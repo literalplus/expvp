@@ -1,0 +1,37 @@
+## JetBrains
+.idea/**
+out/
+*.iml
+*.ipr
+*.iws
+
+## Keep IDEA Code Style settings
+!.idea/codeStyleSettings.xml
+!.idea/copyright/**
+
+## Linux
+.*
+# Don't exclude hidden directories - we need this to include the IDEA Code Style settings
+# If you have a local directory you don't want to share, name it like .something~ instead.
+!.*/
+!.gitattributes
+!.gitignore
+*~
+
+## Maven
+target/
+dependency-reduced-pom.xml
+
+
+## Windows
+$RECYCLE_BIN/
+Desktop.ini
+ehthumbs.db
+Thumbs.db
+
+# Built using https://github.com/github/gitignore/
+
+#Ignore files left after a merge sometimes by merge programs
+*.orig
+
+GitExtensions.settings

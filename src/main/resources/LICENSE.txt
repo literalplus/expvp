@@ -1,0 +1,32 @@
+~~~~███████╗██╗~~██╗██████╗~██╗~~~██╗██████╗~
+~~~~██╔════╝╚██╗██╔╝██╔══██╗██║~~~██║██╔══██╗
+~~~~█████╗~~~╚███╔╝~██████╔╝██║~~~██║██████╔╝
+~~~~██╔══╝~~~██╔██╗~██╔═══╝~╚██╗~██╔╝██╔═══╝~
+~~~~███████╗██╔╝~██╗██║~~~~~~╚████╔╝~██║~~~~~
+~~~~╚══════╝╚═╝~~╚═╝╚═╝~~~~~~~╚═══╝~~╚═╝~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ExPvP Minecraft Game Mode
+Copyright (C) 2016 Literallie / Philipp Nowak (Me) and Contributors.
+
+Additional contributions by other people (Contributors) belong to their respective authors but
+are licensed under these license terms. Major contributions (e.g. new files) will be marked
+with the names of the respective authors by them. Contributors agree that their contributions
+to this project be licensed under these license terms.
+
+These license terms may be changed by the Me for any new version of this software. Especially,
+the Me may release these works under a less restrictive license without further agreement
+from the Contributors. The Me explicitly reserves the exclusive right to release these works
+to the public.
+
+This license applies to code, concepts, resources and all other works related to this project.
+The license headers in some files of this project are intended solely for clarification and
+easy reference and do not exclude unmarked files from this license.
+
+Decompilation, redistribution, execution or any other kind of usage without explicit written
+permission from the Me is strictly prohibited and may result in legal steps being taken. Such
+permission may be revoked by the Me at any point in time.
+Thanks for respecting this work.
+
+Austrian laws apply.
+
+This application uses the Spigot API but is not in any way affiliated with it and/or its authors.

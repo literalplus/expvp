@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This file is part of ExPvP,
+  ~ Copyright (c) 2016-2016.
+  ~
+  ~ This work is protected by international copyright laws and licensed
+  ~ under the license terms which can be found at src/main/resources/LICENSE.txt.
+  -->
+
+<!--
+  Define your custom elements for the log4j2 config here. They will be merged into
+  the main file on every reload and cache clear. That means you can do anything here
+  that you could do if you could edit the main file! \o/
+-->
+<Configuration>
+    <properties>
+        <property name="my.custom.property">yaaay customised</property>
+    </properties>
+    <Appenders>
+
+    </Appenders>
+    <Loggers>
+
+    </Loggers>
+</Configuration>

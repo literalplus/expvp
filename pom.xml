@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This file is part of ExPvP,
+  ~ Copyright (c) 2016-2016.
+  ~
+  ~ This work is protected by international copyright laws and licensed
+  ~ under the license terms which can be found at src/main/resources/LICENSE.txt.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>me.minotopia.expvp</groupId>
+    <artifactId>expvp</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>ExPvP</name>
+    <description>
+        A kit-based Minecraft PvP game mode where players fight each other to gain experience (exp).
+        With a certain amount of exp, they progress to a new level. Higher levels provide better
+        kits.
+    </description>
+
+    <scm>
+        <connection>scm:git://git@bitbucket.org:minotopia/expvp.git</connection>
+    </scm>
+
+    <distributionManagement>
+        <downloadUrl>https://ci.minotopia.me/job/expvp/</downloadUrl>
+        <repository>
+            <id>xxyy-repo</id>
+            <url>https://repo.l1t.li/xxyy-private/</url>
+        </repository>
+    </distributionManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <xyc.version>3.3.4.0</xyc.version>
+        <minecraft.version>1.8.3</minecraft.version>
+        <spigot-api.release>R0.1</spigot-api.release>
+        <rootDir>${project.basedir}</rootDir>
+        <build-comment>dev</build-comment>
+        <log4j.version>2.0-beta9</log4j.version>
+        <!-- Mojang ship outdated Beta code in Production -->
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <!-- Spigot-API -->
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>xxyy-repo</id>
+            <!-- xLogin, etc. -->
+            <url>https://repo.nowak-at.net/xxyy-private/</url>
+        </repository>
+        <repository>
+            <id>dmulloy2-repo</id>
+            <!-- ProtocolLib -->
+            <url>http://repo.dmulloy2.net/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>puha-repo</id>
+            <!-- TitleManager -->
+            <url>http://repo.puha.io/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>${minecraft.version}-${spigot-api.release}-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>3.6.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.puharesource.mc</groupId>
+            <artifactId>TitleManager</artifactId>
+            <version>1.5.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.xxyy.common</groupId>
+            <artifactId>xyc-bukkit</artifactId>
+            <version>${xyc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.xxyy.common</groupId>
+            <artifactId>xyc-games</artifactId>
+            <version>${xyc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.xxyy.xlogin</groupId>
+            <artifactId>xlogin-api</artifactId>
+            <version>2.3.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.2</version>
+
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals><goal>create</goal></goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>true</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <shortRevisionLength>7</shortRevisionLength>
+                    <timestampFormat>{0,date,yyyy-MM-dd HH:mm}</timestampFormat>
+                    <format>{1}</format>
+                    <items>
+                        <item>timestamp</item>
+                        <item>scmVersion</item>
+                    </items>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.2</version>
+
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Build>${buildNumber}@${timestamp}-${build-comment}</Implementation-Build>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.1</version>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <artifactSet>
+                        <includes>
+                            <include>me.minotopia.expvp:expvp</include>
+                        </includes>
+                    </artifactSet>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <finalName>expvp-${project.version}</finalName>
+    </build>
+
+</project>

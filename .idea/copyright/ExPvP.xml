@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <copyright>
+    <option name="notice" value="This file is part of ExPvP,&#10;Copyright (c) 2016-&amp;#36;{today.year}.&#10;&#10;This work is protected by international copyright laws and licensed&#10;under the license terms which can be found at src/main/resources/LICENSE.txt." />
+    <option name="keyword" value="src/main/resources/LICENSE.txt" />
+    <option name="myName" value="ExPvP" />
+  </copyright>
+</component>
