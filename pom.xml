@@ -38,15 +38,17 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <xyc.version>3.3.4.0</xyc.version>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <xyc.version>3.3.6.0</xyc.version>
         <minecraft.version>1.8.3</minecraft.version>
         <spigot-api.release>R0.1</spigot-api.release>
         <rootDir>${project.basedir}</rootDir>
         <build-comment>dev</build-comment>
         <log4j.version>2.0-beta9</log4j.version>
         <!-- Mojang ship outdated Beta code in Production -->
+        <hibernate.version>5.1.0.Final</hibernate.version>
     </properties>
 
     <repositories>
@@ -95,6 +97,27 @@
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.38</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency> <!-- Hibernate entity auto-discovery -->
+            <groupId>com.github.v-ladynev</groupId>
+            <artifactId>fluent-hibernate-core</artifactId>
+            <version>0.2.0</version>
         </dependency>
 
         <dependency>
@@ -205,6 +228,8 @@
                     <artifactSet>
                         <includes>
                             <include>me.minotopia.expvp:expvp</include>
+                            <include>org.hibernate:hibernate-core</include>
+                            <include>com.github.v-ladynev:fluent-hibernate-core</include>
                         </includes>
                     </artifactSet>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
