@@ -34,10 +34,6 @@ public class ObtainedSkill extends BaseEntity {
     private PlayerData playerData;
 
     @Id
-    @Column(name = "tree")
-    private String skillTree;
-
-    @Id
     @Column(name = "skill")
     private String skillId;
 
@@ -49,12 +45,10 @@ public class ObtainedSkill extends BaseEntity {
     /**
      * Business constructor for creating obtained skill data.
      * @param playerData the player data
-     * @param skillTree the skill tree this skill is from
      * @param skillId the unique identifier of the skill
      */
-    public ObtainedSkill(PlayerData playerData, String skillTree, String skillId) {
+    public ObtainedSkill(PlayerData playerData, String skillId) {
         this.playerData = playerData;
-        this.skillTree = skillTree;
         this.skillId = skillId;
     }
 
@@ -63,22 +57,6 @@ public class ObtainedSkill extends BaseEntity {
      */
     public PlayerData getPlayerData() {
         return playerData;
-    }
-
-
-    /**
-     * @return the skill tree this skill is from
-     */
-    public String getSkillTree() {
-        return skillTree;
-    }
-
-    /**
-     * Sets the skill tree this skill is from.
-     * @param skillTree the new skill tree this skill is from
-     */
-    public void setSkillTree(String skillTree) {
-        this.skillTree = skillTree;
     }
 
     /**
@@ -106,6 +84,6 @@ public class ObtainedSkill extends BaseEntity {
     public static ObtainedSkill fromNode(PlayerData playerData, SkillTreeNode node) {
         Preconditions.checkNotNull(playerData, "playerData");
         Preconditions.checkNotNull(node, "node");
-        return new ObtainedSkill(playerData, node.getTreeId(), node.getId());
+        return new ObtainedSkill(playerData, node.getId());
     }
 }

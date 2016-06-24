@@ -13,6 +13,7 @@ import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
 import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.model.BaseEntity;
+import me.minotopia.expvp.skill.tree.SkillTreeManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.command.CommandSender;
@@ -42,6 +43,7 @@ public class EPPlugin extends GenericXyPlugin {
     private KitHandler kitHandler;
     private Logger log;
     private SessionFactory sessionFactory;
+    private SkillTreeManager skillTreeManager;
 
     @Override
     public void reloadConfig() {
@@ -57,7 +59,7 @@ public class EPPlugin extends GenericXyPlugin {
         try {
             LoggingManager.setPlugin(this);
             log = LoggingManager.getLogger(getClass());
-            log.info("===== Hello, friend ");
+            log.info("===== Hello, friend");
             log.info("Am " + getPluginVersion().toString());
 
             //Load kits
@@ -66,6 +68,8 @@ public class EPPlugin extends GenericXyPlugin {
             //Initialise Hibernate ORM
             initHibernate();
 
+            //Load skill trees
+            skillTreeManager = new SkillTreeManager(new File(getDataFolder(), "skilltrees"));
 
             // Register commands
             setExecAndCompleter(new CommandKitFactory("exp.admin.kits", "ExPvP Kit management",
@@ -74,8 +78,8 @@ public class EPPlugin extends GenericXyPlugin {
             saveConfig();
         } catch (Exception e) {
             //Using jul here because Log4J2 might not have been initialised
-            getLogger().log(java.util.logging.Level.SEVERE, "Exception while trying to enable ExPvP: ", e);
-            getServer().getConsoleSender().sendMessage("§4 ---- Unable to enable ExPvP ^^^^ ----");
+            getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable ExPvP: ", e);
+            getServer().getConsoleSender().sendMessage("§4 --- Unable to enable ExPvP ^^^^ ---");
         }
     }
 

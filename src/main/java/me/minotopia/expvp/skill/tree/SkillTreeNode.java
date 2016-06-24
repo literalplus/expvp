@@ -10,11 +10,11 @@ package me.minotopia.expvp.skill.tree;
 
 import me.minotopia.expvp.model.player.ObtainedSkill;
 import me.minotopia.expvp.skill.Skill;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import io.github.xxyy.common.tree.TreeNode;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Represents a node in a skill tree.
@@ -22,7 +22,7 @@ import java.util.Collection;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
  */
-public interface SkillTreeNode extends TreeNode<Skill>, ConfigurationSerializable {
+public interface SkillTreeNode extends TreeNode<SkillTreeNode, Skill> {
     /**
      * @return the unique identifier of the tree this node belongs to
      */
@@ -48,4 +48,10 @@ public interface SkillTreeNode extends TreeNode<Skill>, ConfigurationSerializabl
      * @return whether any of the given model skills represents this node
      */
     boolean matches(Collection<ObtainedSkill> modelSkills);
+
+    /**
+     * Serialises this node and all its children to a map.
+     * @return a map representing this node and its children
+     */
+    Map<String, Object> serialize();
 }

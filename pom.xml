@@ -41,7 +41,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <xyc.version>3.3.7.0</xyc.version>
+        <xyc.version>3.3.9.0</xyc.version>
         <minecraft.version>1.8.3</minecraft.version>
         <spigot-api.release>R0.1</spigot-api.release>
         <rootDir>${project.basedir}</rootDir>
