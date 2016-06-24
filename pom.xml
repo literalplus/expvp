@@ -17,11 +17,11 @@
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>ExPvP</name>
+    <name>Expvp</name>
     <description>
-        A kit-based Minecraft PvP game mode where players fight each other to gain experience (exp).
-        With a certain amount of exp, they progress to a new level. Higher levels provide better
-        kits.
+        A kit-based Minecraft PvP game mode where players fight each other to gain experience (Exp).
+        With a certain amount of exp, they progress to a new level and get books they can spend
+        in skill trees to learn unique skills.
     </description>
 
     <scm>
@@ -169,7 +169,9 @@
                 <executions>
                     <execution>
                         <phase>validate</phase>
-                        <goals><goal>create</goal></goals>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
                     </execution>
                 </executions>
                 <configuration>
@@ -205,7 +207,8 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Implementation-Build>${buildNumber}@${timestamp}-${build-comment}</Implementation-Build>
+                            <Implementation-Build>${buildNumber}@${timestamp}-${build-comment}
+                            </Implementation-Build>
                         </manifestEntries>
                     </archive>
                 </configuration>
