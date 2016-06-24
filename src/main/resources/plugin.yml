@@ -1,4 +1,4 @@
-name: expvp
+name: Expvp
 version: ${project.version}-git-${buildNumber}
 description: Minecraft PvP Game Mode based on Exp and levels
 author: Literallie
