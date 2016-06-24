@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.skill.tree;
+package me.minotopia.expvp.skill.meta;
 
 import me.minotopia.expvp.yaml.AbstractYamlLoader;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -18,43 +18,44 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Loads skill trees from their files and discovers skill trees from a directory.
+ * Handles loading and saving of skills.
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
- * @since 2016-06-23
+ * @since 2016-06-24
  */
-class SkillTreeLoader extends AbstractYamlLoader<SkillTree> {
-    public static String FILE_EXTENSION = ".tree.yml";
+public class SkillLoader extends AbstractYamlLoader<Skill> {
+    public static String FILE_EXTENSION = ".skill.yml";
 
-    SkillTreeLoader(SkillTreeManager manager) {
+    SkillLoader(SkillManager manager) {
         super(manager);
     }
 
     @Override
-    public SkillTree loadFromFile(File file) throws IOException, InvalidConfigurationException {
+    public Skill loadFromFile(File file) throws IOException, InvalidConfigurationException {
         checkExists(getObjectId(file));
         YamlConfiguration config = YamlHelper.load(file, true);
-        return new SkillTree(config.getConfigurationSection(DATA_PATH).getValues(true));
+        return (Skill) config.get(DATA_PATH);
     }
 
     @Override
-    public void saveToFile(SkillTree tree) throws IOException {
-        File file = getFile(tree.getTreeId());
+    public void saveToFile(Skill skill) throws IOException {
+        File file = getFile(skill.getId());
         YamlConfiguration config = new YamlConfiguration();
-        config.set(DATA_PATH, tree.serialize());
+        config.set(DATA_PATH, skill);
         config.save(file);
     }
 
     @Override
-    public SkillTree create(String id) throws IOException {
+    public Skill create(String id) throws IOException {
         checkExists(id);
-        SkillTree tree = new SkillTree(id);
-        saveToFile(tree);
-        return tree;
+        Skill skill = new Skill(id);
+        saveToFile(skill);
+        return skill;
     }
 
     @Override
     public String getFileExtension() {
         return FILE_EXTENSION;
     }
+
 }

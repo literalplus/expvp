@@ -9,7 +9,7 @@
 package me.minotopia.expvp.skill.tree;
 
 import me.minotopia.expvp.model.player.ObtainedSkill;
-import me.minotopia.expvp.skill.Skill;
+import me.minotopia.expvp.skill.meta.Skill;
 
 import io.github.xxyy.common.tree.TreeNode;
 
@@ -54,4 +54,22 @@ public interface SkillTreeNode extends TreeNode<SkillTreeNode, Skill> {
      * @return a map representing this node and its children
      */
     Map<String, Object> serialize();
+
+    /**
+     * <p><b>Note:</b> Adding of nodes which already have children themselves is not permitted.</p>
+     * <p><b>Note:</b> The preferred API way to add a child is to {@link #createChild(String)
+     * let the node create it}.</p>
+     * {@inheritDoc}
+     * @throws IllegalArgumentException if the new child already has children
+     */
+    @Override
+    void addChild(SkillTreeNode newChild);
+
+    /**
+     * Preferred API way to add a child, outsourcing construction to the node itself, since it
+     * knows best what's bets for its children.
+     * @param id the string id of the new child node
+     * @return the created child
+     */
+    SkillTreeNode createChild(String id);
 }

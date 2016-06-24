@@ -10,7 +10,7 @@ package me.minotopia.expvp.skill.tree;
 
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.model.player.ObtainedSkill;
-import me.minotopia.expvp.skill.Skill;
+import me.minotopia.expvp.skill.meta.Skill;
 
 import io.github.xxyy.common.tree.SimpleTreeNode;
 
@@ -21,7 +21,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Simple implementation of a skill tree node.
+ * Simple implementation of a skill tree node. This implementation notifies the root node when
+ * children are added or removed, so subclasses must make sure to always call the super method
+ * from {@link #addChild(SkillTreeNode)} and {@link #removeChild(SkillTreeNode)}.
  * <p><b>Note:</b> This class does not implement {@link org.bukkit.configuration.serialization.ConfigurationSerializable}
  * because of its limitations. Nodes must be manually serialized and deserialized from a map.
  * The only correct way to serialise a complete skill tree is to serialise the root
@@ -83,6 +85,27 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SkillTreeNode, Skill>
     }
 
     @Override
+    public void addChild(SkillTreeNode newChild) {
+        Preconditions.checkArgument(newChild.isLeaf(), "new child must not have children!");
+        super.addChild(newChild);
+        notifyChildChange(newChild, true);
+    }
+
+    @Override
+    public void removeChild(SkillTreeNode oldChild) {
+        oldChild.forEachNode(grandchild -> grandchild.getParent().removeChild(oldChild));
+        super.removeChild(oldChild);
+        notifyChildChange(oldChild, false);
+    }
+
+    @Override
+    public SkillTreeNode createChild(String id) {
+        SimpleSkillTreeNode node = new SimpleSkillTreeNode(this, id);
+        addChild(node);
+        return node;
+    }
+
+    @Override
     public String getTreeId() {
         return treeId;
     }
@@ -115,5 +138,13 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SkillTreeNode, Skill>
                         .collect(Collectors.toList())
         );
         return map;
+    }
+
+    // used to keep statistics up to date
+    void notifyChildChange(SkillTreeNode child, boolean isAdd) {
+        if(getParent() != null && getParent() instanceof SimpleSkillTreeNode) {
+            SimpleSkillTreeNode parent = ((SimpleSkillTreeNode) getParent());
+            parent.notifyChildChange(child, isAdd);
+        }
     }
 }

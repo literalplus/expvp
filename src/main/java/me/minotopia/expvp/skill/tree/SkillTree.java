@@ -36,6 +36,8 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
     private ItemStack icon;
     private boolean branchesExclusive;
     private int slotId;
+    private int height;
+    private int width;
 
     /**
      * Creates a new skill tree.
@@ -144,6 +146,42 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
      */
     public void setBranchesExclusive(boolean branchesExclusive) {
         this.branchesExclusive = branchesExclusive;
+    }
+
+    /**
+     * Gets the height of the tree, that is, the amount of children whose child ids are greater
+     * than 0.
+     *
+     * @return the current height of the tree
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * Gets the width of the tree, that is, the length, in nodes, including the root node, of the
+     * longest straight path to a leaf.
+     *
+     * @return the current width of the tree
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    void notifyChildChange(SkillTreeNode child, boolean isAdd) {
+        if (isAdd) {
+            height = height + (child.getChildren().size() - 1);
+            width = Math.max(width, child.getPosition().length + 1);
+        } else {
+            height = height - (child.getChildren().size() - 1);
+            int nodeWidth = child.getPosition().length + 1;
+            if (width <= nodeWidth) {
+                int newWidth = 1;
+                forEachNode(node -> height = Math.max(newWidth, child.getPosition().length + 1));
+                width = newWidth;
+            }
+        }
     }
 
     @Override
