@@ -93,8 +93,8 @@ public class EPPlugin extends GenericXyPlugin {
         }
 
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .loadProperties(propertiesFile)
-                .configure() // configures settings from hibernate.properties
+                .loadProperties(propertiesFile) // configures settings from hibernate.properties
+                .configure(getClass().getResource("/hibernate.cfg.xml"))
                 .build();
         try {
             List<Class<?>> classes = EntityScanner //Hibernate doesn't do entity scanning, so we need

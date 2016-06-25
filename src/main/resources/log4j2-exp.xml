@@ -28,8 +28,8 @@
     </properties>
 
     <Appenders>
-        <RollingFile name="MainLogFile" fileName="${sys:ep.logsdir}expvp.log"
-                     filePattern="${sys:ep.logsdir}expvp/$${date:yyyy-MM}/%d{yyyy-MM}.log.gz">
+        <RollingFile name="MainLogFile" fileName="${sys:exp.logsdir}expvp.log"
+                     filePattern="${sys:exp.logsdir}expvp/$${date:yyyy-MM}/%d{yyyy-MM}.log.gz">
             <PatternLayout pattern="${pattern}"/>
             <TimeBasedTriggeringPolicy/>
             <DefaultRolloverStrategy max="60"/>

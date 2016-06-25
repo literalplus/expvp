@@ -3,7 +3,7 @@ version: ${project.version}-git-${buildNumber}
 description: Minecraft PvP Game Mode based on Exp and levels
 author: Literallie
 main: me.minotopia.expvp.EPPlugin
-depend: [XYC]
+depend: [XYC, LibHibernate]
 softdepend: [xLogin_Spigot, MTC, ProtocolLib, TitleManager]
 website: https://minotopia.me/
 prefix: EXP

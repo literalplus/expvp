@@ -99,13 +99,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-java8</artifactId>
+            <groupId>li.l1t.common</groupId>
+            <artifactId>xyc-libhibernate</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
         <dependency>
@@ -113,11 +108,6 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.38</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency> <!-- Hibernate entity auto-discovery -->
-            <groupId>com.github.v-ladynev</groupId>
-            <artifactId>fluent-hibernate-core</artifactId>
-            <version>0.2.0</version>
         </dependency>
 
         <dependency>
@@ -214,7 +204,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.1</version>
@@ -231,13 +221,11 @@
                     <artifactSet>
                         <includes>
                             <include>me.minotopia.expvp:expvp</include>
-                            <include>org.hibernate:hibernate-core</include>
-                            <include>com.github.v-ladynev:fluent-hibernate-core</include>
                         </includes>
                     </artifactSet>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
 
         <resources>
