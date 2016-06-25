@@ -49,9 +49,9 @@ public class EPPlugin extends GenericXyPlugin {
 
     @Override
     public void reloadConfig() {
-        log(Level.INFO, "Reloading ExPvP config...");
+        log(Level.INFO, "Reloading Expvp config...");
         super.reloadConfig();
-        log(Level.DEBUG, "Reloaded ExPvP config!");
+        log(Level.DEBUG, "Reloaded Expvp config!");
     }
 
     @Override
@@ -75,14 +75,14 @@ public class EPPlugin extends GenericXyPlugin {
             skillTreeManager = new SkillTreeManager(new File(getDataFolder(), "skilltrees"), skillManager);
 
             // Register commands
-            setExecAndCompleter(new CommandKitFactory("exp.admin.kits", "ExPvP Kit management",
+            setExecAndCompleter(new CommandKitFactory("exp.admin.kits", "Expvp Kit management",
                     kitHandler, kitHandler.getObjectiveDescriptions()), "kitfabrik");
 
             saveConfig();
         } catch (Exception e) {
             //Using jul here because Log4J2 might not have been initialised
-            getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable ExPvP: ", e);
-            getServer().getConsoleSender().sendMessage("§4 --- Unable to enable ExPvP ^^^^ ---");
+            getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable Expvp: ", e);
+            getServer().getConsoleSender().sendMessage("§4 --- Unable to enable Expvp ^^^^ ---");
         }
     }
 
@@ -120,8 +120,9 @@ public class EPPlugin extends GenericXyPlugin {
             //no op yet
         } catch (Exception e) {
             //Using jul here because Log4J2 might not work
-            getLogger().log(java.util.logging.Level.SEVERE, "Exception while trying to disable ExPvP: ", e);
-            getServer().getConsoleSender().sendMessage("§4 ---- Unable to disable ExPvP ^^^^ ----");
+            getLogger().log(java.util.logging.Level.SEVERE, "Exception while trying to disable " +
+                    "Expvp: ", e);
+            getServer().getConsoleSender().sendMessage("§4 ---- Unable to disable Expvp ^^^^ ----");
         }
     }
 
@@ -138,7 +139,7 @@ public class EPPlugin extends GenericXyPlugin {
                 getPluginVersion().toString(),
                 "§6Copyright (C) 2016 Philipp Nowak (Literallie)",
                 "§6See the LICENSE.txt file in the plugin jar for more info."
-        }); // it says "ExPvP"
+        }); // it says "Expvp"
     }
 
     @Override

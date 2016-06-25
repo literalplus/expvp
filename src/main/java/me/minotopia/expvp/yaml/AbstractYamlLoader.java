@@ -36,7 +36,7 @@ public abstract class AbstractYamlLoader<T> implements YamlLoader<T> {
     @Override
     public Set<T> loadFromDirectory() {
         Set<T> obj = new HashSet<>();
-        if (!manager.getDirectory().mkdirs()) {
+        if (!manager.getDirectory().isDirectory() && !manager.getDirectory().mkdirs()) {
             throw new IllegalStateException("couldn't make parent dirs help me");
         }
         for (File file : manager.getDirectory().listFiles(getFileFilter())) {
