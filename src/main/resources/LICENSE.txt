@@ -5,7 +5,7 @@
 ~~~~███████╗██╔╝~██╗██║~~~~~~╚████╔╝~██║~~~~~
 ~~~~╚══════╝╚═╝~~╚═╝╚═╝~~~~~~~╚═══╝~~╚═╝~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ExPvP Minecraft Game Mode
+Expvp Minecraft Game Mode
 Copyright (C) 2016 Literallie / Philipp Nowak (Me) and Contributors.
 
 Additional contributions by other people (Contributors) belong to their respective authors but

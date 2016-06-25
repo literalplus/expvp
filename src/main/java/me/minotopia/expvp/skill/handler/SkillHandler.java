@@ -1,5 +1,5 @@
 /*
- * This file is part of ExPvP,
+ * This file is part of Expvp,
  * Copyright (c) 2016-2016.
  *
  * This work is protected by international copyright laws and licensed

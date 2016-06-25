@@ -1,5 +1,5 @@
 /*
- * This file is part of ExPvP,
+ * This file is part of Expvp,
  * Copyright (c) 2016-2016.
  *
  * This work is protected by international copyright laws and licensed
@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Stores player data related to ExPvP.
+ * Stores player data related to Expvp.
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-21

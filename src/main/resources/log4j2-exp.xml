@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ This file is part of ExPvP,
+  ~ This file is part of Expvp,
   ~ Copyright (c) 2016-2016.
   ~
   ~ This work is protected by international copyright laws and licensed
@@ -16,7 +16,7 @@
  |_____/ \____/      |_| \_|\____/  |_|        |______|_____/_____|  |_|
 
  This file is regenerated on every reload and cache clear. Any changes will be lost!
- Instead, try editing log4j2-custom.xml in the ExPvP data folder. (plugins/expvp)
+ Instead, try editing log4j2-custom.xml in the Expvp data folder. (plugins/expvp)
 
 -->
 
@@ -29,7 +29,7 @@
 
     <Appenders>
         <RollingFile name="MainLogFile" fileName="${sys:exp.logsdir}expvp.log"
-                     filePattern="${sys:exp.logsdir}expvp/$${date:yyyy-MM}/%d{yyyy-MM}.log.gz">
+                     filePattern="${sys:exp.logsdir}expvp/$${date:yyyy-MM}/%d{yyyy-MM-dd}.log.gz">
             <PatternLayout pattern="${pattern}"/>
             <TimeBasedTriggeringPolicy/>
             <DefaultRolloverStrategy max="60"/>

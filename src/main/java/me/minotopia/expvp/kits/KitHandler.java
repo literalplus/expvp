@@ -1,5 +1,5 @@
 /*
- * This file is part of ExPvP,
+ * This file is part of Expvp,
  * Copyright (c) 2016-2016.
  *
  * This work is protected by international copyright laws and licensed
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Manages kits for ExPvP.
+ * Manages kits for Expvp.
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-20

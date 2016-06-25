@@ -1,5 +1,5 @@
 /*
- * This file is part of ExPvP,
+ * This file is part of Expvp,
  * Copyright (c) 2016-2016.
  *
  * This work is protected by international copyright laws and licensed
@@ -135,7 +135,7 @@ public class EPPlugin extends GenericXyPlugin {
                 "§6~~~~§7███████╗██╔╝~██╗██║§6~~~~~~§7╚████╔╝§6~§7██║§6~~~~~",
                 "§6~~~~§7╚══════╝╚═╝§6~~§7╚═╝╚═╝§6~~~~~~~§7╚═══╝§6~~§7╚═╝§6~~~~~",
                 "§6~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-                "§6ExPvP Minecraft Game Mode for MinoTopia.me",
+                "§6Expvp Minecraft Game Mode for MinoTopia.me",
                 getPluginVersion().toString(),
                 "§6Copyright (C) 2016 Philipp Nowak (Literallie)",
                 "§6See the LICENSE.txt file in the plugin jar for more info."

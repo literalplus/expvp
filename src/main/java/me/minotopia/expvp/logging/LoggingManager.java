@@ -1,5 +1,5 @@
 /*
- * This file is part of ExPvP,
+ * This file is part of Expvp,
  * Copyright (c) 2016-2016.
  *
  * This work is protected by international copyright laws and licensed
@@ -15,7 +15,7 @@ import io.github.xxyy.common.log.Log4JContextInitialiser;
 import io.github.xxyy.lib.guava17.base.Preconditions;
 
 /**
- * Takes care of initialising a custom Log4J2 context for ExPvP logging. All members are static to
+ * Takes care of initialising a custom Log4J2 context for Expvp logging. All members are static to
  * allow static construction of {@code LOGGER} fields.
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
@@ -30,7 +30,7 @@ public class LoggingManager {
     }
 
     /**
-     * Obtains a logger in the ExPvP context for a specific class.
+     * Obtains a logger in the Expvp context for a specific class.
      *
      * @param clazz the class to use
      * @return the obtained logger
@@ -41,7 +41,7 @@ public class LoggingManager {
     }
 
     /**
-     * Obtains a logger in the ExPvP context for a specific logger id.
+     * Obtains a logger in the Expvp context for a specific logger id.
      *
      * @param id the id to use
      * @return the obtained logger
