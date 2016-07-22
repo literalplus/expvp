@@ -8,11 +8,10 @@
 
 package me.minotopia.expvp.logging;
 
+import com.google.common.base.Preconditions;
+import li.l1t.common.log.Log4JContextInitialiser;
 import me.minotopia.expvp.EPPlugin;
 import org.apache.logging.log4j.Logger;
-
-import io.github.xxyy.common.log.Log4JContextInitialiser;
-import io.github.xxyy.lib.guava17.base.Preconditions;
 
 /**
  * Takes care of initialising a custom Log4J2 context for Expvp logging. All members are static to

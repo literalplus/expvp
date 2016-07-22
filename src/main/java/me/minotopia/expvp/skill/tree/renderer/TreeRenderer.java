@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.skill.tree.renderer;
 
-import io.github.xxyy.common.inventory.gui.holder.TemplateElementHolder;
+import li.l1t.common.inventory.gui.holder.TemplateElementHolder;
 
 /**
  * Capable of rendering a skill tree into cache and creating inventories that show it.

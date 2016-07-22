@@ -8,9 +8,8 @@
 
 package me.minotopia.expvp.kits;
 
+import li.l1t.common.games.kits.KitManager;
 import me.minotopia.expvp.EPPlugin;
-
-import io.github.xxyy.common.games.kits.KitManager;
 
 import java.io.File;
 import java.util.HashMap;

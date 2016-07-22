@@ -12,7 +12,7 @@ import me.minotopia.expvp.yaml.AbstractYamlLoader;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import io.github.xxyy.common.util.config.YamlHelper;
+import li.l1t.common.util.config.YamlHelper;
 
 import java.io.File;
 import java.io.IOException;

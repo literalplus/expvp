@@ -24,8 +24,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.UUIDCharType;
 
-import io.github.xxyy.common.games.kits.factory.CommandKitFactory;
-import io.github.xxyy.common.xyplugin.GenericXyPlugin;
+import li.l1t.common.games.kits.factory.CommandKitFactory;
+import li.l1t.common.xyplugin.GenericXyPlugin;
 
 import java.io.File;
 import java.io.IOException;
