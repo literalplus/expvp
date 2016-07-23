@@ -10,6 +10,7 @@ package me.minotopia.expvp;
 
 
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
+import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.model.BaseEntity;
@@ -23,9 +24,6 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.UUIDCharType;
-
-import li.l1t.common.games.kits.factory.CommandKitFactory;
-import li.l1t.common.xyplugin.GenericXyPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,8 +73,6 @@ public class EPPlugin extends GenericXyPlugin {
             skillTreeManager = new SkillTreeManager(new File(getDataFolder(), "skilltrees"), skillManager);
 
             // Register commands
-            setExecAndCompleter(new CommandKitFactory("exp.admin.kits", "Expvp Kit management",
-                    kitHandler, kitHandler.getObjectiveDescriptions()), "kitfabrik");
 
             saveConfig();
         } catch (Exception e) {
