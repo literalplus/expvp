@@ -10,7 +10,9 @@ package me.minotopia.expvp;
 
 
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
+import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
+import me.minotopia.expvp.command.CommandSkillAdmin;
 import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.model.BaseEntity;
@@ -44,6 +46,7 @@ public class EPPlugin extends GenericXyPlugin {
     private SessionFactory sessionFactory;
     private SkillTreeManager skillTreeManager;
     private SkillManager skillManager;
+    private CommandsManager commandsManager;
 
     @Override
     public void reloadConfig() {
@@ -73,6 +76,7 @@ public class EPPlugin extends GenericXyPlugin {
             skillTreeManager = new SkillTreeManager(new File(getDataFolder(), "skilltrees"), skillManager);
 
             // Register commands
+            registerCommands();
 
             saveConfig();
         } catch (Exception e) {
@@ -80,6 +84,17 @@ public class EPPlugin extends GenericXyPlugin {
             getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable Expvp: ", e);
             getServer().getConsoleSender().sendMessage("§4 --- Unable to enable Expvp ^^^^ ---");
         }
+    }
+
+    private void registerCommands() {
+        commandsManager = new CommandsManager(this);
+        commandsManager.registerCommand(new CommandSkillAdmin(), "skilladmin", "ska");
+        registerInjections();
+    }
+
+    private void registerInjections() {
+        commandsManager.bind(SkillTreeManager.class).toInstance(skillTreeManager);
+        commandsManager.bind(SkillManager.class).toInstance(skillManager);
     }
 
     private void initHibernate() throws IOException { //TODO: Querydsl
@@ -155,5 +170,9 @@ public class EPPlugin extends GenericXyPlugin {
         if (log != null) {
             log.log(level, message);
         }
+    }
+
+    public CommandsManager getCommandsManager() {
+        return commandsManager;
     }
 }
