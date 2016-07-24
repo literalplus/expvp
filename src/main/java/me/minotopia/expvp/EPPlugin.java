@@ -88,8 +88,8 @@ public class EPPlugin extends GenericXyPlugin {
 
     private void registerCommands() {
         commandsManager = new CommandsManager(this);
-        commandsManager.registerCommand(new CommandSkillAdmin(), "skilladmin", "ska");
         registerInjections();
+        commandsManager.registerCommand(new CommandSkillAdmin(), "skilladmin", "ska");
     }
 
     private void registerInjections() {
