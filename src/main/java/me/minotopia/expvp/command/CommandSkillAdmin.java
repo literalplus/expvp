@@ -42,7 +42,7 @@ public class CommandSkillAdmin {
                 id, name));
     }
 
-    @Command(aliases = "edit name", min = 2,
+    @Command(aliases = "setname", min = 2,
             desc = "Ändert den Namen eines Skills.",
             usage = "[id] [name...]")
     @Require("expvp.admin")
