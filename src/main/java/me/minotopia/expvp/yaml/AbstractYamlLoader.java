@@ -68,7 +68,7 @@ public abstract class AbstractYamlLoader<T> implements YamlLoader<T> {
      */
     protected void checkExists(String objId) {
         Preconditions.checkArgument(manager.contains(objId),
-                "a skill already exists with that id: %s", objId);
+                "an object already exists with that id: %s", objId);
     }
 
     /**
