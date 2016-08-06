@@ -151,9 +151,11 @@ public class Skill implements ConfigurationSerializable {
         }
         if(source.containsKey(ICON_PATH)) {
             Object iconObj = source.get(ICON_PATH);
-            Preconditions.checkArgument(iconObj instanceof ItemStack,
-                    "icon must be an item stack, is: %s", String.valueOf(iconObj));
-            skill.setIconStack((ItemStack) iconObj);
+            if(iconObj != null) {
+                Preconditions.checkArgument(iconObj instanceof ItemStack,
+                        "icon must be an item stack, is: %s", String.valueOf(iconObj));
+                skill.setIconStack((ItemStack) iconObj);
+            }
         }
         return skill;
     }
