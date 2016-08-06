@@ -27,8 +27,8 @@ import java.io.IOException;
 public class CommandSkillAdmin {
     @Command(aliases = "new", min = 2,
             desc = "Erstellt neuen Skill.",
-            help = "Erstellt einen neuen Skill zur Verwendung in Skilltrees.\nid besteht dabei aus " +
-                    "Zahlen, Buchstaben und Bindestrichen und ist eindeutig.",
+            help = "Erstellt einen neuen Skill\nzur Verwendung in Skilltrees.\nDie Id besteht " +
+                    "dabei aus\nZahlen, Buchstaben und Bindestrichen\nund ist eindeutig.",
             usage = "[id] [name...]")
     @Require("expvp.admin")
     public void newSkill(SkillCommandService service, CommandSender sender,
