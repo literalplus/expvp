@@ -13,6 +13,7 @@ import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.command.CommandSkillAdmin;
+import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.model.BaseEntity;
@@ -96,6 +97,7 @@ public class EPPlugin extends GenericXyPlugin {
 
     private void registerInjections() {
         commandsManager.bind(SkillTreeManager.class).toInstance(skillTreeManager);
+        SkillCommandService.registerSkillInjections(commandsManager, skillManager);
     }
 
     private void initHibernate() throws IOException { //TODO: Querydsl
