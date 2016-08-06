@@ -10,8 +10,8 @@ package me.minotopia.expvp.command;
 
 import com.sk89q.intake.Command;
 import com.sk89q.intake.Require;
-import com.sk89q.intake.parametric.annotation.Text;
 import com.sk89q.intake.parametric.annotation.Validate;
+import li.l1t.common.intake.provider.annotation.Merged;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.bukkit.command.CommandSender;
@@ -32,7 +32,8 @@ public class CommandSkillAdmin {
             usage = "[id] [name...]")
     @Require("expvp.admin")
     public void newSkill(SkillCommandService service, CommandSender sender,
-                         @Validate(regex = "[a-zA-Z0-9\\-]+") String id, @Text String name)
+                         @Validate(regex = "[a-zA-Z0-9\\-]+") String id,
+                         @Merged(translateColors = true)  String name)
             throws IOException {
         Skill skill = service.createSkillWithExistsCheck(id);
         skill.setName(name);
@@ -47,7 +48,8 @@ public class CommandSkillAdmin {
             usage = "[id] [name...]")
     @Require("expvp.admin")
     public void editName(SkillCommandService service, CommandSender sender,
-                         Skill skill, @Text String name)
+                         Skill skill,
+                         @Merged(translateColors = true) String name)
             throws IOException {
         String previousName = skill.getName();
         skill.setName(name);
