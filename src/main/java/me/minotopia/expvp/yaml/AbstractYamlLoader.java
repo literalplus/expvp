@@ -67,7 +67,7 @@ public abstract class AbstractYamlLoader<T> implements YamlLoader<T> {
      * @throws IllegalArgumentException if another object already exists with that id
      */
     protected void checkExists(String objId) {
-        Preconditions.checkArgument(manager.contains(objId),
+        Preconditions.checkArgument(!manager.contains(objId),
                 "an object already exists with that id: %s", objId);
     }
 
