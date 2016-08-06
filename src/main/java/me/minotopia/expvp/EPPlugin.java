@@ -91,12 +91,11 @@ public class EPPlugin extends GenericXyPlugin {
         commandsManager = new CommandsManager(this);
         commandsManager.getErrorTranslator().setLocale(Locale.GERMAN);
         registerInjections();
-        commandsManager.registerCommand(new CommandSkillAdmin(), "skilladmin", "ska");
+        commandsManager.registerCommand(new CommandSkillAdmin(), "ska", "skilladmin");
     }
 
     private void registerInjections() {
         commandsManager.bind(SkillTreeManager.class).toInstance(skillTreeManager);
-        commandsManager.bind(SkillManager.class).toInstance(skillManager);
     }
 
     private void initHibernate() throws IOException { //TODO: Querydsl

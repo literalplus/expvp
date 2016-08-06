@@ -11,8 +11,9 @@ package me.minotopia.expvp.command;
 import com.sk89q.intake.Command;
 import com.sk89q.intake.Require;
 import com.sk89q.intake.parametric.annotation.Text;
+import com.sk89q.intake.parametric.annotation.Validate;
+import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.skill.meta.Skill;
-import me.minotopia.expvp.skill.meta.SkillManager;
 import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
@@ -25,21 +26,34 @@ import java.io.IOException;
  */
 public class CommandSkillAdmin {
     @Command(aliases = "new", min = 2,
-            desc = "Erstellt einen neuen Skill zur Verwendung in Skilltrees.")
+            desc = "Erstellt neuen Skill.",
+            help = "Erstellt einen neuen Skill zur Verwendung in Skilltrees.\nid besteht dabei aus " +
+                    "Zahlen, Buchstaben und Bindestrichen und ist eindeutig.",
+            usage = "[id] [name...]")
     @Require("expvp.admin")
-    public void newSkill(SkillManager skillManager, CommandSender sender,
-                         String id, @Text String name) throws
-            IOException {
-        if (skillManager.contains(id)) {
-            sender.sendMessage(String.format(
-                    "§c§lFehler: §cEs gibt bereits einen Skill mit der ID '%s'",
-                    id));
-            return;
-        }
-        Skill skill = skillManager.create(id);
+    public void newSkill(SkillCommandService service, CommandSender sender,
+                         @Validate(regex = "[a-zA-Z0-9\\-]+") String id, @Text String name)
+            throws IOException {
+        Skill skill = service.createSkillWithExistsCheck(id);
         skill.setName(name);
+        service.saveSkill(skill);
         sender.sendMessage(String.format(
                 "§e➩ Neuer Skill mit der ID '%s' und dem Namen '%s' erstellt.",
                 id, name));
+    }
+
+    @Command(aliases = "edit name", min = 2,
+            desc = "Ändert den Namen eines Skills.",
+            usage = "[id] [name...]")
+    @Require("expvp.admin")
+    public void editName(SkillCommandService service, CommandSender sender,
+                         Skill skill, @Text String name)
+            throws IOException {
+        String previousName = skill.getName();
+        skill.setName(name);
+        service.saveSkill(skill);
+        sender.sendMessage(String.format(
+                "§e➩ Name des Skills '%s' von '%s' auf '%s' geändert.",
+                skill.getId(), previousName, name));
     }
 }

@@ -106,7 +106,7 @@
         <dependency>
             <groupId>li.l1t.common</groupId>
             <artifactId>intake-spigot</artifactId>
-            <version>4.2.7</version>
+            <version>4.2.9</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
