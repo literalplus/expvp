@@ -10,7 +10,6 @@ package me.minotopia.expvp.skill.meta;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -24,10 +23,6 @@ import java.util.Map;
  * @since 2016-06-23
  */
 public class Skill implements ConfigurationSerializable {
-    static {
-        ConfigurationSerialization.registerClass(Skill.class);
-    }
-
     public static final String ID_PATH = "id";
     public static final String BOOK_COST_PATH = "cost";
     public static final String NAME_PATH = "name";
