@@ -90,7 +90,7 @@ public class EPPlugin extends GenericXyPlugin {
 
     private void registerCommands() {
         commandsManager = new CommandsManager(this);
-        commandsManager.getErrorTranslator().setLocale(Locale.GERMAN);
+        commandsManager.getTranslator().setLocale(Locale.GERMAN);
         registerInjections();
         commandsManager.registerCommand(new CommandSkillAdmin(), "ska", "skilladmin");
     }
