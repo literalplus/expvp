@@ -9,6 +9,7 @@
 package me.minotopia.expvp.skill.meta;
 
 import com.google.common.base.Preconditions;
+import me.minotopia.expvp.Nameable;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,7 +23,7 @@ import java.util.Map;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
  */
-public class Skill implements ConfigurationSerializable, me.minotopia.expvp.Identifiable {
+public class Skill implements ConfigurationSerializable, Nameable {
     public static final String ID_PATH = "id";
     public static final String BOOK_COST_PATH = "cost";
     public static final String NAME_PATH = "name";
@@ -40,13 +41,6 @@ public class Skill implements ConfigurationSerializable, me.minotopia.expvp.Iden
      */
     public Skill(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return a non-null display name for this skill
-     */
-    public String getDisplayName() {
-        return name == null ? id : name;
     }
 
     @Override

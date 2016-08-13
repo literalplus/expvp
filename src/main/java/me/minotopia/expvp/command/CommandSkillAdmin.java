@@ -27,7 +27,12 @@ import java.io.IOException;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-07-23
  */
-public class CommandSkillAdmin {
+public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
+    @Override
+    public String getObjectTypeName() {
+        return "Skill";
+    }
+
     @Command(aliases = "new", min = 2,
             desc = "Erstellt neuen Skill",
             help = "Erstellt einen neuen Skill\nzur Verwendung in Skilltrees.\nDie Id besteht " +
@@ -38,12 +43,7 @@ public class CommandSkillAdmin {
                          @Validate(regex = "[a-zA-Z0-9\\-]+") String id,
                          @Merged @Colored String name)
             throws IOException {
-        Skill skill = service.createObjectWithExistsCheck(id);
-        skill.setName(name);
-        service.saveObject(skill);
-        sender.sendMessage(String.format(
-                "§e➩ Neuer Skill mit der ID '%s' und dem Namen '%s' erstellt.",
-                id, name));
+        createNew(service, sender, id, name);
     }
 
     @Command(aliases = "name", min = 2,
@@ -54,10 +54,7 @@ public class CommandSkillAdmin {
                          Skill skill,
                          @Merged @Colored String name)
             throws IOException {
-        String previousName = skill.getName();
-        skill.setName(name);
-        service.saveObject(skill);
-        sendChangeNotification("Name", previousName, name, skill, sender);
+        service.changeName(skill, name, sender);
     }
 
     @Command(aliases = "handler", min = 2,
@@ -67,12 +64,9 @@ public class CommandSkillAdmin {
     @Require("expvp.admin")
     public void editHandler(SkillCommandService service, CommandSender sender,
                          Skill skill,
-                         @Merged String name)
+                         @Merged String handlerSpec)
             throws IOException {
-        String previousName = skill.getHandlerSpec();
-        skill.setHandlerSpec(name);
-        service.saveObject(skill);
-        sendChangeNotification("Handler", previousName, name, skill, sender);
+        service.changeHandlerSpec(skill, handlerSpec, sender);
     }
 
     @Command(aliases = "icon", min = 2,
@@ -83,31 +77,18 @@ public class CommandSkillAdmin {
     public void editIcon(SkillCommandService service, CommandSender sender,
                          Skill skill, @ItemInHand ItemStack itemInHand)
             throws IOException {
-        ItemStack previousStack = skill.getIconStack();
-        skill.setIconStack(itemInHand);
-        service.saveObject(skill);
-        sendChangeNotification("Icon", previousStack, itemInHand, skill, sender);
+        service.changeIconStack(skill, itemInHand, sender);
     }
 
     @Command(aliases = "cost", min = 2,
             desc = "Ändert den Preis",
             help = "Ändert den Preis\nPreis in Skillpunkten.",
-            usage = "[id]")
+            usage = "[id] [neuer Preis]")
     @Require("expvp.admin")
     public void editCost(SkillCommandService service, CommandSender sender,
                          Skill skill, int bookCost)
             throws IOException {
-        int previousCost = skill.getBookCost();
-        skill.setBookCost(bookCost);
-        service.saveObject(skill);
-        sendChangeNotification("Preis in Skillpunkten", previousCost, bookCost, skill, sender);
-    }
-
-    private void sendChangeNotification(String description, Object previous, Object changed, Skill
-            skill, CommandSender sender) {
-        sender.sendMessage(String.format(
-                "§e➩ " + description + " des Skills '%s' von '%s' auf '%s' geändert.",
-                skill.getId(), previous, changed));
+        service.changeBookCost(skill, bookCost, sender);
     }
 
     @Command(aliases = "info", min = 1,

@@ -14,8 +14,8 @@ import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.intake.provider.annotation.Colored;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
-import me.minotopia.expvp.command.service.SkillCommandService;
-import me.minotopia.expvp.skill.meta.Skill;
+import me.minotopia.expvp.command.service.SkillTreeCommandService;
+import me.minotopia.expvp.skill.tree.SkillTree;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,52 +27,34 @@ import java.io.IOException;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-07-23
  */
-public class CommandSkillTreeAdmin {
+public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
+
+    @Override
+    public String getObjectTypeName() {
+        return "Skilltree";
+    }
+
     @Command(aliases = "new", min = 2,
             desc = "Erstellt neuen Skilltree",
             help = "Erstellt einen neuen Skilltree\nDie Id besteht " +
                     "dabei aus\nZahlen, Buchstaben und Bindestrichen\nund ist eindeutig.",
             usage = "[id] [name...]")
     @Require("expvp.admin")
-    public void newSkill(SkillCommandService service, CommandSender sender,
+    public void newSkill(SkillTreeCommandService service, CommandSender sender,
                          @Validate(regex = "[a-zA-Z0-9\\-]+") String id,
                          @Merged @Colored String name)
             throws IOException {
-        Skill skill = service.createObjectWithExistsCheck(id);
-        skill.setName(name);
-        service.saveObject(skill);
-        sender.sendMessage(String.format(
-                "§e➩ Neuer Skill mit der ID '%s' und dem Namen '%s' erstellt.",
-                id, name));
+        createNew(service, sender, id, name);
     }
 
     @Command(aliases = "name", min = 2,
             desc = "Ändert den Namen",
             usage = "[id] [name...]")
     @Require("expvp.admin")
-    public void editName(SkillCommandService service, CommandSender sender,
-                         Skill skill,
-                         @Merged @Colored String name)
+    public void editName(SkillTreeCommandService service, CommandSender sender,
+                         SkillTree tree, @Merged @Colored String name)
             throws IOException {
-        String previousName = skill.getName();
-        skill.setName(name);
-        service.saveObject(skill);
-        sendChangeNotification("Name", previousName, name, skill, sender);
-    }
-
-    @Command(aliases = "handler", min = 2,
-            desc = "Ändert die Aktion",
-            help = "Aktionen werden so spezifiziert:\ntyp/argument\nMehr Info: /ska handlers",
-            usage = "[id] [handler...]")
-    @Require("expvp.admin")
-    public void editHandler(SkillCommandService service, CommandSender sender,
-                         Skill skill,
-                         @Merged String name)
-            throws IOException {
-        String previousName = skill.getHandlerSpec();
-        skill.setHandlerSpec(name);
-        service.saveObject(skill);
-        sendChangeNotification("Handler", previousName, name, skill, sender);
+        service.changeName(tree, name, sender);
     }
 
     @Command(aliases = "icon", min = 2,
@@ -80,51 +62,50 @@ public class CommandSkillTreeAdmin {
             help = "Ändert das Icon auf das\nItem in deiner Hand",
             usage = "[id]")
     @Require("expvp.admin")
-    public void editIcon(SkillCommandService service, CommandSender sender,
-                         Skill skill, @ItemInHand ItemStack itemInHand)
+    public void editIcon(SkillTreeCommandService service, CommandSender sender,
+                         SkillTree tree, @ItemInHand ItemStack itemInHand)
             throws IOException {
-        ItemStack previousStack = skill.getIconStack();
-        skill.setIconStack(itemInHand);
-        service.saveObject(skill);
-        sendChangeNotification("Icon", previousStack, itemInHand, skill, sender);
+        service.changeIconStack(tree, itemInHand, sender);
     }
 
-    @Command(aliases = "cost", min = 2,
-            desc = "Ändert den Preis",
-            help = "Ändert den Preis\nPreis in Skillpunkten.",
-            usage = "[id]")
+    @Command(aliases = "iconslot", min = 2,
+            desc = "Ändert den Iconslot",
+            help = "Ändert den Slot, in dem\ndas Icon dieses Trees\nim Übersichtsinventar ist.",
+            usage = "[id] [Slot-ID]")
     @Require("expvp.admin")
-    public void editCost(SkillCommandService service, CommandSender sender,
-                         Skill skill, int bookCost)
+    public void editSlotId(SkillTreeCommandService service, CommandSender sender,
+                         SkillTree tree, int slotId)
             throws IOException {
-        int previousCost = skill.getBookCost();
-        skill.setBookCost(bookCost);
-        service.saveObject(skill);
-        sendChangeNotification("Preis in Skillpunkten", previousCost, bookCost, skill, sender);
+        service.changeSlotId(tree, slotId, sender);
     }
 
-    private void sendChangeNotification(String description, Object previous, Object changed, Skill
-            skill, CommandSender sender) {
-        sender.sendMessage(String.format(
-                "§e➩ " + description + " des Skills '%s' von '%s' auf '%s' geändert.",
-                skill.getId(), previous, changed));
+    @Command(aliases = "branches-exklusive", min = 2,
+            desc = "Setzt Branches Exclusive",
+            help = "Setzt, ob sich die Äster\ndes Baums gegenseitig\nausschließen.\nDas bedeutet,\n" +
+                    "wenn man einen erforscht hat,\nkann man den Nachbar\nnicht mehr erforschen. (true)",
+            usage = "[id] [true|false]")
+    @Require("expvp.admin")
+    public void editBranchesExclusive(SkillTreeCommandService service, CommandSender sender,
+                         SkillTree tree, boolean branchesExclusive)
+            throws IOException {
+        service.changeBranchesExclusive(tree, branchesExclusive, sender);
     }
 
     @Command(aliases = "info", min = 1,
-            desc = "Zeigt Infos zu einem Skill",
+            desc = "Zeigt Infos zu einem Skilltree",
             usage = "[id]")
     @Require("expvp.admin")
-    public void skillInfo(SkillCommandService service, CommandSender sender,
-                         Skill skill)
+    public void skillInfo(SkillTreeCommandService service, CommandSender sender,
+                         SkillTree tree)
             throws IOException {
-        sender.sendMessage(String.format("§e➩ §lSkill: §6%s §e(ID: %s§e)",
-                skill.getDisplayName(), skill.getId()));
-        sender.sendMessage(String.format("§e➩ §lHandler (Aktion): §6%s",
-                skill.getHandlerSpec()));
-        sender.sendMessage(String.format("§e➩ §lPreis in Skillpunkten: §6%s",
-                skill.getBookCost()));
+        sender.sendMessage(String.format("§e➩ §lSkilltree: §6%s §e(ID: %s§e)",
+                tree.getDisplayName(), tree.getId()));
+        sender.sendMessage(String.format("§e➩ §lBranches Exclusive (siehe /sta help): §6%s",
+                tree.areBranchesExclusive()));
+        sender.sendMessage(String.format("§e➩ §lSlot-Id in der Übersicht: §6%s",
+                tree.getSlotId()));
         sender.sendMessage(String.format("§e➩ §lIcon: %s",
-                skill.getIconStack() == null ? "§cnein" : skill.getIconStack()));
+                tree.getIconStack() == null ? "§cnein" : tree.getIconStack()));
     }
 
     //TODO: /ska handlers

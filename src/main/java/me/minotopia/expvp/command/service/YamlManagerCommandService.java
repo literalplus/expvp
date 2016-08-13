@@ -9,8 +9,9 @@
 package me.minotopia.expvp.command.service;
 
 import li.l1t.common.intake.exception.CommandArgumentException;
-import me.minotopia.expvp.Identifiable;
+import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.yaml.YamlManager;
+import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ import java.io.IOException;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-08-13
  */
-public class YamlManagerCommandService<T extends Identifiable> {
+public class YamlManagerCommandService<T extends Nameable> {
     protected final YamlManager<T> manager;
     private String objectTypeName;
 
@@ -60,6 +61,20 @@ public class YamlManagerCommandService<T extends Identifiable> {
                     objectTypeName, id));
         }
         return object;
+    }
+
+    public void changeName(T object, String newName, CommandSender sender) {
+        String previousName = object.getName();
+        object.setName(newName);
+        saveObject(object);
+        sendChangeNotification("Name", previousName, newName, object, sender);
+    }
+
+    public void sendChangeNotification(String description, Object previous, Object changed,
+                                T object, CommandSender sender) {
+        sender.sendMessage(String.format(
+                "§e➩ %s des %ss '%s' von '%s' auf '%s' geändert.",
+                description, objectTypeName, object.getId(), previous, changed));
     }
 
     public YamlManager<T> getManager() {

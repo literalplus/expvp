@@ -9,7 +9,7 @@
 package me.minotopia.expvp.skill.tree;
 
 import li.l1t.common.tree.TreeNode;
-import me.minotopia.expvp.Identifiable;
+import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.model.player.ObtainedSkill;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -22,7 +22,7 @@ import java.util.Map;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
  */
-public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, Skill>, Identifiable {
+public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, Skill>, Nameable {
     /**
      * @return the unique identifier of the tree this node belongs to
      */

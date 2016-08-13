@@ -9,9 +9,13 @@
 package me.minotopia.expvp.command.service;
 
 import li.l1t.common.intake.CommandsManager;
+import li.l1t.common.intake.exception.CommandExitMessage;
+import li.l1t.common.inventory.SlotPosition;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.SkillTreeManager;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Provides commonly used utilities for commands working with skill trees.
@@ -29,6 +33,30 @@ public class SkillTreeCommandService extends YamlManagerCommandService<SkillTree
         commandsManager.bind(SkillTreeManager.class).toInstance(getManager());
         commandsManager.bind(SkillTreeCommandService.class).toInstance(this);
         commandsManager.bind(SkillTree.class).toProvider(new YamlObjectProvider<>(this));
+    }
+
+    public void changeIconStack(SkillTree tree, ItemStack newStack, CommandSender sender) {
+        ItemStack previousStack = tree.getIconStack();
+        tree.setIconStack(newStack);
+        saveObject(tree);
+        sendChangeNotification("Icon", previousStack, newStack, tree, sender);
+    }
+
+    public void changeSlotId(SkillTree tree, int newSlotId, CommandSender sender) {
+        if (!SlotPosition.fromSlotId(newSlotId).isValidSlot()) {
+            throw new CommandExitMessage("§c§lFehler: §cDas ist keine valide Slot-ID: " + newSlotId);
+        }
+        int previous = tree.getSlotId();
+        tree.setSlotId(newSlotId);
+        saveObject(tree);
+        sendChangeNotification("Iconslot", previous, newSlotId, tree, sender);
+    }
+
+    public void changeBranchesExclusive(SkillTree tree, boolean newValue, CommandSender sender) {
+        boolean previous = tree.areBranchesExclusive();
+        tree.setBranchesExclusive(newValue);
+        saveObject(tree);
+        sendChangeNotification("Branches Exclusive", previous, newValue, tree, sender);
     }
 
     @Override

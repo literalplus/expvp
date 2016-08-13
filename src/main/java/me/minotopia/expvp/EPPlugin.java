@@ -13,6 +13,7 @@ import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.command.CommandSkillAdmin;
+import me.minotopia.expvp.command.CommandSkillTreeAdmin;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.kits.KitHandler;
@@ -94,6 +95,7 @@ public class EPPlugin extends GenericXyPlugin {
         commandsManager.getTranslator().setLocale(Locale.GERMAN);
         registerInjections();
         commandsManager.registerCommand(new CommandSkillAdmin(), "ska", "skilladmin");
+        commandsManager.registerCommand(new CommandSkillTreeAdmin(), "sta", "treeadmin");
     }
 
     private void registerInjections() {

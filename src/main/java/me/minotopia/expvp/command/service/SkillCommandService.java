@@ -12,6 +12,8 @@ import li.l1t.common.intake.CommandsManager;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Provides commonly used utilities for commands working with skills.
@@ -30,6 +32,28 @@ public class SkillCommandService extends YamlManagerCommandService<Skill> {
         commandsManager.bind(SkillCommandService.class).toInstance(this);
         commandsManager.bind(Skill.class).toProvider(new YamlObjectProvider<>(this));
     }
+
+    public void changeHandlerSpec(Skill skill, String newSpec, CommandSender sender) {
+        String previousName = skill.getHandlerSpec();
+        skill.setHandlerSpec(newSpec);
+        saveObject(skill);
+        sendChangeNotification("Handler", previousName, newSpec, skill, sender);
+    }
+
+    public void changeIconStack(Skill skill, ItemStack newStack, CommandSender sender) {
+        ItemStack previousStack = skill.getIconStack();
+        skill.setIconStack(newStack);
+        saveObject(skill);
+        sendChangeNotification("Icon", previousStack, newStack, skill, sender);
+    }
+
+    public void changeBookCost(Skill skill, int newCost, CommandSender sender) {
+        int previousCost = skill.getBookCost();
+        skill.setBookCost(newCost);
+        saveObject(skill);
+        sendChangeNotification("Preis in Skillpunkten", previousCost, newCost, skill, sender);
+    }
+
 
     @Override
     public SkillManager getManager() {
