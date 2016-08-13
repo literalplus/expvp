@@ -80,9 +80,10 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     }
 
     @Command(aliases = "branches-exklusive", min = 2,
-            desc = "",
-            help = "Setzt, ob sich die Äster\ndes Baums gegenseitig\nausschließen.\nDas bedeutet,\n" +
-                    "wenn man einen erforscht hat,\nkann man den Nachbar\nnicht mehr erforschen. (true)",
+            desc = "§e/st",
+            help = "Setzt, ob sich die Äste\ndes Baums gegenseitig\nausschließen.\nDas bedeutet, " +
+                    "wenn true,\nund man einen Ast erforscht hat,\nkann man den Nachbarn\nnicht " +
+                    "mehr erforschen. (true)",
             usage = "[id] [true|false]")
     @Require("expvp.admin")
     public void editBranchesExclusive(SkillTreeCommandService service, CommandSender sender,

@@ -9,6 +9,7 @@
 package me.minotopia.expvp.yaml;
 
 import com.google.common.base.Preconditions;
+import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.skill.meta.SkillLoader;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,7 @@ import java.util.Set;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-24
  */
-public abstract class AbstractYamlLoader<T> implements YamlLoader<T> {
+public abstract class AbstractYamlLoader<T extends Nameable> implements YamlLoader<T> {
     public static final String DATA_PATH = "data";
     private static Logger LOGGER = LoggingManager.getLogger(AbstractYamlLoader.class);
     private final YamlManager<T> manager;

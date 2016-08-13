@@ -9,6 +9,7 @@
 package me.minotopia.expvp.skill.tree;
 
 import com.google.common.base.Preconditions;
+import me.minotopia.expvp.Nameable;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +23,7 @@ import java.util.Map;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
  */
-public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSerializable {
+public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSerializable, Nameable {
     public static final String NAME_PATH = "name";
     public static final String ICON_PATH = "icon";
     public static final String BRANCHES_EXCLUSIVE_PATH = "b-excl";
@@ -80,6 +81,7 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
     /**
      * @return the human-readable name of this tree
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -89,6 +91,7 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
      *
      * @param name the new human-readable name of this tree
      */
+    @Override
     public void setName(String name) {
         this.name = name;
     }
