@@ -65,8 +65,8 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
         if (source.containsKey(NAME_PATH)) {
             setName(String.valueOf(source.get(NAME_PATH)));
         }
-        if (source.containsKey(ICON_PATH)) {
-            Object iconObj = source.get(ICON_PATH);
+        Object iconObj = source.get(ICON_PATH);
+        if (iconObj != null) {
             Preconditions.checkArgument(iconObj instanceof Map, "icon must be an item stack: %s", iconObj);
             setIconStack(ItemStack.deserialize((Map<String, Object>) iconObj)); // <--- unchecked
         }
