@@ -21,7 +21,7 @@ import org.bukkit.plugin.Plugin;
  * @since 2016-07-22
  */
 public class SkillTreeInventoryMenu extends SimpleInventoryMenu {
-    protected SkillTreeInventoryMenu(Plugin plugin, String inventoryTitle, Player player) {
+    public SkillTreeInventoryMenu(Plugin plugin, String inventoryTitle, Player player) {
         super(plugin, inventoryTitle, player);
     }
 

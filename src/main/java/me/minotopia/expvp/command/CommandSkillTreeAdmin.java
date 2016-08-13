@@ -14,9 +14,15 @@ import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.intake.provider.annotation.Colored;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
+import li.l1t.common.intake.provider.annotation.Sender;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.skill.tree.SkillTree;
+import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeInventoryMenu;
+import me.minotopia.expvp.skill.tree.ui.renderer.TreeStructureRenderer;
+import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
@@ -92,6 +98,21 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
         service.changeBranchesExclusive(tree, branchesExclusive, sender);
     }
 
+    @Command(aliases = "preview", min = 1,
+            desc = "Zeigt Vorschau",
+            help = "Zeigt eine Vorschau des Skilltrees",
+            usage = "[id]")
+    @Require("expvp.admin")
+    public void showPreview(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player,
+                            SkillTree tree)
+            throws IOException, RenderingException {
+        SkillTreeInventoryMenu menu = new SkillTreeInventoryMenu(plugin, "Vorschau: " + tree.getDisplayName(), player);
+        TreeStructureRenderer renderer = new TreeStructureRenderer(tree);
+        renderer.render();
+        renderer.applyStructureTo(menu);
+        menu.open();
+    }
+
     @Command(aliases = "info", min = 1,
             desc = "Zeigt Infos zu einem Skilltree",
             usage = "[id]")
@@ -108,6 +129,4 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
         sender.sendMessage(String.format("§e➩ §lIcon: %s",
                 tree.getIconStack() == null ? "§cnein" : tree.getIconStack()));
     }
-
-    //TODO: /ska handlers
 }
