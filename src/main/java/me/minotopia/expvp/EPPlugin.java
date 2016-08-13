@@ -14,6 +14,7 @@ import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.command.CommandSkillAdmin;
 import me.minotopia.expvp.command.service.SkillCommandService;
+import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.model.BaseEntity;
@@ -96,8 +97,8 @@ public class EPPlugin extends GenericXyPlugin {
     }
 
     private void registerInjections() {
-        commandsManager.bind(SkillTreeManager.class).toInstance(skillTreeManager);
-        SkillCommandService.registerInjections(commandsManager, skillManager);
+        new SkillCommandService(skillManager).registerInjections(commandsManager);
+        new SkillTreeCommandService(skillTreeManager).registerInjections(commandsManager);
     }
 
     private void initHibernate() throws IOException { //TODO: Querydsl

@@ -9,7 +9,7 @@
 package me.minotopia.expvp.command.service;
 
 import li.l1t.common.intake.CommandsManager;
-import me.minotopia.expvp.command.provider.SkillProvider;
+import me.minotopia.expvp.command.provider.YamlObjectProvider;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
 
@@ -25,13 +25,10 @@ public class SkillCommandService extends YamlManagerCommandService<Skill> {
         super(skillManager, "Skill");
     }
 
-    public SkillCommandService registerInjections(CommandsManager commandsManager,
-                                                  SkillManager skillManager) {
-        SkillCommandService instance = new SkillCommandService(skillManager);
-        commandsManager.bind(SkillManager.class).toInstance(skillManager);
-        commandsManager.bind(SkillCommandService.class).toInstance(instance);
-        commandsManager.bind(Skill.class).toProvider(new SkillProvider(instance));
-        return instance;
+    public void registerInjections(CommandsManager commandsManager) {
+        commandsManager.bind(SkillManager.class).toInstance(getManager());
+        commandsManager.bind(SkillCommandService.class).toInstance(this);
+        commandsManager.bind(Skill.class).toProvider(new YamlObjectProvider<>(this));
     }
 
     @Override

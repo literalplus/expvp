@@ -12,8 +12,8 @@ import com.sk89q.intake.argument.ArgumentException;
 import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.parametric.Provider;
 import com.sk89q.intake.parametric.ProvisionException;
-import me.minotopia.expvp.command.service.SkillCommandService;
-import me.minotopia.expvp.skill.meta.Skill;
+import me.minotopia.expvp.Identifiable;
+import me.minotopia.expvp.command.service.YamlManagerCommandService;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
@@ -21,15 +21,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Provides skill instances to commands.
+ * Provides skill tree instances to commands.
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-08-06
  */
-public class SkillProvider implements Provider<Skill> {
-    private final SkillCommandService service;
+public class YamlObjectProvider<T extends Identifiable> implements Provider<T> {
+    private final YamlManagerCommandService<T> service;
 
-    public SkillProvider(SkillCommandService service) {
+    public YamlObjectProvider(YamlManagerCommandService<T> service) {
         this.service = service;
     }
 
@@ -40,7 +40,8 @@ public class SkillProvider implements Provider<Skill> {
 
     @Nullable
     @Override
-    public Skill get(CommandArgs arguments, List<? extends Annotation> modifiers) throws ArgumentException, ProvisionException {
+    public T get(CommandArgs arguments, List<? extends Annotation> modifiers) throws
+            ArgumentException, ProvisionException {
         String skillId = arguments.next();
         return service.getObjectOrFail(skillId);
     }

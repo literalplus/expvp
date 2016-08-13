@@ -24,7 +24,7 @@ public class YamlManagerCommandService<T extends Identifiable> {
     protected final YamlManager<T> manager;
     private String objectTypeName;
 
-    public YamlManagerCommandService(YamlManager<T> manager, String objectTypeName) {
+    YamlManagerCommandService(YamlManager<T> manager, String objectTypeName) {
         this.manager = manager;
         this.objectTypeName = objectTypeName;
     }
