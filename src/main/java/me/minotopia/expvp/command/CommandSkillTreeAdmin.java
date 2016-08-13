@@ -79,8 +79,8 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
         service.changeSlotId(tree, slotId, sender);
     }
 
-    @Command(aliases = "branches-exklusive", min = 2,
-            desc = "§e/st",
+    @Command(aliases = "branches-exclusive", min = 2,
+            desc = "§e",
             help = "Setzt, ob sich die Äste\ndes Baums gegenseitig\nausschließen.\nDas bedeutet, " +
                     "wenn true,\nund man einen Ast erforscht hat,\nkann man den Nachbarn\nnicht " +
                     "mehr erforschen. (true)",
