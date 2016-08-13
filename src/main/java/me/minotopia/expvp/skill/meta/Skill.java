@@ -22,7 +22,7 @@ import java.util.Map;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
  */
-public class Skill implements ConfigurationSerializable {
+public class Skill implements ConfigurationSerializable, me.minotopia.expvp.Identifiable {
     public static final String ID_PATH = "id";
     public static final String BOOK_COST_PATH = "cost";
     public static final String NAME_PATH = "name";
@@ -49,9 +49,7 @@ public class Skill implements ConfigurationSerializable {
         return name == null ? id : name;
     }
 
-    /**
-     * @return the unique id identifying this skill
-     */
+    @Override
     public String getId() {
         return id;
     }

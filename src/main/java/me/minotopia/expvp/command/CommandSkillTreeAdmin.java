@@ -22,15 +22,15 @@ import org.bukkit.inventory.ItemStack;
 import java.io.IOException;
 
 /**
- * A command that provides tools for creation, deletion and modification of skill metadata.
+ * A command that provides tools for creation, deletion and modification of skill trees.
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-07-23
  */
-public class CommandSkillAdmin {
+public class CommandSkillTreeAdmin {
     @Command(aliases = "new", min = 2,
-            desc = "Erstellt neuen Skill",
-            help = "Erstellt einen neuen Skill\nzur Verwendung in Skilltrees.\nDie Id besteht " +
+            desc = "Erstellt neuen Skilltree",
+            help = "Erstellt einen neuen Skilltree\nDie Id besteht " +
                     "dabei aus\nZahlen, Buchstaben und Bindestrichen\nund ist eindeutig.",
             usage = "[id] [name...]")
     @Require("expvp.admin")

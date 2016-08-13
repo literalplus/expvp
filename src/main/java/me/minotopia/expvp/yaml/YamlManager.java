@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.yaml;
 
+import me.minotopia.expvp.Identifiable;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -18,7 +20,7 @@ import java.util.Collection;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-24
  */
-public interface YamlManager<T> {
+public interface YamlManager<T extends Identifiable> {
     /**
      * Loads all objects from disk.
      */

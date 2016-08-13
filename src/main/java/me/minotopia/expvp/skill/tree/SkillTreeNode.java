@@ -9,6 +9,7 @@
 package me.minotopia.expvp.skill.tree;
 
 import li.l1t.common.tree.TreeNode;
+import me.minotopia.expvp.Identifiable;
 import me.minotopia.expvp.model.player.ObtainedSkill;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -21,16 +22,11 @@ import java.util.Map;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
  */
-public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, Skill> {
+public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, Skill>, Identifiable {
     /**
      * @return the unique identifier of the tree this node belongs to
      */
     String getTreeId();
-
-    /**
-     * @return the unique identifier of this node
-     */
-    String getId();
 
     /**
      * Checks whether given model skill represents this node.

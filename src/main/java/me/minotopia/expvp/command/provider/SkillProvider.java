@@ -42,12 +42,12 @@ public class SkillProvider implements Provider<Skill> {
     @Override
     public Skill get(CommandArgs arguments, List<? extends Annotation> modifiers) throws ArgumentException, ProvisionException {
         String skillId = arguments.next();
-        return service.getSkillOrFail(skillId);
+        return service.getObjectOrFail(skillId);
     }
 
     @Override
     public List<String> getSuggestions(String prefix) {
-        return service.getSkillManager().getAll().stream()
+        return service.getManager().getAll().stream()
                 .map(String::valueOf)
                 .collect(Collectors.toList());
     }

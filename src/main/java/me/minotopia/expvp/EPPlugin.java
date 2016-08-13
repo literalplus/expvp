@@ -97,7 +97,7 @@ public class EPPlugin extends GenericXyPlugin {
 
     private void registerInjections() {
         commandsManager.bind(SkillTreeManager.class).toInstance(skillTreeManager);
-        SkillCommandService.registerSkillInjections(commandsManager, skillManager);
+        SkillCommandService.registerInjections(commandsManager, skillManager);
     }
 
     private void initHibernate() throws IOException { //TODO: Querydsl
