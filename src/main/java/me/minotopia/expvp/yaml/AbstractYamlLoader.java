@@ -11,7 +11,6 @@ package me.minotopia.expvp.yaml;
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.logging.LoggingManager;
-import me.minotopia.expvp.skill.meta.SkillLoader;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
@@ -53,12 +52,12 @@ public abstract class AbstractYamlLoader<T extends Nameable> implements YamlLoad
 
     @Override
     public String getObjectId(File file) {
-        return file.getName().replace(SkillLoader.FILE_EXTENSION, "");
+        return file.getName().replace(getFileExtension(), "");
     }
 
     @Override
     public File getFile(String objId) {
-        return new File(manager.getDirectory(), objId + SkillLoader.FILE_EXTENSION);
+        return new File(manager.getDirectory(), objId + getFileExtension());
     }
 
     /**
