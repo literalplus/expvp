@@ -80,7 +80,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     }
 
     @Command(aliases = "branches-exklusive", min = 2,
-            desc = "Setzt Branches Exclusive",
+            desc = "",
             help = "Setzt, ob sich die Äster\ndes Baums gegenseitig\nausschließen.\nDas bedeutet,\n" +
                     "wenn man einen erforscht hat,\nkann man den Nachbar\nnicht mehr erforschen. (true)",
             usage = "[id] [true|false]")
