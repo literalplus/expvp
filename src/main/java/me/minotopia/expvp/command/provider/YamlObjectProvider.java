@@ -12,7 +12,7 @@ import com.sk89q.intake.argument.ArgumentException;
 import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.parametric.Provider;
 import com.sk89q.intake.parametric.ProvisionException;
-import me.minotopia.expvp.Identifiable;
+import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.command.service.YamlManagerCommandService;
 
 import javax.annotation.Nullable;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-08-06
  */
-public class YamlObjectProvider<T extends Identifiable> implements Provider<T> {
+public class YamlObjectProvider<T extends Nameable> implements Provider<T> {
     private final YamlManagerCommandService<T> service;
 
     public YamlObjectProvider(YamlManagerCommandService<T> service) {
