@@ -46,11 +46,6 @@ public class SkillTreeManager extends AbstractYamlManager<SkillTree> {
     }
 
     @Override
-    public String getId(SkillTree tree) {
-        return tree.getId();
-    }
-
-    @Override
     protected YamlLoader<SkillTree> createLoader() {
         return new SkillTreeLoader(this);
     }

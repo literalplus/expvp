@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.yaml;
 
+import me.minotopia.expvp.Nameable;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -21,7 +23,7 @@ import java.util.Map;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-24
  */
-public abstract class AbstractYamlManager<T> implements YamlManager<T> {
+public abstract class AbstractYamlManager<T extends Nameable> implements YamlManager<T> {
     private final File directory;
     private final YamlLoader<T> loader;
     private final Map<String, T> registry = new HashMap<>();
@@ -36,7 +38,7 @@ public abstract class AbstractYamlManager<T> implements YamlManager<T> {
     public void loadAll() {
         registry.clear();
         loader.loadFromDirectory()
-                .forEach(tree -> registry.put(getId(tree), tree));
+                .forEach(object -> registry.put(object.getId(), object));
     }
 
     @Override
@@ -69,7 +71,7 @@ public abstract class AbstractYamlManager<T> implements YamlManager<T> {
     @Override
     public T create(String objId) throws IOException {
         T obj = loader.create(objId);
-        registry.put(getId(obj), obj);
+        registry.put(obj.getId(), obj);
         return obj;
     }
 

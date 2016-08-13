@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.yaml;
 
-import me.minotopia.expvp.Identifiable;
+import me.minotopia.expvp.Nameable;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.Collection;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-24
  */
-public interface YamlManager<T extends Identifiable> {
+public interface YamlManager<T extends Nameable> {
     /**
      * Loads all objects from disk.
      */
@@ -64,11 +64,4 @@ public interface YamlManager<T extends Identifiable> {
      * @throws IOException if an error occurs writing to the file
      */
     void save(T obj) throws IOException;
-
-    /**
-     * Gets the id of an object managed by this manager.
-     * @param obj the object
-     * @return the unique string identifier of the object
-     */
-    String getId(T obj);
 }

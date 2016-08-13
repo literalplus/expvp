@@ -35,9 +35,4 @@ public class SkillManager extends AbstractYamlManager<Skill> {
     protected SkillLoader createLoader() {
         return new SkillLoader(this);
     }
-
-    @Override
-    public String getId(Skill skill) {
-        return skill.getId();
-    }
 }
