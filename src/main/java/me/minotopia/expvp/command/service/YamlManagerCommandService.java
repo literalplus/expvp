@@ -73,7 +73,7 @@ public class YamlManagerCommandService<T extends Nameable> {
     public void sendChangeNotification(String description, Object previous, Object changed,
                                 T object, CommandSender sender) {
         sender.sendMessage(String.format(
-                "§e➩ %s des %ss '%s' von '%s' auf '%s' geändert.",
+                "§e➩ %s des %ss '%s' von '%s' auf '%s§e' geändert.",
                 description, objectTypeName, object.getId(), previous, changed));
     }
 
