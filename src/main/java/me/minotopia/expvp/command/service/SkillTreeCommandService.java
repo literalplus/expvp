@@ -9,7 +9,7 @@
 package me.minotopia.expvp.command.service;
 
 import li.l1t.common.intake.CommandsManager;
-import li.l1t.common.intake.exception.CommandExitMessage;
+import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.inventory.SlotPosition;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
 import me.minotopia.expvp.skill.tree.SkillTree;
@@ -44,7 +44,7 @@ public class SkillTreeCommandService extends YamlManagerCommandService<SkillTree
 
     public void changeSlotId(SkillTree tree, int newSlotId, CommandSender sender) {
         if (!SlotPosition.fromSlotId(newSlotId).isValidSlot()) {
-            throw new CommandExitMessage("§c§lFehler: §cDas ist keine valide Slot-ID: " + newSlotId);
+            throw new UserException("Das ist keine valide Slot-ID: " + newSlotId);
         }
         int previous = tree.getSlotId();
         tree.setSlotId(newSlotId);

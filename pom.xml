@@ -49,6 +49,7 @@
         <log4j.version>2.0-beta9</log4j.version>
         <!-- Mojang ship outdated Beta code in Production -->
         <hibernate.version>5.1.0.Final</hibernate.version>
+        <intake-spigot.version>4.2.18</intake-spigot.version>
     </properties>
 
     <repositories>
@@ -106,7 +107,7 @@
         <dependency>
             <groupId>li.l1t.common</groupId>
             <artifactId>intake-spigot</artifactId>
-            <version>4.2.14</version>
+            <version>${intake-spigot.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

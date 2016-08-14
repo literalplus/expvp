@@ -8,7 +8,8 @@
 
 package me.minotopia.expvp.command.service;
 
-import li.l1t.common.intake.exception.CommandArgumentException;
+import li.l1t.common.intake.exception.InternalException;
+import li.l1t.common.intake.exception.UserException;
 import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.yaml.YamlManager;
 import org.bukkit.command.CommandSender;
@@ -34,7 +35,7 @@ public class YamlManagerCommandService<T extends Nameable> {
         try {
             manager.save(object);
         } catch (IOException e) {
-            throw new IllegalStateException(String.format(
+            throw new InternalException(String.format(
                     "Fehler beim Speichern vom %s mit der ID '%s'",
                     objectTypeName, object.getId()), e);
         }
@@ -47,7 +48,7 @@ public class YamlManagerCommandService<T extends Nameable> {
 
     public void assureThereIsNoObjectWithId(String id) {
         if (manager.contains(id)) {
-            throw new CommandArgumentException(String.format(
+            throw new UserException(String.format(
                     "Es gibt bereits einen " + objectTypeName + " mit der ID '%s'!",
                     id));
         }
@@ -56,7 +57,7 @@ public class YamlManagerCommandService<T extends Nameable> {
     public T getObjectOrFail(String id) {
         T object = manager.get(id);
         if (object == null) {
-            throw new CommandArgumentException(String.format(
+            throw new UserException(String.format(
                     "Es gibt keinen %s mit der ID '%s'!",
                     objectTypeName, id));
         }
