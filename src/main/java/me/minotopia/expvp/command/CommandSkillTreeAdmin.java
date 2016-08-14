@@ -11,6 +11,8 @@ package me.minotopia.expvp.command;
 import com.sk89q.intake.Command;
 import com.sk89q.intake.Require;
 import com.sk89q.intake.parametric.annotation.Validate;
+import li.l1t.common.chat.ComponentSender;
+import li.l1t.common.chat.XyComponentBuilder;
 import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.intake.provider.annotation.Colored;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
@@ -22,6 +24,7 @@ import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeInventoryMenu;
 import me.minotopia.expvp.skill.tree.ui.renderer.TreeStructureRenderer;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -61,7 +64,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     public void editName(SkillTreeCommandService service, CommandSender sender,
                          SkillTree tree, @Merged @Colored String name)
             throws IOException {
-        if(name.length() > 32) {
+        if (name.length() > 32) {
             throw new UserException("Der Name darf maximal 32 Zeichen lang sein (#BlameMojang)");
         }
         service.changeName(tree, name, sender);
@@ -84,7 +87,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             usage = "[id] [Slot-ID]")
     @Require("expvp.admin")
     public void editSlotId(SkillTreeCommandService service, CommandSender sender,
-                         SkillTree tree, int slotId)
+                           SkillTree tree, int slotId)
             throws IOException {
         service.changeSlotId(tree, slotId, sender);
     }
@@ -97,7 +100,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             usage = "[id] [true|false]")
     @Require("expvp.admin")
     public void editBranchesExclusive(SkillTreeCommandService service, CommandSender sender,
-                         SkillTree tree, boolean branchesExclusive)
+                                      SkillTree tree, boolean branchesExclusive)
             throws IOException {
         service.changeBranchesExclusive(tree, branchesExclusive, sender);
     }
@@ -114,6 +117,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
         TreeStructureRenderer renderer = new TreeStructureRenderer(tree);
         renderer.render();
         renderer.applyStructureTo(menu);
+        menu.redraw();
         menu.open();
     }
 
@@ -122,7 +126,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             usage = "[id]")
     @Require("expvp.admin")
     public void skillInfo(SkillTreeCommandService service, CommandSender sender,
-                         SkillTree tree)
+                          SkillTree tree)
             throws IOException {
         sender.sendMessage(String.format("§e➩ §lSkilltree: §6%s §e(ID: %s§e)",
                 tree.getDisplayName(), tree.getId()));
@@ -132,5 +136,11 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
                 tree.getSlotId()));
         sender.sendMessage(String.format("§e➩ §lIcon: %s",
                 tree.getIconStack() == null ? "§cnein" : tree.getIconStack()));
+        ComponentSender.sendTo(
+                new XyComponentBuilder("[Vorschau anzeigen]", ChatColor.GOLD).italic(true)
+                        .hintedCommand("/sta preview " + tree.getId())
+                        .create(),
+                sender
+        );
     }
 }
