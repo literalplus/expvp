@@ -11,6 +11,7 @@ package me.minotopia.expvp.command;
 import com.sk89q.intake.Command;
 import com.sk89q.intake.Require;
 import com.sk89q.intake.parametric.annotation.Validate;
+import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.intake.provider.annotation.Colored;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
@@ -60,6 +61,9 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     public void editName(SkillTreeCommandService service, CommandSender sender,
                          SkillTree tree, @Merged @Colored String name)
             throws IOException {
+        if(name.length() > 32) {
+            throw new UserException("Der Name darf maximal 32 Zeichen lang sein (#BlameMojang)");
+        }
         service.changeName(tree, name, sender);
     }
 
@@ -106,7 +110,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     public void showPreview(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player,
                             SkillTree tree)
             throws IOException, RenderingException {
-        SkillTreeInventoryMenu menu = new SkillTreeInventoryMenu(plugin, "Vorschau: " + tree.getDisplayName(), player);
+        SkillTreeInventoryMenu menu = new SkillTreeInventoryMenu(plugin, tree.getDisplayName(), player);
         TreeStructureRenderer renderer = new TreeStructureRenderer(tree);
         renderer.render();
         renderer.applyStructureTo(menu);
