@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.skill.tree.ui.renderer;
 
+import com.google.common.base.Preconditions;
 import li.l1t.common.inventory.SlotPosition;
 import li.l1t.common.inventory.gui.element.MenuElement;
 import li.l1t.common.inventory.gui.holder.TemplateElementHolder;
@@ -41,9 +42,7 @@ public class NodeStructureRenderer {
 
     private void renderCurrentNodeAndChildren() {
         renderCurrentNodeAtCurrentPosition();
-        renderUpwardConnectorForCurrentNodeIfNecessary();
         if(currentNode.hasChildren()) {
-            renderHorizontalChildConnectorOfCurrentNode();
             renderChildrenOfCurrentNodeAt(bestPositionForFirstNodeOfNextBranch());
         }
     }
@@ -54,18 +53,47 @@ public class NodeStructureRenderer {
             selectNode(currentChild);
             advanceTo(nextChildPosition);
             renderCurrentNodeAndChildren();
+            renderCurrentNodeParentConnectors();
             nextChildPosition = nextChildPosition.add(0, 2);
         }
     }
 
-    private void renderHorizontalChildConnectorOfCurrentNode() {
-        renderConnectorRelativeToCurrentPosition(1, 0);
+    private void renderCurrentNodeParentConnectors() {
+        Preconditions.checkNotNull(currentNode.getParent(), "children must have parent!");
+        renderDirectParentConnectorOfCurrentNode();
+        renderSiblingConnectorOfCurrentNodeIfNecessary();
+    }
+
+    private void renderSiblingConnectorOfCurrentNodeIfNecessary() {
+        if(currentNodeIsNotFirstChild()) {
+            renderSiblingConnectorOfCurrentNode();
+        }
+    }
+
+    private boolean currentNodeIsNotFirstChild() {
+        return getCurrentNodeChildId() != 0;
+    }
+
+    private void renderSiblingConnectorOfCurrentNode() {
+        renderConnectorRelativeToCurrentPosition(-1, -1);
+    }
+
+    private void renderDirectParentConnectorOfCurrentNode() {
+        renderConnectorRelativeToCurrentPosition(-1, 0);
     }
 
     private void renderUpwardConnectorForCurrentNodeIfNecessary() {
         if(currentNodeHasUpwardConnection()) {
             renderConnectorRelativeToCurrentPosition(0, -1);
         }
+    }
+
+    private boolean currentNodeHasUpwardConnection() {
+        return currentNode.getParent() != null && currentNodeIsNotFirstChild();
+    }
+
+    private int getCurrentNodeChildId() {
+        return currentNode.getParent().getChildId(currentNode);
     }
 
     private void renderConnectorRelativeToCurrentPosition(int relX, int relY) {
@@ -80,10 +108,6 @@ public class NodeStructureRenderer {
 
     private void renderCurrentNodeAtCurrentPosition() {
         template.addElement(currentPosition.toSlotId(), createElementForCurrentNode());
-    }
-
-    private boolean currentNodeHasUpwardConnection() {
-        return currentNode.getParent() != null && currentNode.getParent().getChildId(currentNode) != 0;
     }
 
     private void selectNode(SimpleSkillTreeNode currentChild) {
