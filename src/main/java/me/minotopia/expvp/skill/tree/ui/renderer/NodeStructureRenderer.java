@@ -139,4 +139,8 @@ public class NodeStructureRenderer {
     private boolean isSlotOccupied(SlotPosition targetPosition) {
         return template.isOccupied(targetPosition.toSlotId());
     }
+
+    TreeStructureRenderer getTreeRenderer() { //for tests
+        return treeRenderer;
+    }
 }

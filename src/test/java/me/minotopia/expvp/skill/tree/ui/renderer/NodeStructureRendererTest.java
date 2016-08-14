@@ -11,6 +11,7 @@ package me.minotopia.expvp.skill.tree.ui.renderer;
 import li.l1t.common.inventory.SlotPosition;
 import li.l1t.common.inventory.gui.holder.TemplateElementHolder;
 import li.l1t.common.test.util.MockHelper;
+import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.SkillTreeNode;
 import me.minotopia.expvp.skill.tree.ui.element.SimpleSkillElement;
@@ -31,24 +32,54 @@ public class NodeStructureRendererTest {
     private static final ItemStack MELON_STACK = new ItemStack(Material.MELON_BLOCK);
 
     @Test
-    public void render__simple_root_only() throws Exception {
+    public void render__root_only() throws Exception {
         //given
         MockHelper.mockServer();
-        SkillTree tree = new SkillTree("test-tree");
-        tree.setIconStack(MELON_STACK);
-        TreeStructureRenderer treeRenderer = new TreeStructureRenderer(tree);
-        NodeStructureRenderer nodeRenderer = new NodeStructureRenderer(treeRenderer);
+        SkillTree tree = givenASkillTree();
+        NodeStructureRenderer nodeRenderer = givenANodeRenderer(tree);
         //when
         nodeRenderer.render();
         //then
-        assertNodeAtPositionIs(tree, SlotPosition.ofXY(0, 3), treeRenderer);
+        thenTheNodeAtIs(SlotPosition.ofXY(0, 3), tree, nodeRenderer);
     }
 
-    private void assertNodeAtPositionIs(SkillTreeNode<?> expected, SlotPosition position,
-                                       TreeStructureRenderer treeRenderer) {
-        TemplateElementHolder template = treeRenderer.getTemplate();
+    public NodeStructureRenderer givenANodeRenderer(SkillTree tree) {
+        TreeStructureRenderer treeRenderer = new TreeStructureRenderer(tree);
+        return new NodeStructureRenderer(treeRenderer);
+    }
+
+    public SkillTree givenASkillTree() {
+        SkillTree tree = new SkillTree("test-tree");
+        tree.setIconStack(MELON_STACK);
+        return tree;
+    }
+
+    @Test
+    public void render__single_child() throws Exception {
+        //given
+        MockHelper.mockServer();
+        SkillTree tree = givenASkillTree();
+        SimpleSkillTreeNode child = tree.createChild("some-skill");
+        NodeStructureRenderer nodeRenderer = givenANodeRenderer(tree);
+        //when
+        nodeRenderer.render();
+        //then
+        thenTheNodeAtIs(SlotPosition.ofXY(0, 3), tree, nodeRenderer);
+        thenTheNodeAtIs(SlotPosition.ofXY(2, 3), child, nodeRenderer);
+        thenThereIsAPlaceholderAt(SlotPosition.ofXY(1, 3), nodeRenderer);
+
+    }
+
+    private void thenTheNodeAtIs(SlotPosition position, SkillTreeNode<?> expected,
+                                 NodeStructureRenderer nodeRenderer) {
+        TemplateElementHolder template = nodeRenderer.getTreeRenderer().getTemplate();
         SimpleSkillElement element = (SimpleSkillElement) template.getElement(position.toSlotId());
         assertThat("wrong element at pos " + position, element.getNode(), is(expected));
     }
 
+    private void thenThereIsAPlaceholderAt(SlotPosition position, NodeStructureRenderer nodeRenderer) {
+        TemplateElementHolder template = nodeRenderer.getTreeRenderer().getTemplate();
+        assertThat("expected placeholder at " + position,
+                template.hasPlaceholderAt(position.toSlotId()), is(true));
+    }
 }
