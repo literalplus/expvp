@@ -12,6 +12,7 @@ import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.element.MenuElement;
 import li.l1t.common.inventory.gui.holder.ElementHolder;
 import me.minotopia.expvp.skill.tree.SkillTreeNode;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,6 +32,9 @@ public class SimpleSkillElement implements MenuElement {
     @Override
     public ItemStack draw(ElementHolder elementHolder) {
         //TODO: show completion status and availability
+        if(node.getValue() == null) {
+            return new ItemStack(Material.BARRIER);
+        }
         return node.getValue().getIconStack();
     }
 
