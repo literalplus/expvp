@@ -69,6 +69,19 @@ public class NodeStructureRendererTest {
         thenThereIsAPlaceholderAt(SlotPosition.ofXY(1, 3), renderer);
     }
 
+    private void thenTheNodeAtIs(SlotPosition position, SkillTreeNode<?> expected,
+                                 NodeStructureRenderer renderer) {
+        TemplateElementHolder template = renderer.getTreeRenderer().getTemplate();
+        SimpleSkillElement element = (SimpleSkillElement) template.getElement(position.toSlotId());
+        assertThat("wrong element at pos " + position, element.getNode(), is(expected));
+    }
+
+    private void thenThereIsAPlaceholderAt(SlotPosition position, NodeStructureRenderer renderer) {
+        TemplateElementHolder template = renderer.getTreeRenderer().getTemplate();
+        assertThat("expected placeholder at " + position,
+                template.hasPlaceholderAt(position.toSlotId()), is(true));
+    }
+
     @Test
     public void render__three_children() throws Exception {
         //given
@@ -88,23 +101,28 @@ public class NodeStructureRendererTest {
         thenThereArePlaceholdersVerticallyAtBetween(1, 1, 5, renderer);
     }
 
-    private void thenTheNodeAtIs(SlotPosition position, SkillTreeNode<?> expected,
-                                 NodeStructureRenderer renderer) {
-        TemplateElementHolder template = renderer.getTreeRenderer().getTemplate();
-        SimpleSkillElement element = (SimpleSkillElement) template.getElement(position.toSlotId());
-        assertThat("wrong element at pos " + position, element.getNode(), is(expected));
-    }
-
-    private void thenThereIsAPlaceholderAt(SlotPosition position, NodeStructureRenderer renderer) {
-        TemplateElementHolder template = renderer.getTreeRenderer().getTemplate();
-        assertThat("expected placeholder at " + position,
-                template.hasPlaceholderAt(position.toSlotId()), is(true));
-    }
-
     private void thenThereArePlaceholdersVerticallyAtBetween(int x, int startY, int endY,
                                                              NodeStructureRenderer renderer) {
         for(int y = startY; y <= endY; y++) {
             thenThereIsAPlaceholderAt(SlotPosition.ofXY(x, y), renderer);
         }
+    }
+
+    @Test
+    public void render__single_grandchild() throws Exception {
+        //given
+        MockHelper.mockServer();
+        SkillTree tree = givenASkillTree();
+        SimpleSkillTreeNode child = tree.createChild("child");
+        SimpleSkillTreeNode grandchild = child.createChild("grandchild");
+        NodeStructureRenderer renderer = givenANodeRenderer(tree);
+        //when
+        renderer.render();
+        //then
+        thenTheNodeAtIs(SlotPosition.ofXY(0, 3), tree, renderer);
+        thenTheNodeAtIs(SlotPosition.ofXY(2, 3), child, renderer);
+        thenTheNodeAtIs(SlotPosition.ofXY(4, 3), grandchild, renderer);
+        thenThereIsAPlaceholderAt(SlotPosition.ofXY(1, 3), renderer);
+        thenThereIsAPlaceholderAt(SlotPosition.ofXY(3, 3), renderer);
     }
 }

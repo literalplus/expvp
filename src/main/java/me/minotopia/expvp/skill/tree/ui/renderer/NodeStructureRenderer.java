@@ -52,8 +52,8 @@ public class NodeStructureRenderer {
         for(SimpleSkillTreeNode currentChild : currentNode.getChildren()) {
             selectNode(currentChild);
             advanceTo(nextChildPosition);
-            renderCurrentNodeAndChildren();
             renderCurrentNodeParentConnectors();
+            renderCurrentNodeAndChildren();
             nextChildPosition = nextChildPosition.add(0, 2);
         }
     }
