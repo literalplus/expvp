@@ -15,7 +15,6 @@ import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.element.SimpleSkillElement;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
-import me.minotopia.expvp.skill.tree.ui.renderer.node.NodeStructureRenderer;
 
 import java.util.function.Function;
 
@@ -67,5 +66,9 @@ public class TreeStructureRenderer {
 
     public void setElementSupplier(Function<SimpleSkillTreeNode, MenuElement> elementSupplier) {
         this.elementSupplier = elementSupplier;
+    }
+
+    MenuElement<?> createElement(SimpleSkillTreeNode node) {
+        return elementSupplier.apply(node);
     }
 }

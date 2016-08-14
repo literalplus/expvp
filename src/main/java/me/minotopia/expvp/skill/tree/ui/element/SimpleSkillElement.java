@@ -38,4 +38,8 @@ public class SimpleSkillElement implements MenuElement {
     public void handleMenuClick(InventoryClickEvent inventoryClickEvent, InventoryMenu inventoryMenu) {
         //TODO: actual handling
     }
+
+    public SkillTreeNode<?> getNode() {
+        return node;
+    }
 }

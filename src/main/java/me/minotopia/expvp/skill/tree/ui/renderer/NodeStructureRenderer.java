@@ -6,12 +6,13 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.skill.tree.ui.renderer.node;
+package me.minotopia.expvp.skill.tree.ui.renderer;
 
 import li.l1t.common.inventory.SlotPosition;
 import li.l1t.common.inventory.gui.element.MenuElement;
+import li.l1t.common.inventory.gui.holder.TemplateElementHolder;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
-import me.minotopia.expvp.skill.tree.ui.renderer.TreeStructureRenderer;
+import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingAlgorithmException;
 
 /**
@@ -22,11 +23,15 @@ import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingAlgorithmExc
  */
 public class NodeStructureRenderer {
     private final TreeStructureRenderer treeRenderer;
+    private final SkillTree tree;
+    private final TemplateElementHolder template;
     private SlotPosition currentPosition;
     private SimpleSkillTreeNode currentNode;
 
     public NodeStructureRenderer(TreeStructureRenderer treeRenderer) {
         this.treeRenderer = treeRenderer;
+        this.tree = treeRenderer.getTree();
+        this.template = treeRenderer.getTemplate();
     }
 
     public void render() {
@@ -70,15 +75,15 @@ public class NodeStructureRenderer {
 
     private void renderConnectorAt(SlotPosition targetPosition) {
         assureCanDrawAt(targetPosition);
-        treeRenderer.getTemplate().addPlaceholder(targetPosition.toSlotId());
+        template.addPlaceholder(targetPosition.toSlotId());
     }
 
     private void renderCurrentNodeAtCurrentPosition() {
-        treeRenderer.getTemplate().addElement(currentPosition.toSlotId(), createElementForCurrentNode());
+        template.addElement(currentPosition.toSlotId(), createElementForCurrentNode());
     }
 
     private boolean currentNodeHasUpwardConnection() {
-        return currentNode.getParent().getChildId(currentNode) != 0;
+        return currentNode.getParent() != null && currentNode.getParent().getChildId(currentNode) != 0;
     }
 
     private void selectNode(SimpleSkillTreeNode currentChild) {
@@ -86,7 +91,8 @@ public class NodeStructureRenderer {
     }
 
     private void selectRootNode() {
-        selectNode(treeRenderer.getTree());
+        selectNode(tree);
+        currentPosition = SlotPosition.ofXY(0, 3);
     }
 
     private SlotPosition bestPositionForFirstNodeOfNextBranch() {
@@ -106,7 +112,7 @@ public class NodeStructureRenderer {
     }
 
     private MenuElement createElementForCurrentNode() {
-        return treeRenderer.getElementSupplier().apply(currentNode);
+        return treeRenderer.createElement(currentNode);
     }
 
     private void advanceTo(SlotPosition targetPosition) {
@@ -131,6 +137,6 @@ public class NodeStructureRenderer {
     }
 
     private boolean isSlotOccupied(SlotPosition targetPosition) {
-        return treeRenderer.getTemplate().isOccupied(targetPosition.toSlotId());
+        return template.isOccupied(targetPosition.toSlotId());
     }
 }

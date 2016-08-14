@@ -45,7 +45,7 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
      *
      * @param id the unique string id of this tree
      */
-    SkillTree(String id) {
+    public SkillTree(String id) {
         super(null, id);
     }
 
