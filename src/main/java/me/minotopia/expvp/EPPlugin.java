@@ -93,6 +93,8 @@ public class EPPlugin extends GenericXyPlugin {
             //Using jul here because Log4J2 might not have been initialised
             getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable Expvp: ", e);
             getServer().getConsoleSender().sendMessage("§4 --- Unable to enable Expvp ^^^^ ---");
+            getLogger().log(java.util.logging.Level.SEVERE, "*** Enabling whitelist...");
+            getServer().setWhitelist(true);
             if (!getServer().getOnlinePlayers().isEmpty()) {
                 getServer().getOnlinePlayers().stream()
                         .forEach(player -> {
@@ -101,6 +103,7 @@ public class EPPlugin extends GenericXyPlugin {
                                 player.sendMessage("§4§l *** This is a critical error");
                                 player.sendMessage("§4§l *** Non-authorised personnel will be exterminated");
                                 player.sendMessage("§4§l *** Don't panic, call Ghostbusters.");
+                                player.sendMessage("§4§l *** Whitelist has been enabled.");
                                 player.sendMessage("§c Technical description: " + e.getClass().getName() + ": " + e.getLocalizedMessage());
                             } else {
                                 player.sendMessage("§4§l *** Es gab einen internen Fehler.");
@@ -151,8 +154,6 @@ public class EPPlugin extends GenericXyPlugin {
             StandardServiceRegistryBuilder.destroy(registry);
             getLogger().log(java.util.logging.Level.SEVERE, "Could not build Hibernate SessionFactory: ", e);
             getLogger().log(java.util.logging.Level.SEVERE, "*** This is a CRITICAL error");
-            getLogger().log(java.util.logging.Level.SEVERE, "*** Enabling whitelist...");
-            getServer().setWhitelist(true);
             throw new RuntimeException("Unable to connect to database. This is a critical error.", e);
         }
     }
