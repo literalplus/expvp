@@ -8,10 +8,13 @@
 
 package me.minotopia.expvp.skill.tree.ui.element;
 
+import com.google.common.base.Preconditions;
 import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.element.MenuElement;
 import li.l1t.common.inventory.gui.holder.ElementHolder;
+import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skill.tree.SkillTreeNode;
+import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeInventoryMenu;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-07-22
  */
-public class SimpleSkillElement implements MenuElement {
+public class SimpleSkillElement implements MenuElement<SkillTreeInventoryMenu> {
     private final SkillTreeNode<?> node;
 
     public SimpleSkillElement(SkillTreeNode<?> node) {
@@ -35,11 +38,14 @@ public class SimpleSkillElement implements MenuElement {
         if(node.getValue() == null) {
             return new ItemStack(Material.BARRIER);
         }
-        return node.getValue().getIconStack();
+        SkillManager manager = node.getValue().getManager();
+        Preconditions.checkNotNull(manager, "manager?!");
+        Preconditions.checkArgument(elementHolder instanceof InventoryMenu, "can only render in InventoryMenu, is: %s", elementHolder.getClass());
+        return manager.createSkillIconFor(node, ((InventoryMenu) elementHolder).getPlayer());
     }
 
     @Override
-    public void handleMenuClick(InventoryClickEvent inventoryClickEvent, InventoryMenu inventoryMenu) {
+    public void handleMenuClick(InventoryClickEvent inventoryClickEvent, SkillTreeInventoryMenu inventoryMenu) {
         //TODO: actual handling
     }
 

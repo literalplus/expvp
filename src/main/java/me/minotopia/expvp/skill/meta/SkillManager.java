@@ -47,20 +47,28 @@ public class SkillManager extends AbstractYamlManager<Skill> {
 
     public ItemStack createSkillIconFor(SkillTreeNode<?> node, Player player) {
         Skill skill = node.getValue();
-        if(skill == null) {
+        if (skill == null) {
             return new ItemStack(Material.BARRIER);
         }
         boolean obtained = playerDataManager.hasObtainedSkill(player.getUniqueId(), skill);
-        ItemStackFactory icon = new ItemStackFactory(skill.getIconStack());
-        icon.displayName(findColoredDisplayNameFor(skill, obtained));
-        if(!doesParentPermitObtainment(node, player)) {
-            icon.lore("\n§cDu kannst diesen Skill\n§cnoch nicht erforschen!");
-        } else if (obtained) {
+        ItemStackFactory icon = createRawSkillIconFor(skill, obtained);
+        if (obtained) {
             icon.glow().lore("\n§aDu hast diesen Skill\n§abereits erforscht.");
+        } else if (!doesParentPermitObtainment(node, player)) {
+            icon.lore("\n§cDu kannst diesen Skill\n§cnoch nicht erforschen!");
         } else {
             icon.lore("\n§eDu kannst diesen Skill\n§efür " + skill.getBookCost() + " Skillpunkte erforschen.");
         }
         return icon.produce();
+    }
+
+    public ItemStackFactory createRawSkillIconFor(Skill skill, boolean obtained) {
+        if (skill == null) {
+            return new ItemStackFactory(Material.BARRIER);
+        }
+        ItemStackFactory icon = new ItemStackFactory(skill.getIconStack());
+        icon.displayName(findColoredDisplayNameFor(skill, obtained));
+        return icon;
     }
 
     private boolean doesParentPermitObtainment(SkillTreeNode<?> node, Player player) {
