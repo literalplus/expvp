@@ -9,7 +9,6 @@
 package me.minotopia.expvp.command;
 
 import com.sk89q.intake.Command;
-import com.sk89q.intake.Require;
 import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
@@ -24,7 +23,6 @@ import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeInventoryMenu;
-import me.minotopia.expvp.skill.tree.ui.renderer.TreeStructureRenderer;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -115,11 +113,8 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     public void showPreview(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player,
                             SkillTree tree)
             throws IOException, RenderingException {
-        SkillTreeInventoryMenu menu = new SkillTreeInventoryMenu(plugin, tree.getDisplayName(), player);
-        TreeStructureRenderer renderer = new TreeStructureRenderer(tree);
-        renderer.render();
-        renderer.applyStructureTo(menu);
-        menu.redraw();
+        SkillTreeInventoryMenu menu = new SkillTreeInventoryMenu(plugin, player, tree);
+        menu.enableEditing();
         menu.open();
     }
 
