@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp;
 
+import org.bukkit.permissions.Permissible;
+
 /**
  * The enumeration of permissions used by ExPvP to limit who can do what.
  *
@@ -33,13 +35,22 @@ public enum Permission {
     ADMIN_OVERRIDE("expvp.admin.override")
     ;
 
-    private final String bukkitPermission;
+    private final String value;
 
-    Permission(String bukkitPermission) {
-        this.bukkitPermission = bukkitPermission;
+    Permission(String value) {
+        this.value = value;
     }
 
     public String value() {
-        return bukkitPermission;
+        return value;
+    }
+
+    public boolean has(Permissible permissible) {
+        return permissible.hasPermission(value());
+    }
+
+    @Override
+    public String toString() {
+        return value();
     }
 }

@@ -15,6 +15,7 @@ import com.sk89q.intake.parametric.ArgumentParser;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import li.l1t.common.intake.exception.UncheckedException;
 import li.l1t.common.intake.util.InvokeAdapter;
+import me.minotopia.expvp.Permission;
 import org.bukkit.command.CommandSender;
 
 import java.lang.annotation.Annotation;
@@ -35,12 +36,12 @@ public class EnumPermissionInvokeListener extends InvokeAdapter {
     ) throws CommandException, ArgumentException {
         Optional<? extends EnumRequires> possibleEnumRequires = enumRequiresAnnotationIn(annotations);
         if(possibleEnumRequires.isPresent()) {
-            String permission = possibleEnumRequires.get().value().value();
+            Permission permission = possibleEnumRequires.get().value();
             CommandSender sender = commandArgs.getNamespace().get(CommandSender.class);
             if(sender == null) {
                 throw new CommandException("Could not check permission without command sender!");
             }
-            if(!sender.hasPermission(permission)) {
+            if(!permission.has(sender)) {
                 throw UncheckedException.wrap(new AuthorizationException());
             }
         }
