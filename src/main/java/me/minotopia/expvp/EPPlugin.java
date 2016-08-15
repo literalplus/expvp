@@ -14,6 +14,7 @@ import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.command.CommandSkillAdmin;
 import me.minotopia.expvp.command.CommandSkillTreeAdmin;
+import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.kits.KitHandler;
@@ -98,6 +99,7 @@ public class EPPlugin extends GenericXyPlugin {
     private void registerCommands() {
         commandsManager = new CommandsManager(this);
         commandsManager.getTranslator().setLocale(Locale.GERMAN);
+        commandsManager.getBuilder().addInvokeListener(new EnumPermissionInvokeListener());
         registerInjections();
         commandsManager.registerCommand(new CommandSkillAdmin(), "ska", "skilladmin");
         commandsManager.registerCommand(new CommandSkillTreeAdmin(), "sta", "treeadmin");
