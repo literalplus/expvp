@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.skill.tree.ui.menu;
 
+import com.google.common.base.Preconditions;
 import li.l1t.common.intake.exception.InternalException;
 import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
@@ -26,7 +27,7 @@ import org.bukkit.plugin.Plugin;
  * @since 2016-07-22
  */
 public class SkillTreeInventoryMenu extends SimpleInventoryMenu {
-    private final TreeStructureRenderer renderer;
+    private TreeStructureRenderer renderer;
 
     public SkillTreeInventoryMenu(Plugin plugin, Player player, SkillTree tree) {
         super(plugin, tree.getDisplayName(), player);
@@ -35,32 +36,26 @@ public class SkillTreeInventoryMenu extends SimpleInventoryMenu {
 
     public SkillTreeInventoryMenu(Plugin plugin, Player player, TreeStructureRenderer renderer) {
         super(plugin, renderer.getTree().getDisplayName(), player);
+        setRenderer(renderer);
+    }
+
+    public void setRenderer(TreeStructureRenderer renderer) {
+        Preconditions.checkNotNull(renderer, "renderer");
         this.renderer = renderer;
+        if(renderer.isRendered()) {
+            try {
+                renderer.render();
+            } catch (RenderingException e) {
+                throw new InternalException("Konnte Skilltree nicht rendern", e);
+            }
+        }
+        renderer.applyStructureTo(this);
     }
 
     @Override
     protected ItemStackFactory getPlaceholderFactory() {
         return new ItemStackFactory(Material.IRON_FENCE)
                 .displayName("§7§l*");
-    }
-
-    @Override
-    public void redraw() {
-        try {
-            renderer.render();
-            renderer.applyStructureTo(this);
-        } catch (RenderingException e) {
-            throw new InternalException("Fehler beim Rendern des Skilltress " + renderer.getTree().getDisplayName(), e);
-        }
-        super.redraw();
-    }
-
-    @Override
-    public void open() {
-        if(!renderer.isRendered()) {
-            redraw();
-        }
-        super.open();
     }
 
     public void enableEditing() {
