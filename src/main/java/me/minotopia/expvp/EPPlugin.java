@@ -93,6 +93,22 @@ public class EPPlugin extends GenericXyPlugin {
             //Using jul here because Log4J2 might not have been initialised
             getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable Expvp: ", e);
             getServer().getConsoleSender().sendMessage("§4 --- Unable to enable Expvp ^^^^ ---");
+            if (!getServer().getOnlinePlayers().isEmpty()) {
+                getServer().getOnlinePlayers().stream()
+                        .forEach(player -> {
+                            if (player.isOp() || Permission.ADMIN_BASIC.has(player)) {
+                                player.sendMessage("§4§l *** Unable to enable Expvp ***");
+                                player.sendMessage("§4§l *** This is a critical error ***");
+                                player.sendMessage("§4§l *** Non-authorised personnel will be exterminated ***");
+                                player.sendMessage("§4§l *** Don't panic, have a towel and call Ghostbusters. ***");
+                                player.sendMessage("§4§l Message: " + e.getClass().getName() + " " + e.getLocalizedMessage());
+                            } else {
+                                player.sendMessage("§4§l *** Es gab einen internen Fehler.");
+                                player.sendMessage("§4§l *** Zu deiner eigenen Sicherheit wirst du gekickt.");
+                                player.kickPlayer("§cInterner Fehler bei Expvp.\n§aKeine Panik.\n§eBitte kontaktiere das Team.");
+                            }
+                        });
+            }
         }
     }
 
@@ -134,7 +150,10 @@ public class EPPlugin extends GenericXyPlugin {
         } catch (Exception e) {
             StandardServiceRegistryBuilder.destroy(registry);
             getLogger().log(java.util.logging.Level.SEVERE, "Could not build Hibernate SessionFactory: ", e);
-            throw e;
+            getLogger().log(java.util.logging.Level.SEVERE, "*** This is a CRITICAL error");
+            getLogger().log(java.util.logging.Level.SEVERE, "*** Enabling whitelist...");
+            getServer().setWhitelist(true);
+            throw new RuntimeException("Unable to connect to database. This is a critical error.", e);
         }
     }
 
