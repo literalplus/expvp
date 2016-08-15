@@ -97,11 +97,11 @@ public class EPPlugin extends GenericXyPlugin {
                 getServer().getOnlinePlayers().stream()
                         .forEach(player -> {
                             if (player.isOp() || Permission.ADMIN_BASIC.has(player)) {
-                                player.sendMessage("§4§l *** Unable to enable Expvp ***");
-                                player.sendMessage("§4§l *** This is a critical error ***");
-                                player.sendMessage("§4§l *** Non-authorised personnel will be exterminated ***");
-                                player.sendMessage("§4§l *** Don't panic, have a towel and call Ghostbusters. ***");
-                                player.sendMessage("§4§l Message: " + e.getClass().getName() + " " + e.getLocalizedMessage());
+                                player.sendMessage("§4§l *** Unable to enable Expvp");
+                                player.sendMessage("§4§l *** This is a critical error");
+                                player.sendMessage("§4§l *** Non-authorised personnel will be exterminated");
+                                player.sendMessage("§4§l *** Don't panic, call Ghostbusters.");
+                                player.sendMessage("§c Technical description: " + e.getClass().getName() + ": " + e.getLocalizedMessage());
                             } else {
                                 player.sendMessage("§4§l *** Es gab einen internen Fehler.");
                                 player.sendMessage("§4§l *** Zu deiner eigenen Sicherheit wirst du gekickt.");
