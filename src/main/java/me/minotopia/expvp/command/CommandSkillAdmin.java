@@ -9,11 +9,12 @@
 package me.minotopia.expvp.command;
 
 import com.sk89q.intake.Command;
-import com.sk89q.intake.Require;
 import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.intake.provider.annotation.Colored;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
+import me.minotopia.expvp.Permission;
+import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.bukkit.command.CommandSender;
@@ -38,7 +39,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
             help = "Erstellt einen neuen Skill\nzur Verwendung in Skilltrees.\nDie Id besteht " +
                     "dabei aus\nZahlen, Buchstaben und Bindestrichen\nund ist eindeutig.",
             usage = "[id] [name...]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_SKILL)
     public void newSkill(SkillCommandService service, CommandSender sender,
                          @Validate(regex = "[a-zA-Z0-9\\-]+") String id,
                          @Merged @Colored String name)
@@ -49,7 +50,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
     @Command(aliases = "name", min = 2,
             desc = "Ändert den Namen",
             usage = "[id] [name...]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_SKILL)
     public void editName(SkillCommandService service, CommandSender sender,
                          Skill skill,
                          @Merged @Colored String name)
@@ -61,7 +62,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
             desc = "Ändert die Aktion",
             help = "Aktionen werden so spezifiziert:\ntyp/argument\nMehr Info: /ska handlers",
             usage = "[id] [handler...]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_SKILL)
     public void editHandler(SkillCommandService service, CommandSender sender,
                          Skill skill,
                          @Merged String handlerSpec)
@@ -73,7 +74,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
             desc = "Ändert das Icon",
             help = "Ändert das Icon auf das\nItem in deiner Hand",
             usage = "[id]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_SKILL)
     public void editIcon(SkillCommandService service, CommandSender sender,
                          Skill skill, @ItemInHand ItemStack itemInHand)
             throws IOException {
@@ -84,7 +85,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
             desc = "Ändert den Preis",
             help = "Ändert den Preis\nPreis in Skillpunkten.",
             usage = "[id] [neuer Preis]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_SKILL)
     public void editCost(SkillCommandService service, CommandSender sender,
                          Skill skill, int bookCost)
             throws IOException {
@@ -94,7 +95,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
     @Command(aliases = "info", min = 1,
             desc = "Zeigt Infos zu einem Skill",
             usage = "[id]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_BASIC)
     public void skillInfo(SkillCommandService service, CommandSender sender,
                          Skill skill)
             throws IOException {

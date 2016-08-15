@@ -18,7 +18,7 @@ public enum Permission {
     /**
      * Allows to perform basic administrative tasks, like view skills and trees.
      */
-    ADMIN_BASE("expvp.admin.basic"),
+    ADMIN_BASIC("expvp.admin.basic"),
     /**
      * Allows to create and edit skills.
      */

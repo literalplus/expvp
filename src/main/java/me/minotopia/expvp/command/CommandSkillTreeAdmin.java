@@ -19,6 +19,8 @@ import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.Permission;
+import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeInventoryMenu;
@@ -49,7 +51,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             help = "Erstellt einen neuen Skilltree\nDie Id besteht " +
                     "dabei aus\nZahlen, Buchstaben und Bindestrichen\nund ist eindeutig.",
             usage = "[id] [name...]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_TREE)
     public void newSkill(SkillTreeCommandService service, CommandSender sender,
                          @Validate(regex = "[a-zA-Z0-9\\-]+") String id,
                          @Merged @Colored String name)
@@ -60,7 +62,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     @Command(aliases = "name", min = 2,
             desc = "Ändert den Namen",
             usage = "[id] [name...]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_TREE)
     public void editName(SkillTreeCommandService service, CommandSender sender,
                          SkillTree tree, @Merged @Colored String name)
             throws IOException {
@@ -74,7 +76,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             desc = "Ändert das Icon",
             help = "Ändert das Icon auf das\nItem in deiner Hand",
             usage = "[id]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_TREE)
     public void editIcon(SkillTreeCommandService service, CommandSender sender,
                          SkillTree tree, @ItemInHand ItemStack itemInHand)
             throws IOException {
@@ -85,7 +87,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             desc = "Ändert den Iconslot",
             help = "Ändert den Slot, in dem\ndas Icon dieses Trees\nim Übersichtsinventar ist.",
             usage = "[id] [Slot-ID]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_TREE)
     public void editSlotId(SkillTreeCommandService service, CommandSender sender,
                            SkillTree tree, int slotId)
             throws IOException {
@@ -98,7 +100,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
                     "wenn true,\nund man einen Ast erforscht hat,\nkann man den Nachbarn\nnicht " +
                     "mehr erforschen. (true)",
             usage = "[id] [true|false]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_TREE)
     public void editBranchesExclusive(SkillTreeCommandService service, CommandSender sender,
                                       SkillTree tree, boolean branchesExclusive)
             throws IOException {
@@ -109,7 +111,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             desc = "Zeigt Vorschau",
             help = "Zeigt eine Vorschau des Skilltrees",
             usage = "[id]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_BASIC)
     public void showPreview(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player,
                             SkillTree tree)
             throws IOException, RenderingException {
@@ -124,7 +126,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     @Command(aliases = "info", min = 1,
             desc = "Zeigt Infos zu einem Skilltree",
             usage = "[id]")
-    @Require("expvp.admin")
+    @EnumRequires(Permission.ADMIN_BASIC)
     public void skillInfo(SkillTreeCommandService service, CommandSender sender,
                           SkillTree tree)
             throws IOException {
