@@ -30,6 +30,7 @@ public class TreeStructureRenderer {
     private final SkillTree tree;
     private final TemplateElementHolder template = new TemplateElementHolder();
     private Function<SimpleSkillTreeNode, MenuElement> elementSupplier = SimpleSkillElement::new;
+    private boolean rendered = false;
 
     public TreeStructureRenderer(SkillTree tree) {
         this.tree = tree;
@@ -38,6 +39,11 @@ public class TreeStructureRenderer {
     public void render() throws RenderingException {
         assureCouldTreeFitIntoGrid();
         new NodeStructureRenderer(this).render();
+        rendered = true;
+    }
+
+    public boolean isRendered() {
+        return rendered;
     }
 
     private void assureCouldTreeFitIntoGrid() throws RenderingException {
@@ -58,10 +64,6 @@ public class TreeStructureRenderer {
 
     public SkillTree getTree() {
         return tree;
-    }
-
-    public Function<SimpleSkillTreeNode, MenuElement> getElementSupplier() {
-        return elementSupplier;
     }
 
     public void setElementSupplier(Function<SimpleSkillTreeNode, MenuElement> elementSupplier) {
