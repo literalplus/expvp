@@ -19,6 +19,7 @@ import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.model.BaseEntity;
+import me.minotopia.expvp.player.PlayerDataManager;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skill.tree.SkillTreeManager;
 import org.apache.logging.log4j.Level;
@@ -51,6 +52,7 @@ public class EPPlugin extends GenericXyPlugin {
     private SkillTreeManager skillTreeManager;
     private SkillManager skillManager;
     private CommandsManager commandsManager;
+    private PlayerDataManager playerDataManager;
 
     @Override
     public void reloadConfig() {
@@ -76,8 +78,11 @@ public class EPPlugin extends GenericXyPlugin {
             initHibernate();
 
             //Load skill trees and skills
-            skillManager = new SkillManager(new File(getDataFolder(), "skills"));
+            skillManager = new SkillManager(new File(getDataFolder(), "skills"), playerDataManager);
             skillTreeManager = new SkillTreeManager(new File(getDataFolder(), "skilltrees"), skillManager);
+
+            //Initialise managers
+            playerDataManager = new PlayerDataManager(sessionFactory);
 
             // Register commands
             registerCommands();
@@ -180,5 +185,9 @@ public class EPPlugin extends GenericXyPlugin {
 
     public CommandsManager getCommandsManager() {
         return commandsManager;
+    }
+
+    public PlayerDataManager getPlayerDataManager() {
+        return playerDataManager;
     }
 }

@@ -26,9 +26,11 @@ import java.io.IOException;
  */
 public class SkillLoader extends AbstractYamlLoader<Skill> {
     public static String FILE_EXTENSION = ".skill.yml";
+    private final SkillManager manager;
 
     SkillLoader(SkillManager manager) {
         super(manager);
+        this.manager = manager;
         ConfigurationSerialization.registerClass(Skill.class);
     }
 
@@ -36,7 +38,9 @@ public class SkillLoader extends AbstractYamlLoader<Skill> {
     public Skill loadFromFile(File file) throws IOException, InvalidConfigurationException {
         checkExists(getObjectId(file));
         YamlConfiguration config = YamlHelper.load(file, true);
-        return (Skill) config.get(DATA_PATH);
+        Skill skill = (Skill) config.get(DATA_PATH);
+        skill.setManager(manager);
+        return skill;
     }
 
     @Override
@@ -51,6 +55,7 @@ public class SkillLoader extends AbstractYamlLoader<Skill> {
     public Skill create(String id) throws IOException {
         checkExists(id);
         Skill skill = new Skill(id);
+        skill.setManager(manager);
         saveToFile(skill);
         return skill;
     }

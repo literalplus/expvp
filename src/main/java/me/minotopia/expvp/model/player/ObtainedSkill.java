@@ -10,6 +10,7 @@ package me.minotopia.expvp.model.player;
 
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.model.BaseEntity;
+import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.tree.SkillTreeNode;
 
 import javax.persistence.Column;
@@ -44,8 +45,9 @@ public class ObtainedSkill extends BaseEntity {
 
     /**
      * Business constructor for creating obtained skill data.
+     *
      * @param playerData the player data
-     * @param skillId the unique identifier of the skill
+     * @param skillId    the unique identifier of the skill
      */
     public ObtainedSkill(PlayerData playerData, String skillId) {
         this.playerData = playerData;
@@ -68,17 +70,30 @@ public class ObtainedSkill extends BaseEntity {
 
     /**
      * Sets the tree-unique identifier of the skill.
+     *
      * @param skillId the tree-unique identifier of the skill
      */
     public void setSkillId(String skillId) {
         this.skillId = skillId;
     }
 
+    /**
+     * Checks whether given skill has the same id as this model skill.
+     *
+     * @param skill the skill to compare to
+     * @return whether the ids are the same
+     */
+    public boolean matches(Skill skill) {
+        Preconditions.checkNotNull(skill, "skill");
+        Preconditions.checkNotNull(skill.getId(), "skill.getId()");
+        return skill.getId().equals(skillId);
+    }
 
     /**
      * Creates a model skill from a skill tree node.
+     *
      * @param playerData the player data
-     * @param node the node to convert
+     * @param node       the node to convert
      * @return a model skill corresponding to given arguments
      */
     public static ObtainedSkill fromNode(PlayerData playerData, SkillTreeNode node) {

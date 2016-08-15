@@ -10,6 +10,7 @@ package me.minotopia.expvp.skill.meta;
 
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.Nameable;
+import me.minotopia.expvp.model.player.ObtainedSkill;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,6 +30,7 @@ public class Skill implements ConfigurationSerializable, Nameable {
     public static final String NAME_PATH = "name";
     public static final String ICON_PATH = "icon";
     public static final String HANDLER_SPEC_PATH = "handler";
+    private SkillManager manager;
     private final String id;
     private int bookCost;
     private String name;
@@ -37,10 +39,29 @@ public class Skill implements ConfigurationSerializable, Nameable {
 
     /**
      * Creates a new skill.
+     *
      * @param id the unique id for the new skill
      */
     public Skill(String id) {
         this.id = id;
+    }
+
+    /**
+     * @return the manager that has claimed this skill, or null if none yet
+     */
+    public SkillManager getManager() {
+        return manager;
+    }
+
+    /**
+     * Permanently associates this skill with a manager.
+     *
+     * @param manager the manager to associate with
+     * @throws IllegalStateException if this skill has already been associated with another manager
+     */
+    public void setManager(SkillManager manager) {
+        Preconditions.checkState(this.manager == null || this.manager == manager, "cannot reassociate skill!");
+        this.manager = manager;
     }
 
     @Override
@@ -116,6 +137,17 @@ public class Skill implements ConfigurationSerializable, Nameable {
         this.handlerSpec = handlerSpec;
     }
 
+    /**
+     * Checks if given model skill has the same id as this skill.
+     *
+     * @param modelSkill the model skill to compare to
+     * @return whether the ids are the same
+     */
+    public boolean matches(ObtainedSkill modelSkill) {
+        Preconditions.checkNotNull(modelSkill, "modelSkill");
+        return modelSkill.matches(this);
+    }
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
@@ -129,6 +161,7 @@ public class Skill implements ConfigurationSerializable, Nameable {
 
     /**
      * Deserialises an instance of this class previously serialized using {@link #serialize()}.
+     *
      * @param source the map to deserialise
      * @return a skill corresponding to the map
      */
@@ -141,9 +174,9 @@ public class Skill implements ConfigurationSerializable, Nameable {
         if (source.containsKey(BOOK_COST_PATH)) {
             skill.setBookCost((Integer) source.get(BOOK_COST_PATH));
         }
-        if(source.containsKey(ICON_PATH)) {
+        if (source.containsKey(ICON_PATH)) {
             Object iconObj = source.get(ICON_PATH);
-            if(iconObj != null) {
+            if (iconObj != null) {
                 Preconditions.checkArgument(iconObj instanceof ItemStack,
                         "icon must be an item stack, is: %s", String.valueOf(iconObj));
                 skill.setIconStack((ItemStack) iconObj);
