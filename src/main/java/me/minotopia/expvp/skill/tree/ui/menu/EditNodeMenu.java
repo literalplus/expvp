@@ -14,12 +14,14 @@ import li.l1t.common.inventory.gui.element.Placeholder;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
+import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.element.BackButton;
 import me.minotopia.expvp.skill.tree.ui.element.SkillTreeIconElement;
 import me.minotopia.expvp.skill.tree.ui.element.skill.EditableSkillElement;
 import me.minotopia.expvp.skill.tree.ui.element.skill.SubskillButton;
 import me.minotopia.expvp.skill.tree.ui.renderer.NodeStructureRenderer;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.io.IOException;
@@ -36,6 +38,12 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
     };
     private final EPMenu parent;
     private final SimpleSkillTreeNode node;
+
+    private EditNodeMenu(SimpleSkillTreeNode node, EPPlugin plugin, Player player) {
+        super(plugin, node.getSkillName(), player);
+        this.parent = null;
+        this.node = node;
+    }
 
     private EditNodeMenu(EPMenu parent, SimpleSkillTreeNode node) {
         super(parent.getPlugin(), node.getSkillName(), parent.getPlayer());
@@ -79,6 +87,12 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
 
     public static EditNodeMenu openNew(EPMenu parent, SimpleSkillTreeNode node) {
         EditNodeMenu menu = new EditNodeMenu(parent, node);
+        menu.open();
+        return menu;
+    }
+
+    public static EditNodeMenu openNew(EPPlugin plugin, Player player, SkillTree tree) {
+        EditNodeMenu menu = new EditNodeMenu(tree, plugin, player);
         menu.open();
         return menu;
     }

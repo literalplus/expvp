@@ -22,7 +22,7 @@ import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.skill.tree.SkillTree;
-import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeMenu;
+import me.minotopia.expvp.skill.tree.ui.menu.EditNodeMenu;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -113,7 +113,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     public void showPreview(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player,
                             SkillTree tree)
             throws IOException, RenderingException {
-        SkillTreeMenu.openForEditing(plugin, player, tree);
+        EditNodeMenu.openNew(plugin, player, tree);
     }
 
     @Command(aliases = "info", min = 1,
