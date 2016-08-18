@@ -10,14 +10,15 @@ package me.minotopia.expvp.skill.tree.ui.menu;
 
 import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.TopRowMenu;
-import li.l1t.common.inventory.gui.element.Placeholder;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.element.BackButton;
 import me.minotopia.expvp.skill.tree.ui.element.SkillTreeIconElement;
 import me.minotopia.expvp.skill.tree.ui.element.skill.EditableSkillElement;
+import me.minotopia.expvp.skill.tree.ui.element.skill.NodeEditButton;
 import me.minotopia.expvp.skill.tree.ui.element.skill.SubskillButton;
 import me.minotopia.expvp.skill.tree.ui.renderer.NodeStructureRenderer;
 import org.bukkit.Material;
@@ -26,6 +27,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.io.IOException;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * An inventory menu that provides the frontend for editing a skill tree node.
@@ -61,18 +63,14 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
     protected void initTopRow() {
         BackButton backButton = new BackButton(parent);
         SkillTreeIconElement treeIcon = new SkillTreeIconElement(NOOP_BICONSUMER, node.getTree());
-        Placeholder editDescription = new Placeholder(
-                new ItemStackFactory(Material.BOOK_AND_QUILL)
-                        .displayName("§6§lBearbeiten: §a" + node.getSkillName())
-                        .produce()
-        );
+        NodeEditButton nodeEditButton = new NodeEditButton(node);
         addToTopRow(0, backButton);
         addToTopRow(1, treeIcon);
-        addToTopRow(2, editDescription);
+        addToTopRow(2, nodeEditButton);
         addToTopRow(3, new SubskillButton(node, 0));
         addToTopRow(4, new SubskillButton(node, 1));
         addToTopRow(5, new SubskillButton(node, 2));
-        addToTopRow(6, editDescription);
+        addToTopRow(6, nodeEditButton);
         addToTopRow(7, treeIcon);
         addToTopRow(8, backButton);
     }
@@ -109,11 +107,15 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
             return;
         }
         SimpleSkillTreeNode child = parent.createChild();
-        SelectSkillMenu.openNew(getPlugin(), getPlugin().getSkillManager(), getPlayer(), skill -> {
+        openSelectSkillMenu(skill -> {
             child.setValue(skill);
             getPlayer().sendMessage("§e§l➩ §aNeuer Subskill erstellt.");
             open(); //return to this menu in case they want to add more
         });
+    }
+
+    public void openSelectSkillMenu(Consumer<Skill> callback) {
+        SelectSkillMenu.openNew(getPlugin(), getPlugin().getSkillManager(), getPlayer(), callback);
     }
 
     public void saveTree() {

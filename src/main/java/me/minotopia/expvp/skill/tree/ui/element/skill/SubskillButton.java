@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.skill.tree.ui.element.skill;
 
-import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.ui.menu.EditNodeMenu;
@@ -22,19 +21,18 @@ import org.bukkit.inventory.ItemStack;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-08-18
  */
-public class SubskillButton extends AbstractNodeElement<EditNodeMenu> {
+public class SubskillButton extends EditButton {
     private final SimpleSkillTreeNode parentNode;
     private final int childId;
-    private final ItemStack template;
 
     public SubskillButton(SimpleSkillTreeNode parentNode, int childId) {
-        super(EditNodeMenu.class, parentNode);
+        super(parentNode);
         this.parentNode = parentNode;
         this.childId = childId;
-        this.template = createTemplate();
     }
 
-    private ItemStack createTemplate() {
+    @Override
+    protected ItemStack createTemplate() {
         return new ItemStackFactory(getMaterialBasedOnWhetherTheSubskillExists())
                 .displayName(formatDisplayName())
                 .lore(formatLoreWithActionInfo())
@@ -68,17 +66,8 @@ public class SubskillButton extends AbstractNodeElement<EditNodeMenu> {
         return lore.toString();
     }
 
-    private String getSkillDisplayName() {
-        return parentNode.getChild(childId).getSkillName();
-    }
-
     private boolean subskillHasChildren() {
-        return parentNode.getChild(childId).hasChildren();
-    }
-
-    @Override
-    public ItemStack checkedDraw(InventoryMenu menu) {
-        return template.clone();
+        return getNode().hasChildren();
     }
 
     @Override
@@ -99,5 +88,10 @@ public class SubskillButton extends AbstractNodeElement<EditNodeMenu> {
 
     private void removeThisChild() {
         parentNode.removeChild(parentNode.getChild(childId));
+    }
+
+    @Override
+    public SimpleSkillTreeNode getNode() {
+        return parentNode.getChild(childId);
     }
 }
