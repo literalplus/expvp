@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.skill.tree.ui.menu;
 
+import com.google.common.base.Preconditions;
 import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.TopRowMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
@@ -44,13 +45,13 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
     private EditNodeMenu(SimpleSkillTreeNode node, EPPlugin plugin, Player player) {
         super(plugin, node.getSkillName(), player);
         this.parent = null;
-        this.node = node;
+        this.node = Preconditions.checkNotNull(node, "node");
     }
 
     private EditNodeMenu(EPMenu parent, SimpleSkillTreeNode node) {
         super(parent.getPlugin(), node.getSkillName(), parent.getPlayer());
-        this.parent = parent;
-        this.node = node;
+        this.parent = Preconditions.checkNotNull(parent, "parent");
+        this.node = Preconditions.checkNotNull(node, "node");
     }
 
     @Override

@@ -22,12 +22,10 @@ import org.bukkit.inventory.ItemStack;
  * @since 2016-08-18
  */
 public class SubskillButton extends EditButton {
-    private final SimpleSkillTreeNode parentNode;
     private final int childId;
 
     public SubskillButton(SimpleSkillTreeNode parentNode, int childId) {
         super(parentNode);
-        this.parentNode = parentNode;
         this.childId = childId;
     }
 
@@ -44,7 +42,7 @@ public class SubskillButton extends EditButton {
     }
 
     private boolean subskillExists() {
-        return parentNode.hasChild(childId);
+        return getParentNode().hasChild(childId);
     }
 
     private String formatDisplayName() {
@@ -67,7 +65,7 @@ public class SubskillButton extends EditButton {
     }
 
     private boolean subskillHasChildren() {
-        return getNode().hasChildren();
+        return getSubskill().hasChildren();
     }
 
     @Override
@@ -80,18 +78,21 @@ public class SubskillButton extends EditButton {
                 removeThisChild();
             }
         } else {
-            menu.addSubskill(parentNode);
+            menu.addSubskill(getParentNode());
         }
         menu.redraw();
         menu.saveTree();
     }
 
     private void removeThisChild() {
-        parentNode.removeChild(parentNode.getChild(childId));
+        getParentNode().removeChild(getParentNode().getChild(childId));
     }
 
-    @Override
-    public SimpleSkillTreeNode getNode() {
-        return parentNode.getChild(childId);
+    private SimpleSkillTreeNode getSubskill() {
+        return getParentNode().getChild(childId);
+    }
+
+    private SimpleSkillTreeNode getParentNode() {
+        return super.getNode(); //just an alias for readability
     }
 }
