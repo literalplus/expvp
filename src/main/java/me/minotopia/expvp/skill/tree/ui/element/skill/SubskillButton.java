@@ -42,7 +42,7 @@ public class SubskillButton extends AbstractNodeElement<EditNodeMenu> {
     }
 
     private Material getMaterialBasedOnWhetherTheSubskillExists() {
-        return subskillExists() ? Material.REDSTONE_TORCH_ON : Material.REDSTONE_TORCH_OFF;
+        return subskillExists() ? Material.REDSTONE_TORCH_ON : Material.TORCH;
     }
 
     private boolean subskillExists() {
