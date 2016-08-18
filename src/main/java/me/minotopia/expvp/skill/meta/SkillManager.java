@@ -66,7 +66,7 @@ public class SkillManager extends AbstractYamlManager<Skill> {
         if (skill == null) {
             return new ItemStackFactory(Material.BARRIER);
         }
-        ItemStackFactory icon = new ItemStackFactory(skill.getIconStack());
+        ItemStackFactory icon = new ItemStackFactory(skill.getDisplayStack());
         icon.displayName(findColoredDisplayNameFor(skill, obtained));
         return icon;
     }
