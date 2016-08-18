@@ -29,36 +29,40 @@ import org.bukkit.entity.Player;
 public class SkillTreeMenu extends SimpleInventoryMenu {
     private TreeStructureRenderer renderer;
 
-    public SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree) {
-        this(plugin, player, new TreeStructureRenderer(tree));
-    }
-
-    public SkillTreeMenu(EPPlugin plugin, Player player, TreeStructureRenderer renderer) {
+    SkillTreeMenu(EPPlugin plugin, Player player, TreeStructureRenderer renderer) {
         super(plugin, renderer.getTree().getDisplayName(), player);
-        setRenderer(renderer);
-    }
-
-    public void setRenderer(TreeStructureRenderer renderer) {
         Preconditions.checkNotNull(renderer, "renderer");
         this.renderer = renderer;
+    }
+
+    private void applyRenderer() {
         if(!renderer.isRendered()) {
-            try {
-                renderer.render();
-            } catch (RenderingException e) {
-                throw new InternalException("Konnte Skilltree nicht rendern", e);
-            }
+            attemptRender(renderer);
         }
         renderer.applyStructureTo(this);
+    }
+
+    private void attemptRender(TreeStructureRenderer renderer) {
+        try {
+            renderer.render();
+        } catch (RenderingException e) {
+            throw new InternalException("Konnte Skilltree nicht rendern", e);
+        }
+    }
+
+    public static SkillTreeMenu openForEditing(EPPlugin plugin, Player player, SkillTree tree) {
+        TreeStructureRenderer renderer = new TreeStructureRenderer(tree);
+        renderer.setElementSupplier(EditableSkillElement::new);
+        SkillTreeMenu menu = new SkillTreeMenu(plugin, player, renderer);
+        menu.applyRenderer();
+        menu.open();
+        return menu;
     }
 
     @Override
     protected ItemStackFactory getPlaceholderFactory() {
         return new ItemStackFactory(Material.IRON_FENCE)
                 .displayName("§7§l*");
-    }
-
-    public void enableEditing() {
-        renderer.setElementSupplier(EditableSkillElement::new);
     }
 
     @Override

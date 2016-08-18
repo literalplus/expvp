@@ -113,9 +113,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     public void showPreview(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player,
                             SkillTree tree)
             throws IOException, RenderingException {
-        SkillTreeMenu menu = new SkillTreeMenu(plugin, player, tree);
-        menu.enableEditing();
-        menu.open();
+        SkillTreeMenu.openForEditing(plugin, player, tree);
     }
 
     @Command(aliases = "info", min = 1,
