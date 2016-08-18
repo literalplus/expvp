@@ -29,6 +29,7 @@ import java.util.function.Consumer;
  */
 public class SelectSkillMenu extends PaginationListMenu<Skill> {
     private final Consumer<Skill> callback;
+    private boolean selectionMade = false;
 
     public SelectSkillMenu(Plugin plugin, Player player, Consumer<Skill> callback) {
         super(plugin, player);
@@ -38,7 +39,7 @@ public class SelectSkillMenu extends PaginationListMenu<Skill> {
     @Override
     protected void handleValueClick(Skill skill, InventoryClickEvent inventoryClickEvent) {
         callback.accept(skill);
-        getPlayer().closeInventory();
+        selectionMade = true;
     }
 
     @Override
@@ -53,7 +54,9 @@ public class SelectSkillMenu extends PaginationListMenu<Skill> {
 
     @Override
     public void handleClose(InventoryCloseEvent evt) {
-        getPlayer().sendMessage("§e§l➩ §eSkillauswahl abgebrochen.");
+        if(!selectionMade) {
+            getPlayer().sendMessage("§e§l➩ §eSkillauswahl abgebrochen.");
+        }
     }
 
     public static SelectSkillMenu openNew(EPPlugin plugin, SkillManager manager, Player player, Consumer<Skill> callback) {
