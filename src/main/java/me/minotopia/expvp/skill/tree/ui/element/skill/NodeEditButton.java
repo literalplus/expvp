@@ -30,12 +30,12 @@ public class NodeEditButton extends EditButton {
     protected ItemStack createTemplate() {
         return new ItemStackFactory(Material.BOOK_AND_QUILL)
                 .displayName(formatDisplayName())
-                .lore("§a" + formatLore())
+                .lore(formatLore())
                 .produce();
     }
 
     private String formatLore() {
-        return getSkillDisplayName();
+        return "§a" + getSkillDisplayName() +"\n\n§aHier klicken zum Ändern";
     }
 
     private String formatDisplayName() {
