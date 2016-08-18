@@ -79,10 +79,22 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
 
     @Override
     public void redraw() {
-        clear();
-        initTopRow();
-        new NodeStructureRenderer(node, this, EditableSkillElement::new).render();
+        attemptRender();
         super.redraw();
+    }
+
+    private void attemptRender() {
+        try {
+            clear();
+            initTopRow();
+            new NodeStructureRenderer(node, this, EditableSkillElement::new).render();
+        } catch (Exception e) {
+            e.printStackTrace();
+            getPlayer().sendMessage(
+                    "§e§lWarnung: §eDieser Skilltree konnte nicht vollständig gerendert werden. " +
+                            "Spieler können diesen daher nicht sehen! Bitte entferne den " +
+                            "äußersten Skill und versuche es nochmal. (Dies sollte nicht passieren)");
+        }
     }
 
     public static EditNodeMenu openNew(EPMenu parent, SimpleSkillTreeNode node) {
