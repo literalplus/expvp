@@ -42,7 +42,7 @@ public class SkillTreeMenu extends SimpleInventoryMenu {
     public void setRenderer(TreeStructureRenderer renderer) {
         Preconditions.checkNotNull(renderer, "renderer");
         this.renderer = renderer;
-        if(renderer.isRendered()) {
+        if(!renderer.isRendered()) {
             try {
                 renderer.render();
             } catch (RenderingException e) {
