@@ -126,7 +126,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
                           SkillTree tree)
             throws IOException {
         sender.sendMessage(String.format("§e➩ §lSkilltree: §6%s §e(ID: %s§e)",
-                tree.getSkillName(), tree.getId()));
+                tree.getDisplayName(), tree.getId()));
         sender.sendMessage(String.format("§e➩ §lBranches Exclusive (siehe /sta help): §6%s",
                 tree.areBranchesExclusive()));
         sender.sendMessage(String.format("§e➩ §lSlot-Id in der Übersicht: §6%s",
