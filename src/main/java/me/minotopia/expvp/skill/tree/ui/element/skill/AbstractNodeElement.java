@@ -46,7 +46,9 @@ abstract class AbstractNodeElement<M extends InventoryMenu> extends CheckedMenuE
     ItemStack drawRaw(String lore) {
         Skill skill = getNode().getValue();
         if(skill == null) {
-            return new ItemStack(Material.BARRIER);
+            return new ItemStackFactory(Material.BARRIER)
+                    .displayName("§7<Kein Skill>")
+                    .produce();
         }
         ItemStackFactory factory = getSkillManagerFromValue().createRawSkillIconFor(skill, true);
         factory.lore(lore);
