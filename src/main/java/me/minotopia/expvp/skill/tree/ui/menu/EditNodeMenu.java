@@ -22,6 +22,7 @@ import me.minotopia.expvp.skill.tree.ui.element.skill.EditableSkillElement;
 import me.minotopia.expvp.skill.tree.ui.element.skill.NodeEditButton;
 import me.minotopia.expvp.skill.tree.ui.element.skill.SubskillButton;
 import me.minotopia.expvp.skill.tree.ui.renderer.NodeStructureRenderer;
+import me.minotopia.expvp.skill.tree.ui.renderer.TreeStructureRenderer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -102,17 +103,27 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
     }
 
     public void addSubskill(SimpleSkillTreeNode parent) {
-        if(parent.getChildren().size() >= 3) {
-            getPlayer().sendMessage("§c§lFehler: §cDieser Skill hat bereits drei Subskills!");
-            getPlayer().closeInventory();
-            return;
-        }
         SimpleSkillTreeNode child = parent.createChild();
+        if(isTreeNotRenderable(parent)) {
+            rollbackChildAddBecauseNotRenderable(parent, child);
+            return;  // ^ this is kinda brute-force, but checking before is too complicated
+        }
         openSelectSkillMenu(skill -> {
             child.setValue(skill);
             getPlayer().sendMessage("§e§l➩ §aNeuer Subskill erstellt.");
             open(); //return to this menu in case they want to add more
         });
+    }
+
+    private boolean isTreeNotRenderable(SimpleSkillTreeNode parent) {
+        return (parent.getTree().getHeight() > TreeStructureRenderer.MAX_HEIGHT) ||
+                (parent.getTree().getWidth() > TreeStructureRenderer.MAX_WIDTH);
+    }
+
+    private void rollbackChildAddBecauseNotRenderable(SimpleSkillTreeNode parent, SimpleSkillTreeNode child) {
+        parent.removeChild(child);
+        getPlayer().sendMessage("§c§lFehler: §cDiese Aktion ist nicht durchführbar, weil der Baum sonst nicht mehr in ein Inventar passen würde!");
+        getPlayer().closeInventory();
     }
 
     public void openSelectSkillMenu(Consumer<Skill> callback) {
