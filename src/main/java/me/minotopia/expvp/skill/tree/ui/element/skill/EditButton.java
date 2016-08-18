@@ -20,17 +20,19 @@ import org.bukkit.inventory.ItemStack;
  * @since 2016-08-19
  */
 abstract class EditButton extends AbstractNodeElement<EditNodeMenu> {
-    protected final ItemStack template;
+    private ItemStack template = null;
 
-    public EditButton(SimpleSkillTreeNode node) {
+    EditButton(SimpleSkillTreeNode node) {
         super(EditNodeMenu.class, node);
-        this.template = createTemplate();
     }
 
     protected abstract ItemStack createTemplate();
 
     @Override
     public ItemStack checkedDraw(InventoryMenu menu) {
+        if(template == null) {
+            template = createTemplate();
+        }
         return template.clone();
     }
 
