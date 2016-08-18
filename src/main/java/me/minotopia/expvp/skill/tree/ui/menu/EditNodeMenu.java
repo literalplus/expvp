@@ -55,16 +55,22 @@ public class EditNodeMenu extends TopRowMenu {
 
     @Override
     protected void initTopRow() {
-        addToTopRow(0, new BackButton(parent));
-        addToTopRow(1, new SkillTreeIconElement(NOOP_BICONSUMER, node.getTree()));
-        addToTopRow(2, new Placeholder(
+        BackButton backButton = new BackButton(parent);
+        SkillTreeIconElement treeIcon = new SkillTreeIconElement(NOOP_BICONSUMER, node.getTree());
+        Placeholder editDescription = new Placeholder(
                 new ItemStackFactory(Material.BOOK_AND_QUILL)
                         .displayName("§6§lBearbeiten: §a" + node.getSkillName())
                         .produce()
-        ));
+        );
+        addToTopRow(0, backButton);
+        addToTopRow(1, treeIcon);
+        addToTopRow(2, editDescription);
         addToTopRow(3, new SubskillButton(node, 0));
         addToTopRow(4, new SubskillButton(node, 1));
         addToTopRow(5, new SubskillButton(node, 2));
+        addToTopRow(6, editDescription);
+        addToTopRow(7, treeIcon);
+        addToTopRow(8, backButton);
     }
 
     @Override
