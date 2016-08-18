@@ -9,12 +9,15 @@
 package me.minotopia.expvp.yaml;
 
 import com.google.common.base.Preconditions;
+import com.google.common.io.Files;
+import li.l1t.common.intake.exception.UncheckedException;
 import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,9 +48,20 @@ public abstract class AbstractYamlLoader<T extends Nameable> implements YamlLoad
             } catch (Exception e) { //Make sure we can still load the other objects at least
                 LOGGER.warn("Failed to load object from " + file.getAbsolutePath() + ": ", e);
                 e.printStackTrace();
+                tryMoveAwayBecauseUnreadable(file);
             }
         }
         return obj;
+    }
+
+    private void tryMoveAwayBecauseUnreadable(File file) {
+        try {
+            File newFile = new File(manager.getDirectory(), file.getName() + ".broken_bkp");
+            Files.move(file, newFile);
+            LOGGER.warn("Moved to {} to prevent data loss", newFile.getAbsolutePath());
+        } catch (IOException e1) {
+            throw UncheckedException.wrap(e1); //something is seriously wrong
+        }
     }
 
     @Override
