@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-07-22
  */
-public class SkillTreeMenu extends SimpleInventoryMenu {
+public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
     private TreeStructureRenderer renderer;
 
     SkillTreeMenu(EPPlugin plugin, Player player, TreeStructureRenderer renderer) {

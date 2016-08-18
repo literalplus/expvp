@@ -94,6 +94,7 @@ public class SubskillButton extends AbstractNodeElement<EditNodeMenu> {
             menu.addSubskill(parentNode);
         }
         menu.redraw();
+        menu.saveTree();
     }
 
     private void removeThisChild() {

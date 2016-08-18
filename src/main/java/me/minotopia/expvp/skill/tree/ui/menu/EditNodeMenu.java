@@ -10,21 +10,20 @@ package me.minotopia.expvp.skill.tree.ui.menu;
 
 import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.TopRowMenu;
-import li.l1t.common.inventory.gui.element.MenuElement;
 import li.l1t.common.inventory.gui.element.Placeholder;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.ui.element.BackButton;
 import me.minotopia.expvp.skill.tree.ui.element.SkillTreeIconElement;
-import me.minotopia.expvp.skill.tree.ui.element.skill.RawSkillElement;
+import me.minotopia.expvp.skill.tree.ui.element.skill.EditableSkillElement;
 import me.minotopia.expvp.skill.tree.ui.element.skill.SubskillButton;
 import me.minotopia.expvp.skill.tree.ui.renderer.NodeStructureRenderer;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.io.IOException;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * An inventory menu that provides the frontend for editing a skill tree node.
@@ -32,19 +31,16 @@ import java.util.function.Consumer;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-07-22
  */
-public class EditNodeMenu extends TopRowMenu {
+public class EditNodeMenu extends TopRowMenu implements EPMenu {
     private static final BiConsumer<InventoryClickEvent, InventoryMenu> NOOP_BICONSUMER = (thing1, thing2) -> {
     };
-    private static final Consumer<InventoryMenu> NOOP_CONSUMER = (thing) -> {
-    };
-    private final SkillTreeMenu parent;
+    private final EPMenu parent;
     private final SimpleSkillTreeNode node;
 
-    private EditNodeMenu(SkillTreeMenu parent, SimpleSkillTreeNode node) {
+    private EditNodeMenu(EPMenu parent, SimpleSkillTreeNode node) {
         super(parent.getPlugin(), node.getSkillName(), parent.getPlayer());
         this.parent = parent;
         this.node = node;
-        initTopRow();
     }
 
     @Override
@@ -75,24 +71,16 @@ public class EditNodeMenu extends TopRowMenu {
 
     @Override
     public void redraw() {
-        new NodeStructureRenderer(node, this, node -> new RawSkillElement(node, NOOP_CONSUMER)).render();
+        clear();
+        initTopRow();
+        new NodeStructureRenderer(node, this, EditableSkillElement::new).render();
         super.redraw();
     }
 
-    private MenuElement createTreeElement(SimpleSkillTreeNode node) {
-        return new RawSkillElement(node, inventoryMenu -> {
-            //no-op
-        });
-    }
-
-    public static EditNodeMenu openNew(SkillTreeMenu parent, SimpleSkillTreeNode node) {
+    public static EditNodeMenu openNew(EPMenu parent, SimpleSkillTreeNode node) {
         EditNodeMenu menu = new EditNodeMenu(parent, node);
         menu.open();
         return menu;
-    }
-
-    public SkillTreeMenu getParent() {
-        return parent;
     }
 
     @Override
@@ -112,5 +100,14 @@ public class EditNodeMenu extends TopRowMenu {
             getPlayer().sendMessage("§e§l➩ §aNeuer Subskill erstellt.");
             open(); //return to this menu in case they want to add more
         });
+    }
+
+    public void saveTree() {
+        try {
+            getPlugin().getSkillTreeManager().save(node.getTree());
+        } catch (IOException e) {
+            e.printStackTrace(); //welp
+            getPlayer().sendMessage("§4§lInterner Fehler: §cKonnte Baum nicht speichern");
+        }
     }
 }

@@ -10,8 +10,8 @@ package me.minotopia.expvp.skill.tree.ui.element.skill;
 
 import li.l1t.common.inventory.gui.InventoryMenu;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
+import me.minotopia.expvp.skill.tree.ui.menu.EPMenu;
 import me.minotopia.expvp.skill.tree.ui.menu.EditNodeMenu;
-import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeMenu;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,9 +22,9 @@ import org.bukkit.inventory.ItemStack;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-07-23
  */
-public class EditableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
+public class EditableSkillElement extends AbstractNodeElement<EPMenu> {
     public EditableSkillElement(SimpleSkillTreeNode node) {
-        super(SkillTreeMenu.class, node);
+        super(EPMenu.class, node);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class EditableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
     }
 
     @Override
-    public void checkedHandleMenuClick(InventoryClickEvent evt, SkillTreeMenu menu) {
+    public void checkedHandleMenuClick(InventoryClickEvent evt, EPMenu menu) {
         EditNodeMenu.openNew(menu, getNode());
     }
 }
