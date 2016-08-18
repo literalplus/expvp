@@ -75,7 +75,7 @@ public class EditNodeMenu extends TopRowMenu {
 
     @Override
     public void redraw() {
-        new NodeStructureRenderer(node, this, node -> new RawSkillElement(node, NOOP_CONSUMER));
+        new NodeStructureRenderer(node, this, node -> new RawSkillElement(node, NOOP_CONSUMER)).render();
         super.redraw();
     }
 
