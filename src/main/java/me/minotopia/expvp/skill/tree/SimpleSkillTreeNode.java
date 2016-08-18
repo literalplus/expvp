@@ -67,6 +67,9 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Ski
     @SuppressWarnings("unchecked")
     SimpleSkillTreeNode(Map<String, Object> source, SimpleSkillTreeNode parent) {
         this(parent);
+        if(parent != null) {
+            parent.addChild(this); //prevent parent complaining because we already have children after constructor
+        }
         if(source.containsKey(SKILL_ID_PATH)) {
             this.skillId = String.valueOf(source.get(SKILL_ID_PATH));
         }
@@ -76,8 +79,8 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Ski
             List<Object> childrenList = (List<Object>) childrenObj; // <-- unchecked
             childrenList.stream()
                     .filter(el -> el instanceof Map)
-                    .map(map -> new SimpleSkillTreeNode((Map<String, Object>) map, this)) //<-- unchecked
-                    .forEach(this::addChild);
+                    .forEach(map -> new SimpleSkillTreeNode((Map<String, Object>) map, this)); //<-- unchecked
+            //constructor already adds children to parent (that's us!)
         }
     }
 
