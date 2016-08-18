@@ -145,7 +145,7 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Ski
     }
 
     @Override
-    public String getDisplayName() {
+    public String getSkillName() {
         return getValue() == null ? "(leer)" : getValue().getDisplayName();
     }
 

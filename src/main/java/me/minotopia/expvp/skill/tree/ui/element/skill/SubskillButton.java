@@ -69,7 +69,7 @@ public class SubskillButton extends AbstractNodeElement<EditNodeMenu> {
     }
 
     private String getSkillDisplayName() {
-        return parentNode.getChild(childId).getDisplayName();
+        return parentNode.getChild(childId).getSkillName();
     }
 
     private boolean subskillHasChildren() {

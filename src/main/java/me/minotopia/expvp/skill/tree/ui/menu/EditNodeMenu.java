@@ -41,7 +41,7 @@ public class EditNodeMenu extends TopRowMenu {
     private final SimpleSkillTreeNode node;
 
     private EditNodeMenu(SkillTreeMenu parent, SimpleSkillTreeNode node) {
-        super(parent.getPlugin(), node.getDisplayName(), parent.getPlayer());
+        super(parent.getPlugin(), node.getSkillName(), parent.getPlayer());
         this.parent = parent;
         this.node = node;
     }
@@ -58,7 +58,7 @@ public class EditNodeMenu extends TopRowMenu {
         addToTopRow(1, new SkillTreeIconElement(NOOP_BICONSUMER, node.getTree()));
         addToTopRow(2, new Placeholder(
                 new ItemStackFactory(Material.BOOK_AND_QUILL)
-                        .displayName("§6§lBearbeiten: §a" + node.getDisplayName())
+                        .displayName("§6§lBearbeiten: §a" + node.getSkillName())
                         .produce()
         ));
         addToTopRow(3, new SubskillButton(node, 0));
