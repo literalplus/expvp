@@ -44,6 +44,7 @@ public class EditNodeMenu extends TopRowMenu {
         super(parent.getPlugin(), node.getSkillName(), parent.getPlayer());
         this.parent = parent;
         this.node = node;
+        initTopRow();
     }
 
     @Override
