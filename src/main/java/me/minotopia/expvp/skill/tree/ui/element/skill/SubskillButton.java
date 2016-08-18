@@ -90,7 +90,6 @@ public class SubskillButton extends AbstractNodeElement<EditNodeMenu> {
                 menu.getPlayer().sendMessage("§e§l➩ §aSubskill aus dem Baum entfernt: " + getSkillDisplayName());
                 removeThisChild();
             }
-            menu.getPlayer().closeInventory();
         } else {
             menu.addSubskill(parentNode);
         }
