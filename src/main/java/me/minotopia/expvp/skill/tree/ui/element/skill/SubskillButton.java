@@ -87,8 +87,8 @@ public class SubskillButton extends AbstractNodeElement<EditNodeMenu> {
             if (subskillHasChildren()) {
                 menu.getPlayer().sendMessage("§c§lFehler: §cDu musst zuerst die Subskills dieses Subskills entfernen, bevor du ihn selbst entfernen kannst!");
             } else {
-                removeThisChild();
                 menu.getPlayer().sendMessage("§e§l➩ §aSubskill aus dem Baum entfernt: " + getSkillDisplayName());
+                removeThisChild();
             }
             menu.getPlayer().closeInventory();
         } else {
