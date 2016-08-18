@@ -9,12 +9,13 @@
 package me.minotopia.expvp.skill.tree.ui.renderer;
 
 import li.l1t.common.inventory.SlotPosition;
+import li.l1t.common.inventory.gui.holder.ElementHolder;
 import li.l1t.common.inventory.gui.holder.TemplateElementHolder;
 import li.l1t.common.test.util.MockHelper;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.SkillTreeNode;
-import me.minotopia.expvp.skill.tree.ui.element.SimpleSkillElement;
+import me.minotopia.expvp.skill.tree.ui.element.skill.ObtainableSkillElement;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
@@ -44,8 +45,7 @@ public class NodeStructureRendererTest {
     }
 
     public NodeStructureRenderer givenANodeRenderer(SkillTree tree) {
-        TreeStructureRenderer treeRenderer = new TreeStructureRenderer(tree);
-        return new NodeStructureRenderer(treeRenderer);
+        return new TreeStructureRenderer(tree).createNodeRenderer();
     }
 
     public SkillTree givenASkillTree() {
@@ -59,7 +59,7 @@ public class NodeStructureRendererTest {
         //given
         MockHelper.mockServer();
         SkillTree tree = givenASkillTree();
-        SimpleSkillTreeNode child = tree.createChild("some-skill");
+        SimpleSkillTreeNode child = tree.createChild();
         NodeStructureRenderer renderer = givenANodeRenderer(tree);
         //when
         renderer.render();
@@ -71,13 +71,13 @@ public class NodeStructureRendererTest {
 
     private void thenTheNodeAtIs(SlotPosition position, SkillTreeNode<?> expected,
                                  NodeStructureRenderer renderer) {
-        TemplateElementHolder template = renderer.getTreeRenderer().getTemplate();
-        SimpleSkillElement element = (SimpleSkillElement) template.getElement(position.toSlotId());
+        ElementHolder template = renderer.getTarget();
+        ObtainableSkillElement element = (ObtainableSkillElement) template.getElement(position.toSlotId());
         assertThat("wrong element at pos " + position, element.getNode(), is(expected));
     }
 
     private void thenThereIsAPlaceholderAt(SlotPosition position, NodeStructureRenderer renderer) {
-        TemplateElementHolder template = renderer.getTreeRenderer().getTemplate();
+        TemplateElementHolder template = (TemplateElementHolder) renderer.getTarget();
         assertThat("expected placeholder at " + position,
                 template.hasPlaceholderAt(position.toSlotId()), is(true));
     }
@@ -87,9 +87,9 @@ public class NodeStructureRendererTest {
         //given
         MockHelper.mockServer();
         SkillTree tree = givenASkillTree();
-        SimpleSkillTreeNode child1 = tree.createChild("first-skill");
-        SimpleSkillTreeNode child2 = tree.createChild("second-skill");
-        SimpleSkillTreeNode child3 = tree.createChild("third-skill");
+        SimpleSkillTreeNode child1 = tree.createChild();
+        SimpleSkillTreeNode child2 = tree.createChild();
+        SimpleSkillTreeNode child3 = tree.createChild();
         NodeStructureRenderer renderer = givenANodeRenderer(tree);
         //when
         renderer.render();
@@ -113,8 +113,8 @@ public class NodeStructureRendererTest {
         //given
         MockHelper.mockServer();
         SkillTree tree = givenASkillTree();
-        SimpleSkillTreeNode child = tree.createChild("child");
-        SimpleSkillTreeNode grandchild = child.createChild("grandchild");
+        SimpleSkillTreeNode child = tree.createChild();
+        SimpleSkillTreeNode grandchild = child.createChild();
         NodeStructureRenderer renderer = givenANodeRenderer(tree);
         //when
         renderer.render();

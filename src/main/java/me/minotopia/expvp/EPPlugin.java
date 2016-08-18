@@ -212,4 +212,12 @@ public class EPPlugin extends GenericXyPlugin {
     public PlayerDataManager getPlayerDataManager() {
         return playerDataManager;
     }
+
+    public SkillTreeManager getSkillTreeManager() {
+        return skillTreeManager;
+    }
+
+    public SkillManager getSkillManager() {
+        return skillManager;
+    }
 }

@@ -9,7 +9,6 @@
 package me.minotopia.expvp.skill.tree;
 
 import li.l1t.common.tree.TreeNode;
-import me.minotopia.expvp.Identifiable;
 import me.minotopia.expvp.model.player.ObtainedSkill;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -22,12 +21,7 @@ import java.util.Map;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
  */
-public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, Skill>, Identifiable {
-    /**
-     * @return the unique identifier of the tree this node belongs to
-     */
-    String getTreeId();
-
+public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, Skill> {
     /**
      * Checks whether given model skill represents this node.
      *
@@ -52,10 +46,9 @@ public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, S
     Map<String, Object> serialize();
 
     /**
-     * <p><b>Note:</b> Addition of nodes which already have children themselves is not permitted.</p>
-     * <p><b>Note:</b> The preferred API way to add a child is to {@link #createChild(String)
-     * let the node create it}.</p>
-     * {@inheritDoc}
+     * <p><b>Note:</b> Addition of nodes which already have children themselves is not
+     * permitted.</p> <p><b>Note:</b> The preferred API way to add a child is to {@link
+     * #createChild() let the node create it}.</p> {@inheritDoc}
      *
      * @throws IllegalArgumentException if the new child already has children
      */
@@ -63,11 +56,26 @@ public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, S
     void addChild(N newChild);
 
     /**
-     * Preferred API way to add a child, outsourcing construction to the node itself, since it
-     * knows best what's best for its children.
+     * Preferred API way to add a child, outsourcing construction to the node itself, since it knows
+     * best what's best for its children.
      *
-     * @param id the string id of the new child node
      * @return the created child
      */
-    N createChild(String id);
+    N createChild();
+
+    /**
+     * @return the root of the tree this node is part of
+     */
+    SkillTree getTree();
+
+    /**
+     * @return the node's value's display name or a placeholder string, if the node doesn't have any
+     * value
+     */
+    String getDisplayName();
+
+    /**
+     * @return the unique identifier of the skill associated with this node, or null for none
+     */
+    String getSkillId();
 }

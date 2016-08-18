@@ -11,7 +11,7 @@ package me.minotopia.expvp.model.player;
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.model.BaseEntity;
 import me.minotopia.expvp.skill.meta.Skill;
-import me.minotopia.expvp.skill.tree.SkillTreeNode;
+import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -96,9 +96,10 @@ public class ObtainedSkill extends BaseEntity {
      * @param node       the node to convert
      * @return a model skill corresponding to given arguments
      */
-    public static ObtainedSkill fromNode(PlayerData playerData, SkillTreeNode node) {
+    public static ObtainedSkill fromNode(PlayerData playerData, SimpleSkillTreeNode node) {
         Preconditions.checkNotNull(playerData, "playerData");
         Preconditions.checkNotNull(node, "node");
-        return new ObtainedSkill(playerData, node.getId());
+        Preconditions.checkNotNull(node.getValue(), "node.getValue()");
+        return new ObtainedSkill(playerData, node.getValue().getId());
     }
 }

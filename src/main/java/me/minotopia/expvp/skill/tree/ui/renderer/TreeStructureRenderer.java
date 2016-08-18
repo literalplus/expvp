@@ -13,7 +13,7 @@ import li.l1t.common.inventory.gui.holder.ElementHolder;
 import li.l1t.common.inventory.gui.holder.TemplateElementHolder;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.SkillTree;
-import me.minotopia.expvp.skill.tree.ui.element.SimpleSkillElement;
+import me.minotopia.expvp.skill.tree.ui.element.skill.ObtainableSkillElement;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
 
 import java.util.function.Function;
@@ -29,7 +29,7 @@ public class TreeStructureRenderer {
     public static final int MAX_WIDTH = 5;
     private final SkillTree tree;
     private final TemplateElementHolder template = new TemplateElementHolder();
-    private Function<SimpleSkillTreeNode, MenuElement> elementSupplier = SimpleSkillElement::new;
+    private Function<SimpleSkillTreeNode, MenuElement> elementSupplier = ObtainableSkillElement::new;
     private boolean rendered = false;
 
     public TreeStructureRenderer(SkillTree tree) {
@@ -38,8 +38,12 @@ public class TreeStructureRenderer {
 
     public void render() throws RenderingException {
         assureCouldTreeFitIntoGrid();
-        new NodeStructureRenderer(this).render();
+        createNodeRenderer().render();
         rendered = true;
+    }
+
+    NodeStructureRenderer createNodeRenderer() {
+        return new NodeStructureRenderer(tree, template, elementSupplier);
     }
 
     public boolean isRendered() {
@@ -68,9 +72,5 @@ public class TreeStructureRenderer {
 
     public void setElementSupplier(Function<SimpleSkillTreeNode, MenuElement> elementSupplier) {
         this.elementSupplier = elementSupplier;
-    }
-
-    MenuElement<?> createElement(SimpleSkillTreeNode node) {
-        return elementSupplier.apply(node);
     }
 }

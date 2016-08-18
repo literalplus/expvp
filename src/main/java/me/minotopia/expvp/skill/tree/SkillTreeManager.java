@@ -57,7 +57,7 @@ public class SkillTreeManager extends AbstractYamlManager<SkillTree> {
     public void populate() {
         getAll().forEach(tree ->
                 tree.forEachNode(node ->
-                        node.setValue(skillManager.get(node.getId()) //null if not found
+                        node.setValue(skillManager.get(node.getSkillId()) //null if not found
                         )
                 ));
     }

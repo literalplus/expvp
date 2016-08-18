@@ -28,10 +28,13 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
     public static final String ICON_PATH = "icon";
     public static final String BRANCHES_EXCLUSIVE_PATH = "b-excl";
     public static final String SLOT_ID_PATH = "slot-id";
+    public static final String TREE_ID_PATH = "tree-id";
 
     static {
         ConfigurationSerialization.registerClass(SkillTree.class);
     }
+
+    private final String treeId;
 
     private String name;
     private ItemStack icon;
@@ -46,7 +49,8 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
      * @param id the unique string id of this tree
      */
     public SkillTree(String id) {
-        super(null, id);
+        super(null);
+        this.treeId = id;
     }
 
     /**
@@ -62,6 +66,8 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
     @SuppressWarnings("unchecked")
     SkillTree(Map<String, Object> source) {
         super(source, null);
+        Preconditions.checkArgument(source.containsKey(TREE_ID_PATH), "no tree id specified");
+        this.treeId = source.get(TREE_ID_PATH).toString();
         if (source.containsKey(NAME_PATH)) {
             setName(String.valueOf(source.get(NAME_PATH)));
         }
@@ -193,6 +199,7 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
         map.put(ICON_PATH, icon);
         map.put(BRANCHES_EXCLUSIVE_PATH, branchesExclusive);
         map.put(SLOT_ID_PATH, slotId);
+        map.put(TREE_ID_PATH, treeId);
         return map;
     }
 
@@ -208,5 +215,14 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
     @Override
     public int hashCode() {
         return getId().hashCode();
+    }
+
+    public String getTreeId() {
+        return treeId;
+    }
+
+    @Override
+    public String getId() {
+        return getTreeId();
     }
 }

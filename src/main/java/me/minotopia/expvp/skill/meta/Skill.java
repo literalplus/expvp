@@ -9,8 +9,10 @@
 package me.minotopia.expvp.skill.meta;
 
 import com.google.common.base.Preconditions;
+import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.model.player.ObtainedSkill;
+import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 
@@ -118,8 +120,22 @@ public class Skill implements ConfigurationSerializable, Nameable {
     }
 
     /**
-     * Gets the handler specification of this skill. The spec is an arbitrary string interpreted
-     * by the handler manager that then assigns the appropriate handler, which configures itself
+     * @return a non-null stack representing this skill
+     */
+    public ItemStack getDisplayStack() {
+        return iconStack == null ? createDefaultStack() : getIconStack();
+    }
+
+    private ItemStack createDefaultStack() {
+        return new ItemStackFactory(Material.PAPER)
+                .displayName("§7<Kein Icon>")
+                .lore("§6" + getDisplayName())
+                .produce();
+    }
+
+    /**
+     * Gets the handler specification of this skill. The spec is an arbitrary string interpreted by
+     * the handler manager that then assigns the appropriate handler, which configures itself
      * according to the spec. If the spec is null, this skill does nothing.
      *
      * @return the current handler spec of this skill

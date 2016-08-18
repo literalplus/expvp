@@ -34,31 +34,27 @@ import java.util.stream.Collectors;
  */
 public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Skill>
         implements SkillTreeNode<SimpleSkillTreeNode> {
-    public static final String ID_PATH = "id";
+    public static final String SKILL_ID_PATH = "skill-id";
     public static final String CHILDREN_PATH = "children";
-
-    private final String treeId;
-    private final String id;
+    private String skillId;
+    private SkillTree tree;
 
     /**
      * Creates a new skill tree node. If parent is null, creates a skill tree. Note that there is
-     * no practical difference between a skill tree and a skill tree node, except that for the
-     * skill tree, {@link #getTreeId() tree id} and {@link #getId() id} are the same.
+     * no practical difference between a skill tree and a skill tree node.
      *
      * @param parent the parent of this node
-     * @param id     the unique string id of this node
      */
-    public SimpleSkillTreeNode(SimpleSkillTreeNode parent, String id) {
+    SimpleSkillTreeNode(SimpleSkillTreeNode parent) {
         super(parent, SimpleSkillTreeNode.class);
-        Preconditions.checkNotNull(id, "id");
-        if (parent == null) {
-            this.treeId = id;
+        if (parent != null) {
+            this.tree = parent.getTree();
+        } else if(this instanceof SkillTree) {
+            this.tree = (SkillTree) this;
         } else {
-            this.treeId = parent.getTreeId();
+            throw new IllegalArgumentException("only SkillTree instances need not have a parent");
         }
-        this.id = id;
     }
-
     /**
      * Deserialises a skill tree node which was serialised by {@link #serialize()} and all its
      * child nodes.
@@ -70,16 +66,18 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Ski
      */
     @SuppressWarnings("unchecked")
     SimpleSkillTreeNode(Map<String, Object> source, SimpleSkillTreeNode parent) {
-        this(parent, (String) source.get(ID_PATH));
-        SimpleSkillTreeNode node = new SimpleSkillTreeNode(parent, id);
+        this(parent);
+        if(source.containsKey(SKILL_ID_PATH)) {
+            this.skillId = String.valueOf(source.get(SKILL_ID_PATH));
+        }
         if (source.containsKey(CHILDREN_PATH)) {
             Object childrenObj = source.get(CHILDREN_PATH);
             Preconditions.checkArgument(childrenObj instanceof List, "children must be a list");
             List<Object> childrenList = (List<Object>) childrenObj; // <-- unchecked
             childrenList.stream()
                     .filter(el -> el instanceof Map)
-                    .map(map -> new SimpleSkillTreeNode((Map<String, Object>) map, node)) //<-- unchecked
-                    .forEach(node::addChild);
+                    .map(map -> new SimpleSkillTreeNode((Map<String, Object>) map, this)) //<-- unchecked
+                    .forEach(this::addChild);
         }
     }
 
@@ -98,25 +96,15 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Ski
     }
 
     @Override
-    public SimpleSkillTreeNode createChild(String id) {
-        SimpleSkillTreeNode node = new SimpleSkillTreeNode(this, id);
+    public SimpleSkillTreeNode createChild() {
+        SimpleSkillTreeNode node = new SimpleSkillTreeNode(this);
         addChild(node);
         return node;
     }
 
     @Override
-    public String getTreeId() {
-        return treeId;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
     public boolean matches(ObtainedSkill modelSkill) {
-        return id.equals(modelSkill.getSkillId());
+        return getValue() != null && getValue().getId().equals(modelSkill.getSkillId());
     }
 
     @Override
@@ -130,7 +118,6 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Ski
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put(ID_PATH, id);
         map.put(CHILDREN_PATH,
                 getChildren().stream()
                         .map(SkillTreeNode::serialize)
@@ -150,5 +137,20 @@ public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Ski
         if (getParent() != null) {
             getParent().processChildRemove(child);
         }
+    }
+
+    @Override
+    public SkillTree getTree() {
+        return tree;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return getValue() == null ? "(leer)" : getValue().getDisplayName();
+    }
+
+    @Override
+    public String getSkillId() {
+        return skillId;
     }
 }
