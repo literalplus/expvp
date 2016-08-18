@@ -30,8 +30,7 @@ public class SkillTreeMenu extends SimpleInventoryMenu {
     private TreeStructureRenderer renderer;
 
     public SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree) {
-        super(plugin, tree.getDisplayName(), player);
-        this.renderer = new TreeStructureRenderer(tree);
+        this(plugin, player, new TreeStructureRenderer(tree));
     }
 
     public SkillTreeMenu(EPPlugin plugin, Player player, TreeStructureRenderer renderer) {
