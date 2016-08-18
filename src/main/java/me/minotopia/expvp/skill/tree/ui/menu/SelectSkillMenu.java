@@ -38,8 +38,8 @@ public class SelectSkillMenu extends PaginationListMenu<Skill> {
 
     @Override
     protected void handleValueClick(Skill skill, InventoryClickEvent inventoryClickEvent) {
-        callback.accept(skill);
         selectionMade = true;
+        callback.accept(skill);
     }
 
     @Override
