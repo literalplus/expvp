@@ -126,6 +126,7 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
                         .map(SkillTreeNode::serialize)
                         .collect(Collectors.toList())
         );
+        map.put(SKILL_ID_PATH, skillId);
         return map;
     }
 
