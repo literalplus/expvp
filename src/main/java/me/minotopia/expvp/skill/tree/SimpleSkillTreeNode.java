@@ -9,7 +9,7 @@
 package me.minotopia.expvp.skill.tree;
 
 import com.google.common.base.Preconditions;
-import li.l1t.common.tree.SimpleTreeNode;
+import li.l1t.common.tree.AbstractTreeNode;
 import me.minotopia.expvp.model.player.ObtainedSkill;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
  */
-public class SimpleSkillTreeNode extends SimpleTreeNode<SimpleSkillTreeNode, Skill>
+public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, Skill>
         implements SkillTreeNode<SimpleSkillTreeNode> {
     public static final String SKILL_ID_PATH = "skill-id";
     public static final String CHILDREN_PATH = "children";
