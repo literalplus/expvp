@@ -23,6 +23,7 @@ import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.menu.EditNodeMenu;
+import me.minotopia.expvp.skill.tree.ui.menu.SelectTreeMenu;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -121,8 +122,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void skillInfo(SkillTreeCommandService service, CommandSender sender,
-                          SkillTree tree)
-            throws IOException {
+                          SkillTree tree) {
         sender.sendMessage(String.format("§e➩ §lSkilltree: §6%s §e(ID: %s§e)",
                 tree.getDisplayName(), tree.getId()));
         sender.sendMessage(String.format("§e➩ §lBranches Exclusive (siehe /sta help): §6%s",
@@ -137,5 +137,13 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
                         .create(),
                 sender
         );
+    }
+
+    @Command(aliases = "list",
+            desc = "Listet Skilltrees auf",
+            help = "Listet alle Skilltrees\nin einem Inventar auf")
+    @EnumRequires(Permission.ADMIN_BASIC)
+    public void list(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player) {
+        SelectTreeMenu.openNew(plugin, player, tree -> skillInfo(service, player, tree));
     }
 }
