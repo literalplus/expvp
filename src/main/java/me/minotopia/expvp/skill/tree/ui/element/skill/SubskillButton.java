@@ -54,9 +54,9 @@ public class SubskillButton extends EditButton {
         if (subskillExists()) {
             lore.append(getSubskill().getSkillName()).append("\n\n");
             if (subskillHasChildren()) {
-                lore.append("§eZuerst Subskills\n§eentfernen, bevor dieser\n§eentfernt werden kann.");
+                lore.append("§cZuerst Subskills\n§centfernen, bevor dieser\n§centfernt werden kann.");
             } else {
-                lore.append("§cKlicken zum Entfernen");
+                lore.append("§aKlicken zum Entfernen");
             }
         } else {
             lore.append("Klicken zum Hinzufügen");
