@@ -17,7 +17,7 @@ import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.element.BackButton;
-import me.minotopia.expvp.skill.tree.ui.element.SkillTreeIconElement;
+import me.minotopia.expvp.skill.tree.ui.element.SkillTreeElement;
 import me.minotopia.expvp.skill.tree.ui.element.skill.EditableSkillElement;
 import me.minotopia.expvp.skill.tree.ui.element.skill.NodeEditButton;
 import me.minotopia.expvp.skill.tree.ui.element.skill.SubskillButton;
@@ -64,7 +64,7 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
     @Override
     protected void initTopRow() {
         BackButton backButton = new BackButton(parent);
-        SkillTreeIconElement treeIcon = new SkillTreeIconElement(NOOP_BICONSUMER, node.getTree());
+        SkillTreeElement treeIcon = new SkillTreeElement(openTreeRootMenu(), node.getTree());
         NodeEditButton nodeEditButton = new NodeEditButton(node);
         addToTopRow(0, backButton);
         addToTopRow(1, treeIcon);
@@ -75,6 +75,10 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
         addToTopRow(6, nodeEditButton);
         addToTopRow(7, treeIcon);
         addToTopRow(8, backButton);
+    }
+
+    private Consumer<SkillTree> openTreeRootMenu() {
+        return tree -> EditNodeMenu.openNew(null, tree);
     }
 
     @Override
