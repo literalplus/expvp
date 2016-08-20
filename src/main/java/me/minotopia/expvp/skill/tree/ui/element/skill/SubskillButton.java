@@ -52,7 +52,7 @@ public class SubskillButton extends EditButton {
     private String formatLoreWithActionInfo() {
         StringBuilder lore = new StringBuilder("§a");
         if (subskillExists()) {
-            lore.append(getSkillDisplayName()).append("\n\n");
+            lore.append(getSubskill().getSkillName()).append("\n\n");
             if (subskillHasChildren()) {
                 lore.append("§eZuerst Subskills\n§eentfernen, bevor dieser\n§eentfernt werden kann.");
             } else {
