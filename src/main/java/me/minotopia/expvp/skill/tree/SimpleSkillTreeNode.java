@@ -157,4 +157,14 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
     public String getSkillId() {
         return skillId;
     }
+
+    @Override
+    public void setValue(Skill newValue) {
+        super.setValue(newValue);
+        if(newValue == null) {
+            skillId = null;
+        } else {
+            skillId = newValue.getId();
+        }
+    }
 }
