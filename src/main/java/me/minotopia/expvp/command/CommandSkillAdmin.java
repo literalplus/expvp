@@ -13,11 +13,16 @@ import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.intake.provider.annotation.Colored;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
+import li.l1t.common.intake.provider.annotation.Sender;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.skill.meta.Skill;
+import me.minotopia.expvp.skill.meta.SkillManager;
+import me.minotopia.expvp.skill.tree.ui.menu.SelectSkillMenu;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
@@ -64,8 +69,8 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
             usage = "[id] [handler...]")
     @EnumRequires(Permission.ADMIN_SKILL)
     public void editHandler(SkillCommandService service, CommandSender sender,
-                         Skill skill,
-                         @Merged String handlerSpec)
+                            Skill skill,
+                            @Merged String handlerSpec)
             throws IOException {
         service.changeHandlerSpec(skill, handlerSpec, sender);
     }
@@ -97,8 +102,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void skillInfo(SkillCommandService service, CommandSender sender,
-                         Skill skill)
-            throws IOException {
+                          Skill skill) {
         sender.sendMessage(String.format("§e➩ §lSkill: §6%s §e(ID: %s§e)",
                 skill.getDisplayName(), skill.getId()));
         sender.sendMessage(String.format("§e➩ §lHandler (Aktion): §6%s",
@@ -107,6 +111,21 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
                 skill.getBookCost()));
         sender.sendMessage(String.format("§e➩ §lIcon: %s",
                 skill.getIconStack() == null ? "§cnein" : skill.getIconStack()));
+    }
+
+    @Command(aliases = "list",
+            desc = "Zeigt alle Skills",
+            help = "Zeigt alle Skills\nin einem Inventar.")
+    @EnumRequires(Permission.ADMIN_SKILL)
+    public void list(SkillCommandService service, EPPlugin plugin,
+                     SkillManager manager, @Sender Player player) {
+        SelectSkillMenu.openNew(
+                plugin, manager, player,
+                skill -> {
+                    skillInfo(service, player, skill);
+                    player.closeInventory();
+                }
+        );
     }
 
     //TODO: /ska handlers
