@@ -86,6 +86,7 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
     private void attemptRender() {
         try {
             clear();
+            getInventory().clear();
             initTopRow();
             new NodeStructureRenderer(node, this, EditableSkillElement::new).render();
         } catch (Exception e) {

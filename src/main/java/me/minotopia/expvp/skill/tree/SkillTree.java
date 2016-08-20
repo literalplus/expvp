@@ -179,17 +179,20 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
 
     void processChildAdd(SimpleSkillTreeNode child) {
         height = height + (child.getChildren().size() - 1);
-        width = Math.max(width, child.getPosition().length + 1);
+        width = findChildWidth(child);
     }
 
     void processChildRemove(SimpleSkillTreeNode child) {
         height = height - (child.getChildren().size() - 1);
         int nodeWidth = child.getPosition().length + 1;
         if (width <= nodeWidth) {
-            int newWidth = 1;
-            forEachNode(node -> height = Math.max(newWidth, child.getPosition().length + 1));
-            width = newWidth;
+            this.width = 1;
+            forEachNode(node -> width = findChildWidth(child));
         }
+    }
+
+    private int findChildWidth(SimpleSkillTreeNode child) {
+        return Math.max(width, child.getPosition().length + 1);
     }
 
     @Override
