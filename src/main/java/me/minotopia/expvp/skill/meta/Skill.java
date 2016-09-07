@@ -116,7 +116,7 @@ public class Skill implements ConfigurationSerializable, Nameable {
      * @param iconStack the new icon stack
      */
     public void setIconStack(ItemStack iconStack) {
-        this.iconStack = iconStack;
+        this.iconStack = iconStack.clone();
     }
 
     /**
