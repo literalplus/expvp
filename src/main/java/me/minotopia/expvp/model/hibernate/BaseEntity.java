@@ -14,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
  * @since 2016-06-22
  */
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntity implements Serializable {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime creationDate;
