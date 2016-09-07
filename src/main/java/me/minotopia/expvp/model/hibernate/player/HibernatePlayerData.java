@@ -6,9 +6,11 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.model.player;
+package me.minotopia.expvp.model.hibernate.player;
 
-import me.minotopia.expvp.model.BaseEntity;
+import me.minotopia.expvp.api.model.MutablePlayerData;
+import me.minotopia.expvp.api.model.ObtainedSkill;
+import me.minotopia.expvp.model.hibernate.BaseEntity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -29,7 +31,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "mt_main.exp_player")
-public class PlayerData extends BaseEntity {
+public class HibernatePlayerData extends BaseEntity implements MutablePlayerData {
     @Id
     private UUID uuid; //always use Object types for identifiers, they didn't explain why tho
     private int kills; //how many players this player has killed overall
@@ -45,7 +47,7 @@ public class PlayerData extends BaseEntity {
     private Set<ObtainedSkill> skillsView = Collections.unmodifiableSet(skills);
 
     @SuppressWarnings("unused")
-    PlayerData() {
+    HibernatePlayerData() {
         //Default constructor required for Hibernate - may be package+
     }
 
@@ -54,169 +56,105 @@ public class PlayerData extends BaseEntity {
      *
      * @param uuid the unique id of the player
      */
-    public PlayerData(UUID uuid) {
+    public HibernatePlayerData(UUID uuid) {
         this.uuid = uuid;
     }
 
-    /**
-     * @return the unique id of the player
-     */
+    @Override
     public UUID getUniqueId() {
         return uuid;
     }
 
-    /**
-     * @return the amount of times this player has killed other players overall
-     */
+    @Override
     public int getKills() {
         return kills;
     }
 
-    /**
-     * Registers with the entity that the player has killed another player, causing the kill
-     * count to be increased.
-     */
+    @Override
     public void addKill() {
         this.kills += 1;
     }
 
-    /**
-     * @return the amount of times this player has died
-     */
+    @Override
     public int getDeaths() {
         return deaths;
     }
 
-    /**
-     * Registers with the entity that the player has died, causing the death count to be increased.
-     */
+    @Override
     public void addDeath() {
         this.deaths += 1;
     }
 
-    /**
-     * Causes the player's stats, that is, kill and death count, to be reset to their initial
-     * value of zero.
-     */
+    @Override
     public void clearStats() {
         this.kills = 0;
         this.deaths = 0;
     }
 
-    /**
-     * @return the current level of this player, starting at 1
-     */
+    @Override
     public int getLevel() {
         return level;
     }
 
-    /**
-     * Sets the current level of this player. The initial level is 1. This also resets the points
-     * count for this player. Note that this does not change the amount of books.
-     *
-     * @param level the new level of this player
-     * @see #levelUp() the correct API way to level up by one
-     */
+    @Override
     public void setLevel(int level) {
         this.level = level;
         this.points = 0;
     }
 
-    /**
-     * Causes this player's level to be increased by one and the points count to be reset. Also
-     * adds a book to the player's bookshelf.
-     *
-     * @return the new level of the player
-     */
+    @Override
     public int levelUp() {
         setLevel(level + 1);
         setBooks(melons + 1); //TODO: book limits
         return getLevel();
     }
 
-    /**
-     * Gets the amount of points this player currently has for progressing to the next level.
-     * Points are increased each time the player kills somebody and decreased every time the
-     * player dies. Upon reaching a certain amount of points, the player progresses to the next
-     * level.
-     *
-     * @return the amount of points the player currently has
-     */
+    @Override
     public int getPoints() {
         return points;
     }
 
-    /**
-     * Sets the amount of {@link #getPoints() points} this player has.
-     *
-     * @param points the new amount of points for this player
-     */
+    @Override
     public void setPoints(int points) {
         this.points = points;
     }
 
-    /**
-     * Gets the amount of books this player currently has. Books can be used to obtain skills
-     * from a skill tree and are added at level-up, except if the player has reached their book
-     * limit.
-     * @return the current amount of books this player has
-     */
+    @Override
     public int getBooks() {
         return books;
     }
 
-    /**
-     * Sets the current amount of {@link #getBooks() books} this player has.
-     * @param books the new amount of books
-     */
+    @Override
     public void setBooks(int books) {
         this.books = books;
     }
 
-    /**
-     * Gets the amount of melons this player has. Melons are a premium currency used for
-     * purchasing cosmetic things.
-     * @return the current amount of melons this player has
-     */
+    @Override
     public int getMelons() {
         return melons;
     }
 
-    /**
-     * Sets the current amount of {@link #getMelons() melons} this player has.
-     * @param melons the new amount of melons
-     */
+    @Override
     public void setMelons(int melons) {
         this.melons = melons;
     }
 
-    /**
-     * Gets the set of skills this player has.
-     * @return the set of skills
-     */
+    @Override
     public Set<ObtainedSkill> getSkills() {
         return skillsView;
     }
 
-    /**
-     * Adds a new skill to the player's set of skills.
-     * @param newSkill the new skill to add
-     */
+    @Override
     public void addSkill(ObtainedSkill newSkill) {
         skills.add(newSkill);
     }
 
-    /**
-     * Removes a skill from this player's set of skills.
-     * @param oldSkill the skill to remove
-     */
+    @Override
     public void removeSkill(ObtainedSkill oldSkill) {
         skills.remove(oldSkill);
     }
 
-    /**
-     * Clears this player's set of skills.
-     */
+    @Override
     public void clearSkills() {
         skills.clear();
     }

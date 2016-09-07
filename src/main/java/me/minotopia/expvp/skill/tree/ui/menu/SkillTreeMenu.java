@@ -14,7 +14,6 @@ import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.skill.tree.SkillTree;
-import me.minotopia.expvp.skill.tree.ui.element.skill.EditableSkillElement;
 import me.minotopia.expvp.skill.tree.ui.renderer.TreeStructureRenderer;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
 import org.bukkit.Material;
@@ -50,9 +49,8 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
         }
     }
 
-    public static SkillTreeMenu openForEditing(EPPlugin plugin, Player player, SkillTree tree) {
+    public static SkillTreeMenu openForResearch(EPPlugin plugin, Player player, SkillTree tree) {
         TreeStructureRenderer renderer = new TreeStructureRenderer(tree);
-        renderer.setElementSupplier(EditableSkillElement::new);
         SkillTreeMenu menu = new SkillTreeMenu(plugin, player, renderer);
         menu.applyRenderer();
         menu.open();

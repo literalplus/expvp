@@ -12,6 +12,7 @@ package me.minotopia.expvp;
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
+import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.command.CommandSkillAdmin;
 import me.minotopia.expvp.command.CommandSkillTreeAdmin;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
@@ -19,9 +20,11 @@ import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
-import me.minotopia.expvp.model.BaseEntity;
-import me.minotopia.expvp.player.PlayerDataManager;
+import me.minotopia.expvp.model.hibernate.BaseEntity;
+import me.minotopia.expvp.player.HibernatePlayerDataService;
+import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
+import me.minotopia.expvp.skill.obtainment.SimpleSkillObtainmentService;
 import me.minotopia.expvp.skill.tree.SkillTreeManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -53,7 +56,8 @@ public class EPPlugin extends GenericXyPlugin {
     private SkillTreeManager skillTreeManager;
     private SkillManager skillManager;
     private CommandsManager commandsManager;
-    private PlayerDataManager playerDataManager;
+    private PlayerDataService playerDataService;
+    private SkillObtainmentService obtainmentService;
 
     @Override
     public void reloadConfig() {
@@ -79,11 +83,12 @@ public class EPPlugin extends GenericXyPlugin {
             initHibernate();
 
             //Load skill trees and skills
-            skillManager = new SkillManager(new File(getDataFolder(), "skills"), playerDataManager);
+            skillManager = new SkillManager(new File(getDataFolder(), "skills"), obtainmentService);
             skillTreeManager = new SkillTreeManager(new File(getDataFolder(), "skilltrees"), skillManager);
 
             //Initialise managers
-            playerDataManager = new PlayerDataManager(sessionFactory);
+            playerDataService = new HibernatePlayerDataService(sessionFactory);
+            obtainmentService = new SimpleSkillObtainmentService(playerDataService);
 
             // Register commands
             registerCommands();
@@ -160,6 +165,7 @@ public class EPPlugin extends GenericXyPlugin {
 
     @Override
     public void disable() {
+        //noinspection EmptyTryBlock
         try {
             //no op yet
         } catch (Exception e) {
@@ -209,8 +215,12 @@ public class EPPlugin extends GenericXyPlugin {
         return commandsManager;
     }
 
-    public PlayerDataManager getPlayerDataManager() {
-        return playerDataManager;
+    public PlayerDataService getPlayerDataService() {
+        return playerDataService;
+    }
+
+    public SkillObtainmentService getSkillObtainmentService() {
+        return obtainmentService;
     }
 
     public SkillTreeManager getSkillTreeManager() {

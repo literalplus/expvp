@@ -9,7 +9,7 @@
 package me.minotopia.expvp.skill.tree;
 
 import li.l1t.common.tree.TreeNode;
-import me.minotopia.expvp.model.player.ObtainedSkill;
+import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.skill.meta.Skill;
 
 import java.util.Collection;

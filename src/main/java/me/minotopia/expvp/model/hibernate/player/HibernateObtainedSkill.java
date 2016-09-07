@@ -6,10 +6,12 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.model.player;
+package me.minotopia.expvp.model.hibernate.player;
 
 import com.google.common.base.Preconditions;
-import me.minotopia.expvp.model.BaseEntity;
+import me.minotopia.expvp.api.model.ObtainedSkill;
+import me.minotopia.expvp.api.model.PlayerData;
+import me.minotopia.expvp.model.hibernate.BaseEntity;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 
@@ -28,7 +30,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "exp_player_skill")
-public class ObtainedSkill extends BaseEntity {
+public class HibernateObtainedSkill extends BaseEntity implements ObtainedSkill {
     @Id
     @ManyToOne
     @JoinColumn(name = "player_uuid")
@@ -39,7 +41,7 @@ public class ObtainedSkill extends BaseEntity {
     private String skillId;
 
     @SuppressWarnings("unused")
-    ObtainedSkill() {
+    HibernateObtainedSkill() {
         //Default constructor required for Hibernate - may be package+
     }
 
@@ -49,40 +51,26 @@ public class ObtainedSkill extends BaseEntity {
      * @param playerData the player data
      * @param skillId    the unique identifier of the skill
      */
-    public ObtainedSkill(PlayerData playerData, String skillId) {
+    public HibernateObtainedSkill(PlayerData playerData, String skillId) {
         this.playerData = playerData;
         this.skillId = skillId;
     }
 
-    /**
-     * @return the player who has this skill
-     */
+    @Override
     public PlayerData getPlayerData() {
         return playerData;
     }
 
-    /**
-     * @return the the unique identifier of the skill
-     */
+    @Override
     public String getSkillId() {
         return skillId;
     }
 
-    /**
-     * Sets the tree-unique identifier of the skill.
-     *
-     * @param skillId the tree-unique identifier of the skill
-     */
     public void setSkillId(String skillId) {
         this.skillId = skillId;
     }
 
-    /**
-     * Checks whether given skill has the same id as this model skill.
-     *
-     * @param skill the skill to compare to
-     * @return whether the ids are the same
-     */
+    @Override
     public boolean matches(Skill skill) {
         Preconditions.checkNotNull(skill, "skill");
         Preconditions.checkNotNull(skill.getId(), "skill.getId()");
@@ -100,6 +88,6 @@ public class ObtainedSkill extends BaseEntity {
         Preconditions.checkNotNull(playerData, "playerData");
         Preconditions.checkNotNull(node, "node");
         Preconditions.checkNotNull(node.getValue(), "node.getValue()");
-        return new ObtainedSkill(playerData, node.getValue().getId());
+        return new HibernateObtainedSkill(playerData, node.getValue().getId());
     }
 }
