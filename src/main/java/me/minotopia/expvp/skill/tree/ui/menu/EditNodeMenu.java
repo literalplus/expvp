@@ -121,7 +121,7 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
 
     public void addSubskill(SimpleSkillTreeNode parent) {
         SimpleSkillTreeNode child = parent.createChild();
-        if(isTreeNotRenderable(parent)) {
+        if (isTreeNotRenderable(parent)) {
             rollbackChildAddBecauseNotRenderable(parent, child);
             return;  // ^ this is kinda brute-force, but checking before is too complicated
         }

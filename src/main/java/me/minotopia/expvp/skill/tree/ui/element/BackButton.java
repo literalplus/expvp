@@ -23,7 +23,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  */
 public class BackButton extends Placeholder {
     private static final ItemStackFactory ICON_FACTORY = new ItemStackFactory(Material.WOOD_DOOR)
-                    .displayName("<< §6§lZurück");
+            .displayName("<< §6§lZurück");
     private final InventoryMenu previous;
 
     public BackButton(InventoryMenu previous) {
@@ -33,7 +33,7 @@ public class BackButton extends Placeholder {
 
     @Override
     public void handleMenuClick(InventoryClickEvent event, InventoryMenu inventoryMenu) {
-        if(previous != null) {
+        if (previous != null) {
             previous.open();
         } else {
             inventoryMenu.getPlayer().closeInventory();

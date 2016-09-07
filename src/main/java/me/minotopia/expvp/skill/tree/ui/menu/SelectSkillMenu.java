@@ -21,8 +21,8 @@ import org.bukkit.plugin.Plugin;
 import java.util.function.Consumer;
 
 /**
- * An inventory menu that allows to select a skill from the list of all available skills and executes
- * a custom handler when a skill is selected.
+ * An inventory menu that allows to select a skill from the list of all available skills and
+ * executes a custom handler when a skill is selected.
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-08-18
@@ -54,7 +54,7 @@ public class SelectSkillMenu extends PaginationListMenu<Skill> {
 
     @Override
     public void handleClose(InventoryCloseEvent evt) {
-        if(!selectionMade) {
+        if (!selectionMade) {
             getPlayer().sendMessage("§e§l➩ §eSkillauswahl abgebrochen.");
         }
     }

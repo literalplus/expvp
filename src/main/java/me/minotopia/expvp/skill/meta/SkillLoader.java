@@ -8,11 +8,10 @@
 
 package me.minotopia.expvp.skill.meta;
 
+import li.l1t.common.util.config.YamlHelper;
 import me.minotopia.expvp.yaml.AbstractYamlLoader;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import li.l1t.common.util.config.YamlHelper;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 import java.io.File;

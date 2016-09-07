@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 
 /**
  * Simple implementation of a skill tree node. This implementation notifies the root node when
- * children are added or removed, so subclasses must make sure to always call the super method
- * from {@link #addChild(SimpleSkillTreeNode)} and {@link #removeChild(SimpleSkillTreeNode)}.
+ * children are added or removed, so subclasses must make sure to always call the super method from
+ * {@link #addChild(SimpleSkillTreeNode)} and {@link #removeChild(SimpleSkillTreeNode)}.
  * <p><b>Note:</b> This class does not implement {@link org.bukkit.configuration.serialization.ConfigurationSerializable}
- * because of its limitations. Nodes must be manually serialized and deserialized from a map.
- * The only correct way to serialise a complete skill tree is to serialise the root
- * {@link SkillTree}. Also note that deserialising part of a skill tree is <b>not</b> supported:
- * That would mess up tree ids.</p>
+ * because of its limitations. Nodes must be manually serialized and deserialized from a map. The
+ * only correct way to serialise a complete skill tree is to serialise the root {@link SkillTree}.
+ * Also note that deserialising part of a skill tree is <b>not</b> supported: That would mess up
+ * tree ids.</p>
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
@@ -40,8 +40,8 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
     private SkillTree tree;
 
     /**
-     * Creates a new skill tree node. If parent is null, creates a skill tree. Note that there is
-     * no practical difference between a skill tree and a skill tree node.
+     * Creates a new skill tree node. If parent is null, creates a skill tree. Note that there is no
+     * practical difference between a skill tree and a skill tree node.
      *
      * @param parent the parent of this node
      */
@@ -49,15 +49,16 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
         super(parent, SimpleSkillTreeNode.class);
         if (parent != null) {
             this.tree = parent.getTree();
-        } else if(this instanceof SkillTree) {
+        } else if (this instanceof SkillTree) {
             this.tree = (SkillTree) this;
         } else {
             throw new IllegalArgumentException("only SkillTree instances need not have a parent");
         }
     }
+
     /**
-     * Deserialises a skill tree node which was serialised by {@link #serialize()} and all its
-     * child nodes.
+     * Deserialises a skill tree node which was serialised by {@link #serialize()} and all its child
+     * nodes.
      *
      * @param source the source map
      * @param parent the parent of the node, or null for a root node
@@ -67,10 +68,10 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
     @SuppressWarnings("unchecked")
     SimpleSkillTreeNode(Map<String, Object> source, SimpleSkillTreeNode parent) {
         this(parent);
-        if(parent != null) {
+        if (parent != null) {
             parent.addChild(this); //prevent parent complaining because we already have children after constructor
         }
-        if(source.containsKey(SKILL_ID_PATH)) {
+        if (source.containsKey(SKILL_ID_PATH)) {
             this.skillId = String.valueOf(source.get(SKILL_ID_PATH));
         }
         if (source.containsKey(CHILDREN_PATH)) {
@@ -161,7 +162,7 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
     @Override
     public void setValue(Skill newValue) {
         super.setValue(newValue);
-        if(newValue == null) {
+        if (newValue == null) {
             skillId = null;
         } else {
             skillId = newValue.getId();

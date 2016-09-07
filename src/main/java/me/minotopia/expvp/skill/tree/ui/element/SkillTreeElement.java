@@ -38,7 +38,7 @@ public class SkillTreeElement implements MenuElement {
 
     @Override
     public ItemStack draw(ElementHolder menu) {
-        if(template == null) {
+        if (template == null) {
             return new ItemStackFactory(Material.BARRIER)
                     .displayName("§7<Kein Treeicon>")
                     .produce();

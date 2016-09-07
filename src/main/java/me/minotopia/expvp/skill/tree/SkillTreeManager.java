@@ -36,8 +36,8 @@ public class SkillTreeManager extends AbstractYamlManager<SkillTree> {
     }
 
     /**
-     * {@inheritDoc}
-     * <p>Also {@link #populate() populates} all loaded trees with skill metadata.</p>
+     * {@inheritDoc} <p>Also {@link #populate() populates} all loaded trees with skill
+     * metadata.</p>
      */
     @Override
     public void loadAll() {

@@ -51,9 +51,9 @@ public class TreeStructureRenderer {
     }
 
     private void assureCouldTreeFitIntoGrid() throws RenderingException {
-        if(tree.getHeight() > MAX_HEIGHT) {
+        if (tree.getHeight() > MAX_HEIGHT) {
             throw new RenderingException("Dieser Baum hat zu viele Äste! (drei erlaubt)");
-        } else if(tree.getWidth() > MAX_WIDTH) {
+        } else if (tree.getWidth() > MAX_WIDTH) {
             throw new RenderingException("Dieser Baum ist zu hoch! (fünf Skills in einer Zeile erlaubt)");
         }
     }

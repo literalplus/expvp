@@ -38,6 +38,7 @@ public interface YamlManager<T extends Nameable> {
 
     /**
      * Gets am object by its id, if it exists in memory. Otherwise returns null.
+     *
      * @param objId the id of the object to fetch
      * @return an object with given id (case-sensitive) or null
      */
@@ -45,6 +46,7 @@ public interface YamlManager<T extends Nameable> {
 
     /**
      * Checks whether an object exists in memory by a given id.
+     *
      * @param objId the id of the object to seek
      * @return whether anm object exists by the given id
      */
@@ -52,6 +54,7 @@ public interface YamlManager<T extends Nameable> {
 
     /**
      * Creates a new object and saves it to its file.
+     *
      * @param objId the unique id of the new tree
      * @return the created tree
      * @throws IOException if an error occurs writing the file
@@ -60,6 +63,7 @@ public interface YamlManager<T extends Nameable> {
 
     /**
      * Saves an object to its file.
+     *
      * @param obj the object to save
      * @throws IOException if an error occurs writing to the file
      */

@@ -35,7 +35,7 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
     }
 
     private void applyRenderer() {
-        if(!renderer.isRendered()) {
+        if (!renderer.isRendered()) {
             attemptRender(renderer);
         }
         renderer.applyStructureTo(this);

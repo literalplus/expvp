@@ -35,13 +35,13 @@ public class EnumPermissionInvokeListener extends InvokeAdapter {
             List<? extends Annotation> annotations, ArgumentParser parser, Object[] args, CommandArgs commandArgs
     ) throws CommandException, ArgumentException {
         Optional<? extends EnumRequires> possibleEnumRequires = enumRequiresAnnotationIn(annotations);
-        if(possibleEnumRequires.isPresent()) {
+        if (possibleEnumRequires.isPresent()) {
             Permission permission = possibleEnumRequires.get().value();
             CommandSender sender = commandArgs.getNamespace().get(CommandSender.class);
-            if(sender == null) {
+            if (sender == null) {
                 throw new CommandException("Could not check permission without command sender!");
             }
-            if(!permission.has(sender)) {
+            if (!permission.has(sender)) {
                 throw UncheckedException.wrap(new AuthorizationException());
             }
         }

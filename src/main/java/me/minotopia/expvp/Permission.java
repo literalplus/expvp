@@ -30,10 +30,10 @@ public enum Permission {
      */
     ADMIN_TREE("expvp.admin.tree"),
     /**
-     * Allows to override certain safety measures and delete content such as skills and skill trees.
+     * Allows to override certain safety measures and delete content such as skills and skill
+     * trees.
      */
-    ADMIN_OVERRIDE("expvp.admin.override")
-    ;
+    ADMIN_OVERRIDE("expvp.admin.override");
 
     private final String value;
 

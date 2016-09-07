@@ -35,7 +35,7 @@ public class NodeEditButton extends EditButton {
     }
 
     private String formatLore() {
-        return "§a" + getSkillDisplayName() +"\n\n§aHier klicken zum Ändern";
+        return "§a" + getSkillDisplayName() + "\n\n§aHier klicken zum Ändern";
     }
 
     private String formatDisplayName() {

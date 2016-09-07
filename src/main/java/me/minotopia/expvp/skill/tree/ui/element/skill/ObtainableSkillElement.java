@@ -30,7 +30,7 @@ public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
 
     @Override
     public ItemStack checkedDraw(InventoryMenu menu) {
-        if(node.getValue() == null) {
+        if (node.getValue() == null) {
             return new ItemStack(Material.BARRIER);
         }
         SkillManager manager = getSkillManagerFromValue();

@@ -20,7 +20,7 @@ public interface Nameable extends Identifiable {
     void setName(String newName);
 
     default String getDisplayName() {
-        if(getName() == null) {
+        if (getName() == null) {
             return getId();
         } else {
             return getName();

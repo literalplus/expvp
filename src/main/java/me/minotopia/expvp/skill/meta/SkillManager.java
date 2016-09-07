@@ -31,7 +31,7 @@ public class SkillManager extends AbstractYamlManager<Skill> {
     /**
      * Creates a new skill manager.
      *
-     * @param skillDirectory         the directory to load skills from
+     * @param skillDirectory    the directory to load skills from
      * @param obtainmentService the service to get skill obtainment state from
      */
     public SkillManager(File skillDirectory, SkillObtainmentService obtainmentService) {

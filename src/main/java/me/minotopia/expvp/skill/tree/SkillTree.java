@@ -17,8 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 
 /**
- * Represents the root of a skill tree with additional tree-related metadata that is not
- * important for the data structure, but for displaying it.
+ * Represents the root of a skill tree with additional tree-related metadata that is not important
+ * for the data structure, but for displaying it.
  *
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-06-23
@@ -54,14 +54,13 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
     }
 
     /**
-     * <p>Deserialisation constructor for a whole tree.</p>
-     * Deserialises a skill tree node which was serialised by {@link #serialize()} and all its
-     * child nodes.
+     * <p>Deserialisation constructor for a whole tree.</p> Deserialises a skill tree node which was
+     * serialised by {@link #serialize()} and all its child nodes.
      *
      * @param source the source map
      * @throws IllegalArgumentException if the source map doesn't contain both id and tree-id, or
-     *                                  children is not a list, or source map doesn't contain
-     *                                  name or icon, or icon is not an item stack
+     *                                  children is not a list, or source map doesn't contain name
+     *                                  or icon, or icon is not an item stack
      */
     @SuppressWarnings("unchecked")
     SkillTree(Map<String, Object> source) {
@@ -120,8 +119,8 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
 
 
     /**
-     * Gets the id of the slot this tree occupies in a inventory with as many slots as the
-     * maximum slots of {@link org.bukkit.event.inventory.InventoryType#CHEST}.
+     * Gets the id of the slot this tree occupies in a inventory with as many slots as the maximum
+     * slots of {@link org.bukkit.event.inventory.InventoryType#CHEST}.
      *
      * @return the id of the slot this tree occupies in a inventory
      */
@@ -158,8 +157,8 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
     }
 
     /**
-     * Gets the height of the tree, that is, the amount of children whose child ids are greater
-     * than 0.
+     * Gets the height of the tree, that is, the amount of children whose child ids are greater than
+     * 0.
      *
      * @return the current height of the tree
      */

@@ -83,6 +83,7 @@ public abstract class AbstractYamlManager<T extends Nameable> implements YamlMan
     /**
      * Creates a new loader for this object type. Not a constructor parameter because you cannot
      * reference this before calling the supertype constructor.
+     *
      * @return a new loader for this object type
      */
     protected abstract YamlLoader<T> createLoader();

@@ -45,14 +45,14 @@ public class NodeStructureRenderer {
 
     private void renderCurrentNodeAndChildren() {
         renderCurrentNodeAtCurrentPosition();
-        if(currentNode.hasChildren()) {
+        if (currentNode.hasChildren()) {
             renderChildrenOfCurrentNodeAt(bestPositionForFirstNodeOfNextBranch());
         }
     }
 
     private void renderChildrenOfCurrentNodeAt(SlotPosition firstChildPosition) {
         SlotPosition nextChildPosition = firstChildPosition;
-        for(SimpleSkillTreeNode currentChild : currentNode.getChildren()) {
+        for (SimpleSkillTreeNode currentChild : currentNode.getChildren()) {
             selectNode(currentChild);
             advanceTo(nextChildPosition);
             renderCurrentNodeParentConnectors();
@@ -68,7 +68,7 @@ public class NodeStructureRenderer {
     }
 
     private void renderSiblingConnectorOfCurrentNodeIfNecessary() {
-        if(currentNodeIsNotFirstChild()) {
+        if (currentNodeIsNotFirstChild()) {
             renderSiblingConnectorOfCurrentNode();
         }
     }
@@ -113,7 +113,7 @@ public class NodeStructureRenderer {
     }
 
     private SlotPosition bestPositionForFirstNodeOfNextBranch() {
-        if(nextBranchIsLinear() || !canBranchUpward()) {
+        if (nextBranchIsLinear() || !canBranchUpward()) {
             return currentPosition.add(2, 0);
         } else {
             return currentPosition.add(2, -2);

@@ -43,7 +43,8 @@ public interface YamlLoader<T> {
      *
      * @param file the file to load from
      * @return the loaded object
-     * @throws IOException                   if an error occurs reading the file or the file does not exist
+     * @throws IOException                   if an error occurs reading the file or the file does
+     *                                       not exist
      * @throws InvalidConfigurationException if the file is not a valid YAML file
      */
     T loadFromFile(File file) throws IOException, InvalidConfigurationException;

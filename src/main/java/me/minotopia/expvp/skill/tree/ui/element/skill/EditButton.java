@@ -30,7 +30,7 @@ abstract class EditButton extends AbstractNodeElement<EditNodeMenu> {
 
     @Override
     public ItemStack checkedDraw(InventoryMenu menu) {
-        if(template == null) {
+        if (template == null) {
             template = createTemplate();
         }
         return template.clone();

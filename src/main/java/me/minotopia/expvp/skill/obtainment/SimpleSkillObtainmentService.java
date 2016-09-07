@@ -34,7 +34,8 @@ public class SimpleSkillObtainmentService implements SkillObtainmentService {
         this.playerDataService = playerDataService;
     }
 
-    @Override public void addObtainedSkill(UUID playerId, Skill skill) {
+    @Override
+    public void addObtainedSkill(UUID playerId, Skill skill) {
         Preconditions.checkNotNull(skill, "skill");
         MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
         checkIsNotObtained(playerId, skill);
@@ -43,12 +44,13 @@ public class SimpleSkillObtainmentService implements SkillObtainmentService {
     }
 
     private void checkIsNotObtained(UUID playerId, Skill skill) {
-        if(hasObtainedSkill(playerId, skill)) {
+        if (hasObtainedSkill(playerId, skill)) {
             throw new UserException("Das ist bereits erforscht!");
         }
     }
 
-    @Override public void removeObtainedSkill(UUID playerId, Skill skill) {
+    @Override
+    public void removeObtainedSkill(UUID playerId, Skill skill) {
         Preconditions.checkNotNull(skill, "skill");
         MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
         checkIsObtained(playerId, skill);
@@ -57,18 +59,20 @@ public class SimpleSkillObtainmentService implements SkillObtainmentService {
     }
 
     private void checkIsObtained(UUID playerId, Skill skill) {
-        if(!hasObtainedSkill(playerId, skill)) {
+        if (!hasObtainedSkill(playerId, skill)) {
             throw new UserException("Das ist noch nicht erforscht!");
         }
     }
 
-    @Override public boolean hasObtainedSkill(UUID playerId, Skill skill) {
+    @Override
+    public boolean hasObtainedSkill(UUID playerId, Skill skill) {
         MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
         return playerData.getSkills().stream()
                 .anyMatch(skill::matches);
     }
 
-    @Override public Collection<String> getObtainedSkills(UUID playerId) {
+    @Override
+    public Collection<String> getObtainedSkills(UUID playerId) {
         MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
         return playerData.getSkills().stream()
                 .map(ObtainedSkill::getSkillId)
