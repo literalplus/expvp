@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.skill.meta;
 
+import com.google.common.base.Preconditions;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.skill.tree.SkillTreeNode;
@@ -36,7 +37,7 @@ public class SkillManager extends AbstractYamlManager<Skill> {
      */
     public SkillManager(File skillDirectory, SkillObtainmentService obtainmentService) {
         super(skillDirectory);
-        this.obtainmentService = obtainmentService;
+        this.obtainmentService = Preconditions.checkNotNull(obtainmentService, "obtainmentService");
         loadAll();
     }
 

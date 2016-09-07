@@ -83,13 +83,13 @@ public class EPPlugin extends GenericXyPlugin {
             //Initialise Hibernate ORM
             initHibernate();
 
+            //Instantiate services
+            playerDataService = new HibernatePlayerDataService(sessionFactory);
+            obtainmentService = new SimpleSkillObtainmentService(playerDataService);
+
             //Load skill trees and skills
             skillManager = new SkillManager(new File(getDataFolder(), "skills"), obtainmentService);
             skillTreeManager = new SkillTreeManager(new File(getDataFolder(), "skilltrees"), skillManager);
-
-            //Initialise managers
-            playerDataService = new HibernatePlayerDataService(sessionFactory);
-            obtainmentService = new SimpleSkillObtainmentService(playerDataService);
 
             // Register commands
             registerCommands();
