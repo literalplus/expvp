@@ -16,6 +16,7 @@ import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.command.CommandSkillAdmin;
 import me.minotopia.expvp.command.CommandSkillTreeAdmin;
+import me.minotopia.expvp.command.CommandSkills;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
@@ -127,6 +128,7 @@ public class EPPlugin extends GenericXyPlugin {
         registerInjections();
         commandsManager.registerCommand(new CommandSkillAdmin(), "ska", "skilladmin");
         commandsManager.registerCommand(new CommandSkillTreeAdmin(), "sta", "treeadmin");
+        commandsManager.registerCommand(new CommandSkills(), "sk", "skills");
     }
 
     private void registerInjections() {
