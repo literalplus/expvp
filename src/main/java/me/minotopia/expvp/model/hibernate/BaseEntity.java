@@ -26,12 +26,12 @@ import java.time.Instant;
 @MappedSuperclass
 public class BaseEntity implements Serializable {
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created")
     private Instant creationDate = Instant.now();
 
     @Version
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, name = "updated")
     private Instant lastUpdated = Instant.now();
 
     public Instant getCreationDate() {
