@@ -22,7 +22,6 @@ import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
-import me.minotopia.expvp.model.hibernate.BaseEntity;
 import me.minotopia.expvp.player.HibernatePlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skill.obtainment.SimpleSkillObtainmentService;
@@ -30,6 +29,8 @@ import me.minotopia.expvp.skill.tree.SkillTreeManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -39,6 +40,7 @@ import org.hibernate.type.UUIDCharType;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -59,6 +61,14 @@ public class EPPlugin extends GenericXyPlugin {
     private CommandsManager commandsManager;
     private PlayerDataService playerDataService;
     private SkillObtainmentService obtainmentService;
+
+    public EPPlugin() {
+
+    }
+
+    EPPlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, description, dataFolder, file);
+    }
 
     @Override
     public void reloadConfig() {
@@ -81,7 +91,7 @@ public class EPPlugin extends GenericXyPlugin {
             this.kitHandler = new KitHandler(this);
 
             //Initialise Hibernate ORM
-            initHibernate();
+            initHibernate(getClassLoader());
 
             //Instantiate services
             playerDataService = new HibernatePlayerDataService(sessionFactory);
@@ -136,7 +146,7 @@ public class EPPlugin extends GenericXyPlugin {
         new SkillTreeCommandService(skillTreeManager).registerInjections(commandsManager);
     }
 
-    private void initHibernate() throws IOException { //TODO: Querydsl
+    void initHibernate(ClassLoader classLoader) throws IOException { //TODO: Querydsl
         File propertiesFile = new File(getDataFolder(), "hibernate.properties");
         if (!propertiesFile.exists()) {
             Files.copy(getResource("hibernate.properties"), propertiesFile.toPath());
@@ -147,8 +157,11 @@ public class EPPlugin extends GenericXyPlugin {
                 .configure(getClass().getResource("/hibernate.cfg.xml"))
                 .build();
         try {
-            List<Class<?>> classes = EntityScanner //Hibernate doesn't do entity scanning, so we need
-                    .scanPackages(BaseEntity.class.getPackage().getName()).result(); //to do it for them
+            List<Class<?>> classes = EntityScanner //Hibernate doesn't do entity scanning sadly
+                    .scanPackages(
+                            Collections.singletonList(classLoader),
+                            EPPlugin.class.getPackage().getName()
+                    ).result();
             MetadataSources sources = new MetadataSources(registry);
             classes.forEach(sources::addAnnotatedClass);
             sources.getMetadataBuilder().applyBasicType(        //Map UUIDs to CHAR(36) instead of
@@ -167,9 +180,8 @@ public class EPPlugin extends GenericXyPlugin {
 
     @Override
     public void disable() {
-        //noinspection EmptyTryBlock
         try {
-            //no op yet
+            sessionFactory.close();
         } catch (Exception e) {
             //Using jul here because Log4J2 might not work
             getLogger().log(java.util.logging.Level.SEVERE, "Exception while trying to disable " +

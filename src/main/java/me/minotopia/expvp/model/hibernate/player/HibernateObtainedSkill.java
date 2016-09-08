@@ -10,17 +10,15 @@ package me.minotopia.expvp.model.hibernate.player;
 
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.api.model.ObtainedSkill;
-import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.model.hibernate.BaseEntity;
 import me.minotopia.expvp.skill.meta.Skill;
-import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence21.Column;
+import javax.persistence21.Entity;
+import javax.persistence21.Id;
+import javax.persistence21.JoinColumn;
+import javax.persistence21.ManyToOne;
+import javax.persistence21.Table;
 
 /**
  * Model for storing data about an actual skill that a player has obtained using books.
@@ -29,12 +27,12 @@ import javax.persistence.Table;
  * @since 2016-06-22
  */
 @Entity
-@Table(name = "exp_player_skill")
+@Table(name = "exp_player_skill", schema = "mt_main")
 public class HibernateObtainedSkill extends BaseEntity implements ObtainedSkill {
     @Id
     @ManyToOne
     @JoinColumn(name = "player_uuid")
-    private PlayerData playerData;
+    private HibernatePlayerData playerData;
 
     @Id
     @Column(name = "skill")
@@ -51,13 +49,13 @@ public class HibernateObtainedSkill extends BaseEntity implements ObtainedSkill 
      * @param playerData the player data
      * @param skillId    the unique identifier of the skill
      */
-    public HibernateObtainedSkill(PlayerData playerData, String skillId) {
+    public HibernateObtainedSkill(HibernatePlayerData playerData, String skillId) {
         this.playerData = playerData;
         this.skillId = skillId;
     }
 
     @Override
-    public PlayerData getPlayerData() {
+    public HibernatePlayerData getPlayerData() {
         return playerData;
     }
 
@@ -75,19 +73,5 @@ public class HibernateObtainedSkill extends BaseEntity implements ObtainedSkill 
         Preconditions.checkNotNull(skill, "skill");
         Preconditions.checkNotNull(skill.getId(), "skill.getId()");
         return skill.getId().equals(skillId);
-    }
-
-    /**
-     * Creates a model skill from a skill tree node.
-     *
-     * @param playerData the player data
-     * @param node       the node to convert
-     * @return a model skill corresponding to given arguments
-     */
-    public static ObtainedSkill fromNode(PlayerData playerData, SimpleSkillTreeNode node) {
-        Preconditions.checkNotNull(playerData, "playerData");
-        Preconditions.checkNotNull(node, "node");
-        Preconditions.checkNotNull(node.getValue(), "node.getValue()");
-        return new HibernateObtainedSkill(playerData, node.getValue().getId());
     }
 }

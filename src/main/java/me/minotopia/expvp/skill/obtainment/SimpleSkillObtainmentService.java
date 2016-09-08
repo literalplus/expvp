@@ -14,7 +14,6 @@ import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.service.SkillObtainmentService;
-import me.minotopia.expvp.model.hibernate.player.HibernateObtainedSkill;
 import me.minotopia.expvp.skill.meta.Skill;
 
 import java.util.Collection;
@@ -39,7 +38,7 @@ public class SimpleSkillObtainmentService implements SkillObtainmentService {
         Preconditions.checkNotNull(skill, "skill");
         MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
         checkIsNotObtained(playerId, skill);
-        playerData.addSkill(new HibernateObtainedSkill(playerData, skill.getId()));
+        playerData.addSkill(skill);
         playerDataService.saveData(playerData);
     }
 
@@ -54,7 +53,7 @@ public class SimpleSkillObtainmentService implements SkillObtainmentService {
         Preconditions.checkNotNull(skill, "skill");
         MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
         checkIsObtained(playerId, skill);
-        playerData.removeSkill(new HibernateObtainedSkill(playerData, skill.getId()));
+        playerData.removeSkill(skill);
         playerDataService.saveData(playerData);
     }
 

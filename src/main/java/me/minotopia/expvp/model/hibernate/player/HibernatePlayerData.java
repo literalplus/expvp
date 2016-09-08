@@ -11,13 +11,14 @@ package me.minotopia.expvp.model.hibernate.player;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.model.hibernate.BaseEntity;
+import me.minotopia.expvp.skill.meta.Skill;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence21.CascadeType;
+import javax.persistence21.Entity;
+import javax.persistence21.Id;
+import javax.persistence21.OneToMany;
+import javax.persistence21.Table;
+import javax.persistence21.Transient;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +31,7 @@ import java.util.UUID;
  * @since 2016-06-21
  */
 @Entity
-@Table(name = "mt_main.exp_player")
+@Table(name = "exp_player", schema = "mt_main")
 public class HibernatePlayerData extends BaseEntity implements MutablePlayerData {
     @Id
     private UUID uuid; //always use Object types for identifiers, they didn't explain why tho
@@ -41,7 +42,7 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     private int books; //books, that is, skill points left to allocate
     private int melons; //melons, that is, premium currency for cosmetic stuff (yay EULA!)
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = HibernateObtainedSkill.class, mappedBy = "playerData")
     private Set<ObtainedSkill> skills = new HashSet<>();
     @Transient
     private Set<ObtainedSkill> skillsView = Collections.unmodifiableSet(skills);
@@ -145,13 +146,13 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     }
 
     @Override
-    public void addSkill(ObtainedSkill newSkill) {
-        skills.add(newSkill);
+    public void addSkill(Skill newSkill) {
+        skills.add(new HibernateObtainedSkill(this, newSkill.getId()));
     }
 
     @Override
-    public void removeSkill(ObtainedSkill oldSkill) {
-        skills.remove(oldSkill);
+    public void removeSkill(Skill oldSkill) {
+        skills.removeIf(oldSkill::matches);
     }
 
     @Override
@@ -161,4 +162,20 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
 
     //Implement equals/hashCode if this entity persists across multiple Sessions and has generated ids
     // See docs, 2.5.7 - https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HibernatePlayerData that = (HibernatePlayerData) o;
+
+        return uuid.equals(that.uuid);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
+    }
 }

@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.api.model;
 
+import me.minotopia.expvp.skill.meta.Skill;
+
 /**
  * Represents a player's data related to Expvp, providing write access to certain properties.
  *
@@ -74,14 +76,14 @@ public interface MutablePlayerData extends PlayerData {
      *
      * @param newSkill the new skill to add
      */
-    void addSkill(ObtainedSkill newSkill);
+    void addSkill(Skill newSkill);
 
     /**
      * Removes a skill from this player's set of skills.
      *
      * @param oldSkill the skill to remove
      */
-    void removeSkill(ObtainedSkill oldSkill);
+    void removeSkill(Skill oldSkill);
 
     /**
      * Clears this player's set of skills.

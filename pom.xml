@@ -48,7 +48,7 @@
         <build-comment>dev</build-comment>
         <log4j.version>2.0-beta9</log4j.version>
         <!-- Mojang ship outdated Beta code in Production -->
-        <hibernate.version>5.1.0.Final</hibernate.version>
+        <hibernate.version>5.2.3-SNAPSHOT</hibernate.version>
         <intake-spigot.version>4.2.20</intake-spigot.version>
     </properties>
 
@@ -140,17 +140,18 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.4</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.192</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

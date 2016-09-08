@@ -11,11 +11,11 @@ package me.minotopia.expvp.model.hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import javax.persistence21.Column;
+import javax.persistence21.MappedSuperclass;
+import javax.persistence21.Version;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Provides a common base for entities that keep track of creation and last updated date.
@@ -27,18 +27,18 @@ import java.time.LocalDateTime;
 public class BaseEntity implements Serializable {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime creationDate;
+    private Instant creationDate = Instant.now();
 
     @Version
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime lastUpdated;
+    private Instant lastUpdated = Instant.now();
 
-    public LocalDateTime getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 
-    public LocalDateTime getLastUpdated() {
+    public Instant getLastUpdated() {
         return lastUpdated;
     }
 }
