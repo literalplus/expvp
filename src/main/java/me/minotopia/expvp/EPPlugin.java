@@ -164,11 +164,11 @@ public class EPPlugin extends GenericXyPlugin {
                     ).result();
             MetadataSources sources = new MetadataSources(registry);
             classes.forEach(sources::addAnnotatedClass);
-            sources.getMetadataBuilder().applyBasicType(        //Map UUIDs to CHAR(36) instead of
-                    UUIDCharType.INSTANCE, UUID.class.getName() //binary; readability > storage
-            );
             sessionFactory = sources
-                    .buildMetadata()
+                    .getMetadataBuilder()
+                    //Map UUIDs to CHAR(36) instead of binary; readability > storage
+                    .applyBasicType(UUIDCharType.INSTANCE, UUID.class.getName())
+                    .build()
                     .buildSessionFactory();
         } catch (Exception e) {
             StandardServiceRegistryBuilder.destroy(registry);
