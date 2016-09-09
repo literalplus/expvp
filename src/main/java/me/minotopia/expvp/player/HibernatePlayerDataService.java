@@ -15,7 +15,9 @@ import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -25,6 +27,7 @@ import java.util.UUID;
  * @since 2016-08-14
  */
 public class HibernatePlayerDataService implements PlayerDataService {
+    //FIXME: Some manual transactioning thing where we pass an object holding the session to the Data Access layer
     private final SessionFactory sessionFactory;
 
     public HibernatePlayerDataService(SessionFactory sessionFactory) {
@@ -40,11 +43,16 @@ public class HibernatePlayerDataService implements PlayerDataService {
     public HibernatePlayerData findOrCreateDataMutable(UUID playerId) {
         Preconditions.checkNotNull(playerId, "playerId");
         try (Session session = sessionFactory.openSession()) {
-            HibernatePlayerData playerData = session.get(HibernatePlayerData.class, playerId);
-            if (playerData == null) {
-                playerData = new HibernatePlayerData(playerId);
-                session.saveOrUpdate(playerData);
+            Optional<HibernatePlayerData> optional =
+                    session.byId(HibernatePlayerData.class).loadOptional(playerId);
+            if (optional.isPresent()) {
+                return optional.get();
             }
+
+            Transaction tx = session.beginTransaction();
+            HibernatePlayerData playerData = new HibernatePlayerData(playerId);
+            session.save(playerData);
+            tx.commit();
             return playerData;
         }
     }
