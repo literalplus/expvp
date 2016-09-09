@@ -25,11 +25,18 @@
     </description>
 
     <scm>
-        <connection>scm:git://git@bitbucket.org:minotopia/expvp.git</connection>
+        <connection>scm:git:git@bitbucket.org:minotopia/expvp.git</connection>
+        <developerConnection>scm:git:git@bitbucket.org:minotopia/expvp.git</developerConnection>
+        <url>https://bitbucket.org/minotopia/expvp/</url>
     </scm>
 
+    <ciManagement>
+        <system>jenkins</system>
+        <url>https://ci.minotopia.me/job/Expvp/</url>
+    </ciManagement>
+
     <distributionManagement>
-        <downloadUrl>https://ci.minotopia.me/job/expvp/</downloadUrl>
+        <downloadUrl>https://ci.minotopia.me/job/Expvp/</downloadUrl>
         <repository>
             <id>xxyy-repo</id>
             <url>https://repo.l1t.li/xxyy-private/</url>
@@ -50,6 +57,8 @@
         <!-- Mojang ship outdated Beta code in Production -->
         <hibernate.version>5.2.3-SNAPSHOT</hibernate.version>
         <intake-spigot.version>4.2.20</intake-spigot.version>
+        <!-- maven-release-plugin -->
+        <ignoreSnapshots>true</ignoreSnapshots>
     </properties>
 
     <repositories>
