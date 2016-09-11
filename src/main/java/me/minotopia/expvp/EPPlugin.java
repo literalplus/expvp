@@ -24,6 +24,7 @@ import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.player.HibernatePlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
+import me.minotopia.expvp.skill.obtainment.CostCheckingObtainmentService;
 import me.minotopia.expvp.skill.obtainment.SimpleSkillObtainmentService;
 import me.minotopia.expvp.skill.tree.SkillTreeManager;
 import me.minotopia.expvp.util.SessionProvider;
@@ -97,7 +98,10 @@ public class EPPlugin extends GenericXyPlugin {
 
             //Instantiate services
             playerDataService = new HibernatePlayerDataService(sessionProvider);
-            obtainmentService = new SimpleSkillObtainmentService(playerDataService);
+            obtainmentService = new CostCheckingObtainmentService(
+                    new SimpleSkillObtainmentService(playerDataService),
+                    playerDataService, sessionProvider
+            );
 
             //Load skill trees and skills
             skillManager = new SkillManager(new File(getDataFolder(), "skills"), obtainmentService);
