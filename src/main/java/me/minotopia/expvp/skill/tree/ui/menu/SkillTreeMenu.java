@@ -16,6 +16,8 @@ import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.ui.renderer.TreeStructureRenderer;
 import me.minotopia.expvp.skill.tree.ui.renderer.exception.RenderingException;
+import me.minotopia.expvp.util.ScopedSession;
+import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -53,8 +55,18 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
         TreeStructureRenderer renderer = new TreeStructureRenderer(tree);
         SkillTreeMenu menu = new SkillTreeMenu(plugin, player, renderer);
         menu.applyRenderer();
-        menu.open();
+        openInTransaction(menu);
         return menu;
+    }
+
+    private static void openInTransaction(SkillTreeMenu menu) {
+        SessionProvider sessionProvider = menu.getPlugin().getSessionProvider();
+        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+            menu.open();
+            scoped.commitIfLastAndChanged();
+        } catch (Exception e) {
+            throw sessionProvider.handleException(e);
+        }
     }
 
     @Override
