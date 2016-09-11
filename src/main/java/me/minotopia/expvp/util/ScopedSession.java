@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.util;
 
-import li.l1t.common.intake.exception.InternalException;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -16,7 +15,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import javax.persistence21.RollbackException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -77,6 +75,14 @@ public class ScopedSession implements AutoCloseable {
         transaction.commit();
     }
 
+    private void checkHasTransaction() {
+        if (transaction == null) {
+            throw new HibernateException("Cannot set active state if no transaction is associated with this scope!");
+        } else if (!transaction.isActive()) {
+            throw new HibernateException("Transaction is no longer active!");
+        }
+    }
+
     public void rollbackAndClose() {
         checkHasTransaction();
         transaction.rollback();
@@ -92,11 +98,13 @@ public class ScopedSession implements AutoCloseable {
         }
     }
 
-    private void checkHasTransaction() {
-        if (transaction == null) {
-            throw new HibernateException("Cannot set active state if no transaction is associated with this scope!");
-        } else if (!transaction.isActive()) {
-            throw new HibernateException("Transaction is no longer active!");
+    /**
+     * Commits the underlying transaction if this layer is the last layer and a transaction was
+     * crated in a lower layer.
+     */
+    public void commitIfLastAndChanged() {
+        if (transaction != null) {
+            commitIfLast();
         }
     }
 
@@ -108,7 +116,7 @@ public class ScopedSession implements AutoCloseable {
         }
     }
 
-    private void forceClose() {
+    void forceClose() {
         if (transaction != null && transaction.isActive()) {
             transaction.rollback();
             closeInternal();
@@ -122,18 +130,6 @@ public class ScopedSession implements AutoCloseable {
         session.close();
         session = null;
         transaction = null;
-    }
-
-    public InternalException handleException(Exception e) {
-        rollbackAndClose();
-        forceClose();
-        if (e instanceof RollbackException || e instanceof javax.persistence.RollbackException) {
-            return new InternalException("Datenbankfehler (Rollback)", e);
-        } else if (e instanceof HibernateException) {
-            return new InternalException("Datenbankfehler", e);
-        } else {
-            return new InternalException("Fehler während der Interaktion mit der Datenbank", e);
-        }
     }
 
     /**
@@ -152,5 +148,9 @@ public class ScopedSession implements AutoCloseable {
 
     int getReferenceCount() {
         return refCount.get();
+    }
+
+    public boolean hasTransaction() {
+        return transaction != null && transaction.isActive();
     }
 }

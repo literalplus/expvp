@@ -9,8 +9,10 @@
 package me.minotopia.expvp.util;
 
 import li.l1t.common.intake.exception.InternalException;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
+import javax.persistence21.RollbackException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -41,7 +43,7 @@ public class SessionProvider {
         attemptLockSessionLock();
         try {
             ScopedSession currentSession = sessionLocal.get();
-            if (currentSession == null || !currentSession.acceptsFurtherReferences()) {
+            if (!isValidSession(currentSession)) {
                 currentSession = new ScopedSession(sessionFactory);
                 sessionLocal.set(currentSession);
             }
@@ -51,6 +53,10 @@ public class SessionProvider {
         }
     }
 
+    private boolean isValidSession(ScopedSession currentSession) {
+        return currentSession != null && currentSession.acceptsFurtherReferences();
+    }
+
     private void attemptLockSessionLock() {
         try {
             if (!sessionLock.tryLock(2, TimeUnit.SECONDS)) {
@@ -58,6 +64,35 @@ public class SessionProvider {
             }
         } catch (InterruptedException e) {
             throw new InternalException("Interrupted while waiting for session lock", e);
+        }
+    }
+
+    /**
+     * Wraps given exception with an appropriate error message as internal error for catching in
+     * higher application layers. If a valid session exists in the current thread, initiates a
+     * rollback and closes it. The called is expected to throw the returned exception.
+     *
+     * @param e the exception to wrap
+     * @return the internal exception wrapping the parameter exception
+     */
+    public InternalException handleException(Exception e) {
+        closeAndRollbackIfDirty(sessionLocal.get());
+        if (e instanceof RollbackException || e instanceof javax.persistence.RollbackException) {
+            return new InternalException("Datenbankfehler (Rollback)", e);
+        } else if (e instanceof HibernateException) {
+            return new InternalException("Datenbankfehler", e);
+        } else {
+            return new InternalException("Fehler während der Interaktion mit der Datenbank", e);
+        }
+    }
+
+    private void closeAndRollbackIfDirty(ScopedSession scoped) {
+        if (isValidSession(scoped)) {
+            if (scoped.hasTransaction()) {
+                scoped.rollbackAndClose();
+            } else {
+                scoped.forceClose();
+            }
         }
     }
 

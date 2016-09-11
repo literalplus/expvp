@@ -30,7 +30,7 @@ public class SessionProviderTest extends HibernateAwareTest {
             scoped.join().tx();
             scoped.commitIfLast();
         } catch (Exception e) {
-            throw scopedOuter.handleException(e);
+            throw provider.handleException(e);
         }
         //then
         assertThat(scopedOuter.getReferenceCount(), is(0));
@@ -58,7 +58,7 @@ public class SessionProviderTest extends HibernateAwareTest {
             assertThat(scoped.tx().isActive(), is(true));
             scoped.commitIfLast();
         } catch (Exception e) {
-            throw scopedOuter.handleException(e);
+            throw provider.handleException(e);
         }
         //then
         assertThat(scopedOuter.getReferenceCount(), is(0));
