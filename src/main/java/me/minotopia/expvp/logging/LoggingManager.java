@@ -40,17 +40,6 @@ public class LoggingManager {
     }
 
     /**
-     * Obtains a logger in the Expvp context for a specific logger id.
-     *
-     * @param id the id to use
-     * @return the obtained logger
-     * @see Log4JContextInitialiser#getLogger(String)
-     */
-    public static Logger getLogger(String id) {
-        return initialiser.getLogger(id);
-    }
-
-    /**
      * Sets the plugin used by the log manager. Once set, it cannot be re-set.
      *
      * @param newPlugin the plugin to use
