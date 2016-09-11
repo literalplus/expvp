@@ -48,6 +48,7 @@ public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
         Player player = inventoryMenu.getPlayer();
         SkillObtainmentService obtainmentService = inventoryMenu.getPlugin().getSkillObtainmentService();
         obtainmentService.addObtainedSkill(player.getUniqueId(), node.getValue()); //handles cost etc
+        player.closeInventory();
     }
 
 }
