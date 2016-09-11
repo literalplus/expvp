@@ -9,6 +9,7 @@
 package me.minotopia.expvp.skill.tree.ui.menu;
 
 import li.l1t.common.inventory.gui.PaginationListMenu;
+import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
@@ -44,7 +45,9 @@ public class SelectSkillMenu extends PaginationListMenu<Skill> {
 
     @Override
     protected ItemStack drawItem(Skill skill) {
-        return skill.getDisplayStack();
+        return new ItemStackFactory(skill.getDisplayStack())
+                .displayName("§e" + skill.getDisplayName())
+                .produce();
     }
 
     @Override
