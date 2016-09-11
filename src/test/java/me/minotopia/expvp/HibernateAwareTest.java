@@ -24,12 +24,22 @@ import java.io.IOException;
  * @since 2016-09-11
  */
 public abstract class HibernateAwareTest {
+    private SessionProvider sessionProvider;
+
     protected SessionFactory whenHibernateIsInitialisedOn(EPPlugin plugin) throws IOException {
         return plugin.initHibernate(Thread.currentThread().getContextClassLoader());
     }
 
     protected SessionProvider givenHibernateIsInitialised() throws IOException {
-        return new SessionProvider(whenHibernateIsInitialisedOn(givenAPluginInstance()));
+        this.sessionProvider = new SessionProvider(whenHibernateIsInitialisedOn(givenAPluginInstance()));
+        return sessionProvider;
+    }
+
+    protected SessionProvider getOrCreateSessionProvider() throws IOException {
+        if (sessionProvider == null) {
+            givenHibernateIsInitialised();
+        }
+        return sessionProvider;
     }
 
     @SuppressWarnings("deprecation")
