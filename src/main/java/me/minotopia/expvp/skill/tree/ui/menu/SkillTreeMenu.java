@@ -88,9 +88,11 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
             return super.handleClick(evt);
         } catch (InternalException e) {
             getPlayer().sendMessage("§4§lInterner Fehler: §c" + e.getLocalizedMessage());
+            getPlayer().closeInventory();
             throw e;
         } catch (UserException e) {
             getPlayer().sendMessage("§c§lFehler: §c" + e.getLocalizedMessage());
+            getPlayer().closeInventory();
             if (e.getCause() != null) {
                 throw e;
             } else {
