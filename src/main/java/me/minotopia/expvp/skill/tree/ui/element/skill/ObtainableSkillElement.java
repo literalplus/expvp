@@ -8,11 +8,14 @@
 
 package me.minotopia.expvp.skill.tree.ui.element.skill;
 
+import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.inventory.gui.InventoryMenu;
+import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skill.tree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeMenu;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,7 +42,12 @@ public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
 
     @Override
     public void checkedHandleMenuClick(InventoryClickEvent inventoryClickEvent, SkillTreeMenu inventoryMenu) {
-        //TODO: actual handling
+        if (node.getValue() == null) {
+            throw new UserException("Da ist nichts!");
+        }
+        Player player = inventoryMenu.getPlayer();
+        SkillObtainmentService obtainmentService = inventoryMenu.getPlugin().getSkillObtainmentService();
+        obtainmentService.addObtainedSkill(player.getUniqueId(), node.getValue()); //handles cost etc
     }
 
 }
