@@ -80,6 +80,14 @@ public abstract class AbstractYamlManager<T extends Nameable> implements YamlMan
         loader.saveToFile(obj);
     }
 
+    @Override
+    public void remove(T obj) throws IOException {
+        loader.delete(obj.getId());
+        if (!registry.remove(obj.getId(), obj)) {
+            throw new IllegalStateException("object does not exist: " + obj.getId());
+        }
+    }
+
     /**
      * Creates a new loader for this object type. Not a constructor parameter because you cannot
      * reference this before calling the supertype constructor.

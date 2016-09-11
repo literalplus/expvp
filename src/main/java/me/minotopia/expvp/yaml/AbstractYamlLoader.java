@@ -65,6 +65,14 @@ public abstract class AbstractYamlLoader<T extends Nameable> implements YamlLoad
     }
 
     @Override
+    public void delete(String objId) throws IOException {
+        File file = getFile(objId);
+        if (file.exists()) {
+            java.nio.file.Files.delete(file.toPath());
+        }
+    }
+
+    @Override
     public String getObjectId(File file) {
         return file.getName().replace(getFileExtension(), "");
     }
@@ -80,9 +88,20 @@ public abstract class AbstractYamlLoader<T extends Nameable> implements YamlLoad
      * @param objId the id to check for uniqueness
      * @throws IllegalArgumentException if another object already exists with that id
      */
-    protected void checkExists(String objId) {
+    protected void checkDoesNotExistInManager(String objId) {
         Preconditions.checkArgument(!manager.contains(objId),
                 "an object already exists with that id: %s", objId);
+    }
+
+    /**
+     * Checks to make sure that given id does already have a mapping.
+     *
+     * @param objId the id to check
+     * @throws IllegalArgumentException if no object exists with that id
+     */
+    protected void checkExistsInManager(String objId) {
+        Preconditions.checkArgument(manager.contains(objId),
+                "no object exists with that id: %s", objId);
     }
 
     /**

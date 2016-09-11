@@ -68,4 +68,17 @@ public interface YamlManager<T extends Nameable> {
      * @throws IOException if an error occurs writing to the file
      */
     void save(T obj) throws IOException;
+
+    /**
+     * Attempts to remove an object from this manager and the underlying data store.
+     *
+     * @param obj the object to remove
+     * @throws IOException           if an error occurs deleting the object from the underlying data
+     *                               store. Note that the object will not be removed from this
+     *                               manager if such error occurs.
+     * @throws IllegalStateException if the object does not exist in this manager. Note that if this
+     *                               error occurs, the underlying data store will have the object
+     *                               removed.
+     */
+    void remove(T obj) throws IOException;
 }

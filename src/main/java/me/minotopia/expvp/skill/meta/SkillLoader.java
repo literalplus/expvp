@@ -35,7 +35,7 @@ public class SkillLoader extends AbstractYamlLoader<Skill> {
 
     @Override
     public Skill loadFromFile(File file) throws IOException, InvalidConfigurationException {
-        checkExists(getObjectId(file));
+        checkDoesNotExistInManager(getObjectId(file));
         YamlConfiguration config = YamlHelper.load(file, true);
         Skill skill = (Skill) config.get(DATA_PATH);
         skill.setManager(manager);
@@ -52,7 +52,7 @@ public class SkillLoader extends AbstractYamlLoader<Skill> {
 
     @Override
     public Skill create(String id) throws IOException {
-        checkExists(id);
+        checkDoesNotExistInManager(id);
         Skill skill = new Skill(id);
         skill.setManager(manager);
         saveToFile(skill);

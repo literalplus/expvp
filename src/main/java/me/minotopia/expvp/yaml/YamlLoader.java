@@ -64,6 +64,14 @@ public interface YamlLoader<T> {
     T create(String objId) throws IOException;
 
     /**
+     * Deletes the file backing an object. Does nothing if the file does not exist. Does not modify
+     * the state of the manager.
+     * @param objId the id of the object
+     * @throws IOException if an error occurs deleting the file
+     */
+    void delete(String objId) throws IOException;
+
+    /**
      * Gets the id of the contained object from a file name.
      *
      * @param file the file

@@ -31,7 +31,7 @@ class SkillTreeLoader extends AbstractYamlLoader<SkillTree> {
 
     @Override
     public SkillTree loadFromFile(File file) throws IOException, InvalidConfigurationException {
-        checkExists(getObjectId(file));
+        checkDoesNotExistInManager(getObjectId(file));
         YamlConfiguration config = YamlHelper.load(file, true);
         return new SkillTree(config.getConfigurationSection(DATA_PATH).getValues(true));
     }
@@ -46,7 +46,7 @@ class SkillTreeLoader extends AbstractYamlLoader<SkillTree> {
 
     @Override
     public SkillTree create(String id) throws IOException {
-        checkExists(id);
+        checkDoesNotExistInManager(id);
         SkillTree tree = new SkillTree(id);
         saveToFile(tree);
         return tree;
