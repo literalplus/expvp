@@ -15,10 +15,10 @@ import com.sk89q.intake.parametric.ArgumentParser;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import li.l1t.common.intake.exception.UncheckedException;
 import li.l1t.common.intake.util.InvokeAdapter;
-import me.minotopia.expvp.Permission;
 import org.bukkit.command.CommandSender;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,16 +36,24 @@ public class EnumPermissionInvokeListener extends InvokeAdapter {
     ) throws CommandException, ArgumentException {
         Optional<? extends EnumRequires> possibleEnumRequires = enumRequiresAnnotationIn(annotations);
         if (possibleEnumRequires.isPresent()) {
-            Permission permission = possibleEnumRequires.get().value();
             CommandSender sender = commandArgs.getNamespace().get(CommandSender.class);
             if (sender == null) {
-                throw new CommandException("Could not check permission without command sender!");
+                throw new CommandException("Cannot check permission without command sender!");
             }
-            if (!permission.has(sender)) {
-                throw UncheckedException.wrap(new AuthorizationException());
-            }
+            checkHasAllRequiredPermissions(possibleEnumRequires.get(), sender);
         }
         return true;
+    }
+
+    private void checkHasAllRequiredPermissions(EnumRequires annotation, CommandSender sender) {
+        if (!hasAllPermissionsIn(sender, annotation)) {
+            throw UncheckedException.wrap(new AuthorizationException());
+        }
+    }
+
+    private boolean hasAllPermissionsIn(CommandSender sender, EnumRequires annotation) {
+        return Arrays.stream(annotation.value())
+                .allMatch(perm -> perm.has(sender));
     }
 
     private Optional<? extends EnumRequires> enumRequiresAnnotationIn(List<? extends Annotation> annotations) {
