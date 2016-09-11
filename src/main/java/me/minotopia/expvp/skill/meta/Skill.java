@@ -34,7 +34,7 @@ public class Skill implements ConfigurationSerializable, Nameable {
     public static final String HANDLER_SPEC_PATH = "handler";
     private SkillManager manager;
     private final String id;
-    private int bookCost;
+    private int bookCost = 1; //sane default value
     private String name;
     private ItemStack iconStack;
     private String handlerSpec; //arbitrary string handled by handlers - like XYC Kit API
