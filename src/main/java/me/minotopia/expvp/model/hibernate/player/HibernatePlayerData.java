@@ -18,8 +18,6 @@ import javax.persistence21.Entity;
 import javax.persistence21.Id;
 import javax.persistence21.OneToMany;
 import javax.persistence21.Table;
-import javax.persistence21.Transient;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -44,8 +42,6 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = HibernateObtainedSkill.class, mappedBy = "playerData")
     private Set<ObtainedSkill> skills = new HashSet<>();
-    @Transient
-    private Set<ObtainedSkill> skillsView = Collections.unmodifiableSet(skills);
 
     @SuppressWarnings("unused")
     HibernatePlayerData() {
@@ -142,7 +138,7 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
 
     @Override
     public Set<ObtainedSkill> getSkills() {
-        return skillsView;
+        return skills;
     }
 
     @Override
