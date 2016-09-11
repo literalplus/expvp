@@ -13,9 +13,8 @@ import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import me.minotopia.expvp.util.ScopedSession;
+import me.minotopia.expvp.util.SessionProvider;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -27,11 +26,10 @@ import java.util.UUID;
  * @since 2016-08-14
  */
 public class HibernatePlayerDataService implements PlayerDataService {
-    //FIXME: Some manual transactioning thing where we pass an object holding the session to the Data Access layer
-    private final SessionFactory sessionFactory;
+    private final SessionProvider sessionProvider;
 
-    public HibernatePlayerDataService(SessionFactory sessionFactory) {
-        this.sessionFactory = Preconditions.checkNotNull(sessionFactory, "sessionFactory");
+    public HibernatePlayerDataService(SessionProvider sessionProvider) {
+        this.sessionProvider = Preconditions.checkNotNull(sessionProvider, "sessionProvider");
     }
 
     @Override
@@ -42,25 +40,27 @@ public class HibernatePlayerDataService implements PlayerDataService {
     @Override
     public HibernatePlayerData findOrCreateDataMutable(UUID playerId) {
         Preconditions.checkNotNull(playerId, "playerId");
-        try (Session session = sessionFactory.openSession()) {
+        try (ScopedSession scoped = sessionProvider.scoped().join()) {
             Optional<HibernatePlayerData> optional =
-                    session.byId(HibernatePlayerData.class).loadOptional(playerId);
+                    scoped.session().byId(HibernatePlayerData.class).loadOptional(playerId);
             if (optional.isPresent()) {
                 return optional.get();
             }
 
-            Transaction tx = session.beginTransaction();
+            scoped.tx();
             HibernatePlayerData playerData = new HibernatePlayerData(playerId);
-            session.save(playerData);
-            tx.commit();
+            scoped.session().save(playerData);
+            scoped.commitIfLast();
             return playerData;
         }
     }
 
     @Override
     public void saveData(MutablePlayerData toSave) {
-        try (Session session = sessionFactory.openSession()) {
-            session.saveOrUpdate(toSave);
+        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+            scoped.tx();
+            scoped.session().saveOrUpdate(toSave);
+            scoped.commitIfLast();
         }
     }
 }

@@ -26,6 +26,7 @@ import me.minotopia.expvp.player.HibernatePlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skill.obtainment.SimpleSkillObtainmentService;
 import me.minotopia.expvp.skill.tree.SkillTreeManager;
+import me.minotopia.expvp.util.SessionProvider;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.command.CommandSender;
@@ -55,7 +56,7 @@ public class EPPlugin extends GenericXyPlugin {
     private final String chatPrefix = "§6[§7ExP§6] ";
     private KitHandler kitHandler;
     private Logger log;
-    private SessionFactory sessionFactory;
+    private SessionProvider sessionProvider;
     private SkillTreeManager skillTreeManager;
     private SkillManager skillManager;
     private CommandsManager commandsManager;
@@ -91,10 +92,11 @@ public class EPPlugin extends GenericXyPlugin {
             this.kitHandler = new KitHandler(this);
 
             //Initialise Hibernate ORM
-            initHibernate(getClassLoader());
+            SessionFactory sessionFactory = initHibernate(getClassLoader());
+            this.sessionProvider = new SessionProvider(sessionFactory);
 
             //Instantiate services
-            playerDataService = new HibernatePlayerDataService(sessionFactory);
+            playerDataService = new HibernatePlayerDataService(sessionProvider);
             obtainmentService = new SimpleSkillObtainmentService(playerDataService);
 
             //Load skill trees and skills
@@ -146,7 +148,7 @@ public class EPPlugin extends GenericXyPlugin {
         new SkillTreeCommandService(skillTreeManager).registerInjections(commandsManager);
     }
 
-    void initHibernate(ClassLoader classLoader) throws IOException { //TODO: Querydsl
+    SessionFactory initHibernate(ClassLoader classLoader) throws IOException { //TODO: Querydsl
         File propertiesFile = new File(getDataFolder(), "hibernate.properties");
         if (!propertiesFile.exists()) {
             Files.copy(getResource("hibernate.properties"), propertiesFile.toPath());
@@ -164,7 +166,7 @@ public class EPPlugin extends GenericXyPlugin {
                     ).result();
             MetadataSources sources = new MetadataSources(registry);
             classes.forEach(sources::addAnnotatedClass);
-            sessionFactory = sources
+            return sources
                     .getMetadataBuilder()
                     //Map UUIDs to CHAR(36) instead of binary; readability > storage
                     .applyBasicType(UUIDCharType.INSTANCE, UUID.class.getName())
@@ -181,7 +183,7 @@ public class EPPlugin extends GenericXyPlugin {
     @Override
     public void disable() {
         try {
-            sessionFactory.close();
+            sessionProvider.getSessionFactory().close();
         } catch (Exception e) {
             //Using jul here because Log4J2 might not work
             getLogger().log(java.util.logging.Level.SEVERE, "Exception while trying to disable " +
@@ -213,10 +215,10 @@ public class EPPlugin extends GenericXyPlugin {
 
 
     /**
-     * @return the Hibernate SessionFactory for this plugin
+     * @return the SessionProvider used by this plugin
      */
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
+    public SessionProvider getSessionProvider() {
+        return sessionProvider;
     }
 
     private void log(Level level, String message) {

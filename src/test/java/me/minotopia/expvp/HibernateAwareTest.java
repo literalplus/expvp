@@ -9,6 +9,7 @@
 package me.minotopia.expvp;
 
 import li.l1t.common.test.util.MockHelper;
+import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.hibernate.SessionFactory;
@@ -24,12 +25,11 @@ import java.io.IOException;
  */
 public abstract class HibernateAwareTest {
     protected SessionFactory whenHibernateIsInitialisedOn(EPPlugin plugin) throws IOException {
-        plugin.initHibernate(Thread.currentThread().getContextClassLoader());
-        return plugin.getSessionFactory();
+        return plugin.initHibernate(Thread.currentThread().getContextClassLoader());
     }
 
-    protected SessionFactory givenHibernateIsInitialised() throws IOException {
-        return whenHibernateIsInitialisedOn(givenAPluginInstance());
+    protected SessionProvider givenHibernateIsInitialised() throws IOException {
+        return new SessionProvider(whenHibernateIsInitialisedOn(givenAPluginInstance()));
     }
 
     @SuppressWarnings("deprecation")

@@ -38,7 +38,7 @@ public class SessionProviderTest extends HibernateAwareTest {
     }
 
     private SessionProvider givenASessionProvider() throws IOException {
-        return new SessionProvider(givenHibernateIsInitialised());
+        return givenHibernateIsInitialised();
     }
 
     @Test
