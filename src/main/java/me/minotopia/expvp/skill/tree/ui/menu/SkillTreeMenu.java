@@ -10,6 +10,7 @@ package me.minotopia.expvp.skill.tree.ui.menu;
 
 import com.google.common.base.Preconditions;
 import li.l1t.common.intake.exception.InternalException;
+import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
@@ -20,6 +21,7 @@ import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 /**
  * An inventory menu that provides the frontend for a skill tree.
@@ -78,5 +80,18 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
     @Override
     public EPPlugin getPlugin() {
         return (EPPlugin) super.getPlugin();
+    }
+
+    @Override
+    public boolean handleClick(InventoryClickEvent evt) {
+        try {
+            return super.handleClick(evt);
+        } catch (InternalException e) {
+            getPlayer().sendMessage("§4§lInterner Fehler: §c" + e.getLocalizedMessage());
+            throw e;
+        } catch (UserException e) {
+            getPlayer().sendMessage("§c§lFehler: §c" + e.getLocalizedMessage());
+            throw e;
+        }
     }
 }
