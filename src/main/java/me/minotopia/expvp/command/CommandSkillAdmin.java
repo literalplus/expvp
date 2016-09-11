@@ -128,5 +128,14 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill> {
         );
     }
 
+    @Command(aliases = "remove", min = 1,
+            desc = "Löscht einen Skill",
+            usage = "[id]")
+    @EnumRequires({Permission.ADMIN_SKILL, Permission.ADMIN_OVERRIDE})
+    public void removeSkill(SkillCommandService service, CommandSender sender, Skill skill)
+            throws IOException {
+        service.getManager().remove(skill);
+    }
+
     //TODO: /ska handlers
 }

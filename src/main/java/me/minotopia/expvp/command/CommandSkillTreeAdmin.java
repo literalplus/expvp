@@ -146,4 +146,13 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
     public void list(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player) {
         SelectTreeMenu.openNew(plugin, player, tree -> skillInfo(service, player, tree));
     }
+
+    @Command(aliases = "remove", min = 1,
+            desc = "Löscht einen Skilltree",
+            usage = "[id]")
+    @EnumRequires({Permission.ADMIN_TREE, Permission.ADMIN_OVERRIDE})
+    public void removeSkill(SkillTreeCommandService service, CommandSender sender, SkillTree tree)
+            throws IOException {
+        service.getManager().remove(tree);
+    }
 }
