@@ -29,7 +29,7 @@ import me.minotopia.expvp.player.HibernatePlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skill.obtainment.CostCheckingObtainmentService;
 import me.minotopia.expvp.skill.obtainment.SimpleSkillObtainmentService;
-import me.minotopia.expvp.skill.tree.SkillTreeManager;
+import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.util.SessionProvider;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;

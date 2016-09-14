@@ -20,7 +20,7 @@ import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
-import me.minotopia.expvp.skill.tree.ui.menu.SelectSkillMenu;
+import me.minotopia.expvp.ui.menu.SelectSkillMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

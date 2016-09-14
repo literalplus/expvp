@@ -13,8 +13,8 @@ import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.inventory.SlotPosition;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
-import me.minotopia.expvp.skill.tree.SkillTree;
-import me.minotopia.expvp.skill.tree.SkillTreeManager;
+import me.minotopia.expvp.skilltree.SkillTree;
+import me.minotopia.expvp.skilltree.SkillTreeManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 

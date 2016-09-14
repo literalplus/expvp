@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.skill.tree;
+package me.minotopia.expvp.skilltree;
 
 import li.l1t.common.tree.TreeNode;
 import me.minotopia.expvp.api.model.ObtainedSkill;

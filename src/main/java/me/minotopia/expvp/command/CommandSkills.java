@@ -11,8 +11,8 @@ package me.minotopia.expvp.command;
 import com.sk89q.intake.Command;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.EPPlugin;
-import me.minotopia.expvp.skill.tree.ui.menu.SelectTreeMenu;
-import me.minotopia.expvp.skill.tree.ui.menu.SkillTreeMenu;
+import me.minotopia.expvp.ui.menu.SelectTreeMenu;
+import me.minotopia.expvp.ui.menu.SkillTreeMenu;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
