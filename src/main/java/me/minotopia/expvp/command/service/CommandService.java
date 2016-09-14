@@ -15,6 +15,7 @@ import li.l1t.common.shared.uuid.UUIDRepositories;
 import li.l1t.common.shared.uuid.UUIDRepository;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.model.MutablePlayerData;
+import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
@@ -50,8 +51,11 @@ public class CommandService {
         }
     }
 
-    public <T> T modifyPlayerData(SessionProvider sessionProvider, PlayerDataService playerDataService,
-                                  UUID playerId, Function<MutablePlayerData, T> mutator) {
+    public PlayerData findPlayerData(UUID playerId) {
+        return modifyPlayerData(playerId, playerData -> playerData);
+    }
+
+    public <T> T modifyPlayerData(UUID playerId, Function<MutablePlayerData, T> mutator) {
         try (ScopedSession scoped = sessionProvider.scoped().join()) {
             MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
             T result = mutator.apply(playerData);
