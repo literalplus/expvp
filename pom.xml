@@ -109,8 +109,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>li.l1t.common</groupId>
-            <artifactId>xyc-libhibernate</artifactId>
+            <groupId>li.l1t.lib</groupId>
+            <artifactId>libhibernate-bukkit</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
         <dependency>
