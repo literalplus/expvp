@@ -8,14 +8,10 @@
 
 package me.minotopia.expvp;
 
-import li.l1t.common.test.util.MockHelper;
 import me.minotopia.expvp.util.SessionProvider;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPluginLoader;
 import org.hibernate.SessionFactory;
 import org.junit.AfterClass;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -24,7 +20,7 @@ import java.io.IOException;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-09-11
  */
-public abstract class HibernateAwareTest {
+public abstract class HibernateAwareTest extends EPPluginAwareTest {
     private static SessionFactory sessionFactory;
     private SessionProvider sessionProvider;
 
@@ -57,12 +53,4 @@ public abstract class HibernateAwareTest {
         return sessionProvider;
     }
 
-    @SuppressWarnings("deprecation")
-    protected EPPlugin givenAPluginInstance() {
-        return new EPPlugin(
-                new JavaPluginLoader(MockHelper.mockServer()),
-                new PluginDescriptionFile("Expvp", "awesome", EPPlugin.class.getName()),
-                new File("target/"), new File("./thisshouldbeignored--unittest")
-        );
-    }
 }
