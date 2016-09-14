@@ -150,6 +150,7 @@ public class EPPlugin extends GenericXyPlugin {
     private void registerInjections() {
         new SkillCommandService(skillManager).registerInjections(commandsManager);
         new SkillTreeCommandService(skillTreeManager).registerInjections(commandsManager);
+        commandsManager.bind(SessionProvider.class).toInstance(sessionProvider);
     }
 
     SessionFactory initHibernate(ClassLoader classLoader) throws IOException { //TODO: Querydsl
