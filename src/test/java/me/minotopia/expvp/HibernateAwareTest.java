@@ -13,6 +13,7 @@ import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.hibernate.SessionFactory;
+import org.junit.AfterClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,14 +25,28 @@ import java.io.IOException;
  * @since 2016-09-11
  */
 public abstract class HibernateAwareTest {
+    private static SessionFactory sessionFactory;
     private SessionProvider sessionProvider;
 
+    @AfterClass
+    public static void shutdownHibernate() {
+        if (sessionFactory != null) {
+            sessionFactory.close();
+            sessionFactory = null;
+        }
+    }
+
     protected SessionFactory whenHibernateIsInitialisedOn(EPPlugin plugin) throws IOException {
-        return plugin.initHibernate(Thread.currentThread().getContextClassLoader());
+        if (sessionFactory == null) {
+            sessionFactory = plugin.initHibernate(Thread.currentThread().getContextClassLoader());
+        }
+        return sessionFactory;
     }
 
     protected SessionProvider givenHibernateIsInitialised() throws IOException {
-        this.sessionProvider = new SessionProvider(whenHibernateIsInitialisedOn(givenAPluginInstance()));
+        if (sessionProvider == null) {
+            sessionProvider = new SessionProvider(whenHibernateIsInitialisedOn(givenAPluginInstance()));
+        }
         return sessionProvider;
     }
 

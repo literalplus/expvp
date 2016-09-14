@@ -12,6 +12,8 @@ import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.model.hibernate.BaseEntity;
 import me.minotopia.expvp.skill.meta.Skill;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence21.CascadeType;
 import javax.persistence21.Entity;
@@ -30,6 +32,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "exp_player", schema = "mt_main")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class HibernatePlayerData extends BaseEntity implements MutablePlayerData {
     @Id
     private UUID uuid; //always use Object types for identifiers, they didn't explain why tho
@@ -41,6 +44,7 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     private int melons; //melons, that is, premium currency for cosmetic stuff (yay EULA!)
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = HibernateObtainedSkill.class, mappedBy = "playerData")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ObtainedSkill> skills = new HashSet<>();
 
     @SuppressWarnings("unused")
