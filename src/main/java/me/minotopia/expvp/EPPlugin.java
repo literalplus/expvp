@@ -187,7 +187,9 @@ public class EPPlugin extends GenericXyPlugin {
     @Override
     public void disable() {
         try {
-            sessionProvider.getSessionFactory().close();
+            if (sessionProvider != null) {
+                sessionProvider.getSessionFactory().close();
+            }
         } catch (Exception e) {
             //Using jul here because Log4J2 might not work
             getLogger().log(java.util.logging.Level.SEVERE, "Exception while trying to disable " +
