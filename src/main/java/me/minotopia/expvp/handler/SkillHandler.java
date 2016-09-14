@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.skill.handler;
+package me.minotopia.expvp.handler;
 
 /**
  * Takes care of applying the effects of a skill to a player.
