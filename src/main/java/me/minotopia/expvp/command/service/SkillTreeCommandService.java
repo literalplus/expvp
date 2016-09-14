@@ -11,6 +11,7 @@ package me.minotopia.expvp.command.service;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.inventory.SlotPosition;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
 import me.minotopia.expvp.skill.tree.SkillTree;
 import me.minotopia.expvp.skill.tree.SkillTreeManager;
@@ -25,8 +26,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class SkillTreeCommandService extends YamlManagerCommandService<SkillTree> {
 
-    public SkillTreeCommandService(SkillTreeManager manager) {
-        super(manager, "Skilltree");
+    public SkillTreeCommandService(SkillTreeManager manager, EPPlugin plugin) {
+        super(plugin, manager, "Skilltree");
     }
 
     public void registerInjections(CommandsManager commandsManager) {

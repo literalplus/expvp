@@ -9,6 +9,7 @@
 package me.minotopia.expvp.command.service;
 
 import li.l1t.common.intake.CommandsManager;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
@@ -23,8 +24,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class SkillCommandService extends YamlManagerCommandService<Skill> {
 
-    public SkillCommandService(SkillManager skillManager) {
-        super(skillManager, "Skill");
+    public SkillCommandService(SkillManager skillManager, EPPlugin plugin) {
+        super(plugin, skillManager, "Skill");
     }
 
     public void registerInjections(CommandsManager commandsManager) {

@@ -10,6 +10,7 @@ package me.minotopia.expvp.command.service;
 
 import li.l1t.common.intake.exception.InternalException;
 import li.l1t.common.intake.exception.UserException;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Nameable;
 import me.minotopia.expvp.yaml.YamlManager;
 import org.bukkit.command.CommandSender;
@@ -22,11 +23,12 @@ import java.io.IOException;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-08-13
  */
-public class YamlManagerCommandService<T extends Nameable> {
+public class YamlManagerCommandService<T extends Nameable> extends CommandService {
     protected final YamlManager<T> manager;
     private String objectTypeName;
 
-    YamlManagerCommandService(YamlManager<T> manager, String objectTypeName) {
+    YamlManagerCommandService(EPPlugin plugin, YamlManager<T> manager, String objectTypeName) {
+        super(plugin);
         this.manager = manager;
         this.objectTypeName = objectTypeName;
     }

@@ -17,7 +17,9 @@ import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.command.CommandSkillAdmin;
 import me.minotopia.expvp.command.CommandSkillTreeAdmin;
 import me.minotopia.expvp.command.CommandSkills;
+import me.minotopia.expvp.command.ServiceBackedCommand;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
+import me.minotopia.expvp.command.service.CommandService;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.kits.KitHandler;
@@ -142,14 +144,19 @@ public class EPPlugin extends GenericXyPlugin {
         commandsManager.getTranslator().setLocale(Locale.GERMAN);
         commandsManager.getBuilder().addInvokeListener(new EnumPermissionInvokeListener());
         registerInjections();
-        commandsManager.registerCommand(new CommandSkillAdmin(), "ska", "skilladmin");
-        commandsManager.registerCommand(new CommandSkillTreeAdmin(), "sta", "treeadmin");
+        registerCommand(new CommandSkillAdmin(), new SkillCommandService(skillManager, this), "ska");
+        registerCommand(new CommandSkillTreeAdmin(), new SkillTreeCommandService(skillTreeManager, this), "sta");
         commandsManager.registerCommand(new CommandSkills(), "sk", "skills");
     }
 
+    private <S extends CommandService> void registerCommand(ServiceBackedCommand<S> command,
+                                                            S service, String name, String... aliases) {
+        service.registerInjections(commandsManager);
+        command.setCommandService(service);
+        commandsManager.registerCommand(command, name, aliases);
+    }
+
     private void registerInjections() {
-        new SkillCommandService(skillManager).registerInjections(commandsManager);
-        new SkillTreeCommandService(skillTreeManager).registerInjections(commandsManager);
         commandsManager.bind(SessionProvider.class).toInstance(sessionProvider);
         commandsManager.bind(PlayerDataService.class).toInstance(playerDataService);
     }

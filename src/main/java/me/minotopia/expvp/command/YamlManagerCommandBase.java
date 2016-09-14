@@ -20,14 +20,15 @@ import java.io.IOException;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-08-13
  */
-abstract class YamlManagerCommandBase<T extends Nameable> {
+abstract class YamlManagerCommandBase<T extends Nameable, S extends YamlManagerCommandService<T>>
+        extends AbstractServiceBackedCommand<S> {
     public abstract String getObjectTypeName();
 
-    void createNew(YamlManagerCommandService<T> service, CommandSender sender,
+    void createNew(CommandSender sender,
                    String id, String name) throws IOException {
-        T object = service.createObjectWithExistsCheck(id);
+        T object = service().createObjectWithExistsCheck(id);
         object.setName(name);
-        service.saveObject(object);
+        service().saveObject(object);
         sender.sendMessage(String.format(
                 "§e➩ Neuer %s mit der ID '%s' und dem Namen '%s' erstellt.",
                 getObjectTypeName(), id, name));

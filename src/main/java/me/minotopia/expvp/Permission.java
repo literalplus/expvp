@@ -33,7 +33,11 @@ public enum Permission {
      * Allows to override certain safety measures and delete content such as skills and skill
      * trees.
      */
-    ADMIN_OVERRIDE("expvp.admin.override");
+    ADMIN_OVERRIDE("expvp.admin.override"),
+    /**
+     * Allows to administer player data.
+     */
+    ADMIN_PLAYERS("expvp.admin.players");
 
     private final String value;
 

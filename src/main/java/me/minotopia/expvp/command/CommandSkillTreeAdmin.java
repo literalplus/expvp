@@ -38,7 +38,7 @@ import java.io.IOException;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-07-23
  */
-public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
+public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, SkillTreeCommandService> {
 
     @Override
     public String getObjectTypeName() {
@@ -51,24 +51,23 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
                     "dabei aus\nZahlen, Buchstaben und Bindestrichen\nund ist eindeutig.",
             usage = "[id] [name...]")
     @EnumRequires(Permission.ADMIN_TREE)
-    public void newSkill(SkillTreeCommandService service, CommandSender sender,
+    public void newSkill(CommandSender sender,
                          @Validate(regex = "[a-zA-Z0-9\\-]+") String id,
                          @Merged @Colored String name)
             throws IOException {
-        createNew(service, sender, id, name);
+        createNew(sender, id, name);
     }
 
     @Command(aliases = "name", min = 2,
             desc = "Ändert den Namen",
             usage = "[id] [name...]")
     @EnumRequires(Permission.ADMIN_TREE)
-    public void editName(SkillTreeCommandService service, CommandSender sender,
-                         SkillTree tree, @Merged @Colored String name)
+    public void editName(CommandSender sender, SkillTree tree, @Merged @Colored String name)
             throws IOException {
         if (name.length() > 32) {
             throw new UserException("Der Name darf maximal 32 Zeichen lang sein (#BlameMojang)");
         }
-        service.changeName(tree, name, sender);
+        service().changeName(tree, name, sender);
     }
 
     @Command(aliases = "icon", min = 2,
@@ -76,10 +75,9 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             help = "Ändert das Icon auf das\nItem in deiner Hand",
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_TREE)
-    public void editIcon(SkillTreeCommandService service, CommandSender sender,
-                         SkillTree tree, @ItemInHand ItemStack itemInHand)
+    public void editIcon(CommandSender sender, SkillTree tree, @ItemInHand ItemStack itemInHand)
             throws IOException {
-        service.changeIconStack(tree, itemInHand, sender);
+        service().changeIconStack(tree, itemInHand, sender);
     }
 
     @Command(aliases = "iconslot", min = 2,
@@ -87,10 +85,9 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             help = "Ändert den Slot, in dem\ndas Icon dieses Trees\nim Übersichtsinventar ist.",
             usage = "[id] [Slot-ID]")
     @EnumRequires(Permission.ADMIN_TREE)
-    public void editSlotId(SkillTreeCommandService service, CommandSender sender,
-                           SkillTree tree, int slotId)
+    public void editSlotId(CommandSender sender, SkillTree tree, int slotId)
             throws IOException {
-        service.changeSlotId(tree, slotId, sender);
+        service().changeSlotId(tree, slotId, sender);
     }
 
     @Command(aliases = "branches-exclusive", min = 2,
@@ -100,10 +97,9 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
                     "mehr erforschen. (true)",
             usage = "[id] [true|false]")
     @EnumRequires(Permission.ADMIN_TREE)
-    public void editBranchesExclusive(SkillTreeCommandService service, CommandSender sender,
-                                      SkillTree tree, boolean branchesExclusive)
+    public void editBranchesExclusive(CommandSender sender, SkillTree tree, boolean branchesExclusive)
             throws IOException {
-        service.changeBranchesExclusive(tree, branchesExclusive, sender);
+        service().changeBranchesExclusive(tree, branchesExclusive, sender);
     }
 
     @Command(aliases = "preview", min = 1,
@@ -111,8 +107,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             help = "Zeigt eine Vorschau des Skilltrees",
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_BASIC)
-    public void showPreview(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player,
-                            SkillTree tree)
+    public void showPreview(EPPlugin plugin, @Sender Player player, SkillTree tree)
             throws IOException, RenderingException {
         EditNodeMenu.openNew(plugin, player, tree);
     }
@@ -121,8 +116,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             desc = "Zeigt Infos zu einem Skilltree",
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_BASIC)
-    public void skillInfo(SkillTreeCommandService service, CommandSender sender,
-                          SkillTree tree) {
+    public void skillInfo(CommandSender sender, SkillTree tree) {
         sender.sendMessage(String.format("§e➩ §lSkilltree: §6%s §e(ID: %s§e)",
                 tree.getDisplayName(), tree.getId()));
         sender.sendMessage(String.format("§e➩ §lBranches Exclusive (siehe /sta help): §6%s",
@@ -143,16 +137,16 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree> {
             desc = "Listet Skilltrees auf",
             help = "Listet alle Skilltrees\nin einem Inventar auf")
     @EnumRequires(Permission.ADMIN_BASIC)
-    public void list(EPPlugin plugin, SkillTreeCommandService service, @Sender Player player) {
-        SelectTreeMenu.openNew(plugin, player, tree -> skillInfo(service, player, tree));
+    public void list(EPPlugin plugin, @Sender Player player) {
+        SelectTreeMenu.openNew(plugin, player, tree -> skillInfo(player, tree));
     }
 
     @Command(aliases = "remove", min = 1,
             desc = "Löscht einen Skilltree",
             usage = "[id]")
     @EnumRequires({Permission.ADMIN_TREE, Permission.ADMIN_OVERRIDE})
-    public void removeSkill(SkillTreeCommandService service, CommandSender sender, SkillTree tree)
+    public void removeSkill(CommandSender sender, SkillTree tree)
             throws IOException {
-        service.getManager().remove(tree);
+        service().getManager().remove(tree);
     }
 }
