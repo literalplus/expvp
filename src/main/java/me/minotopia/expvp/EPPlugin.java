@@ -151,6 +151,7 @@ public class EPPlugin extends GenericXyPlugin {
         new SkillCommandService(skillManager).registerInjections(commandsManager);
         new SkillTreeCommandService(skillTreeManager).registerInjections(commandsManager);
         commandsManager.bind(SessionProvider.class).toInstance(sessionProvider);
+        commandsManager.bind(PlayerDataService.class).toInstance(playerDataService);
     }
 
     SessionFactory initHibernate(ClassLoader classLoader) throws IOException { //TODO: Querydsl
