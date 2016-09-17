@@ -10,6 +10,7 @@ package me.minotopia.expvp.api.handler;
 
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
+import me.minotopia.expvp.skill.meta.Skill;
 
 /**
  * Takes care of applying the effects of a skill to a player.
@@ -31,4 +32,9 @@ public interface SkillHandler extends HandlerSpecNode {
      * @param plugin the plugin disabling the handler
      */
     void disable(EPPlugin plugin);
+
+    /**
+     * @return the skill this handler handles
+     */
+    Skill getSkill();
 }

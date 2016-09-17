@@ -10,6 +10,7 @@ package me.minotopia.expvp.handler;
 
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.SkillHandler;
+import me.minotopia.expvp.skill.meta.Skill;
 
 /**
  * A skill handler that does nothing.
@@ -30,5 +31,10 @@ class NoopSkillHandler extends AbstractHandlerSpecNode implements SkillHandler {
     @Override
     public void disable(EPPlugin plugin) {
 
+    }
+
+    @Override
+    public Skill getSkill() {
+        throw new UnsupportedOperationException(); //don't want surprises so let's be fail-fast instead of inventong something
     }
 }
