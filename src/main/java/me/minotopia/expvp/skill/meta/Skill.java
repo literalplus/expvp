@@ -200,4 +200,22 @@ public class Skill implements ConfigurationSerializable, Nameable {
         }
         return skill;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Skill skill = (Skill) o;
+
+        return manager != null ? manager.equals(skill.manager) : skill.manager == null && id.equals(skill.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = manager != null ? manager.hashCode() : 0;
+        result = 31 * result + id.hashCode();
+        return result;
+    }
 }
