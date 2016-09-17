@@ -52,7 +52,6 @@ public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
         return Collections.unmodifiableCollection(handlers);
     }
 
-    @Override
     public Collection<T> getMatchingHandlers(Predicate<? super T> filter) {
         Preconditions.checkNotNull(filter, "filter");
         return handlers.stream()
@@ -64,15 +63,5 @@ public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
     public Collection<T> getRelevantHandlers(Collection<? extends Skill> skills) {
         Preconditions.checkNotNull(skills, "skills");
         return getMatchingHandlers(handler -> skills.contains(handler.getSkill()));
-    }
-
-    @Override
-    public Collection<T> getRelevantMatchingHandlers(Collection<? extends Skill> skills, Predicate<? super T> filter) {
-        Preconditions.checkNotNull(skills, "skills");
-        Preconditions.checkNotNull(filter, "filter");
-        return handlers.stream()
-                .filter(handler -> skills.contains(handler.getSkill()))
-                .filter(filter)
-                .collect(Collectors.toList());
     }
 }
