@@ -10,10 +10,10 @@ package me.minotopia.expvp.handler;
 
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.EPPlugin;
-import me.minotopia.expvp.api.handler.CompoundSkillHandlerFactory;
-import me.minotopia.expvp.api.handler.InvalidHandlerSpecException;
+import me.minotopia.expvp.api.handler.factory.CompoundSkillHandlerFactory;
+import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
 import me.minotopia.expvp.api.handler.SkillHandler;
-import me.minotopia.expvp.api.handler.SkillHandlerFactory;
+import me.minotopia.expvp.api.handler.factory.SkillHandlerFactory;
 
 import java.util.Collection;
 import java.util.HashMap;

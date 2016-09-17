@@ -6,9 +6,10 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.api.handler;
+package me.minotopia.expvp.api.handler.factory;
 
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.handler.SkillHandler;
 
 /**
  * A factory for skill handlers that creates handlers defined by formatted strings, so-called

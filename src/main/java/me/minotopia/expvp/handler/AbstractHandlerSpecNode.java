@@ -9,7 +9,7 @@
 package me.minotopia.expvp.handler;
 
 import com.google.common.base.Preconditions;
-import me.minotopia.expvp.api.handler.HandlerSpecNode;
+import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 
 /**
  * Abstract base class for handler spec nodes.
