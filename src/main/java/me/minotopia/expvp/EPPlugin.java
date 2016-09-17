@@ -23,7 +23,6 @@ import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
 import me.minotopia.expvp.command.service.CommandService;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
-import me.minotopia.expvp.kits.KitHandler;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.player.HibernatePlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
@@ -58,7 +57,6 @@ import java.util.UUID;
  */
 public class EPPlugin extends GenericXyPlugin {
     private final String chatPrefix = "§6[§7ExP§6] ";
-    private KitHandler kitHandler;
     private Logger log;
     private SessionProvider sessionProvider;
     private SkillTreeManager skillTreeManager;
@@ -91,9 +89,6 @@ public class EPPlugin extends GenericXyPlugin {
             log = LoggingManager.getLogger(getClass());
             log.info("===== Hello, friend");
             log.info("Am " + getPluginVersion().toString());
-
-            //Load kits
-            this.kitHandler = new KitHandler(this);
 
             //Initialise Hibernate ORM
             SessionFactory sessionFactory = initHibernate(getClassLoader());
