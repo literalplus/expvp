@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp;
+package me.minotopia.expvp.api;
 
 /**
  * Something that can be identified with a String id.

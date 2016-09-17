@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.command;
 
-import me.minotopia.expvp.Nameable;
+import me.minotopia.expvp.api.Nameable;
 import me.minotopia.expvp.command.service.YamlManagerCommandService;
 import org.bukkit.command.CommandSender;
 

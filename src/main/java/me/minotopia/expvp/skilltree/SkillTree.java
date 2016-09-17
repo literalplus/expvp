@@ -9,7 +9,7 @@
 package me.minotopia.expvp.skilltree;
 
 import com.google.common.base.Preconditions;
-import me.minotopia.expvp.Nameable;
+import me.minotopia.expvp.api.Nameable;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;

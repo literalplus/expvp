@@ -11,7 +11,7 @@ package me.minotopia.expvp.yaml;
 import com.google.common.base.Preconditions;
 import com.google.common.io.Files;
 import li.l1t.common.intake.exception.UncheckedException;
-import me.minotopia.expvp.Nameable;
+import me.minotopia.expvp.api.Nameable;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 

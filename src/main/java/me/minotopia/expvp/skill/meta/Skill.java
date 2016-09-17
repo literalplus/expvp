@@ -10,7 +10,7 @@ package me.minotopia.expvp.skill.meta;
 
 import com.google.common.base.Preconditions;
 import li.l1t.common.util.inventory.ItemStackFactory;
-import me.minotopia.expvp.Nameable;
+import me.minotopia.expvp.api.Nameable;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

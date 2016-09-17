@@ -11,7 +11,7 @@ package me.minotopia.expvp.command.service;
 import li.l1t.common.intake.exception.InternalException;
 import li.l1t.common.intake.exception.UserException;
 import me.minotopia.expvp.EPPlugin;
-import me.minotopia.expvp.Nameable;
+import me.minotopia.expvp.api.Nameable;
 import me.minotopia.expvp.yaml.YamlManager;
 import org.bukkit.command.CommandSender;
 

@@ -12,7 +12,7 @@ import com.sk89q.intake.argument.ArgumentException;
 import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.parametric.Provider;
 import com.sk89q.intake.parametric.ProvisionException;
-import me.minotopia.expvp.Nameable;
+import me.minotopia.expvp.api.Nameable;
 import me.minotopia.expvp.command.service.YamlManagerCommandService;
 
 import javax.annotation.Nullable;

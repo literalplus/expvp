@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.yaml;
 
-import me.minotopia.expvp.Nameable;
+import me.minotopia.expvp.api.Nameable;
 
 import java.io.File;
 import java.io.IOException;
