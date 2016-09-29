@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.api.service;
 
-import li.l1t.common.intake.exception.UserException;
+import li.l1t.common.exception.UserException;
 import me.minotopia.expvp.skill.meta.Skill;
 
 import java.util.Collection;

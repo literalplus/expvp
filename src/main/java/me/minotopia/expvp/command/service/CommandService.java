@@ -8,9 +8,9 @@
 
 package me.minotopia.expvp.command.service;
 
+import li.l1t.common.exception.InternalException;
+import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.CommandsManager;
-import li.l1t.common.intake.exception.InternalException;
-import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.shared.uuid.UUIDRepositories;
 import li.l1t.common.shared.uuid.UUIDRepository;
 import me.minotopia.expvp.EPPlugin;

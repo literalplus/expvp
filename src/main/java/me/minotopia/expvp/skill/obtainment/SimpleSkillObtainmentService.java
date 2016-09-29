@@ -9,7 +9,7 @@
 package me.minotopia.expvp.skill.obtainment;
 
 import com.google.common.base.Preconditions;
-import li.l1t.common.intake.exception.UserException;
+import li.l1t.common.exception.UserException;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.api.service.PlayerDataService;

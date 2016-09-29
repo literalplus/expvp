@@ -9,8 +9,8 @@
 package me.minotopia.expvp.ui.menu;
 
 import com.google.common.base.Preconditions;
-import li.l1t.common.intake.exception.InternalException;
-import li.l1t.common.intake.exception.UserException;
+import li.l1t.common.exception.InternalException;
+import li.l1t.common.exception.UserException;
 import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;

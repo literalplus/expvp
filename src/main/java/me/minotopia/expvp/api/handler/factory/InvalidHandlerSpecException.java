@@ -8,7 +8,8 @@
 
 package me.minotopia.expvp.api.handler.factory;
 
-import li.l1t.common.intake.exception.UserException;
+
+import li.l1t.common.exception.UserException;
 
 /**
  * Thrown if a {@link SkillHandlerFactory} cannot parse a handler spec.

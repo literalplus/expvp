@@ -12,7 +12,7 @@ import com.sk89q.intake.Command;
 import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
-import li.l1t.common.intake.exception.UserException;
+import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.provider.annotation.Colored;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;

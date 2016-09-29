@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.ui.element.skill;
 
-import li.l1t.common.intake.exception.UserException;
+import li.l1t.common.exception.UserException;
 import li.l1t.common.inventory.gui.InventoryMenu;
 import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.skill.meta.Skill;

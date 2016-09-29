@@ -8,8 +8,8 @@
 
 package me.minotopia.expvp.command.service;
 
+import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.CommandsManager;
-import li.l1t.common.intake.exception.UserException;
 import li.l1t.common.inventory.SlotPosition;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;

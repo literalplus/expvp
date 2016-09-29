@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.util;
 
-import li.l1t.common.intake.exception.InternalException;
+import li.l1t.common.exception.InternalException;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 

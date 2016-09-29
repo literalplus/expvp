@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.skill.obtainment;
 
-import li.l1t.common.intake.exception.UserException;
+import li.l1t.common.exception.UserException;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
