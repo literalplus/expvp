@@ -48,8 +48,8 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <xyc.version>4.0.5.1</xyc.version>
-        <minecraft.version>1.8.3</minecraft.version>
+        <xyc.version>4.4.0.0</xyc.version>
+        <minecraft.version>1.8.8</minecraft.version>
         <spigot-api.release>R0.1</spigot-api.release>
         <rootDir>${project.basedir}</rootDir>
         <build-comment>dev</build-comment>
@@ -127,25 +127,19 @@
 
         <dependency>
             <groupId>li.l1t.common</groupId>
-            <artifactId>xyc-bukkit</artifactId>
+            <artifactId>xyc-1.8-bukkit</artifactId>
             <version>${xyc.version}</version>
         </dependency>
         <dependency>
             <groupId>li.l1t.common</groupId>
-            <artifactId>xyc-games</artifactId>
+            <artifactId>xyc-1.8-games</artifactId>
             <version>${xyc.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.xxyy.xlogin</groupId>
+            <groupId>li.l1t.xlogin</groupId>
             <artifactId>xlogin-api</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
+            <version>2.4.0-SNAPSHOT</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.github.xxyy</groupId>
-                    <artifactId>common-java7</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -226,28 +220,6 @@
                 </configuration>
             </plugin>
 
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.1</version>
-
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-                <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>me.minotopia.expvp:expvp</include>
-                        </includes>
-                    </artifactSet>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                </configuration>
-            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
