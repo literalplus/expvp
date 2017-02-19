@@ -9,13 +9,13 @@
 package me.minotopia.expvp.api.handler.kit.compilation;
 
 
+import com.google.common.collect.Multimap;
 import me.minotopia.expvp.api.handler.HandlerMap;
 import me.minotopia.expvp.api.handler.kit.KitHandler;
 import me.minotopia.expvp.api.handler.kit.KitItemType;
 import me.minotopia.expvp.skill.meta.Skill;
 
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * A handler map that stores {@link KitHandler}s.
@@ -32,5 +32,5 @@ public interface KitHandlerMap extends HandlerMap<KitHandler> {
      * @param skills the collection of skills to filter by
      * @return the collection of relevant handlers for given arguments
      */
-    Map<KitItemType, KitHandler> getTypeHandlerMap(Collection<? extends Skill> skills);
+    Multimap<KitItemType, KitHandler> getTypeHandlerMap(Collection<? extends Skill> skills);
 }
