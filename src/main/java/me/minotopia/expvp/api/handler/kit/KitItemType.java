@@ -20,15 +20,15 @@ import org.bukkit.Material;
  */
 public interface KitItemType extends Nameable {
     /**
-     * @return the id of the slot in the player inventory this item will be placed in by default
+     * @return the id of the slot in the player inventory this item will be placed in
      */
-    int getDefaultSlot();
+    int getSlotId();
 
     /**
      * @param newDefaultSlot the new id of the slot in the player inventory this item will be placed
-     *                       in by default
+     *                       in
      */
-    void setDefaultSlot(int newDefaultSlot);
+    void getSlotId(int newDefaultSlot);
 
     /**
      * @return the material of the item represented by this type
