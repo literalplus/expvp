@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.api.handler.kit;
 
-import li.l1t.common.inventory.SlotPosition;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.api.Nameable;
 import org.bukkit.Material;
@@ -23,7 +22,7 @@ public interface KitSlot extends Nameable {
     /**
      * @return the slot in the player inventory this item will be placed in
      */
-    SlotPosition getMinecraftSlot();
+    int getMinecraftSlotId();
 
     /**
      * @return the material of the item represented by this type
