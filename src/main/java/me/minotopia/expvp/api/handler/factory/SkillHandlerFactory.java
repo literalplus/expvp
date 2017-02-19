@@ -10,6 +10,7 @@ package me.minotopia.expvp.api.handler.factory;
 
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.SkillHandler;
+import me.minotopia.expvp.skill.meta.Skill;
 
 /**
  * A factory for skill handlers that creates handlers defined by formatted strings, so-called
@@ -29,8 +30,8 @@ public interface SkillHandlerFactory extends HandlerSpecNode {
      * Creates a new handler by given handler spec.
      *
      * @param plugin      the plugin creating the handler
-     * @param handlerSpec the handler spec to create a handler for
+     * @param skill       the skill the handler is going to handle
      * @return the created handler
      */
-    SkillHandler createHandler(EPPlugin plugin, String handlerSpec) throws InvalidHandlerSpecException;
+    SkillHandler createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException;
 }

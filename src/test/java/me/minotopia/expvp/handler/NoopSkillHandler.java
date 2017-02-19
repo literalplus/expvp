@@ -35,6 +35,6 @@ class NoopSkillHandler extends AbstractHandlerSpecNode implements SkillHandler {
 
     @Override
     public Skill getSkill() {
-        throw new UnsupportedOperationException(); //don't want surprises so let's be fail-fast instead of inventong something
+        throw new UnsupportedOperationException(); //don't want surprises so let's be fail-fast instead of inventing something
     }
 }
