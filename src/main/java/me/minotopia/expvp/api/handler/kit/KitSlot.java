@@ -9,7 +9,6 @@
 package me.minotopia.expvp.api.handler.kit;
 
 import li.l1t.common.util.inventory.ItemStackFactory;
-import me.minotopia.expvp.api.Nameable;
 import org.bukkit.Material;
 
 /**
@@ -18,7 +17,7 @@ import org.bukkit.Material;
  * @author <a href="http://xxyy.github.io/">xxyy</a>
  * @since 2016-09-17
  */
-public interface KitSlot extends Nameable {
+public interface KitSlot {
     /**
      * @return the slot in the player inventory this item will be placed in
      */
