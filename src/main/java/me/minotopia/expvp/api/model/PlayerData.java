@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * Represents persistent and mutable Expvp-related stats and metadata of a player.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-08
  */
 public interface PlayerData {

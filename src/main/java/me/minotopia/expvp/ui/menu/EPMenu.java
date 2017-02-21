@@ -14,7 +14,7 @@ import me.minotopia.expvp.EPPlugin;
 /**
  * An inventory menu that is linked to the Expvp plugin.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-18
  */
 public interface EPMenu extends InventoryMenu {

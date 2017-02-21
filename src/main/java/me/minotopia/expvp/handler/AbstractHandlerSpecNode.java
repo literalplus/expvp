@@ -14,7 +14,7 @@ import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 /**
  * Abstract base class for handler spec nodes.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public abstract class AbstractHandlerSpecNode implements HandlerSpecNode {

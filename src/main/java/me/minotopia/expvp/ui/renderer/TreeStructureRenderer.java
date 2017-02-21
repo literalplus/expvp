@@ -21,7 +21,7 @@ import java.util.function.Function;
 /**
  * Attempts to somehow fit the structure of a skill tree in the area of a Minecraft inventory.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
 public class TreeStructureRenderer {

@@ -20,7 +20,7 @@ import java.time.Instant;
 /**
  * Provides a common base for entities that keep track of creation and last updated date.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-22
  */
 @MappedSuperclass

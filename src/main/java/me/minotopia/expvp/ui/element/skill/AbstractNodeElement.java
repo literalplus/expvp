@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Abstract base class for menu elements that store their own instances of skill tree nodes.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-18
  */
 abstract class AbstractNodeElement<M extends InventoryMenu> extends CheckedMenuElement<InventoryMenu, M> {

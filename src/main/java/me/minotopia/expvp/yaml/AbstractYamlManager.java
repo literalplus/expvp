@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Manages YAML-backed objects in-memory and delegates loading.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
 public abstract class AbstractYamlManager<T extends Nameable> implements YamlManager<T> {

@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * A simple menu element that represents a skill.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-22
  */
 public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {

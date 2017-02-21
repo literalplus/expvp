@@ -23,7 +23,7 @@ import java.util.Map;
  * Represents the metadata of an obtainable skill. Note that skills are pluggable, so they do not
  * keep a reference to the skill tree they're part of - they can also be part of multiple trees.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-23
  */
 public class Skill implements ConfigurationSerializable, Nameable {

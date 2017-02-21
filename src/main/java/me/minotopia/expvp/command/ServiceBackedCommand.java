@@ -13,7 +13,7 @@ import me.minotopia.expvp.command.service.CommandService;
 /**
  * Represents a command that operates through a service.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public interface ServiceBackedCommand<T extends CommandService> {

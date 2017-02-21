@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 /**
  * An element that displays the icon of a skill tree and forwards click events to a consumer.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-18
  */
 public class SkillTreeElement implements MenuElement {

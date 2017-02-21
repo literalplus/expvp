@@ -18,7 +18,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  * A button that restores the previous menu, if any, on click. If no previous menu exists, it closes
  * the current inventory.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-15
  */
 public class BackButton extends Placeholder {

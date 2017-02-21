@@ -14,7 +14,7 @@ import java.util.Collection;
  * A skill handler factory that splits handler specs in parts and delegates handler creation to its
  * children based on these parts.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public interface CompoundSkillHandlerFactory extends SkillHandlerFactory {

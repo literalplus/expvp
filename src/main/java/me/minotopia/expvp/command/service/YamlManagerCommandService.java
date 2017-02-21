@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * Provides base utilities for working with object registries managed by {@link YamlManager}.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-13
  */
 public class YamlManagerCommandService<T extends Nameable> extends CommandService {

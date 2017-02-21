@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
  * Represents a skill in a menu. This kind of element can be clicked to edit it in an inventory
  * GUI.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-23
  */
 public class EditableSkillElement extends AbstractNodeElement<EPMenu> {

@@ -16,7 +16,7 @@ import java.util.Collection;
  * Keeps track of available handlers by skill and type for a single event source.
  *
  * @param <T> the type of handler managed by this map
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public interface HandlerMap<T extends SkillHandler> {

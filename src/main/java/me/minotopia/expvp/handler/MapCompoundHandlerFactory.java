@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * A compound skill handler factory based on a map.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public class MapCompoundHandlerFactory extends AbstractHandlerSpecNode implements CompoundSkillHandlerFactory {

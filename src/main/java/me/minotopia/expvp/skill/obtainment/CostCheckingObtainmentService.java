@@ -25,7 +25,7 @@ import java.util.UUID;
  * A wrapper for skill obtainment services that adds cost checking and payments using {@link
  * PlayerData#getBooks() books}.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-11
  */
 public class CostCheckingObtainmentService implements SkillObtainmentService {

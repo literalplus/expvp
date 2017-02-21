@@ -26,7 +26,7 @@ import java.util.Optional;
  * Checks command invocations for {@link EnumRequires} annotations and the corresponding
  * permissions.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-15
  */
 public class EnumPermissionInvokeListener extends InvokeAdapter {

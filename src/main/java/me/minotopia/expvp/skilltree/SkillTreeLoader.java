@@ -19,7 +19,7 @@ import java.io.IOException;
 /**
  * Loads skill trees from their files and discovers skill trees from a directory.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-23
  */
 class SkillTreeLoader extends AbstractYamlLoader<SkillTree> {

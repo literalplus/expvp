@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Abstract base classes for buttons that allow to edit skill to node assignments.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-19
  */
 abstract class EditButton extends AbstractNodeElement<EditNodeMenu> {

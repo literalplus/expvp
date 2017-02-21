@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * A button that allows to add or remove subskills of a skill.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-18
  */
 public class SubskillButton extends EditButton {

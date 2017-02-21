@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Provides ScopedSession instances scoped to the current thread. Recreates sessions after they have
  * been closed.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-11
  */
 public class SessionProvider {

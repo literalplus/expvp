@@ -19,7 +19,7 @@ import java.util.UUID;
  * invalidation methods for other subsystems to hook into and invalidate the compiled kit, for
  * example if the collection of skills known to a player changes.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-18
  */
 public interface CompiledKitCache {

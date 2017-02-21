@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * Also note that deserialising part of a skill tree is <b>not</b> supported: That would mess up
  * tree ids.</p>
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-23
  */
 public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, Skill>

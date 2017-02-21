@@ -11,7 +11,7 @@ package me.minotopia.expvp.ui.renderer.exception;
 /**
  * Thrown if the rendering algorithm is not able to fit a tree into the inventory grid.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-22
  */
 public class RenderingException extends Exception {

@@ -13,7 +13,7 @@ import me.minotopia.expvp.skill.meta.Skill;
 /**
  * Represents a player's data related to Expvp, providing write access to certain properties.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-08
  */
 public interface MutablePlayerData extends PlayerData {

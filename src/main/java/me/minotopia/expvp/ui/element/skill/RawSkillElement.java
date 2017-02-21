@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 /**
  * Represents a skill in a menu, with just the skill name on the item and a custom click handler.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-23
  */
 public class RawSkillElement extends AbstractNodeElement<InventoryMenu> {

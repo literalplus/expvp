@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * close() must be called. If this is not adhered, the reference count will become invalid and the
  * session might not get closed properly.</p>
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-11
  */
 public class ScopedSession implements AutoCloseable {

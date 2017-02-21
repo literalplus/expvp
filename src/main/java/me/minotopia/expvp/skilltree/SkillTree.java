@@ -20,7 +20,7 @@ import java.util.Map;
  * Represents the root of a skill tree with additional tree-related metadata that is not important
  * for the data structure, but for displaying it.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-23
  */
 public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSerializable, Nameable {

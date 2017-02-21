@@ -18,7 +18,7 @@ import java.io.File;
 /**
  * Abstract base class for unit tests that need access to a EPPlugin instance.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public class EPPluginAwareTest {

@@ -26,7 +26,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 /**
  * An inventory menu that provides the frontend for a skill tree.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-22
  */
 public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {

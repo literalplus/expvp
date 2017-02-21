@@ -24,7 +24,7 @@ import java.util.Set;
 /**
  * Generic implementation of a class that loads objects from a directory of YAML files.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
 public abstract class AbstractYamlLoader<T extends Nameable> implements YamlLoader<T> {

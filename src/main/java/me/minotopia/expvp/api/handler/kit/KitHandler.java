@@ -14,7 +14,7 @@ import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
 /**
  * A skill handler which mutates a player's kit during compilation.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public interface KitHandler extends SkillHandler {

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * Provides skill tree instances to commands.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-06
  */
 public class YamlObjectProvider<T extends Nameable> implements Provider<T> {

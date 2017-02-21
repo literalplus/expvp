@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * A simple implementation of a handler map.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {

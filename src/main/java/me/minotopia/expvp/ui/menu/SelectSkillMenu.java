@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  * An inventory menu that allows to select a skill from the list of all available skills and
  * executes a custom handler when a skill is selected.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-18
  */
 public class SelectSkillMenu extends PaginationListMenu<Skill> {

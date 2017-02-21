@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Provides commonly used utilities for commands working with skill trees.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-06
  */
 public class SkillTreeCommandService extends YamlManagerCommandService<SkillTree> {

@@ -16,7 +16,7 @@ import java.util.UUID;
  * Service that manages compilation and applying of the appropriate kit for a player according to
  * their set of skills.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-18
  */
 public interface KitService {

@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Base class for commands related to YamlManager.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-13
  */
 abstract class YamlManagerCommandBase<T extends Nameable, S extends YamlManagerCommandService<T>>

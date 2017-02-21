@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * Handles loading and saving of skills.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
 public class SkillLoader extends AbstractYamlLoader<Skill> {

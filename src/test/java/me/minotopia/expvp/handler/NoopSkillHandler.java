@@ -15,7 +15,7 @@ import me.minotopia.expvp.skill.meta.Skill;
 /**
  * A skill handler that does nothing.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 class NoopSkillHandler extends AbstractHandlerSpecNode implements SkillHandler {

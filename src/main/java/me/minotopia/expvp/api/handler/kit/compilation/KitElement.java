@@ -16,7 +16,7 @@ import java.util.Collection;
 /**
  * Immutable element of a kit, representing the compiled state of a single item.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public interface KitElement {

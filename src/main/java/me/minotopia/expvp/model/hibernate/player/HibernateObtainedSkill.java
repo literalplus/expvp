@@ -23,7 +23,7 @@ import javax.persistence21.Table;
 /**
  * Model for storing data about an actual skill that a player has obtained using books.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-22
  */
 @Entity

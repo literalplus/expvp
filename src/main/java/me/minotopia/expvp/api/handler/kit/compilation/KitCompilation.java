@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Stores the mutable state of an ongoing kit compilation.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public interface KitCompilation {

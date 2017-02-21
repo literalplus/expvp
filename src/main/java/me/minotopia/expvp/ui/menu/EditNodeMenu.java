@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 /**
  * An inventory menu that provides the frontend for editing a skill tree node.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-22
  */
 public class EditNodeMenu extends TopRowMenu implements EPMenu {

@@ -14,7 +14,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * Represents a skill that has already been obtained by a player. This is tied to a single player
  * and to a single skill.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-08
  */
 public interface ObtainedSkill {

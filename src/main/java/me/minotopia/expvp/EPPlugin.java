@@ -52,7 +52,7 @@ import java.util.UUID;
 /**
  * Plugin class for interfacing with the Bukkit API.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-20
  */
 public class EPPlugin extends GenericXyPlugin {

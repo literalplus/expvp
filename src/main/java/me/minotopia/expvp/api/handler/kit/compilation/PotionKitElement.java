@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionType;
 /**
  * A kit element that has potion metadata associated with it.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public interface PotionKitElement extends KitElement {

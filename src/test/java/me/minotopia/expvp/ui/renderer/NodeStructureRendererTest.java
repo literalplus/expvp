@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Test for the node structure renderer.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-14
  */
 public class NodeStructureRendererTest {

@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Abstract base class for tests that need access to a Hibernate SessionFactory.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-11
  */
 public abstract class HibernateAwareTest extends EPPluginAwareTest {

@@ -14,7 +14,7 @@ import org.bukkit.Material;
 /**
  * Represents a single slot of the Expvp inventory template with a fixed position.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public interface KitSlot {

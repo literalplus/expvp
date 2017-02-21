@@ -13,7 +13,7 @@ import org.bukkit.permissions.Permissible;
 /**
  * The enumeration of permissions used by ExPvP to limit who can do what.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-15
  */
 public enum Permission {

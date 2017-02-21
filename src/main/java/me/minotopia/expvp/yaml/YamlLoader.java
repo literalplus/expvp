@@ -18,7 +18,7 @@ import java.util.Set;
  * Manages loading of identifiable objects serialised as individual YAML files in a common
  * directory.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
 public interface YamlLoader<T> {

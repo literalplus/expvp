@@ -14,7 +14,7 @@ import me.minotopia.expvp.command.service.CommandService;
 /**
  * Abstract base class for commands backed by a service.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public class AbstractServiceBackedCommand<T extends CommandService> implements ServiceBackedCommand<T> {

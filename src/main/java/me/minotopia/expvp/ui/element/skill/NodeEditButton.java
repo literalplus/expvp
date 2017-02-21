@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * A button for editing the skill of a node itself.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-19
  */
 public class NodeEditButton extends EditButton {

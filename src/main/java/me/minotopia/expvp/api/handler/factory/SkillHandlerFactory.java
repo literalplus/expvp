@@ -16,7 +16,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * A factory for skill handlers that creates handlers defined by formatted strings, so-called
  * handler specifications, or handler specs for short.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public interface SkillHandlerFactory extends HandlerSpecNode {

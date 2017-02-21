@@ -27,7 +27,7 @@ import java.util.function.Function;
 /**
  * Base implementation of a command service with some common methods.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public class CommandService {

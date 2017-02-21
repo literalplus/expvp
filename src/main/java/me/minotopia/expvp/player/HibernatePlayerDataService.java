@@ -22,7 +22,7 @@ import java.util.UUID;
 /**
  * Manages PlayerData instances using a Hibernate backend.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-14
  */
 public class HibernatePlayerDataService implements PlayerDataService {

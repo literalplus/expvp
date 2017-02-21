@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Command used to administer Expvp.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService> {

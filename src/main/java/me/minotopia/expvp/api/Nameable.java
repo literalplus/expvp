@@ -11,7 +11,7 @@ package me.minotopia.expvp.api;
 /**
  * Something that can be uniquely identified and optionally assigned a name.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-13
  */
 public interface Nameable extends Identifiable {

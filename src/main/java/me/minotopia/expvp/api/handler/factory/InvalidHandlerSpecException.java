@@ -14,7 +14,7 @@ import li.l1t.common.exception.UserException;
 /**
  * Thrown if a {@link SkillHandlerFactory} cannot parse a handler spec.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public class InvalidHandlerSpecException extends UserException {

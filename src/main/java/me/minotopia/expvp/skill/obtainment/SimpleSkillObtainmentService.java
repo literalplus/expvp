@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * Service that provides an interface for performing actions related to obtainment of skills.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-07
  */
 public class SimpleSkillObtainmentService implements SkillObtainmentService {

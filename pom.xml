@@ -63,14 +63,14 @@
 
     <repositories>
         <repository>
+            <id>xxyy-repo</id>
+            <!-- xLogin, etc. -->
+            <url>https://repo.l1t.li/xxyy-lib/</url>
+        </repository>
+        <repository>
             <id>spigot-repo</id>
             <!-- Spigot-API -->
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>xxyy-repo</id>
-            <!-- xLogin, etc. -->
-            <url>https://repo.nowak-at.net/xxyy-private/</url>
         </repository>
         <repository>
             <id>dmulloy2-repo</id>

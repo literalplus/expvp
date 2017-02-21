@@ -12,7 +12,7 @@ package me.minotopia.expvp.api.handler.factory;
  * Represents a node in the handler spec graph. Handlers specs tell {@link SkillHandlerFactory}s
  * what kind of handler to create given a handler spec.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public interface HandlerSpecNode {

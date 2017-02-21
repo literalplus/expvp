@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionType;
 /**
  * Mutable builder for {@link KitElement}s.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public interface KitElementBuilder {

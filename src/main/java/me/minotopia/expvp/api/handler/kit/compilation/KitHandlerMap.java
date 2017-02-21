@@ -20,7 +20,7 @@ import java.util.Collection;
 /**
  * A handler map that stores {@link KitHandler}s.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
 public interface KitHandlerMap extends HandlerMap<KitHandler> {

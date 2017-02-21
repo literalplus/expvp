@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 /**
  * A menu for selection of trees.
  *
- * @author <a href="http://xxyy.github.io/">xxyy</a>
+ * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-20
  */
 public class SelectTreeMenu extends SimpleInventoryMenu implements EPMenu {
