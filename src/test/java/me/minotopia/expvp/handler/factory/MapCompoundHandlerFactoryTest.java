@@ -1,12 +1,12 @@
 /*
  * This file is part of Expvp,
- * Copyright (c) 2016-2016.
+ * Copyright (c) 2016-2017.
  *
  * This work is protected by international copyright laws and licensed
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.handler;
+package me.minotopia.expvp.handler.factory;
 
 import me.minotopia.expvp.EPPluginAwareTest;
 import me.minotopia.expvp.api.handler.SkillHandler;
@@ -23,7 +23,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     public void testRootLevelDispatch() throws Exception {
         //given
         MapCompoundHandlerFactory factory = givenARootFactory();
-        factory.withChild(new NoopHandlerFactory(factory, "marc"));
+        factory.addChild(new NoopHandlerFactory(factory, "marc"));
         //when
         SkillHandler handler = factory.createHandler(plugin, skill("/marc/submarc"));
         //then
@@ -49,7 +49,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     public void testNamedDispatch() throws Exception {
         //given
         MapCompoundHandlerFactory factory = givenARootFactory();
-        factory.withChild(new NoopHandlerFactory(factory, "battery"));
+        factory.addChild(new NoopHandlerFactory(factory, "battery"));
         //when
         SkillHandler handler = factory.createHandler(plugin, skill("/battery/subbattery"));
         //then
@@ -84,7 +84,6 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
         //then
         assertThat(handler, is(not(nullValue())));
         assertThat(handler, is(instanceOf(NoopSkillHandler.class)));
-        assertThat(handler.getHandlerSpec(), is("sublit"));
     }
 
     @Test

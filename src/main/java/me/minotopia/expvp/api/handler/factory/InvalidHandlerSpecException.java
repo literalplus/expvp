@@ -19,24 +19,24 @@ import li.l1t.common.exception.UserException;
  */
 public class InvalidHandlerSpecException extends UserException {
     private final String handlerSpec;
-    private final HandlerFactory factory;
+    private final HandlerSpecNode node;
 
-    public InvalidHandlerSpecException(String message, String handlerSpec, HandlerFactory factory) {
+    public InvalidHandlerSpecException(String message, String handlerSpec, HandlerSpecNode node) {
         super(message);
         this.handlerSpec = handlerSpec;
-        this.factory = factory;
+        this.node = node;
     }
 
     public String getHandlerSpec() {
         return handlerSpec;
     }
 
-    public HandlerFactory getFactory() {
-        return factory;
+    public HandlerSpecNode getNode() {
+        return node;
     }
 
     @Override
     public String getMessage() {
-        return super.getMessage() + " for spec " + getHandlerSpec() + " from factory " + factory;
+        return super.getMessage() + " for spec " + getHandlerSpec() + " from node " + node;
     }
 }

@@ -1,12 +1,12 @@
 /*
  * This file is part of Expvp,
- * Copyright (c) 2016-2016.
+ * Copyright (c) 2016-2017.
  *
  * This work is protected by international copyright laws and licensed
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.handler;
+package me.minotopia.expvp.handler.factory;
 
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.SkillHandler;
@@ -21,7 +21,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-class NoopHandlerFactory extends AbstractHandlerSpecNode implements HandlerFactory {
+class NoopHandlerFactory extends MultiHandlerSpecNode implements HandlerFactory {
     NoopHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
     }
@@ -33,6 +33,6 @@ class NoopHandlerFactory extends AbstractHandlerSpecNode implements HandlerFacto
 
     @Override
     public SkillHandler createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException {
-        return new NoopSkillHandler(getHandlerSpec());
+        return new NoopSkillHandler(skill);
     }
 }

@@ -9,7 +9,6 @@
 package me.minotopia.expvp.api.handler;
 
 import me.minotopia.expvp.EPPlugin;
-import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.skill.meta.Skill;
 
 /**
@@ -18,7 +17,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
-public interface SkillHandler extends HandlerSpecNode {
+public interface SkillHandler {
     /**
      * Enables this handler, preparing everything necessary for it to work and be called.
      *

@@ -8,36 +8,20 @@
 
 package me.minotopia.expvp.api.handler;
 
-import me.minotopia.expvp.api.handler.event.ListenerHandlerMap;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
-import me.minotopia.expvp.api.handler.kit.KitHandlerMap;
 
 /**
- * Represents the root node of a complete handler graph. The handler spec of the root node is an empty
+ * Represents the root node of a complete handler factory graph. The handler spec of the root node is an empty
  * string, meaning that all handler specs start with the separator.
- *
- * <p>The graph statically contains a kit and a listener
- * handler map as direct children of the root node. These may be obtained in a type-safe way using the {@link #kits()}
- * and {@link #listeners()} methods.</p>
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-02-22
  */
-public interface HandlerGraph extends HandlerSpecNode {
+public interface HandlerFactoryGraph extends HandlerSpecNode {
     /**
      * The separator that separates the nodes in handler specs.
      */
     String SEPARATOR = "/";
-
-    /**
-     * @return the kit handler map of this graph
-     */
-    KitHandlerMap kits();
-
-    /**
-     * @return the listener handler map of this graph
-     */
-    ListenerHandlerMap listeners();
 
     /**
      * {@inheritDoc}

@@ -8,11 +8,11 @@
 
 package me.minotopia.expvp.api.handler.factory;
 
-import me.minotopia.expvp.api.handler.HandlerGraph;
+import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
 
 /**
  * Represents a node in the handler spec graph. Handler specs tell {@link HandlerFactory}s
- * what kind of handler to create. The complete handler spec represents a path in the {@link HandlerGraph}.
+ * what kind of handler to create. The complete handler spec represents a path in the {@link HandlerFactoryGraph}.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
