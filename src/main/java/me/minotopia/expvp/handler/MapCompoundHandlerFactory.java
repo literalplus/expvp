@@ -12,10 +12,10 @@ import com.google.common.base.Preconditions;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.HandlerGraph;
 import me.minotopia.expvp.api.handler.SkillHandler;
-import me.minotopia.expvp.api.handler.factory.CompoundSkillHandlerFactory;
+import me.minotopia.expvp.api.handler.factory.CompoundHandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
-import me.minotopia.expvp.api.handler.factory.SkillHandlerFactory;
+import me.minotopia.expvp.api.handler.factory.HandlerFactory;
 import me.minotopia.expvp.skill.meta.Skill;
 
 import java.util.Collection;
@@ -30,26 +30,26 @@ import java.util.regex.Pattern;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public class MapCompoundHandlerFactory extends AbstractHandlerSpecNode implements CompoundSkillHandlerFactory {
-    private final Map<String, SkillHandlerFactory> children = new HashMap<>();
+public class MapCompoundHandlerFactory extends AbstractHandlerSpecNode implements CompoundHandlerFactory {
+    private final Map<String, HandlerFactory> children = new HashMap<>();
 
     public MapCompoundHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
     }
 
-    public MapCompoundHandlerFactory withChild(SkillHandlerFactory child) {
+    public MapCompoundHandlerFactory withChild(HandlerFactory child) {
         addChild(child);
         return this;
     }
 
     @Override
-    public void addChild(SkillHandlerFactory child) {
+    public void addChild(HandlerFactory child) {
         Preconditions.checkNotNull(child, "child");
         children.put(child.getHandlerSpec(), child);
     }
 
     @Override
-    public Collection<SkillHandlerFactory> getChildren() {
+    public Collection<HandlerFactory> getChildren() {
         return children.values();
     }
 
@@ -58,7 +58,7 @@ public class MapCompoundHandlerFactory extends AbstractHandlerSpecNode implement
         Preconditions.checkNotNull(plugin, "plugin");
         Preconditions.checkNotNull(skill, "skill");
         String relativeSpec = findRelativeSpec(skill);
-        SkillHandlerFactory factory = findChildOrFail(relativeSpec);
+        HandlerFactory factory = findChildOrFail(relativeSpec);
         return factory.createHandler(plugin, skill);
     }
 
@@ -72,9 +72,9 @@ public class MapCompoundHandlerFactory extends AbstractHandlerSpecNode implement
         }
     }
 
-    private SkillHandlerFactory findChildOrFail(String handlerSpec) throws InvalidHandlerSpecException {
+    private HandlerFactory findChildOrFail(String handlerSpec) throws InvalidHandlerSpecException {
         String firstNodeId = findFirstNodeId(handlerSpec);
-        SkillHandlerFactory child = children.get(firstNodeId);
+        HandlerFactory child = children.get(firstNodeId);
         if (child == null) {
             throw invalidSpecException("Unknown sub-spec", handlerSpec);
         }
@@ -104,8 +104,8 @@ public class MapCompoundHandlerFactory extends AbstractHandlerSpecNode implement
         return sb.toString();
     }
 
-    private void describeChild(StringBuilder sb, Map.Entry<String, SkillHandlerFactory> entry) {
-        SkillHandlerFactory child = entry.getValue();
+    private void describeChild(StringBuilder sb, Map.Entry<String, HandlerFactory> entry) {
+        HandlerFactory child = entry.getValue();
         sb.append(" - ").append(getHandlerSpec()).append(HandlerGraph.SEPARATOR)
                 .append(child.getHandlerSpec())
                 .append(" -> ").append(child.getDescription());

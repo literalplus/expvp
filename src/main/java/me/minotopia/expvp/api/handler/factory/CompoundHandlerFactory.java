@@ -17,16 +17,16 @@ import java.util.Collection;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public interface CompoundSkillHandlerFactory extends SkillHandlerFactory {
+public interface CompoundHandlerFactory extends HandlerFactory {
     /**
      * Registers a handler factory as a child of this compound factory.
      *
      * @param child the child to register
      */
-    void addChild(SkillHandlerFactory child);
+    void addChild(HandlerFactory child);
 
     /**
      * @return the collection of this factory's children
      */
-    Collection<SkillHandlerFactory> getChildren();
+    Collection<HandlerFactory> getChildren();
 }

@@ -11,7 +11,7 @@ package me.minotopia.expvp.api.handler.factory;
 import me.minotopia.expvp.api.handler.HandlerGraph;
 
 /**
- * Represents a node in the handler spec graph. Handler specs tell {@link SkillHandlerFactory}s
+ * Represents a node in the handler spec graph. Handler specs tell {@link HandlerFactory}s
  * what kind of handler to create. The complete handler spec represents a path in the {@link HandlerGraph}.
  *
  * @author <a href="https://l1t.li/">Literallie</a>

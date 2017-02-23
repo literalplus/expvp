@@ -12,7 +12,7 @@ import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
-import me.minotopia.expvp.api.handler.factory.SkillHandlerFactory;
+import me.minotopia.expvp.api.handler.factory.HandlerFactory;
 import me.minotopia.expvp.skill.meta.Skill;
 
 /**
@@ -21,8 +21,8 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-class NoopSkillHandlerFactory extends AbstractHandlerSpecNode implements SkillHandlerFactory {
-    NoopSkillHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
+class NoopHandlerFactory extends AbstractHandlerSpecNode implements HandlerFactory {
+    NoopHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
     }
 

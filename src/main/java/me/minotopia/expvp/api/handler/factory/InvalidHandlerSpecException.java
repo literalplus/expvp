@@ -12,16 +12,16 @@ package me.minotopia.expvp.api.handler.factory;
 import li.l1t.common.exception.UserException;
 
 /**
- * Thrown if a {@link SkillHandlerFactory} cannot parse a handler spec.
+ * Thrown if a {@link HandlerFactory} cannot parse a handler spec.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
 public class InvalidHandlerSpecException extends UserException {
     private final String handlerSpec;
-    private final SkillHandlerFactory factory;
+    private final HandlerFactory factory;
 
-    public InvalidHandlerSpecException(String message, String handlerSpec, SkillHandlerFactory factory) {
+    public InvalidHandlerSpecException(String message, String handlerSpec, HandlerFactory factory) {
         super(message);
         this.handlerSpec = handlerSpec;
         this.factory = factory;
@@ -31,7 +31,7 @@ public class InvalidHandlerSpecException extends UserException {
         return handlerSpec;
     }
 
-    public SkillHandlerFactory getFactory() {
+    public HandlerFactory getFactory() {
         return factory;
     }
 

@@ -19,7 +19,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public interface SkillHandlerFactory extends HandlerSpecNode {
+public interface HandlerFactory extends HandlerSpecNode {
     /**
      * @return a human-readable string describing what handlers this factory supports and the
      * individual handler spec format for each of them

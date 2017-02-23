@@ -23,7 +23,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     public void testRootLevelDispatch() throws Exception {
         //given
         MapCompoundHandlerFactory factory = givenARootFactory();
-        factory.withChild(new NoopSkillHandlerFactory(factory, "marc"));
+        factory.withChild(new NoopHandlerFactory(factory, "marc"));
         //when
         SkillHandler handler = factory.createHandler(plugin, skill("/marc/submarc"));
         //then
@@ -49,7 +49,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     public void testNamedDispatch() throws Exception {
         //given
         MapCompoundHandlerFactory factory = givenARootFactory();
-        factory.withChild(new NoopSkillHandlerFactory(factory, "battery"));
+        factory.withChild(new NoopHandlerFactory(factory, "battery"));
         //when
         SkillHandler handler = factory.createHandler(plugin, skill("/battery/subbattery"));
         //then
@@ -65,7 +65,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
         MapCompoundHandlerFactory child = givenACompoundFactory(parent, "battery");
         root.addChild(parent);
         parent.addChild(child);
-        child.addChild(new NoopSkillHandlerFactory(child, "staple"));
+        child.addChild(new NoopHandlerFactory(child, "staple"));
         //when
         SkillHandler handler = root.createHandler(plugin, skill("/horse/battery/staple/substaple"));
         //then
@@ -77,8 +77,8 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     public void testMultiChildDispatch() throws Exception {
         //given
         MapCompoundHandlerFactory factory = givenARootFactory();
-        factory.addChild(new NoopSkillHandlerFactory(factory, "lit"));
-        factory.addChild(new NoopSkillHandlerFactory(factory, "hot"));
+        factory.addChild(new NoopHandlerFactory(factory, "lit"));
+        factory.addChild(new NoopHandlerFactory(factory, "hot"));
         //when
         SkillHandler handler = factory.createHandler(plugin, skill("/lit/sublit"));
         //then
