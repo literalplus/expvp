@@ -20,7 +20,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  */
 class NoopSkillHandler extends AbstractHandlerSpecNode implements SkillHandler {
     protected NoopSkillHandler(String ownHandlerSpec) {
-        super("sub" + ownHandlerSpec);
+        super(null, "sub" + ownHandlerSpec);
     }
 
     @Override

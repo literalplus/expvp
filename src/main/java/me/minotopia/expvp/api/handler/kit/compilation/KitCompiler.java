@@ -27,10 +27,4 @@ public interface KitCompiler {
      * @return a template with the compiled item stacks
      */
     KitCompilation compile(Player player, PlayerData data);
-
-    /**
-     * @return the handler map which may be used for registering and unregistering handlers to be
-     * used by this compiler
-     */
-    KitHandlerMap getHandlerMap();
 }

@@ -9,7 +9,12 @@
 package me.minotopia.expvp.handler;
 
 import com.google.common.base.Preconditions;
+import me.minotopia.expvp.api.handler.HandlerGraph;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.stream.Collectors;
 
 /**
  * Abstract base class for handler spec nodes.
@@ -18,14 +23,31 @@ import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
  * @since 2016-09-14
  */
 public abstract class AbstractHandlerSpecNode implements HandlerSpecNode {
+    private final HandlerSpecNode parent;
     private final String ownHandlerSpec;
 
-    protected AbstractHandlerSpecNode(String ownHandlerSpec) {
+    protected AbstractHandlerSpecNode(HandlerSpecNode parent, String ownHandlerSpec) {
+        this.parent = parent;
         this.ownHandlerSpec = Preconditions.checkNotNull(ownHandlerSpec, "ownHandlerSpec");
     }
 
     @Override
     public String getHandlerSpec() {
         return ownHandlerSpec;
+    }
+
+    @Override
+    public HandlerSpecNode getParent() {
+        return parent;
+    }
+
+    public String getFullHandlerSpec() {
+        Deque<String> parentSpecs = new ArrayDeque<>();
+        HandlerSpecNode current = this;
+        do {
+            parentSpecs.addFirst(current.getHandlerSpec());
+        } while ((current = current.getParent()) != null);
+        return parentSpecs.stream()
+                .collect(Collectors.joining(HandlerGraph.SEPARATOR));
     }
 }

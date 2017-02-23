@@ -10,6 +10,7 @@ package me.minotopia.expvp.handler;
 
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.SkillHandler;
+import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
 import me.minotopia.expvp.api.handler.factory.SkillHandlerFactory;
 import me.minotopia.expvp.skill.meta.Skill;
@@ -21,8 +22,8 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @since 2016-09-14
  */
 class NoopSkillHandlerFactory extends AbstractHandlerSpecNode implements SkillHandlerFactory {
-    NoopSkillHandlerFactory(String ownHandlerSpec) {
-        super(ownHandlerSpec);
+    NoopSkillHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
+        super(parent, ownHandlerSpec);
     }
 
     @Override
