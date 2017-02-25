@@ -72,8 +72,10 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected ItemStackFactory getPlaceholderFactory() {
-        return new ItemStackFactory(Material.IRON_FENCE)
+        return new ItemStackFactory(Material.STAINED_GLASS_PANE)
+                .legacyData((byte) 15)
                 .displayName("§7§l*");
     }
 
