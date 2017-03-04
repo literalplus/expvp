@@ -1,3 +1,11 @@
+<!--
+  ~ This file is part of Expvp,
+  ~ Copyright (c) 2016-2017.
+  ~
+  ~ This work is protected by international copyright laws and licensed
+  ~ under the license terms which can be found at src/main/resources/LICENSE.txt.
+  -->
+
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd"
          updateCheck="false" name="expvp-hibernate"

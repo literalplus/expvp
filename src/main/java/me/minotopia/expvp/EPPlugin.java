@@ -1,6 +1,6 @@
 /*
  * This file is part of Expvp,
- * Copyright (c) 2016-2016.
+ * Copyright (c) 2016-2017.
  *
  * This work is protected by international copyright laws and licensed
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
@@ -219,7 +219,7 @@ public class EPPlugin extends GenericXyPlugin {
                         "§6~~~~~~~~~~~~~~~~~~~~§7888§6~~~~~~~~~~~~~~~§7888§6~~~~~~",
                 "§6Expvp Minecraft Game Mode for MinoTopia.me",
                 getPluginVersion().toString(),
-                "§6Copyright (C) 2016 Philipp Nowak (Literallie)",
+                "§6Copyright (C) 2016-2017 Philipp Nowak (Literallie)",
                 "§6See the LICENSE.txt file in the plugin jar for more info."
         }); // it says "Expvp"
     }

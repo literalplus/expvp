@@ -1,6 +1,6 @@
 /*
  * This file is part of Expvp,
- * Copyright (c) 2016-2016.
+ * Copyright (c) 2016-2017.
  *
  * This work is protected by international copyright laws and licensed
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
