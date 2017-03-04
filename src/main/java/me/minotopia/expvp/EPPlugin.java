@@ -137,7 +137,7 @@ public class EPPlugin extends GenericXyPlugin {
 
     private void registerCommands() {
         commandsManager = new CommandsManager(this);
-        commandsManager.getTranslator().setLocale(Locale.GERMAN);
+        commandsManager.setLocale(Locale.GERMAN);
         commandsManager.getBuilder().addInvokeListener(new EnumPermissionInvokeListener());
         registerInjections();
         registerCommand(new CommandSkillAdmin(), new SkillCommandService(skillManager, this), "ska");
