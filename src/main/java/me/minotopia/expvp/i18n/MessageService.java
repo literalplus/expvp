@@ -24,20 +24,19 @@ import java.util.ResourceBundle;
 /**
  * Handles retrieval of messages from the correct resource bundle.
  *
+ * <p><b>Note:</b> To make a message service retrieve custom resource bundles from the file system, use {@link
+ * #setDataFolder(File)}.</p>
+ *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-03
  */
 public class MessageService {
     private static final Logger LOGGER = LoggingManager.getLogger(MessageService.class);
-    private final BundleCache bundleCache;
+    private final BundleCache bundleCache = new BundleCache();
 
-    public MessageService(File dataFolder) throws MalformedURLException {
-        bundleCache = new BundleCache(new URLClassLoader(new URL[]{dataFolder.toURI().toURL()}));
-    }
-
-    private String getMessage(Locale locale, String key, Object... args) {
+    public String getMessage(Locale locale, String key, Object... args) {
         Preconditions.checkNotNull(locale, "locale");
-        if("debug".equals(locale.getVariant())) {
+        if ("debug".equals(locale.getVariant())) {
             return messageKeyString(key, args);
         }
         MessagePath path = MessagePath.of(key);
@@ -55,4 +54,21 @@ public class MessageService {
         return key + Arrays.toString(args);
     }
 
+    /**
+     * @param dataFolder the data folder to use for retrieval of custom resource bundles
+     * @throws NullPointerException if dataFolder is null
+     */
+    public void setDataFolder(File dataFolder) {
+        Preconditions.checkNotNull(dataFolder, "dataFolder");
+        try {
+            bundleCache.setFileLoader(new URLClassLoader(new URL[]{dataFolder.toURI().toURL()}));
+        } catch (MalformedURLException e) {
+            LOGGER.error("Invalid data folder of some sort: " + dataFolder.getAbsolutePath(), e);
+            throw new AssertionError("Invalid URL while in MessageService: " + dataFolder.getAbsolutePath(), e);
+        }
+    }
+
+    public void clearCache() {
+        bundleCache.clear();
+    }
 }

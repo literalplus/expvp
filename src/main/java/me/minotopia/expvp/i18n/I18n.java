@@ -1,0 +1,102 @@
+/*
+ * This file is part of Expvp,
+ * Copyright (c) 2016-2017.
+ *
+ * This work is protected by international copyright laws and licensed
+ * under the license terms which can be found at src/main/resources/LICENSE.txt.
+ */
+
+package me.minotopia.expvp.i18n;
+
+import li.l1t.common.util.CommandHelper;
+import me.minotopia.expvp.logging.LoggingManager;
+import org.apache.logging.log4j.Logger;
+import org.bukkit.command.CommandSender;
+
+import java.io.File;
+import java.util.*;
+
+/**
+ * Single point of contact for localisation in Expvp.
+ *
+ * @author <a href="https://l1t.li/">Literallie</a>
+ * @since 2017-03-06
+ */
+public class I18n {
+    private static final Logger LOGGER = LoggingManager.getLogger(I18n.class);
+    private static MessageService messageService = new MessageService();
+    private static Map<UUID, Locale> localeCache = new HashMap<>();
+
+    private I18n() {
+
+    }
+
+    /**
+     * @param dataFolder the data folder that contains custom resource bundles on the file system that may override the
+     *                   defaults or provide custom data
+     */
+    public static void setDataFolder(File dataFolder) {
+        messageService.setDataFolder(dataFolder);
+    }
+
+    /**
+     * Clears the resource bundle caches, forcing them to be reloaded when next used.
+     *
+     * <p><b>Note:</b> This does not clear the sender-&gt;locale cache, use {@link #clearLocaleOf(UUID)} for that.</p>
+     */
+    public static void clearCache() {
+        messageService.clearCache();
+    }
+
+    /**
+     * Returns the string value for given message key in given locale.
+     *
+     * @param locale the locale to query
+     * @param key    the message key, according to {@link MessagePath} specifications.
+     * @param args   the arguments for the message, which will be inserted like in {@link String#format(String,
+     *               Object...)}
+     * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
+     */
+    public static String loc(Locale locale, String key, Object... args) {
+        if (messageService == null) {
+            LOGGER.warn("Requested localisation for {} with {} before I18n was initialised",
+                    key, Arrays.toString(args));
+            return key + Arrays.toString(args);
+        }
+        return messageService.getMessage(locale, key, args);
+    }
+
+    /**
+     * Returns the string value for given message key in given locale.
+     *
+     * @param senderId the unique id of the command sender whose locale to use from the cache
+     * @param key      the message key, according to {@link MessagePath} specifications.
+     * @param args     the arguments for the message, which will be inserted like in {@link String#format(String,
+     *                 Object...)}
+     * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
+     */
+    public static String loc(UUID senderId, String key, Object... args) {
+        return loc(localeCache.getOrDefault(senderId, Locale.getDefault()), key, args);
+    }
+
+    /**
+     * Returns the string value for given message key in given locale.
+     *
+     * @param sender the command sender whose locale to use from the cache
+     * @param key    the message key, according to {@link MessagePath} specifications.
+     * @param args   the arguments for the message, which will be inserted like in {@link String#format(String,
+     *               Object...)}
+     * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
+     */
+    public static String loc(CommandSender sender, String key, Object... args) {
+        return loc(CommandHelper.getSenderId(sender), key, args);
+    }
+
+    public static void setLocaleFor(UUID senderId, Locale locale) {
+        localeCache.put(senderId, locale);
+    }
+
+    public static void clearLocaleOf(UUID senderId) {
+        localeCache.remove(senderId);
+    }
+}

@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.i18n;
 
+import com.google.common.base.Preconditions;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,11 +22,12 @@ import java.util.*;
  */
 class BundleCache {
     private static final Logger LOGGER = LoggingManager.getLogger(BundleCache.class);
-    private final ClassLoader fileLoader;
     private final Map<String, Optional<CachedBundle>> fileBundles = new HashMap<>();
     private final Map<String, Optional<CachedBundle>> defaultBundles = new HashMap<>();
+    private ClassLoader fileLoader;
 
-    BundleCache(ClassLoader fileLoader) {
+    public void setFileLoader(ClassLoader fileLoader) {
+        Preconditions.checkNotNull(fileLoader, "fileLoader");
         this.fileLoader = fileLoader;
     }
 
@@ -48,6 +50,9 @@ class BundleCache {
     }
 
     private Optional<CachedBundle> getFromFile(String baseName) {
+        if(fileLoader == null) {
+            return Optional.empty();
+        }
         return fileBundles.computeIfAbsent(baseName, this::fileBundleFor);
     }
 
@@ -73,5 +78,10 @@ class BundleCache {
 
     private Optional<CachedBundle> defaultsBundleFor(String baseName) {
         return bundleFor("me.minotopia.expvp." + baseName, getClass().getClassLoader(), "default");
+    }
+
+    public void clear() {
+        fileBundles.clear();
+        defaultBundles.clear();
     }
 }

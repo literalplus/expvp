@@ -10,6 +10,9 @@ package me.minotopia.expvp.i18n;
 
 /**
  * Represents the unique path to a localised message with bundle and message key.
+ * <p>String representations look like {@code core!some.key}, where {@code core} is the resource bundle name, and
+ * {@code some.key} is the message key in that bundle. The bundle name may be omitted like {@code !some.key} for
+ * the {@code core} resource bundle.</p>
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-03
