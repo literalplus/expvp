@@ -14,6 +14,8 @@ import org.apache.logging.log4j.Logger;
 import org.bukkit.command.CommandSender;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -34,8 +36,10 @@ public class I18n {
     /**
      * @param dataFolder the data folder that contains custom resource bundles on the file system that may override the
      *                   defaults or provide custom data
+     * @throws IOException if creation of given data folder fails
      */
-    public static void setDataFolder(File dataFolder) {
+    public static void setDataFolder(File dataFolder) throws IOException {
+        Files.createDirectories(dataFolder.toPath());
         messageService.setDataFolder(dataFolder);
     }
 

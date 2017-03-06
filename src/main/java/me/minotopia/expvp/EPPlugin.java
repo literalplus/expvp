@@ -23,6 +23,7 @@ import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
 import me.minotopia.expvp.command.service.CommandService;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.player.HibernatePlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
@@ -56,7 +57,7 @@ import java.util.UUID;
  * @since 2016-06-20
  */
 public class EPPlugin extends GenericXyPlugin {
-    private final String chatPrefix = "§6[§7ExP§6] ";
+    private final String chatPrefix = "§6[§7Exp§6] ";
     private Logger log;
     private SessionProvider sessionProvider;
     private SkillTreeManager skillTreeManager;
@@ -90,6 +91,9 @@ public class EPPlugin extends GenericXyPlugin {
             log.info("===== Hello, friend");
             log.info("Am " + getPluginVersion().toString());
 
+            //Set locale data folder
+            I18n.setDataFolder(new File(getDataFolder(), "lang"));
+
             //Initialise Hibernate ORM
             SessionFactory sessionFactory = initHibernate(getClassLoader());
             this.sessionProvider = new SessionProvider(sessionFactory);
@@ -110,29 +114,32 @@ public class EPPlugin extends GenericXyPlugin {
 
             saveConfig();
         } catch (Exception e) {
-            //Using jul here because Log4J2 might not have been initialised
-            getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable Expvp: ", e);
-            getServer().getConsoleSender().sendMessage("§4 --- Unable to enable Expvp ^^^^ ---");
-            getLogger().log(java.util.logging.Level.SEVERE, "*** Enabling whitelist...");
-            getServer().setWhitelist(true);
-            if (!getServer().getOnlinePlayers().isEmpty()) {
-                getServer().getOnlinePlayers().stream()
-                        .forEach(player -> {
-                            if (player.isOp() || Permission.ADMIN_BASIC.has(player)) {
-                                player.sendMessage("§4§l *** Unable to enable Expvp");
-                                player.sendMessage("§4§l *** This is a critical error");
-                                player.sendMessage("§4§l *** Non-authorised personnel will be exterminated");
-                                player.sendMessage("§4§l *** Don't panic, call Ghostbusters.");
-                                player.sendMessage("§4§l *** Whitelist has been enabled.");
-                                player.sendMessage("§c Technical description: " + e.getClass().getName() + ": " + e.getLocalizedMessage());
-                            } else {
-                                player.sendMessage("§4§l *** Es gab einen internen Fehler.");
-                                player.sendMessage("§4§l *** Zu deiner eigenen Sicherheit wirst du gekickt.");
-                                player.kickPlayer("§cInterner Fehler bei Expvp.\n§aKeine Panik.\n§eBitte kontaktiere das Team.");
-                            }
-                        });
-            }
+            handleEnableException(e);
+
         }
+    }
+
+    private void handleEnableException(Exception e) {
+        //Using jul here because Log4J2 might not have been initialised
+        getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable Expvp: ", e);
+        getServer().getConsoleSender().sendMessage("§4 --- Unable to enable Expvp ^^^^ ---");
+        getLogger().log(java.util.logging.Level.SEVERE, "*** Enabling whitelist...");
+        getServer().setWhitelist(true);
+        getServer().getOnlinePlayers()
+                .forEach(player -> {
+                    if (player.isOp() || Permission.ADMIN_BASIC.has(player)) {
+                        player.sendMessage("§4§l *** Unable to enable Expvp");
+                        player.sendMessage("§4§l *** This is a critical error");
+                        player.sendMessage("§4§l *** Non-authorised personnel will be exterminated");
+                        player.sendMessage("§4§l *** Don't panic, call Ghostbusters.");
+                        player.sendMessage("§4§l *** Whitelist has been enabled.");
+                        player.sendMessage("§c Technical description: " + e.getClass().getName() + ": " + e.getLocalizedMessage());
+                    } else {
+                        player.sendMessage("§4§l *** Es gab einen internen Fehler.");
+                        player.sendMessage("§4§l *** Zu deiner eigenen Sicherheit wirst du gekickt.");
+                        player.kickPlayer("§cInterner Fehler bei Expvp.\n§aKeine Panik.\n§eBitte kontaktiere das Team.");
+                    }
+                });
     }
 
     private void registerCommands() {
@@ -207,16 +214,16 @@ public class EPPlugin extends GenericXyPlugin {
     public void printBanner(CommandSender receiver) {
         receiver.sendMessage(new String[]{
                 "§78888888888§6~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-                        "§7888§6~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-                        "§7888§6~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-                        "§78888888§6~~~~§7888§6~~§7888§6~§788888b.§6~~§7888§6~~§7888§6~§788888b.§6~~",
-                        "§7888§6~~~~~~~~§7`Y8bd8P'§6~§7888§6~§7\"88b§6~§7888§6~~§7888§6~§7888§6~§7\"88b§6~",
-                        "§7888§6~~~~~~~~~~§7X88K§6~~~§7888§6~~§7888§6~§7Y88§6~~§788P§6~§7888§6~~§7888§6~",
-                        "§7888§6~~~~~~~~§7.d8\"\"8b.§6~§7888§6~§7d88P§6~~§7Y8bd8P§6~~§7888§6~§7d88P§6~",
-                        "§78888888888§6~§7888~~§7888§6~§788888P\"§6~~~~§7Y88P§6~~~§788888P\"§6~~",
-                        "§6~~~~~~~~~~~~~~~~~~~~§7888§6~~~~~~~~~~~~~~~§7888§6~~~~~~",
-                        "§6~~~~~~~~~~~~~~~~~~~~§7888§6~~~~~~~~~~~~~~~§7888§6~~~~~~",
-                        "§6~~~~~~~~~~~~~~~~~~~~§7888§6~~~~~~~~~~~~~~~§7888§6~~~~~~",
+                "§7888§6~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+                "§7888§6~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+                "§78888888§6~~~~§7888§6~~§7888§6~§788888b.§6~~§7888§6~~§7888§6~§788888b.§6~~",
+                "§7888§6~~~~~~~~§7`Y8bd8P'§6~§7888§6~§7\"88b§6~§7888§6~~§7888§6~§7888§6~§7\"88b§6~",
+                "§7888§6~~~~~~~~~~§7X88K§6~~~§7888§6~~§7888§6~§7Y88§6~~§788P§6~§7888§6~~§7888§6~",
+                "§7888§6~~~~~~~~§7.d8\"\"8b.§6~§7888§6~§7d88P§6~~§7Y8bd8P§6~~§7888§6~§7d88P§6~",
+                "§78888888888§6~§7888~~§7888§6~§788888P\"§6~~~~§7Y88P§6~~~§788888P\"§6~~",
+                "§6~~~~~~~~~~~~~~~~~~~~§7888§6~~~~~~~~~~~~~~~§7888§6~~~~~~",
+                "§6~~~~~~~~~~~~~~~~~~~~§7888§6~~~~~~~~~~~~~~~§7888§6~~~~~~",
+                "§6~~~~~~~~~~~~~~~~~~~~§7888§6~~~~~~~~~~~~~~~§7888§6~~~~~~",
                 "§6Expvp Minecraft Game Mode for MinoTopia.me",
                 getPluginVersion().toString(),
                 "§6Copyright (C) 2016-2017 Philipp Nowak (Literallie)",
