@@ -57,6 +57,11 @@ public interface MutablePlayerData extends PlayerData {
     void setLocale(Locale locale);
 
     /**
+     * @param customLocale whether the player has {@link #hasCustomLocale() changed their locale}
+     */
+    void setCustomLocale(boolean customLocale);
+
+    /**
      * Adds a new skill to the player's set of skills.
      *
      * @param newSkill the new skill to add

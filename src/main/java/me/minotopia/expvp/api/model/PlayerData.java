@@ -66,12 +66,18 @@ public interface PlayerData {
     int getTalentPoints();
 
     /**
-     * Gets the amount of melons this player has. Melons are a premium currency used for purchasing
-     * cosmetic things.
+     * Gets the locale preferred by the player. This can either be automatically computed from the player's client
+     * settings, or explicitly set by the player. In the latter case, {@link #hasCustomLocale()} returns true.
      *
-     * @return the current amount of melons this player has
+     * @return the locale preferred by the player
      */
     Locale getLocale();
+
+    /**
+     * @return whether this player has explicitly requested their current locale, making it so that client settings will
+     * not override their locale
+     */
+    boolean hasCustomLocale();
 
     /**
      * Gets the set of skills this player has.

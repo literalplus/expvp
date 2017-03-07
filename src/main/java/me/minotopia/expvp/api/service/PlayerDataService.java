@@ -11,6 +11,7 @@ package me.minotopia.expvp.api.service;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -39,6 +40,10 @@ public interface PlayerDataService {
      * @return the existing or created player data
      */
     MutablePlayerData findOrCreateDataMutable(UUID playerId);
+
+    Optional<? extends PlayerData> findData(UUID playerId);
+
+    Optional<? extends MutablePlayerData> findDataMutable(UUID playerId);
 
     /**
      * Persists the state of a given player data object to the underlying data store.

@@ -56,6 +56,19 @@ public class HibernatePlayerDataService implements PlayerDataService {
     }
 
     @Override
+    public Optional<HibernatePlayerData> findData(UUID playerId) {
+        return findDataMutable(playerId); //read-only is a type safety thing only, this simplifies usage
+    }
+
+    @Override
+    public Optional<HibernatePlayerData> findDataMutable(UUID playerId) {
+        Preconditions.checkNotNull(playerId, "playerId");
+        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+            return scoped.session().byId(HibernatePlayerData.class).loadOptional(playerId);
+        }
+    }
+
+    @Override
     public void saveData(MutablePlayerData toSave) {
         try (ScopedSession scoped = sessionProvider.scoped().join()) {
             scoped.tx();

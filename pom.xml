@@ -20,7 +20,7 @@
     <name>Expvp</name>
     <description>
         A kit-based Minecraft PvP game mode where players fight each other to gain experience (Exp).
-        With a certain amount of exp, they progress to a new level and get books they can spend
+        With a certain amount of exp, they progress to a higher league and get talent points they can spend
         in skill trees to learn unique skills.
     </description>
 
@@ -48,7 +48,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <xyc.version>4.4.0.1</xyc.version>
+        <xyc.version>4.4.0.4</xyc.version>
         <minecraft.version>1.8.8</minecraft.version>
         <spigot-api.release>R0.1</spigot-api.release>
         <rootDir>${project.basedir}</rootDir>
@@ -93,8 +93,8 @@
         </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>3.6.4</version>
+            <artifactId>ProtocolLib-API</artifactId>
+            <version>4.1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

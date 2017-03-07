@@ -9,6 +9,7 @@
 package me.minotopia.expvp;
 
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
@@ -24,6 +25,8 @@ import me.minotopia.expvp.command.service.CommandService;
 import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.LocaleChangeListener;
+import me.minotopia.expvp.i18n.LocaleService;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.player.HibernatePlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
@@ -104,6 +107,10 @@ public class EPPlugin extends GenericXyPlugin {
                     new SimpleSkillObtainmentService(playerDataService),
                     playerDataService, sessionProvider
             );
+            LocaleService localeService = new LocaleService(playerDataService, sessionProvider);
+
+            //Packet listeners
+            ProtocolLibrary.getProtocolManager().addPacketListener(new LocaleChangeListener(this, localeService));
 
             //Load skill trees and skills
             skillManager = new SkillManager(new File(getDataFolder(), "skills"), obtainmentService);

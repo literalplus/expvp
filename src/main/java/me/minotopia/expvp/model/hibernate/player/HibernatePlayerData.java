@@ -11,6 +11,7 @@ package me.minotopia.expvp.model.hibernate.player;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.model.hibernate.BaseEntity;
+import me.minotopia.expvp.model.hibernate.converter.LocaleConverter;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -44,10 +45,10 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     private String leagueName;
     private int exp;
     private int talentPoints;
-    @Transient
+    @Convert(converter = LocaleConverter.class)
     private Locale locale;
-    @Column(name = "locale")
-    private String localeTag;
+    @Column(name = "localechanged")
+    private boolean customLocale;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = HibernateObtainedSkill.class, mappedBy = "playerData")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -65,8 +66,7 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
      */
     public HibernatePlayerData(UUID uuid) {
         this.uuid = uuid;
-        this.locale = Locale.GERMANY;
-        this.localeTag = locale.toLanguageTag();
+        this.locale = Locale.getDefault();
     }
 
     @Override
@@ -145,7 +145,15 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     @Override
     public void setLocale(Locale locale) {
         this.locale = locale;
-        this.localeTag = locale.toLanguageTag();
+    }
+
+    @Override
+    public boolean hasCustomLocale() {
+        return customLocale;
+    }
+
+    public void setCustomLocale(boolean customLocale) {
+        this.customLocale = customLocale;
     }
 
     @Override
