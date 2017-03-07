@@ -23,7 +23,7 @@ import java.util.UUID;
 
 /**
  * A wrapper for skill obtainment services that adds cost checking and payments using {@link
- * PlayerData#getBooks() books}.
+ * PlayerData#getTalentPoints() books}.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-11
@@ -46,10 +46,10 @@ public class CostCheckingObtainmentService implements SkillObtainmentService {
         try (ScopedSession scoped = sessionProvider.scoped().join()) {
             scoped.tx();
             MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
-            if (playerData.getBooks() < skill.getBookCost()) {
+            if (playerData.getTalentPoints() < skill.getBookCost()) {
                 throw new UserException("Du hast dafür nicht genügend Skillpunkte!");
             }
-            playerData.setBooks(playerData.getBooks() - skill.getBookCost());
+            playerData.setTalentPoints(playerData.getTalentPoints() - skill.getBookCost());
             proxy.addObtainedSkill(playerId, skill);
             playerDataService.saveData(playerData);
             scoped.commitIfLast();

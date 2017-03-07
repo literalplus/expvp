@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.api.model;
 
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,34 +27,43 @@ public interface PlayerData {
     /**
      * @return the amount of times this player has killed other players overall
      */
-    int getKills();
+    int getTotalKills();
 
     /**
-     * @return the amount of times this player has died
+     * @return the amount of times this player has died overall
      */
-    int getDeaths();
+    int getTotalDeaths();
 
     /**
-     * @return the current level of this player, starting at 1
+     * @return the amount of times this player has killed other players since the last automated reset
      */
-    int getLevel();
+    int getCurrentKills();
 
     /**
-     * Gets the amount of points this player currently has for progressing to the next level. Points
-     * are increased each time the player kills somebody and decreased every time the player dies.
-     * Upon reaching a certain amount of points, the player progresses to the next level.
+     * @return the amount of times this player has died since the last automated reset
+     */
+    int getCurrentDeaths();
+
+    /**
+     * @return the internal name of the current league of this player
+     */
+    String getLeagueName();
+
+    /**
+     * Gets the amount of Exp this player currently has. Exp are calculated from kills and deaths based on the current
+     * league of this player and the players they kill.
      *
-     * @return the amount of points the player currently has
+     * @return the amount of Exp the player currently has
      */
-    int getPoints();
+    int getExp();
 
     /**
-     * Gets the amount of books this player currently has. Books can be used to obtain skills from a
-     * skill tree and are added at level-up, except if the player has reached their book limit.
+     * Gets the amount of talent points this player currently has. These may be used to obtain skills from a
+     * skill tree and are obtained by killing other players.
      *
-     * @return the current amount of books this player has
+     * @return the amount of talent points this player currently has
      */
-    int getBooks();
+    int getTalentPoints();
 
     /**
      * Gets the amount of melons this player has. Melons are a premium currency used for purchasing
@@ -61,7 +71,7 @@ public interface PlayerData {
      *
      * @return the current amount of melons this player has
      */
-    int getMelons();
+    Locale getLocale();
 
     /**
      * Gets the set of skills this player has.

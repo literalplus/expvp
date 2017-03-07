@@ -15,12 +15,9 @@ import me.minotopia.expvp.skill.meta.Skill;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence21.CascadeType;
-import javax.persistence21.Entity;
-import javax.persistence21.Id;
-import javax.persistence21.OneToMany;
-import javax.persistence21.Table;
+import javax.persistence21.*;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,12 +33,21 @@ import java.util.UUID;
 public class HibernatePlayerData extends BaseEntity implements MutablePlayerData {
     @Id
     private UUID uuid; //always use Object types for identifiers, they didn't explain why tho
-    private int kills; //how many players this player has killed overall
-    private int deaths; //how often this player has died overall
-    private int level = 1; //current level id (starting at 1)
-    private int points; //current amount of points (kills and deaths) - reset at level-up
-    private int books; //books, that is, skill points left to allocate
-    private int melons; //melons, that is, premium currency for cosmetic stuff (yay EULA!)
+    @Column(name = "totalkills")
+    private int totalKills;
+    @Column(name = "totaldeaths")
+    private int totalDeaths;
+    @Column(name = "currentkills")
+    private int currentKills;
+    @Column(name = "currentdeaths")
+    private int currentDeaths;
+    private String leagueName;
+    private int exp;
+    private int talentPoints;
+    @Transient
+    private Locale locale;
+    @Column(name = "locale")
+    private String localeTag;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = HibernateObtainedSkill.class, mappedBy = "playerData")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -59,6 +65,8 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
      */
     public HibernatePlayerData(UUID uuid) {
         this.uuid = uuid;
+        this.locale = Locale.GERMANY;
+        this.localeTag = locale.toLanguageTag();
     }
 
     @Override
@@ -67,77 +75,77 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     }
 
     @Override
-    public int getKills() {
-        return kills;
+    public int getTotalKills() {
+        return totalKills;
+    }
+
+    @Override
+    public int getCurrentKills() {
+        return currentKills;
     }
 
     @Override
     public void addKill() {
-        this.kills += 1;
+        this.totalKills += 1;
+        this.currentKills += 1;
     }
 
     @Override
-    public int getDeaths() {
-        return deaths;
+    public int getTotalDeaths() {
+        return totalDeaths;
+    }
+
+    @Override
+    public int getCurrentDeaths() {
+        return currentDeaths;
     }
 
     @Override
     public void addDeath() {
-        this.deaths += 1;
+        this.totalDeaths += 1;
+        this.currentDeaths += 1;
     }
 
     @Override
-    public void clearStats() {
-        this.kills = 0;
-        this.deaths = 0;
+    public String getLeagueName() {
+        return leagueName;
     }
 
     @Override
-    public int getLevel() {
-        return level;
+    public void setLeagueName(String leagueName) {
+        this.leagueName = leagueName;
+        this.exp = 0;
     }
 
     @Override
-    public void setLevel(int level) {
-        this.level = level;
-        this.points = 0;
+    public int getExp() {
+        return exp;
     }
 
     @Override
-    public int levelUp() {
-        setLevel(level + 1);
-        setBooks(melons + 1); //TODO: book limits
-        return getLevel();
+    public void setExp(int exp) {
+        this.exp = exp;
     }
 
     @Override
-    public int getPoints() {
-        return points;
+    public int getTalentPoints() {
+        return talentPoints;
     }
 
     @Override
-    public void setPoints(int points) {
-        this.points = points;
+    public void setTalentPoints(int talentPoints) {
+        this.talentPoints = talentPoints;
     }
 
     @Override
-    public int getBooks() {
-        return books;
+    public Locale getLocale() {
+        return locale;
     }
 
     @Override
-    public void setBooks(int books) {
-        this.books = books;
-    }
-
-    @Override
-    public int getMelons() {
-        return melons;
-    }
-
-    @Override
-    public void setMelons(int melons) {
-        this.melons = melons;
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+        this.localeTag = locale.toLanguageTag();
     }
 
     @Override

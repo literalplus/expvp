@@ -10,6 +10,8 @@ package me.minotopia.expvp.api.model;
 
 import me.minotopia.expvp.skill.meta.Skill;
 
+import java.util.Locale;
+
 /**
  * Represents a player's data related to Expvp, providing write access to certain properties.
  *
@@ -29,47 +31,30 @@ public interface MutablePlayerData extends PlayerData {
     void addDeath();
 
     /**
-     * Causes the player's stats, that is, kill and death count, to be reset to their initial value
-     * of zero.
+     * Sets the league name of this player.
+     *
+     * @param leagueName the name of the new league of this player
      */
-    void clearStats();
+    void setLeagueName(String leagueName);
 
     /**
-     * Sets the current level of this player. The initial level is 1. This also resets the points
-     * count for this player. Note that this does not change the amount of books.
+     * Sets the amount of {@link #getExp() Exp} this player has.
      *
-     * @param level the new level of this player
+     * @param exp the new amount of Exp for this player
      */
-    void setLevel(int level);
+    void setExp(int exp);
 
     /**
-     * Causes this player's level to be increased by one and the points count to be reset. Also adds
-     * a book to the player's bookshelf.
+     * Sets the current amount of {@link #getTalentPoints() talent points} this player has.
      *
-     * @return the new level of the player
+     * @param talentPoints the new amount of talent points
      */
-    int levelUp();
+    void setTalentPoints(int talentPoints);
 
     /**
-     * Sets the amount of {@link #getPoints() points} this player has.
-     *
-     * @param points the new amount of points for this player
+     * @param locale the new locale for this player
      */
-    void setPoints(int points);
-
-    /**
-     * Sets the current amount of {@link #getBooks() books} this player has.
-     *
-     * @param books the new amount of books
-     */
-    void setBooks(int books);
-
-    /**
-     * Sets the current amount of {@link #getMelons() melons} this player has.
-     *
-     * @param melons the new amount of melons
-     */
-    void setMelons(int melons);
+    void setLocale(Locale locale);
 
     /**
      * Adds a new skill to the player's set of skills.

@@ -29,55 +29,29 @@ import java.util.stream.Collectors;
  * @since 2016-09-14
  */
 public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService> {
-    @Command(aliases = "setbooks", min = 2,
-            desc = "Setzt Skillpunkte",
-            help = "Setzt die Skillpunkte\neines Spielers.",
-            usage = "[uuid|name] [punkte]")
+    @Command(aliases = "settp", min = 2,
+            desc = "Setzt Talentpunkte",
+            help = "Setzt die Talentpunkte\neines Spielers.",
+            usage = "[uuid|name] [tp]")
     @EnumRequires(Permission.ADMIN_PLAYERS)
-    public void setBooks(CommandSender sender, String playerSpec, int newBooks)
+    public void setBooks(CommandSender sender, String playerSpec, int newTalentPoints)
             throws IOException {
-        modifyProperty(sender, playerSpec, "Skillpunkte", playerData -> {
-            playerData.setBooks(newBooks);
-            return playerData.getBooks();
+        modifyProperty(sender, playerSpec, "Talentpunkte", playerData -> {
+            playerData.setTalentPoints(newTalentPoints);
+            return playerData.getTalentPoints();
         });
     }
 
-    @Command(aliases = "addbooks", min = 2,
-            desc = "Gibt Skillpunkte",
-            help = "Gibt einem Spieler Skillpunkte.",
-            usage = "[uuid|name] [punkte]")
+    @Command(aliases = "addtp", min = 2,
+            desc = "Gibt Talentpunkte",
+            help = "Gibt einem Spieler Talentpunkte.",
+            usage = "[uuid|name] [tp]")
     @EnumRequires(Permission.ADMIN_PLAYERS)
-    public void addBooks(CommandSender sender, String playerSpec, int addBooks)
+    public void addBooks(CommandSender sender, String playerSpec, int addTalentPoints)
             throws IOException {
-        modifyProperty(sender, playerSpec, "Skillpunkte", playerData -> {
-            playerData.setBooks(playerData.getBooks() + addBooks);
-            return playerData.getBooks();
-        });
-    }
-
-    @Command(aliases = "setmelons", min = 2,
-            desc = "Setzt Melonen",
-            help = "Setzt die Melonen\neines Spielers.",
-            usage = "[uuid|name] [melonen]")
-    @EnumRequires(Permission.ADMIN_PLAYERS)
-    public void setMelons(CommandSender sender, String playerSpec, int newMelons)
-            throws IOException {
-        modifyProperty(sender, playerSpec, "Melonen", playerData -> {
-            playerData.setMelons(newMelons);
-            return playerData.getMelons();
-        });
-    }
-
-    @Command(aliases = "addmelons", min = 2,
-            desc = "Gibt Melonen",
-            help = "Gibt einem Spieler Melonen.",
-            usage = "[uuid|name] [melonen]")
-    @EnumRequires(Permission.ADMIN_PLAYERS)
-    public void addMelons(CommandSender sender, String playerSpec, int addMelons)
-            throws IOException {
-        modifyProperty(sender, playerSpec, "Melonen", playerData -> {
-            playerData.setMelons(playerData.getMelons() + addMelons);
-            return playerData.getMelons();
+        modifyProperty(sender, playerSpec, "Talentpunkte", playerData -> {
+            playerData.setTalentPoints(playerData.getTalentPoints() + addTalentPoints);
+            return playerData.getTalentPoints();
         });
     }
 
@@ -95,18 +69,24 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
             desc = "Zeigt Infos zu einem Spieler",
             usage = "[uuid|name]")
     @EnumRequires(Permission.ADMIN_BASIC)
-    public void whoIs(CommandSender sender, String playerInput, int newBooks)
+    public void whoIs(CommandSender sender, String playerInput)
             throws IOException {
         UUID playerId = service().findPlayerByNameOrIdOrFail(playerInput);
         PlayerData playerData = service().findPlayerData(playerId);
         sender.sendMessage("§a»»» §eSpielerinfo §a«««"); //TODO: player name -> xyc profile api
         formatMessage(sender,
-                "§e§l➩ §eLevel: §a%d §ePunkte: §a%d §eSkillpunkte: §a%d",
-                playerData.getLevel(), playerData.getPoints(), playerData.getBooks()
+                "§e§l➩ §eLiga: §a%d §eExp: §a%d §eTP: §a%d §eSprache: §a%s",
+                playerData.getLeagueName(), playerData.getExp(), playerData.getTalentPoints(), playerData.getLocale().getDisplayName()
         );
+        int totalKD = playerData.getTotalKills() / (playerData.getTotalDeaths() == 0 ? 1 : playerData.getTotalDeaths());
         formatMessage(sender,
-                "§e§l➩ §eKills: §a%d §eDeaths: §a%d §eMelonen: §a%d",
-                playerData.getKills(), playerData.getDeaths(), playerData.getMelons()
+                "§e§l➩ §aGesamte §eKills: §a%d §eDeaths: §a%d §eK/D: §a%d",
+                playerData.getTotalKills(), playerData.getTotalDeaths(), totalKD
+        );
+        int currentKD = playerData.getCurrentKills() / (playerData.getCurrentDeaths() == 0 ? 1 : playerData.getCurrentDeaths());
+        formatMessage(sender,
+                "§e§l➩ §aAktuelle §eKills: §a%d §eDeaths: §a%d §eK/D: §a%d",
+                playerData.getCurrentKills(), playerData.getCurrentDeaths(), currentKD
         );
         formatMessage(sender,
                 "§e§l➩ §eSkills: §a%s",
