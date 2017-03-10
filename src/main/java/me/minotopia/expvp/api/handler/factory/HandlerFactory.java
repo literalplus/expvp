@@ -19,7 +19,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public interface HandlerFactory extends HandlerSpecNode {
+public interface HandlerFactory<R extends SkillHandler> extends HandlerSpecNode {
     /**
      * @return a human-readable string describing what handlers this factory supports and the
      * individual handler spec format for each of them
@@ -33,5 +33,5 @@ public interface HandlerFactory extends HandlerSpecNode {
      * @param skill       the skill the handler is going to handle
      * @return the created handler
      */
-    SkillHandler createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException;
+    R createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException;
 }

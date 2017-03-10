@@ -36,8 +36,12 @@ public class ItemKitElementBuilder implements KitElementBuilder {
 
     @Override
     public KitElementBuilder addToAmount(int toAdd) {
-        Preconditions.checkArgument(toAdd > 0, "toAdd must be positive");
-        factory().amount(factory().getBase().getAmount() + toAdd);
+        Preconditions.checkArgument(toAdd >= 0, "toAdd must be non-negative");
+        if (toAdd > 0) {
+            factory().amount(factory().getBase().getAmount() + toAdd);
+        } else {
+            include();
+        }
         return this;
     }
 
@@ -58,7 +62,7 @@ public class ItemKitElementBuilder implements KitElementBuilder {
         Preconditions.checkNotNull(type, "type");
         Preconditions.checkArgument(level > 0 && level <= potionType.getMaxLevel(),
                 "potion level out of bounds: %s %s", type, level);
-        factory();
+        include();
         if (this.potionType != type || level > this.potionLevel) {
             this.potionType = type;
             this.potionLevel = level;

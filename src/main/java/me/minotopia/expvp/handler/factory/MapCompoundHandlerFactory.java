@@ -12,7 +12,6 @@ import com.google.common.base.Preconditions;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
 import me.minotopia.expvp.api.handler.SkillHandler;
-import me.minotopia.expvp.api.handler.factory.CompoundHandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
@@ -24,17 +23,18 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public class MapCompoundHandlerFactory extends MultiHandlerSpecNode implements CompoundHandlerFactory {
+public class MapCompoundHandlerFactory<T extends HandlerFactory<R>, R extends SkillHandler>
+        extends MultiHandlerSpecNode<T, R> {
     public MapCompoundHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
     }
 
     @Override
-    public SkillHandler createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException {
+    public R createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException {
         Preconditions.checkNotNull(plugin, "plugin");
         Preconditions.checkNotNull(skill, "skill");
         String relativeSpec = findRelativeSpec(skill);
-        HandlerFactory factory = findChildOrFail(relativeSpec);
+        T factory = findChildOrFail(relativeSpec);
         return factory.createHandler(plugin, skill);
     }
 
@@ -46,7 +46,7 @@ public class MapCompoundHandlerFactory extends MultiHandlerSpecNode implements C
         return sb.toString();
     }
 
-    private void describeChild(StringBuilder sb, HandlerFactory factory) {
+    private void describeChild(StringBuilder sb, HandlerFactory<?> factory) {
         sb.append(" - ").append(getHandlerSpec()).append(HandlerFactoryGraph.SEPARATOR)
                 .append(factory.getHandlerSpec())
                 .append(" -> ").append(factory.getDescription());

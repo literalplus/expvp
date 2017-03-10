@@ -22,7 +22,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     @Test
     public void testRootLevelDispatch() throws Exception {
         //given
-        MapCompoundHandlerFactory factory = givenARootFactory();
+        TestHandlerFactory factory = givenARootFactory();
         factory.addChild(new NoopHandlerFactory(factory, "marc"));
         //when
         SkillHandler handler = factory.createHandler(plugin, skill("/marc/submarc"));
@@ -31,12 +31,12 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
         assertThat(handler, is(instanceOf(NoopSkillHandler.class)));
     }
 
-    private MapCompoundHandlerFactory givenARootFactory() {
+    private TestHandlerFactory givenARootFactory() {
         return givenACompoundFactory(null, "");
     }
 
-    private MapCompoundHandlerFactory givenACompoundFactory(HandlerSpecNode parent, String ownHandlerSpec) {
-        return new MapCompoundHandlerFactory(parent, ownHandlerSpec);
+    private TestHandlerFactory givenACompoundFactory(HandlerSpecNode parent, String ownHandlerSpec) {
+        return new TestHandlerFactory(parent, ownHandlerSpec);
     }
 
     private Skill skill(String handlerSpec) {
@@ -48,7 +48,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     @Test
     public void testNamedDispatch() throws Exception {
         //given
-        MapCompoundHandlerFactory factory = givenARootFactory();
+        TestHandlerFactory factory = givenARootFactory();
         factory.addChild(new NoopHandlerFactory(factory, "battery"));
         //when
         SkillHandler handler = factory.createHandler(plugin, skill("/battery/subbattery"));
@@ -60,9 +60,9 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     @Test
     public void testNestedDispatch() throws Exception {
         //given
-        MapCompoundHandlerFactory root = givenARootFactory();
-        MapCompoundHandlerFactory parent = givenACompoundFactory(root, "horse");
-        MapCompoundHandlerFactory child = givenACompoundFactory(parent, "battery");
+        TestHandlerFactory root = givenARootFactory();
+        TestHandlerFactory parent = givenACompoundFactory(root, "horse");
+        TestHandlerFactory child = givenACompoundFactory(parent, "battery");
         root.addChild(parent);
         parent.addChild(child);
         child.addChild(new NoopHandlerFactory(child, "staple"));
@@ -76,7 +76,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     @Test
     public void testMultiChildDispatch() throws Exception {
         //given
-        MapCompoundHandlerFactory factory = givenARootFactory();
+        TestHandlerFactory factory = givenARootFactory();
         factory.addChild(new NoopHandlerFactory(factory, "lit"));
         factory.addChild(new NoopHandlerFactory(factory, "hot"));
         //when
@@ -89,7 +89,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     @Test
     public void testFullHandlerSpec__root() throws Exception {
         //given
-        MapCompoundHandlerFactory factory = givenARootFactory();
+        TestHandlerFactory factory = givenARootFactory();
         //when
         String fullSpec = factory.getFullHandlerSpec();
         //then
@@ -99,8 +99,8 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
     @Test
     public void testFullHandlerSpec__child() throws Exception {
         //given
-        MapCompoundHandlerFactory root = givenARootFactory();
-        MapCompoundHandlerFactory child = givenACompoundFactory(root, "kek");
+        TestHandlerFactory root = givenARootFactory();
+        TestHandlerFactory child = givenACompoundFactory(root, "kek");
         //when
         String fullSpec = child.getFullHandlerSpec();
         //then

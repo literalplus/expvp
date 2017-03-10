@@ -9,9 +9,10 @@
 package me.minotopia.expvp.api.handler.kit.compilation;
 
 import me.minotopia.expvp.api.model.PlayerData;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Stores the mutable state of an ongoing kit compilation.
@@ -33,25 +34,14 @@ public interface KitCompilation {
     /**
      * @return the current state of the result, ready to be put into an inventory
      */
-    List<KitElement> getResult(); //TODO: clone elements; this is not the place i know but ill forget
+    Map<Integer, KitElement> getResult();
 
     /**
-     * @return the element the compilation is currently building, or null for none
+     * @param slotId the slot id to get the builder for
+     * @param type   the expected material for the builder
+     * @return the builder in given slot, or a new builder if there is a builder of a different type in given slot
      */
-    KitElementBuilder getCurrentElement();
-
-    /**
-     * @return the element the compilation is currently building
-     * @throws IllegalStateException if there is no current element
-     */
-    KitElementBuilder current();
-
-    /**
-     * Sets given element as the current element of this compilation.
-     *
-     * @param nextElement the next element
-     */
-    void next(KitElementBuilder nextElement);
+    KitElementBuilder slot(int slotId, Material type);
 
     /**
      * Returns whether this compilation is finished. Finished compilations may no longer be

@@ -10,6 +10,7 @@ package me.minotopia.expvp.api.handler.kit;
 
 import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
+import org.bukkit.Material;
 
 /**
  * A skill handler which mutates a player's kit during compilation.
@@ -24,7 +25,21 @@ public interface KitHandler extends SkillHandler {
      *
      * @param compilation the compilation to handle
      * @throws IllegalStateException if the compilation does not have a current element
-     * @see KitCompilation#current() for getting the current element with null check
      */
     void handle(KitCompilation compilation);
+
+    /**
+     * @return the amount of items this handler adds to the stack
+     */
+    int getAmount();
+
+    /**
+     * @return the type of items this handler adds to the stack
+     */
+    Material getType();
+
+    /**
+     * @return the slot id this handler handles items for
+     */
+    int getSlotId();
 }

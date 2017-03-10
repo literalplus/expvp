@@ -48,7 +48,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <xyc.version>4.4.0.4</xyc.version>
+        <xyc.version>4.4.0.5</xyc.version>
         <minecraft.version>1.8.8</minecraft.version>
         <spigot-api.release>R0.1</spigot-api.release>
         <rootDir>${project.basedir}</rootDir>
@@ -117,6 +117,12 @@
             <groupId>li.l1t.common</groupId>
             <artifactId>intake-spigot</artifactId>
             <version>${intake-spigot.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>li.l1t.common</groupId>
+                    <artifactId>xyc-api-spigot</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -125,11 +131,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>li.l1t.common</groupId>
-            <artifactId>xyc-1.8-bukkit</artifactId>
-            <version>${xyc.version}</version>
-        </dependency>
         <dependency>
             <groupId>li.l1t.common</groupId>
             <artifactId>xyc-1.8-games</artifactId>

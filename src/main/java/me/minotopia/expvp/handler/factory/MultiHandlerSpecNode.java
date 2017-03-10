@@ -10,6 +10,7 @@ package me.minotopia.expvp.handler.factory;
 
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
+import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.handler.factory.CompoundHandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
@@ -25,16 +26,17 @@ import java.util.Map;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-abstract class MultiHandlerSpecNode extends AbstractHandlerSpecNode implements CompoundHandlerFactory {
-    private final Map<String, HandlerFactory> children = new HashMap<>();
+abstract class MultiHandlerSpecNode<T extends HandlerFactory<? extends R>, R extends SkillHandler>
+        extends AbstractHandlerSpecNode implements CompoundHandlerFactory<T, R> {
+    private final Map<String, T> children = new HashMap<>();
 
     MultiHandlerSpecNode(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
     }
 
-    protected HandlerFactory findChildOrFail(String handlerSpec) throws InvalidHandlerSpecException {
+    protected T findChildOrFail(String handlerSpec) throws InvalidHandlerSpecException {
         String firstNodeId = findFirstNodeId(handlerSpec);
-        HandlerFactory child = children.get(firstNodeId);
+        T child = children.get(firstNodeId);
         if (child == null) {
             throw invalidSpecException("Unknown sub-spec", handlerSpec);
         }
@@ -51,13 +53,13 @@ abstract class MultiHandlerSpecNode extends AbstractHandlerSpecNode implements C
     }
 
     @Override
-    public void addChild(HandlerFactory child) {
+    public void addChild(T child) {
         Preconditions.checkNotNull(child, "child");
         children.put(child.getHandlerSpec(), child);
     }
 
     @Override
-    public Collection<HandlerFactory> getChildren() {
+    public Collection<T> getChildren() {
         return children.values();
     }
 }

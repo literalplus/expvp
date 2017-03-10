@@ -22,10 +22,9 @@ import org.bukkit.potion.PotionType;
  */
 public interface KitElementBuilder {
     /**
-     * Adds an integer to the amount of the resulting element. If the amount is currently zero,
-     * meaning that the item would not be added to the kit, and the given integer is also zero, the
-     * amount is set to one. This allows for not adding to the amount if the item is already marked
-     * for inclusion, but making sure it's getting included.
+     * Adds an integer to the amount of the resulting element. If given integer is zero, this method only makes sure
+     * that this element will be {@link #include() included in the kit}. This allows for not adding to the amount if the
+     * item is already marked for inclusion, but making sure it's getting included.
      *
      * @param toAdd the integer to add the the amount
      * @return this builder

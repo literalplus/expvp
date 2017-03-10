@@ -8,7 +8,10 @@
 
 package me.minotopia.expvp.api.handler;
 
+import me.minotopia.expvp.api.handler.factory.CompoundHandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
+import me.minotopia.expvp.api.handler.factory.KitHandlerFactory;
+import me.minotopia.expvp.api.handler.kit.KitHandler;
 
 /**
  * Represents the root node of a complete handler factory graph. The handler spec of the root node is an empty
@@ -42,4 +45,6 @@ public interface HandlerFactoryGraph extends HandlerSpecNode {
     default HandlerSpecNode getParent() {
         return null;
     }
+
+    CompoundHandlerFactory<KitHandlerFactory<KitHandler>, KitHandler> kits();
 }
