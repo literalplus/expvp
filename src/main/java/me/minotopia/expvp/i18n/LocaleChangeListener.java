@@ -13,6 +13,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.google.inject.Inject;
 import me.minotopia.expvp.EPPlugin;
+import org.bukkit.entity.Player;
 
 /**
  * Listens for locale changes and forwards them to the Internationalisation subsystem.
@@ -20,12 +21,12 @@ import me.minotopia.expvp.EPPlugin;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-07
  */
-public class LocaleChangeListener extends PacketAdapter {
+class LocaleChangeListener extends PacketAdapter {
     private final EPPlugin plugin;
     private final LocaleService localeService;
 
     @Inject
-    public LocaleChangeListener(EPPlugin plugin, LocaleService localeService) {
+    LocaleChangeListener(EPPlugin plugin, LocaleService localeService) {
         super(plugin, PacketType.Play.Client.SETTINGS);
         this.plugin = plugin;
         this.localeService = localeService;
@@ -33,6 +34,7 @@ public class LocaleChangeListener extends PacketAdapter {
 
     @Override
     public void onPacketReceiving(PacketEvent event) {
-        plugin.async(() -> localeService.recomputeClientLocale(event.getPlayer()));
+        Player player = event.getPlayer();
+        plugin.async(() -> localeService.recomputeClientLocale(player));
     }
 }

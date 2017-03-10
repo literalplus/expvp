@@ -9,7 +9,6 @@
 package me.minotopia.expvp;
 
 
-import com.comphenix.protocol.ProtocolLibrary;
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -18,7 +17,7 @@ import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.command.*;
 import me.minotopia.expvp.i18n.I18n;
-import me.minotopia.expvp.i18n.LocaleChangeListener;
+import me.minotopia.expvp.i18n.LocaleService;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
@@ -81,21 +80,19 @@ public class EPPlugin extends GenericXyPlugin {
             log.info("===== Hello, friend");
             log.info("Am " + getPluginVersion().toString());
 
-            //Set locale data folder
+            // Set locale data folder
             I18n.setDataFolder(new File(getDataFolder(), "lang"));
 
-            //Initialise Hibernate ORM
+            // Initialise Hibernate ORM
             this.sessionProvider = new SessionProvider(initHibernate(getClassLoader()));
 
-            //Init Dependency Injection
+            // Initialise Dependency Injection
             injector = Guice.createInjector(new EPRootModule(this), new CommandsModule());
 
-            //Packet listeners
-            ProtocolLibrary.getProtocolManager().addPacketListener(inject(LocaleChangeListener.class));
-
-            //Load skill trees and skills
-            skillManager = injector.getInstance(SkillManager.class);
-            skillTreeManager = injector.getInstance(SkillTreeManager.class);
+            // Start some services
+            inject(LocaleService.class).enable(this);
+            skillManager = inject(SkillManager.class);
+            skillTreeManager = inject(SkillTreeManager.class);
 
             // Register commands
             registerCommands();
@@ -135,7 +132,7 @@ public class EPPlugin extends GenericXyPlugin {
         commandsManager.registerCommand(inject(CommandEPAdmin.class), "epa");
         commandsManager.registerCommand(inject(CommandSkillTreeAdmin.class), "sta");
         commandsManager.registerCommand(inject(CommandSkillAdmin.class), "ska");
-        commandsManager.registerCommand(new CommandSkills(), "sk", "skills");
+        commandsManager.registerCommand(inject(CommandSkills.class), "sk", "skills");
     }
 
     public <T> T inject(Class<T> clazz) {

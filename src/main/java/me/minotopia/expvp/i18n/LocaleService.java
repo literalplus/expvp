@@ -8,8 +8,11 @@
 
 package me.minotopia.expvp.i18n;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import li.l1t.common.i18n.MinecraftLocale;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.ScopedSession;
@@ -17,7 +20,6 @@ import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 
 import java.util.Locale;
-import java.util.Optional;
 
 /**
  * Manages the locale preference of players from the database and receives notifications about changed client settings.
@@ -25,6 +27,7 @@ import java.util.Optional;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-07
  */
+@Singleton
 public class LocaleService {
     private final PlayerDataService players;
     private final SessionProvider sessionProvider;
@@ -35,34 +38,15 @@ public class LocaleService {
         this.sessionProvider = sessionProvider;
     }
 
-    /**
-     * Finds the preferred locale of given player, first looking for their explicitly preferred locale in the database,
-     * and if that's not set, uses the client locale of the player.
-     *
-     * @param player the player to operate on
-     * @return the preferred locale of given player
-     */
-    public Locale findPlayerLocale(Player player) {
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
-            Optional<? extends MutablePlayerData> data = players.findDataMutable(player.getUniqueId());
-            if (data.isPresent()) {
-                Locale locale = findLocale(player, data.get());
+    public void enable(EPPlugin plugin) {
+        plugin.getServer().getPluginManager().registerEvents(plugin.inject(LocaleJoinLeaveListener.class), plugin);
+        ProtocolLibrary.getProtocolManager().addPacketListener(plugin.inject(LocaleChangeListener.class));
+        plugin.async(() -> {
+            try (ScopedSession scoped = sessionProvider.scoped().join()) {
+                plugin.getServer().getOnlinePlayers().forEach(this::recomputeClientLocale);
                 scoped.commitIfLastAndChanged();
-                return locale;
-            } else {
-                return MinecraftLocale.toJava(player.spigot().getLocale());
             }
-        }
-    }
-
-    private Locale findLocale(Player player, MutablePlayerData playerData) {
-        if (playerData.hasCustomLocale()) {
-            return playerData.getLocale();
-        } else {
-            Locale clientLocale = MinecraftLocale.toJava(player.spigot().getLocale());
-            setLocaleIfDifferent(playerData, clientLocale);
-            return clientLocale;
-        }
+        });
     }
 
     /**
@@ -82,6 +66,7 @@ public class LocaleService {
                 locale = playerData.getLocale();
             }
             scoped.commitIfLastAndChanged();
+            I18n.setLocaleFor(player.getUniqueId(), locale);
             return locale;
         }
     }
