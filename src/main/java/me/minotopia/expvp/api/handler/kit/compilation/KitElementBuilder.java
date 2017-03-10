@@ -84,4 +84,14 @@ public interface KitElementBuilder {
      * @return the built element
      */
     KitElement build();
+
+    /**
+     * @return whether the item represented by this builder is supposed to be included in the kit
+     */
+    boolean isIncluded();
+
+    /**
+     * @return the integer id of the slot this element is in, as used by Minecraft
+     */
+    int getSlotId();
 }
