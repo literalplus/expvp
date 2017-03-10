@@ -80,7 +80,7 @@ public class I18n {
      * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
      */
     public static String loc(UUID senderId, String key, Object... args) {
-        return loc(localeCache.getOrDefault(senderId, Locale.getDefault()), key, args);
+        return loc(getLocaleFor(senderId), key, args);
     }
 
     /**
@@ -98,6 +98,14 @@ public class I18n {
 
     public static void setLocaleFor(UUID senderId, Locale locale) {
         localeCache.put(senderId, locale);
+    }
+
+    /**
+     * @param senderId the unique id of the command sender to retrieve the locale for
+     * @return the sender's preferred locale, or the system's default locale if none has been set
+     */
+    public static Locale getLocaleFor(UUID senderId) {
+        return localeCache.getOrDefault(senderId, Locale.getDefault());
     }
 
     public static void clearLocaleOf(UUID senderId) {

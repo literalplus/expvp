@@ -17,5 +17,5 @@ import me.minotopia.expvp.command.service.CommandService;
  * @since 2016-09-14
  */
 public interface ServiceBackedCommand<T extends CommandService> {
-    void setCommandService(T service);
+    T service();
 }

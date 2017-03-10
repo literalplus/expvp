@@ -8,13 +8,15 @@
 
 package me.minotopia.expvp.command.service;
 
+import com.google.inject.Inject;
 import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.inventory.SlotPosition;
-import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
+import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,12 +27,14 @@ import org.bukkit.inventory.ItemStack;
  * @since 2016-08-06
  */
 public class SkillTreeCommandService extends YamlManagerCommandService<SkillTree> {
-
-    public SkillTreeCommandService(SkillTreeManager manager, EPPlugin plugin) {
-        super(plugin, manager, "Skilltree");
+    @Inject
+    public SkillTreeCommandService(SkillTreeManager manager, SessionProvider sessionProvider,
+                                   PlayerDataService playerDataService, CommandsManager commandsManager) {
+        super(sessionProvider, playerDataService, manager, "Skilltree", commandsManager);
     }
 
-    public void registerInjections(CommandsManager commandsManager) {
+    @Override
+    protected void registerInjections(CommandsManager commandsManager) {
         commandsManager.bind(SkillTreeManager.class).toInstance(getManager());
         commandsManager.bind(SkillTreeCommandService.class).toInstance(this);
         commandsManager.bind(SkillTree.class).toProvider(new YamlObjectProvider<>(this));

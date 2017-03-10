@@ -8,6 +8,9 @@
 
 package me.minotopia.expvp.skilltree;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.yaml.AbstractYamlManager;
 import me.minotopia.expvp.yaml.YamlLoader;
@@ -20,17 +23,13 @@ import java.io.File;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-23
  */
+@Singleton
 public class SkillTreeManager extends AbstractYamlManager<SkillTree> {
-
     private final SkillManager skillManager;
 
-    /**
-     * Creates a new skill tree manager for a given directory.
-     *
-     * @param directory the directory where skill trees are stored
-     */
-    public SkillTreeManager(File directory, SkillManager skillManager) {
-        super(directory);
+    @Inject
+    SkillTreeManager(@DataFolder File dataFolder, SkillManager skillManager) {
+        super(new File(dataFolder, "skilltrees"));
         this.skillManager = skillManager;
         loadAll();
     }

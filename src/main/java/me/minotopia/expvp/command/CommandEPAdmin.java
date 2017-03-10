@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.command;
 
+import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.model.MutablePlayerData;
@@ -29,6 +30,12 @@ import java.util.stream.Collectors;
  * @since 2016-09-14
  */
 public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService> {
+
+    @Inject
+    CommandEPAdmin(CommandService commandService) {
+        super(commandService);
+    }
+
     @Command(aliases = "settp", min = 2,
             desc = "Setzt Talentpunkte",
             help = "Setzt die Talentpunkte\neines Spielers.",

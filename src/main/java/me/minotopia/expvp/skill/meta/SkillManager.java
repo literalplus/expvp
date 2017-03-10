@@ -9,7 +9,10 @@
 package me.minotopia.expvp.skill.meta;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import li.l1t.common.util.inventory.ItemStackFactory;
+import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.skilltree.SkillTreeNode;
 import me.minotopia.expvp.yaml.AbstractYamlManager;
@@ -26,17 +29,13 @@ import java.io.File;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
+@Singleton
 public class SkillManager extends AbstractYamlManager<Skill> {
     private final SkillObtainmentService obtainmentService;
 
-    /**
-     * Creates a new skill manager.
-     *
-     * @param skillDirectory    the directory to load skills from
-     * @param obtainmentService the service to get skill obtainment state from
-     */
-    public SkillManager(File skillDirectory, SkillObtainmentService obtainmentService) {
-        super(skillDirectory);
+    @Inject
+    public SkillManager(@DataFolder File dataFolder, SkillObtainmentService obtainmentService) {
+        super(new File(dataFolder, "skills"));
         this.obtainmentService = Preconditions.checkNotNull(obtainmentService, "obtainmentService");
         loadAll();
     }

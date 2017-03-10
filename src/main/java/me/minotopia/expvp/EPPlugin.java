@@ -11,27 +11,16 @@ package me.minotopia.expvp;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
-import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.service.SkillObtainmentService;
-import me.minotopia.expvp.command.CommandEPAdmin;
-import me.minotopia.expvp.command.CommandSkillAdmin;
-import me.minotopia.expvp.command.CommandSkillTreeAdmin;
-import me.minotopia.expvp.command.CommandSkills;
-import me.minotopia.expvp.command.ServiceBackedCommand;
-import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
-import me.minotopia.expvp.command.service.CommandService;
-import me.minotopia.expvp.command.service.SkillCommandService;
-import me.minotopia.expvp.command.service.SkillTreeCommandService;
+import me.minotopia.expvp.command.*;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.LocaleChangeListener;
-import me.minotopia.expvp.i18n.LocaleService;
 import me.minotopia.expvp.logging.LoggingManager;
-import me.minotopia.expvp.player.HibernatePlayerDataService;
 import me.minotopia.expvp.skill.meta.SkillManager;
-import me.minotopia.expvp.skill.obtainment.CostCheckingObtainmentService;
-import me.minotopia.expvp.skill.obtainment.SimpleSkillObtainmentService;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.util.SessionProvider;
 import org.apache.logging.log4j.Level;
@@ -50,7 +39,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -65,9 +53,8 @@ public class EPPlugin extends GenericXyPlugin {
     private SessionProvider sessionProvider;
     private SkillTreeManager skillTreeManager;
     private SkillManager skillManager;
-    private CommandsManager commandsManager;
-    private PlayerDataService playerDataService;
     private SkillObtainmentService obtainmentService;
+    private Injector injector;
 
     public EPPlugin() {
 
@@ -98,23 +85,17 @@ public class EPPlugin extends GenericXyPlugin {
             I18n.setDataFolder(new File(getDataFolder(), "lang"));
 
             //Initialise Hibernate ORM
-            SessionFactory sessionFactory = initHibernate(getClassLoader());
-            this.sessionProvider = new SessionProvider(sessionFactory);
+            this.sessionProvider = new SessionProvider(initHibernate(getClassLoader()));
 
-            //Instantiate services
-            playerDataService = new HibernatePlayerDataService(sessionProvider);
-            obtainmentService = new CostCheckingObtainmentService(
-                    new SimpleSkillObtainmentService(playerDataService),
-                    playerDataService, sessionProvider
-            );
-            LocaleService localeService = new LocaleService(playerDataService, sessionProvider);
+            //Init Dependency Injection
+            injector = Guice.createInjector(new EPRootModule(this), new CommandsModule());
 
             //Packet listeners
-            ProtocolLibrary.getProtocolManager().addPacketListener(new LocaleChangeListener(this, localeService));
+            ProtocolLibrary.getProtocolManager().addPacketListener(inject(LocaleChangeListener.class));
 
             //Load skill trees and skills
-            skillManager = new SkillManager(new File(getDataFolder(), "skills"), obtainmentService);
-            skillTreeManager = new SkillTreeManager(new File(getDataFolder(), "skilltrees"), skillManager);
+            skillManager = injector.getInstance(SkillManager.class);
+            skillTreeManager = injector.getInstance(SkillTreeManager.class);
 
             // Register commands
             registerCommands();
@@ -150,26 +131,15 @@ public class EPPlugin extends GenericXyPlugin {
     }
 
     private void registerCommands() {
-        commandsManager = new CommandsManager(this);
-        commandsManager.setLocale(Locale.GERMAN);
-        commandsManager.getBuilder().addInvokeListener(new EnumPermissionInvokeListener());
-        registerInjections();
-        registerCommand(new CommandSkillAdmin(), new SkillCommandService(skillManager, this), "ska");
-        registerCommand(new CommandSkillTreeAdmin(), new SkillTreeCommandService(skillTreeManager, this), "sta");
-        registerCommand(new CommandEPAdmin(), new CommandService(this), "epa");
+        CommandsManager commandsManager = inject(CommandsManager.class);
+        commandsManager.registerCommand(inject(CommandEPAdmin.class), "epa");
+        commandsManager.registerCommand(inject(CommandSkillTreeAdmin.class), "sta");
+        commandsManager.registerCommand(inject(CommandSkillAdmin.class), "ska");
         commandsManager.registerCommand(new CommandSkills(), "sk", "skills");
     }
 
-    private <S extends CommandService> void registerCommand(ServiceBackedCommand<S> command,
-                                                            S service, String name, String... aliases) {
-        service.registerInjections(commandsManager);
-        command.setCommandService(service);
-        commandsManager.registerCommand(command, name, aliases);
-    }
-
-    private void registerInjections() {
-        commandsManager.bind(SessionProvider.class).toInstance(sessionProvider);
-        commandsManager.bind(PlayerDataService.class).toInstance(playerDataService);
+    public <T> T inject(Class<T> clazz) {
+        return injector.getInstance(clazz);
     }
 
     SessionFactory initHibernate(ClassLoader classLoader) throws IOException { //TODO: Querydsl
@@ -255,14 +225,6 @@ public class EPPlugin extends GenericXyPlugin {
         if (log != null) {
             log.log(level, message);
         }
-    }
-
-    public CommandsManager getCommandsManager() {
-        return commandsManager;
-    }
-
-    public PlayerDataService getPlayerDataService() {
-        return playerDataService;
     }
 
     public SkillObtainmentService getSkillObtainmentService() {

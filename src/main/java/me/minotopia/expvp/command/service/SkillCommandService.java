@@ -8,11 +8,13 @@
 
 package me.minotopia.expvp.command.service;
 
+import com.google.inject.Inject;
 import li.l1t.common.intake.CommandsManager;
-import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
+import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,12 +25,14 @@ import org.bukkit.inventory.ItemStack;
  * @since 2016-08-06
  */
 public class SkillCommandService extends YamlManagerCommandService<Skill> {
-
-    public SkillCommandService(SkillManager skillManager, EPPlugin plugin) {
-        super(plugin, skillManager, "Skill");
+    @Inject
+    public SkillCommandService(SkillManager skillManager, PlayerDataService playerDataService,
+                               SessionProvider sessionProvider, CommandsManager commandsManager) {
+        super(sessionProvider, playerDataService, skillManager, "Skill", commandsManager);
+        registerInjections(commandsManager);
     }
 
-    public void registerInjections(CommandsManager commandsManager) {
+    protected void registerInjections(CommandsManager commandsManager) {
         commandsManager.bind(SkillManager.class).toInstance(getManager());
         commandsManager.bind(SkillCommandService.class).toInstance(this);
         commandsManager.bind(Skill.class).toProvider(new YamlObjectProvider<>(this));

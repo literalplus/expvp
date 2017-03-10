@@ -9,6 +9,8 @@
 package me.minotopia.expvp.skill.obtainment;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import li.l1t.common.exception.UserException;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
@@ -26,9 +28,11 @@ import java.util.stream.Collectors;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-07
  */
+@Singleton
 public class SimpleSkillObtainmentService implements SkillObtainmentService {
     private final PlayerDataService playerDataService;
 
+    @Inject
     public SimpleSkillObtainmentService(PlayerDataService playerDataService) {
         this.playerDataService = playerDataService;
     }

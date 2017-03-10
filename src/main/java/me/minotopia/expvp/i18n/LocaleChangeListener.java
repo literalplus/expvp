@@ -11,6 +11,7 @@ package me.minotopia.expvp.i18n;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.google.inject.Inject;
 import me.minotopia.expvp.EPPlugin;
 
 /**
@@ -23,6 +24,7 @@ public class LocaleChangeListener extends PacketAdapter {
     private final EPPlugin plugin;
     private final LocaleService localeService;
 
+    @Inject
     public LocaleChangeListener(EPPlugin plugin, LocaleService localeService) {
         super(plugin, PacketType.Play.Client.SETTINGS);
         this.plugin = plugin;

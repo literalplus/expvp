@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.player;
+package me.minotopia.expvp.model.player;
 
 import me.minotopia.expvp.HibernateAwareTest;
 import me.minotopia.expvp.api.model.PlayerData;

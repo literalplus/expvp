@@ -10,8 +10,10 @@ package me.minotopia.expvp.command.service;
 
 import li.l1t.common.exception.InternalException;
 import li.l1t.common.exception.UserException;
-import me.minotopia.expvp.EPPlugin;
+import li.l1t.common.intake.CommandsManager;
 import me.minotopia.expvp.api.Nameable;
+import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.util.SessionProvider;
 import me.minotopia.expvp.yaml.YamlManager;
 import org.bukkit.command.CommandSender;
 
@@ -27,8 +29,9 @@ public class YamlManagerCommandService<T extends Nameable> extends CommandServic
     protected final YamlManager<T> manager;
     private String objectTypeName;
 
-    YamlManagerCommandService(EPPlugin plugin, YamlManager<T> manager, String objectTypeName) {
-        super(plugin);
+    YamlManagerCommandService(SessionProvider sessionProvider, PlayerDataService playerDataService,
+                              YamlManager<T> manager, String objectTypeName, CommandsManager commandsManager) {
+        super(sessionProvider, playerDataService, commandsManager);
         this.manager = manager;
         this.objectTypeName = objectTypeName;
     }
@@ -48,7 +51,7 @@ public class YamlManagerCommandService<T extends Nameable> extends CommandServic
         return manager.create(id);
     }
 
-    public void assureThereIsNoObjectWithId(String id) {
+    private void assureThereIsNoObjectWithId(String id) {
         if (manager.contains(id)) {
             throw new UserException(String.format(
                     "Es gibt bereits einen " + objectTypeName + " mit der ID '%s'!",

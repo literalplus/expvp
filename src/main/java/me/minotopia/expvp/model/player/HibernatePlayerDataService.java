@@ -6,9 +6,11 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.player;
+package me.minotopia.expvp.model.player;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
@@ -25,9 +27,11 @@ import java.util.UUID;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-14
  */
+@Singleton
 public class HibernatePlayerDataService implements PlayerDataService {
     private final SessionProvider sessionProvider;
 
+    @Inject
     public HibernatePlayerDataService(SessionProvider sessionProvider) {
         this.sessionProvider = Preconditions.checkNotNull(sessionProvider, "sessionProvider");
     }

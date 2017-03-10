@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.i18n;
 
+import com.google.inject.Inject;
 import li.l1t.common.i18n.MinecraftLocale;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
@@ -28,6 +29,7 @@ public class LocaleService {
     private final PlayerDataService players;
     private final SessionProvider sessionProvider;
 
+    @Inject
     public LocaleService(PlayerDataService players, SessionProvider sessionProvider) {
         this.players = players;
         this.sessionProvider = sessionProvider;

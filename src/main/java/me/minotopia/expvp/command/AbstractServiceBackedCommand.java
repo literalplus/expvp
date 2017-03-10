@@ -17,16 +17,15 @@ import me.minotopia.expvp.command.service.CommandService;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public class AbstractServiceBackedCommand<T extends CommandService> implements ServiceBackedCommand<T> {
+public class AbstractServiceBackedCommand<T extends CommandService> implements ServiceBackedCommand {
     private T commandService;
 
-    @Override
-    public void setCommandService(T commandService) {
-        this.commandService = commandService;
+    protected AbstractServiceBackedCommand(T commandService) {
+        this.commandService = Preconditions.checkNotNull(commandService, "commandService");
     }
 
+    @Override
     public T service() {
-        Preconditions.checkNotNull(commandService, "commandService");
         return commandService;
     }
 }

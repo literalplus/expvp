@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.command;
 
+import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.intake.provider.annotation.Colored;
@@ -34,6 +35,11 @@ import java.io.IOException;
  * @since 2016-07-23
  */
 public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillCommandService> {
+    @Inject
+    protected CommandSkillAdmin(SkillCommandService commandService) {
+        super(commandService);
+    }
+
     @Override
     public String getObjectTypeName() {
         return "Skill";

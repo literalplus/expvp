@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.command;
 
+import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.chat.ComponentSender;
@@ -39,6 +40,10 @@ import java.io.IOException;
  * @since 2016-07-23
  */
 public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, SkillTreeCommandService> {
+    @Inject
+    CommandSkillTreeAdmin(SkillTreeCommandService commandService) {
+        super(commandService);
+    }
 
     @Override
     public String getObjectTypeName() {

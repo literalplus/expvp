@@ -141,6 +141,11 @@
             <version>2.4.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.1.0</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -228,6 +233,35 @@
                     <systemPropertyVariables>
                         <xyc.unittest>true</xyc.unittest>
                     </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+
+                <executions>
+                    <execution>
+                        <id>bukkit-shade</id>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <artifactSet>
+                        <includes>
+                            <include>me.minotopia:expvp</include>
+                            <include>com.google.inject:guice</include>
+                        </includes>
+                    </artifactSet>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.google.inject</pattern>
+                            <shadedPattern>li.l1t.lib.guice</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
             </plugin>
         </plugins>

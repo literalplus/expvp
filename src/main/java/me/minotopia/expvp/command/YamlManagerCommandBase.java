@@ -22,6 +22,10 @@ import java.io.IOException;
  */
 abstract class YamlManagerCommandBase<T extends Nameable, S extends YamlManagerCommandService<T>>
         extends AbstractServiceBackedCommand<S> {
+    protected YamlManagerCommandBase(S commandService) {
+        super(commandService);
+    }
+
     public abstract String getObjectTypeName();
 
     void createNew(CommandSender sender,
