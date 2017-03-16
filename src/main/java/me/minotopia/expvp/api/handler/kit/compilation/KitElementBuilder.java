@@ -9,7 +9,6 @@
 package me.minotopia.expvp.api.handler.kit.compilation;
 
 import li.l1t.common.util.inventory.ItemStackFactory;
-import me.minotopia.expvp.api.handler.kit.KitSlot;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
@@ -54,8 +53,7 @@ public interface KitElementBuilder {
     KitElementBuilder withEnchantment(Enchantment enchantment, int level);
 
     /**
-     * Causes this builder to build a potion instead of the type of item specified by the {@link
-     * KitSlot item type}. Uses given potion type and level. If there is already a different
+     * Causes this builder to build a potion. Uses given potion type and level. If there is already a different
      * potion type set on this item, it will be overridden. If given type is already set on this
      * builder with an equal or higher level, it will not be modified. If it has a lower level, it
      * will be overridden.
