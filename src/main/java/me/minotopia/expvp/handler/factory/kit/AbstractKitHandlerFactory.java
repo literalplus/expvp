@@ -25,10 +25,14 @@ import org.bukkit.Material;
  * @since 2017-03-10
  */
 public abstract class AbstractKitHandlerFactory<R extends KitHandler> extends AbstractHandlerSpecNode
-        implements KitHandlerFactory<R> {
-    private static int SLOT_ID_INDEX = 0;
-    private static int MATERIAL_INDEX = 1;
-    private static int AMOUNT_INDEX = 2;
+        implements KitHandlerFactory {
+    public static int SLOT_ID_INDEX = 0;
+    public static int MATERIAL_INDEX = 1;
+    public static int AMOUNT_INDEX = 2;
+
+    public AbstractKitHandlerFactory(String ownHandlerSpec) {
+        super(ownHandlerSpec);
+    }
 
     public AbstractKitHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);

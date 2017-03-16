@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.handler.factory;
 
-import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 
@@ -18,7 +17,7 @@ import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-10
  */
-public class TestHandlerFactory extends MapCompoundHandlerFactory<HandlerFactory<SkillHandler>, SkillHandler> {
+public class TestHandlerFactory extends MapCompoundHandlerFactory<HandlerFactory> {
     public TestHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
     }

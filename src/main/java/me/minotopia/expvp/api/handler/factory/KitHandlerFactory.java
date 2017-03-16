@@ -18,7 +18,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-10
  */
-public interface KitHandlerFactory<R extends KitHandler> extends HandlerFactory<R> {
+public interface KitHandlerFactory extends HandlerFactory {
     @Override
-    R createHandler(EPPlugin plugin, Skill skill);
+    KitHandler createHandler(EPPlugin plugin, Skill skill);
 }

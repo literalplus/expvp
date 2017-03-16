@@ -23,14 +23,18 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public class MapCompoundHandlerFactory<T extends HandlerFactory<R>, R extends SkillHandler>
-        extends MultiHandlerSpecNode<T, R> {
+public class MapCompoundHandlerFactory<T extends HandlerFactory>
+        extends MultiHandlerSpecNode<T, SkillHandler> {
+    public MapCompoundHandlerFactory(String ownHandlerSpec) {
+        super(ownHandlerSpec);
+    }
+
     public MapCompoundHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
     }
 
     @Override
-    public R createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException {
+    public SkillHandler createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException {
         Preconditions.checkNotNull(plugin, "plugin");
         Preconditions.checkNotNull(skill, "skill");
         String relativeSpec = findRelativeSpec(skill);
@@ -46,7 +50,7 @@ public class MapCompoundHandlerFactory<T extends HandlerFactory<R>, R extends Sk
         return sb.toString();
     }
 
-    private void describeChild(StringBuilder sb, HandlerFactory<?> factory) {
+    private void describeChild(StringBuilder sb, HandlerFactory factory) {
         sb.append(" - ").append(getHandlerSpec()).append(HandlerFactoryGraph.SEPARATOR)
                 .append(factory.getHandlerSpec())
                 .append(" -> ").append(factory.getDescription());

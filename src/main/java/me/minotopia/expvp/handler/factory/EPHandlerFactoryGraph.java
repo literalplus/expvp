@@ -8,10 +8,9 @@
 
 package me.minotopia.expvp.handler.factory;
 
+import com.google.inject.Inject;
 import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
-import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
-import me.minotopia.expvp.api.handler.kit.KitHandler;
 import me.minotopia.expvp.handler.factory.kit.CompoundKitHandlerFactory;
 
 /**
@@ -20,17 +19,20 @@ import me.minotopia.expvp.handler.factory.kit.CompoundKitHandlerFactory;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-02-21
  */
-public class EPHandlerFactoryGraph
-        extends MapCompoundHandlerFactory<HandlerFactory<SkillHandler>, SkillHandler> implements HandlerFactoryGraph {
-    private CompoundKitHandlerFactory<KitHandler> rootKitFactory;
+public class EPHandlerFactoryGraph extends MapCompoundHandlerFactory<HandlerFactory>
+        implements HandlerFactoryGraph {
+    private CompoundKitHandlerFactory rootKitFactory;
 
-    public EPHandlerFactoryGraph() {
+    @Inject
+    public EPHandlerFactoryGraph(HandlerFactoryWiring wiring) {
         super(null, "");
-        rootKitFactory = new CompoundKitHandlerFactory<>(this, "kit");
+        rootKitFactory = new CompoundKitHandlerFactory(this, "kit");
+        addChild(rootKitFactory);
+        wiring.wire(this);
     }
 
     @Override
-    public CompoundKitHandlerFactory<KitHandler> kits() {
+    public CompoundKitHandlerFactory kits() {
         return rootKitFactory;
     }
 }

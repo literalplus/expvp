@@ -26,12 +26,16 @@ import java.util.Map;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-abstract class MultiHandlerSpecNode<T extends HandlerFactory<? extends R>, R extends SkillHandler>
+abstract class MultiHandlerSpecNode<T extends HandlerFactory, R extends SkillHandler>
         extends AbstractHandlerSpecNode implements CompoundHandlerFactory<T, R> {
     private final Map<String, T> children = new HashMap<>();
 
     MultiHandlerSpecNode(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
+    }
+
+    MultiHandlerSpecNode(String ownHandlerSpec) {
+        this(null, ownHandlerSpec);
     }
 
     protected T findChildOrFail(String handlerSpec) throws InvalidHandlerSpecException {
@@ -53,8 +57,9 @@ abstract class MultiHandlerSpecNode<T extends HandlerFactory<? extends R>, R ext
     }
 
     @Override
-    public void addChild(T child) {
+    public <F extends T> void addChild(F child) {
         Preconditions.checkNotNull(child, "child");
+        child.setParent(this);
         children.put(child.getHandlerSpec(), child);
     }
 

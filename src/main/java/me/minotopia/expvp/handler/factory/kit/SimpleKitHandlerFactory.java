@@ -20,6 +20,9 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @since 2017-03-10
  */
 public class SimpleKitHandlerFactory extends AbstractKitHandlerFactory<SimpleKitHandler> {
+    public SimpleKitHandlerFactory(String ownHandlerSpec) {
+        super(ownHandlerSpec);
+    }
 
     public SimpleKitHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);

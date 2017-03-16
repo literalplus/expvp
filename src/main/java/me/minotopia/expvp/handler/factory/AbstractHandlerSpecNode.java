@@ -27,16 +27,25 @@ import java.util.stream.Collectors;
  * @since 2017-02-23
  */
 public class AbstractHandlerSpecNode implements HandlerSpecNode {
-    private final HandlerSpecNode parent;
     private final String ownHandlerSpec;
+    private HandlerSpecNode parent;
 
     public AbstractHandlerSpecNode(HandlerSpecNode parent, String ownHandlerSpec) {
         this.parent = parent;
         this.ownHandlerSpec = Preconditions.checkNotNull(ownHandlerSpec, "ownHandlerSpec");
     }
 
+    public AbstractHandlerSpecNode(String ownHandlerSpec) {
+        this(null, ownHandlerSpec);
+    }
+
     public String getHandlerSpec() {
         return ownHandlerSpec;
+    }
+
+    @Override
+    public void setParent(HandlerSpecNode parent) {
+        this.parent = parent;
     }
 
     public HandlerSpecNode getParent() {

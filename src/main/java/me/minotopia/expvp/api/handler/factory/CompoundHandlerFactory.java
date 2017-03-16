@@ -19,14 +19,14 @@ import java.util.Collection;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public interface CompoundHandlerFactory<T extends HandlerFactory<? extends R>, R extends SkillHandler>
-        extends HandlerFactory<R> {
+public interface CompoundHandlerFactory<T extends HandlerFactory, R extends SkillHandler>
+        extends HandlerFactory {
     /**
      * Registers a handler factory as a child of this compound factory.
      *
      * @param child the child to register
      */
-    void addChild(T child);
+    <F extends T> void addChild(F child);
 
     /**
      * @return the collection of this factory's children

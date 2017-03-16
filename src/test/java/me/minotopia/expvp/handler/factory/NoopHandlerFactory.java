@@ -21,7 +21,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-class NoopHandlerFactory extends MultiHandlerSpecNode<HandlerFactory<SkillHandler>, SkillHandler> {
+class NoopHandlerFactory extends MultiHandlerSpecNode<HandlerFactory, SkillHandler> {
     NoopHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
         super(parent, ownHandlerSpec);
     }

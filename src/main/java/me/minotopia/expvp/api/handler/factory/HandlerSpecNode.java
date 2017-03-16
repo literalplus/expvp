@@ -26,6 +26,11 @@ public interface HandlerSpecNode {
     String getHandlerSpec();
 
     /**
+     * @param parent the immediate parent node of this node, or null if this is the root node
+     */
+    void setParent(HandlerSpecNode parent);
+
+    /**
      * @return the immediate parent node of this node, or null if this is the root node
      */
     HandlerSpecNode getParent();
