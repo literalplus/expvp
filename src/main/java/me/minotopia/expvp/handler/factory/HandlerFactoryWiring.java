@@ -9,6 +9,7 @@
 package me.minotopia.expvp.handler.factory;
 
 import me.minotopia.expvp.handler.factory.kit.EnchantKitHandlerFactory;
+import me.minotopia.expvp.handler.factory.kit.NotchAppleKitHandlerFactory;
 import me.minotopia.expvp.handler.factory.kit.PotionKitHandlerFactory;
 import me.minotopia.expvp.handler.factory.kit.SimpleKitHandlerFactory;
 
@@ -23,5 +24,6 @@ public class HandlerFactoryWiring {
         graph.kits().addChild(new SimpleKitHandlerFactory("simple"));
         graph.kits().addChild(new EnchantKitHandlerFactory("ench"));
         graph.kits().addChild(new PotionKitHandlerFactory("potion"));
+        graph.kits().addChild(new NotchAppleKitHandlerFactory("notch"));
     }
 }
