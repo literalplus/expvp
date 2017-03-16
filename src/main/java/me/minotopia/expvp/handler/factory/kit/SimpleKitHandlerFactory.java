@@ -9,7 +9,6 @@
 package me.minotopia.expvp.handler.factory.kit;
 
 import me.minotopia.expvp.EPPlugin;
-import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.handler.kit.SimpleKitHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -22,10 +21,6 @@ import me.minotopia.expvp.skill.meta.Skill;
 public class SimpleKitHandlerFactory extends AbstractKitHandlerFactory<SimpleKitHandler> {
     public SimpleKitHandlerFactory(String ownHandlerSpec) {
         super(ownHandlerSpec);
-    }
-
-    public SimpleKitHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
-        super(parent, ownHandlerSpec);
     }
 
     @Override

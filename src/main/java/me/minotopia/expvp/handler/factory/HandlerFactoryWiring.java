@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.handler.factory;
 
+import me.minotopia.expvp.handler.factory.kit.EnchantKitHandlerFactory;
 import me.minotopia.expvp.handler.factory.kit.SimpleKitHandlerFactory;
 
 /**
@@ -19,5 +20,6 @@ import me.minotopia.expvp.handler.factory.kit.SimpleKitHandlerFactory;
 public class HandlerFactoryWiring {
     public void wire(EPHandlerFactoryGraph graph) {
         graph.kits().addChild(new SimpleKitHandlerFactory("simple"));
+        graph.kits().addChild(new EnchantKitHandlerFactory("ench"));
     }
 }
