@@ -35,10 +35,10 @@ public class EnchantKitHandlerFactory extends AbstractKitHandlerFactory<EnchantK
 
     @Override
     protected EnchantKitHandler createHandler(EPPlugin plugin, Skill skill, KitArgs args) {
-        return new EnchantKitHandler(skill, slotId(args), material(args), enchantment(args, skill), level(args));
+        return new EnchantKitHandler(skill, slotId(args), material(args), enchantment(args), level(args));
     }
 
-    private Enchantment enchantment(KitArgs args, Skill skill) {
+    private Enchantment enchantment(KitArgs args) {
         String enchantmentName = args.arg(ENCHANTMENT_INDEX).toLowerCase().replaceAll("[ -]", "_");
         Enchantment enchantment = Enchantment.getByName(enchantmentName);
         if (enchantment == null) {
