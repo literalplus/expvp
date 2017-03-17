@@ -42,12 +42,4 @@ public interface KitCompilation {
      * @return the builder in given slot, or a new builder if there is a builder of a different type in given slot
      */
     KitElementBuilder slot(int slotId, Material type);
-
-    /**
-     * Returns whether this compilation is finished. Finished compilations may no longer be
-     * modified.
-     *
-     * @return whether this compilation is finished
-     */
-    boolean isFinished();
 }
