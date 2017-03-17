@@ -25,7 +25,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
         TestHandlerFactory factory = givenARootFactory();
         factory.addChild(new NoopHandlerFactory(factory, "marc"));
         //when
-        SkillHandler handler = factory.createHandler(plugin, skill("/marc/submarc"));
+        SkillHandler handler = factory.createHandler(skill("/marc/submarc"));
         //then
         assertThat(handler, is(not(nullValue())));
         assertThat(handler, is(instanceOf(NoopSkillHandler.class)));
@@ -51,7 +51,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
         TestHandlerFactory factory = givenARootFactory();
         factory.addChild(new NoopHandlerFactory(factory, "battery"));
         //when
-        SkillHandler handler = factory.createHandler(plugin, skill("/battery/subbattery"));
+        SkillHandler handler = factory.createHandler(skill("/battery/subbattery"));
         //then
         assertThat(handler, is(not(nullValue())));
         assertThat(handler, is(instanceOf(NoopSkillHandler.class)));
@@ -67,7 +67,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
         parent.addChild(child);
         child.addChild(new NoopHandlerFactory(child, "staple"));
         //when
-        SkillHandler handler = root.createHandler(plugin, skill("/horse/battery/staple/substaple"));
+        SkillHandler handler = root.createHandler(skill("/horse/battery/staple/substaple"));
         //then
         assertThat(handler, is(not(nullValue())));
         assertThat(handler, is(instanceOf(NoopSkillHandler.class)));
@@ -80,7 +80,7 @@ public class MapCompoundHandlerFactoryTest extends EPPluginAwareTest {
         factory.addChild(new NoopHandlerFactory(factory, "lit"));
         factory.addChild(new NoopHandlerFactory(factory, "hot"));
         //when
-        SkillHandler handler = factory.createHandler(plugin, skill("/lit/sublit"));
+        SkillHandler handler = factory.createHandler(skill("/lit/sublit"));
         //then
         assertThat(handler, is(not(nullValue())));
         assertThat(handler, is(instanceOf(NoopSkillHandler.class)));

@@ -10,6 +10,7 @@ package me.minotopia.expvp;
 
 import com.google.inject.AbstractModule;
 import me.minotopia.expvp.api.inject.DataFolder;
+import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.model.ModelModule;
 import me.minotopia.expvp.skill.SkillModule;
 import me.minotopia.expvp.skilltree.SkillTreeModule;
@@ -43,5 +44,6 @@ public class EPRootModule extends AbstractModule {
         install(new ModelModule());
         install(new SkillModule());
         install(new SkillTreeModule());
+        install(new HandlerModule());
     }
 }

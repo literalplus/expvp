@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.handler.factory.kit;
 
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.handler.kit.PotionKitHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.bukkit.potion.PotionType;
@@ -33,7 +32,7 @@ public class PotionKitHandlerFactory extends AbstractKitHandlerFactory<PotionKit
     }
 
     @Override
-    protected PotionKitHandler createHandler(EPPlugin plugin, Skill skill, KitArgs args) {
+    protected PotionKitHandler createHandler(Skill skill, KitArgs args) {
         return new PotionKitHandler(skill, slotId(args), material(args), amount(args), potionType(args), level(args));
     }
 

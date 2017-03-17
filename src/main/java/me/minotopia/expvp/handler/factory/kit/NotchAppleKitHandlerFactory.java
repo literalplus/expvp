@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.handler.factory.kit;
 
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.handler.kit.NotchAppleKitHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -29,7 +28,7 @@ public class NotchAppleKitHandlerFactory extends AbstractKitHandlerFactory<Notch
     }
 
     @Override
-    protected NotchAppleKitHandler createHandler(EPPlugin plugin, Skill skill, KitArgs args) {
+    protected NotchAppleKitHandler createHandler(Skill skill, KitArgs args) {
         return new NotchAppleKitHandler(skill, slotId(args), amount(args));
     }
 

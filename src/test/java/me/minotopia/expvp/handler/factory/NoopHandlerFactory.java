@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.handler.factory;
 
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
@@ -32,7 +31,7 @@ class NoopHandlerFactory extends MultiHandlerSpecNode<HandlerFactory, SkillHandl
     }
 
     @Override
-    public SkillHandler createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException {
+    public SkillHandler createHandler(Skill skill) throws InvalidHandlerSpecException {
         return new NoopSkillHandler(skill);
     }
 }

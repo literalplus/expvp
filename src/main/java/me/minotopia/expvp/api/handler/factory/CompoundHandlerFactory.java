@@ -8,8 +8,6 @@
 
 package me.minotopia.expvp.api.handler.factory;
 
-import me.minotopia.expvp.api.handler.SkillHandler;
-
 import java.util.Collection;
 
 /**
@@ -19,8 +17,7 @@ import java.util.Collection;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
-public interface CompoundHandlerFactory<T extends HandlerFactory, R extends SkillHandler>
-        extends HandlerFactory {
+public interface CompoundHandlerFactory<T extends HandlerFactory> extends HandlerFactory {
     /**
      * Registers a handler factory as a child of this compound factory.
      *

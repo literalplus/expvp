@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.api.handler.factory;
 
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.kit.KitHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -20,5 +19,5 @@ import me.minotopia.expvp.skill.meta.Skill;
  */
 public interface KitHandlerFactory extends HandlerFactory {
     @Override
-    KitHandler createHandler(EPPlugin plugin, Skill skill);
+    KitHandler createHandler(Skill skill);
 }

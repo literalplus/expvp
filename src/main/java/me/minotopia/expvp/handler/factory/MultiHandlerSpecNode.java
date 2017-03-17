@@ -27,7 +27,7 @@ import java.util.Map;
  * @since 2016-09-14
  */
 abstract class MultiHandlerSpecNode<T extends HandlerFactory, R extends SkillHandler>
-        extends AbstractHandlerSpecNode implements CompoundHandlerFactory<T, R> {
+        extends AbstractHandlerSpecNode implements CompoundHandlerFactory<T> {
     private final Map<String, T> children = new HashMap<>();
 
     MultiHandlerSpecNode(HandlerSpecNode parent, String ownHandlerSpec) {

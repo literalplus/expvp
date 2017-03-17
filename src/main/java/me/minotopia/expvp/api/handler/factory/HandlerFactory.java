@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.api.handler.factory;
 
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -29,9 +28,8 @@ public interface HandlerFactory extends HandlerSpecNode {
     /**
      * Creates a new handler by given handler spec.
      *
-     * @param plugin      the plugin creating the handler
      * @param skill       the skill the handler is going to handle
      * @return the created handler
      */
-    SkillHandler createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException;
+    SkillHandler createHandler(Skill skill) throws InvalidHandlerSpecException;
 }

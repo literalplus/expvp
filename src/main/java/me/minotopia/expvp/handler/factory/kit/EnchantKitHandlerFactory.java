@@ -9,7 +9,6 @@
 package me.minotopia.expvp.handler.factory.kit;
 
 import li.l1t.common.string.ArgumentFormatException;
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.handler.kit.EnchantKitHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.bukkit.enchantments.Enchantment;
@@ -34,7 +33,7 @@ public class EnchantKitHandlerFactory extends AbstractKitHandlerFactory<EnchantK
     }
 
     @Override
-    protected EnchantKitHandler createHandler(EPPlugin plugin, Skill skill, KitArgs args) {
+    protected EnchantKitHandler createHandler(Skill skill, KitArgs args) {
         return new EnchantKitHandler(skill, slotId(args), material(args), enchantment(args), level(args));
     }
 

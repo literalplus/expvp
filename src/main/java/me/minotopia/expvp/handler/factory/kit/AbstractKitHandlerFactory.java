@@ -9,7 +9,6 @@
 package me.minotopia.expvp.handler.factory.kit;
 
 import li.l1t.common.string.ArgumentFormatException;
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
 import me.minotopia.expvp.api.handler.factory.KitHandlerFactory;
@@ -39,10 +38,10 @@ public abstract class AbstractKitHandlerFactory<R extends KitHandler> extends Ab
     }
 
     @Override
-    public R createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException {
+    public R createHandler(Skill skill) throws InvalidHandlerSpecException {
         try {
             String relativeSpec = findRelativeSpec(skill);
-            return createHandler(plugin, skill, new KitArgs(relativeSpec));
+            return createHandler(skill, new KitArgs(relativeSpec));
         } catch (ArgumentFormatException e) {
             throw new InvalidHandlerSpecException(e.getMessage(), skill.getHandlerSpec(), this);
         }
@@ -51,13 +50,12 @@ public abstract class AbstractKitHandlerFactory<R extends KitHandler> extends Ab
     /**
      * Creates a handler using this kit handler factory's specific creation mechanism.
      *
-     * @param plugin the plugin
      * @param skill  the skill to create the handler for
      * @param args   the argument list, retrieved from the skill's handler spec, where 1 is the first argument that is
      *               specifically mean for the implementation
      * @return the created kit handler for given arguments
      */
-    protected abstract R createHandler(EPPlugin plugin, Skill skill, KitArgs args);
+    protected abstract R createHandler(Skill skill, KitArgs args);
 
     /**
      * @param args the arguments to get the slot id from

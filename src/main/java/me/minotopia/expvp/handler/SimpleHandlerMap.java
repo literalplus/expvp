@@ -25,8 +25,8 @@ import java.util.stream.Stream;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
-public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
-    private final Map<Skill, T> handlers = new HashMap<>();
+public class SimpleHandlerMap implements HandlerMap {
+    private final Map<Skill, SkillHandler> handlers = new HashMap<>();
     private final EPPlugin plugin;
 
     @Inject
@@ -35,7 +35,7 @@ public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
     }
 
     @Override
-    public void registerHandler(T handler) {
+    public void registerHandler(SkillHandler handler) {
         Preconditions.checkNotNull(handler, "handler");
         Preconditions.checkNotNull(handler.getSkill(), "handler.getSkill()");
         handlers.put(handler.getSkill(), handler);
@@ -43,7 +43,7 @@ public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
     }
 
     @Override
-    public void unregisterHandler(T handler) {
+    public void unregisterHandler(SkillHandler handler) {
         Preconditions.checkNotNull(handler, "handler");
         Preconditions.checkNotNull(handler.getSkill(), "handler.getSkill()");
         handlers.remove(handler.getSkill(), handler);
@@ -53,24 +53,28 @@ public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
     @Override
     public void unregisterHandler(Skill skill) {
         Preconditions.checkNotNull(skill, "skill");
-        Optional.ofNullable(handlers.get(skill))
-                .ifPresent(this::unregisterHandler);
+        findHandler(skill).ifPresent(this::unregisterHandler);
     }
 
     @Override
-    public Collection<T> getAllHandlers() {
+    public Optional<SkillHandler> findHandler(Skill skill) {
+        return Optional.ofNullable(handlers.get(skill));
+    }
+
+    @Override
+    public Collection<SkillHandler> getAllHandlers() {
         return Collections.unmodifiableCollection(handlers.values());
     }
 
     @Override
-    public Collection<T> getRelevantHandlers(Collection<? extends Skill> skills) {
+    public Collection<SkillHandler> getRelevantHandlers(Collection<? extends Skill> skills) {
         Preconditions.checkNotNull(skills, "skills");
         return handlerStream()
                 .filter(handler -> skills.contains(handler.getSkill()))
                 .collect(Collectors.toList());
     }
 
-    private Stream<T> handlerStream() {
+    private Stream<SkillHandler> handlerStream() {
         return handlers.entrySet().stream()
                 .map(Map.Entry::getValue);
     }

@@ -19,16 +19,14 @@ import me.minotopia.expvp.handler.factory.kit.CompoundKitHandlerFactory;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-02-21
  */
-public class EPHandlerFactoryGraph extends MapCompoundHandlerFactory<HandlerFactory>
-        implements HandlerFactoryGraph {
+public class EPHandlerFactoryGraph extends MapCompoundHandlerFactory<HandlerFactory> implements HandlerFactoryGraph {
     private CompoundKitHandlerFactory rootKitFactory;
 
     @Inject
-    public EPHandlerFactoryGraph(HandlerFactoryWiring wiring) {
+    public EPHandlerFactoryGraph() {
         super(null, "");
         rootKitFactory = new CompoundKitHandlerFactory(this, "kit");
         addChild(rootKitFactory);
-        wiring.wire(this);
     }
 
     @Override

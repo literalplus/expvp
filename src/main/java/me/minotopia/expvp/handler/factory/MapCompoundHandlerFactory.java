@@ -9,7 +9,6 @@
 package me.minotopia.expvp.handler.factory;
 
 import com.google.common.base.Preconditions;
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
 import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
@@ -34,12 +33,11 @@ public class MapCompoundHandlerFactory<T extends HandlerFactory>
     }
 
     @Override
-    public SkillHandler createHandler(EPPlugin plugin, Skill skill) throws InvalidHandlerSpecException {
-        Preconditions.checkNotNull(plugin, "plugin");
+    public SkillHandler createHandler(Skill skill) throws InvalidHandlerSpecException {
         Preconditions.checkNotNull(skill, "skill");
         String relativeSpec = findRelativeSpec(skill);
         T factory = findChildOrFail(relativeSpec);
-        return factory.createHandler(plugin, skill);
+        return factory.createHandler(skill);
     }
 
     @Override

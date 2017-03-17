@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.handler.factory.kit;
 
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.api.handler.factory.KitHandlerFactory;
 import me.minotopia.expvp.api.handler.kit.KitHandler;
@@ -32,7 +31,7 @@ public class CompoundKitHandlerFactory extends MapCompoundHandlerFactory<KitHand
     }
 
     @Override
-    public KitHandler createHandler(EPPlugin plugin, Skill skill) {
-        return (KitHandler) super.createHandler(plugin, skill);
+    public KitHandler createHandler(Skill skill) {
+        return (KitHandler) super.createHandler(skill);
     }
 }

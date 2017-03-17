@@ -11,28 +11,28 @@ package me.minotopia.expvp.api.handler;
 import me.minotopia.expvp.skill.meta.Skill;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
- * Keeps track of available handlers by skill and type for a single event source.
+ * Keeps track of available handlers by skill.
  *
- * @param <T> the type of handler managed by this map
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
-public interface HandlerMap<T extends SkillHandler> {
+public interface HandlerMap {
     /**
      * Registers a handler with this map and calls its enable method.
      *
      * @param handler the handler to register
      */
-    void registerHandler(T handler);
+    void registerHandler(SkillHandler handler);
 
     /**
      * Unregisters a handler from this map and calls its disable method.
      *
      * @param handler the handler to unregister
      */
-    void unregisterHandler(T handler);
+    void unregisterHandler(SkillHandler handler);
 
     /**
      * Unregisters the handler associated with given skill, if any, and calls its disable method.
@@ -42,9 +42,15 @@ public interface HandlerMap<T extends SkillHandler> {
     void unregisterHandler(Skill skill);
 
     /**
+     * @param skill the skill to find the registered handler for
+     * @return an optional containing the respective handler, or an empty optional
+     */
+    Optional<SkillHandler> findHandler(Skill skill);
+
+    /**
      * @return all handlers currently registered with this map
      */
-    Collection<T> getAllHandlers();
+    Collection<SkillHandler> getAllHandlers();
 
     /**
      * Gets all handlers registered with this map which belong to any of the given skills.
@@ -52,5 +58,5 @@ public interface HandlerMap<T extends SkillHandler> {
      * @param skills the skills to filter by
      * @return the collection of handlers relevant to given skills
      */
-    Collection<T> getRelevantHandlers(Collection<? extends Skill> skills);
+    Collection<SkillHandler> getRelevantHandlers(Collection<? extends Skill> skills);
 }
