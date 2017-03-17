@@ -9,15 +9,15 @@
 package me.minotopia.expvp.handler;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.HandlerMap;
 import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A simple implementation of a handler map.
@@ -27,12 +27,19 @@ import java.util.stream.Collectors;
  */
 public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
     private final Map<Skill, T> handlers = new HashMap<>();
+    private final EPPlugin plugin;
+
+    @Inject
+    public SimpleHandlerMap(EPPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void registerHandler(T handler) {
         Preconditions.checkNotNull(handler, "handler");
         Preconditions.checkNotNull(handler.getSkill(), "handler.getSkill()");
         handlers.put(handler.getSkill(), handler);
+        handler.enable(plugin);
     }
 
     @Override
@@ -40,12 +47,14 @@ public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
         Preconditions.checkNotNull(handler, "handler");
         Preconditions.checkNotNull(handler.getSkill(), "handler.getSkill()");
         handlers.remove(handler.getSkill(), handler);
+        handler.disable(plugin);
     }
 
     @Override
-    public void unregisterHandlers(Skill skill) {
+    public void unregisterHandler(Skill skill) {
         Preconditions.checkNotNull(skill, "skill");
-        handlers.remove(skill);
+        Optional.ofNullable(handlers.get(skill))
+                .ifPresent(this::unregisterHandler);
     }
 
     @Override
@@ -56,9 +65,13 @@ public class SimpleHandlerMap<T extends SkillHandler> implements HandlerMap<T> {
     @Override
     public Collection<T> getRelevantHandlers(Collection<? extends Skill> skills) {
         Preconditions.checkNotNull(skills, "skills");
-        return handlers.entrySet().stream()
-                .filter(e -> skills.contains(e.getKey()))
-                .map(Map.Entry::getValue)
+        return handlerStream()
+                .filter(handler -> skills.contains(handler.getSkill()))
                 .collect(Collectors.toList());
+    }
+
+    private Stream<T> handlerStream() {
+        return handlers.entrySet().stream()
+                .map(Map.Entry::getValue);
     }
 }

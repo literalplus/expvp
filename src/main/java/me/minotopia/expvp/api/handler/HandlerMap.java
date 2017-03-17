@@ -21,25 +21,25 @@ import java.util.Collection;
  */
 public interface HandlerMap<T extends SkillHandler> {
     /**
-     * Registers a handler with this map.
+     * Registers a handler with this map and calls its enable method.
      *
      * @param handler the handler to register
      */
     void registerHandler(T handler);
 
     /**
-     * Unregisters a handler from this map.
+     * Unregisters a handler from this map and calls its disable method.
      *
      * @param handler the handler to unregister
      */
     void unregisterHandler(T handler);
 
     /**
-     * Unregisters all handlers handling given skill.
+     * Unregisters the handler associated with given skill, if any, and calls its disable method.
      *
      * @param skill the skill whose handlers to unregister
      */
-    void unregisterHandlers(Skill skill);
+    void unregisterHandler(Skill skill);
 
     /**
      * @return all handlers currently registered with this map
