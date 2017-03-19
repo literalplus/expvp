@@ -255,12 +255,18 @@
                         <includes>
                             <include>me.minotopia:expvp</include>
                             <include>com.google.inject:guice</include>
+                            <include>javax.inject:javax.inject</include>
+                            <include>aopalliance:aopalliance</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>com.google.inject</pattern>
                             <shadedPattern>li.l1t.lib.guice</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>javax.inject</pattern>
+                            <shadedPattern>li.l1t.lib.javax.inject</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
