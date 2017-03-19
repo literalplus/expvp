@@ -10,13 +10,16 @@ package me.minotopia.expvp.command;
 
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
+import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.CommandService;
+import me.minotopia.expvp.handler.kit.SkillKitService;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -30,10 +33,12 @@ import java.util.stream.Collectors;
  * @since 2016-09-14
  */
 public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService> {
+    private final SkillKitService skillKitService;
 
     @Inject
-    CommandEPAdmin(CommandService commandService) {
+    CommandEPAdmin(CommandService commandService, SkillKitService skillKitService) {
         super(commandService);
+        this.skillKitService = skillKitService;
     }
 
     @Command(aliases = "settp", min = 2,
@@ -103,5 +108,12 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
 
     private void formatMessage(CommandSender sender, String format, Object... args) {
         sender.sendMessage(String.format(format, args));
+    }
+
+    @Command(aliases = "testkit", desc = "Testet dein Kit")
+    @EnumRequires(Permission.ADMIN_BASIC)
+    public void testKit(@Sender Player player) {
+        skillKitService.applyKit(player);
+        player.sendMessage("§eok sollte passen");
     }
 }
