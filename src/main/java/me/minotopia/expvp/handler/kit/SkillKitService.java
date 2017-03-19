@@ -68,8 +68,11 @@ public class SkillKitService implements KitService {
 
     @Override
     public void invalidateCache(UUID playerId) {
-        PlayerData data = players.findOrCreateData(playerId);
-        handlerService.unregisterHandlers(data);
-        handlerService.registerHandlers(data);
+        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+            PlayerData data = players.findOrCreateData(playerId);
+            handlerService.unregisterHandlers(data);
+            handlerService.registerHandlers(data);
+            scoped.commitIfLastAndChanged();
+        }
     }
 }
