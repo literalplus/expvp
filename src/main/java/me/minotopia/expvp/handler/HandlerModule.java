@@ -14,9 +14,13 @@ import com.google.inject.Singleton;
 import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
 import me.minotopia.expvp.api.handler.HandlerMap;
 import me.minotopia.expvp.api.handler.HandlerService;
+import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.handler.kit.compilation.KitBaseline;
+import me.minotopia.expvp.api.handler.kit.compilation.KitCompiler;
 import me.minotopia.expvp.handler.factory.EPHandlerFactoryGraph;
 import me.minotopia.expvp.handler.factory.HandlerFactoryWiring;
+import me.minotopia.expvp.handler.kit.SkillKitService;
+import me.minotopia.expvp.handler.kit.compilation.SkillKitCompiler;
 import me.minotopia.expvp.handler.kit.compilation.StaticKitBaseline;
 
 /**
@@ -31,6 +35,8 @@ public class HandlerModule extends AbstractModule {
         bind(HandlerMap.class).to(SimpleHandlerMap.class);
         bind(HandlerService.class).to(SimpleHandlerService.class);
         bind(KitBaseline.class).to(StaticKitBaseline.class);
+        bind(KitCompiler.class).to(SkillKitCompiler.class);
+        bind(KitService.class).to(SkillKitService.class);
     }
 
     @Singleton

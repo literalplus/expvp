@@ -33,6 +33,4 @@ public interface KitService {
      * @param playerId the unique id of the player
      */
     void invalidateCache(UUID playerId);
-
-    //TODO: If this is the main entry point from outside the module, we need methods for unregistering handlers or some kind of skill delete listener
 }
