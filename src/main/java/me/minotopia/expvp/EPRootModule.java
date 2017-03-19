@@ -37,6 +37,7 @@ public class EPRootModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(Plugin.class).toInstance(plugin);
+        bind(EPPlugin.class).toInstance(plugin);
         bind(Server.class).toInstance(plugin.getServer());
         bind(BukkitScheduler.class).toInstance(plugin.getServer().getScheduler());
         bind(File.class).annotatedWith(DataFolder.class).toInstance(plugin.getDataFolder());
