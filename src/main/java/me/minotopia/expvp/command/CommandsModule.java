@@ -9,6 +9,7 @@
 package me.minotopia.expvp.command;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.util.CommandHelper;
@@ -29,6 +30,7 @@ public class CommandsModule extends AbstractModule {
     }
 
     @Singleton
+    @Provides
     CommandsManager commandsManager(Plugin plugin) {
         CommandsManager commandsManager = new CommandsManager(plugin);
         commandsManager.setLocale(sender -> I18n.getLocaleFor(CommandHelper.getSenderId(sender)));
