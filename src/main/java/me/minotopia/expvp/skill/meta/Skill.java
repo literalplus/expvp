@@ -218,4 +218,13 @@ public class Skill implements ConfigurationSerializable, Nameable {
         result = 31 * result + id.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Skill{" +
+                "id='" + id + '\'' +
+                ", bookCost=" + bookCost +
+                ", handlerSpec='" + handlerSpec + '\'' +
+                '}';
+    }
 }

@@ -113,6 +113,7 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
     @Command(aliases = "testkit", desc = "Testet dein Kit")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void testKit(@Sender Player player) {
+        skillKitService.invalidateCache(player.getUniqueId());
         skillKitService.applyKit(player);
         player.sendMessage("§eok sollte passen");
     }

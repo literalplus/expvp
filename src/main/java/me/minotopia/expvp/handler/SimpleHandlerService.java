@@ -16,10 +16,14 @@ import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
 import me.minotopia.expvp.api.handler.HandlerMap;
 import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.handler.SkillHandler;
+import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.skill.SkillService;
+import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.skill.meta.Skill;
+import org.apache.logging.log4j.Logger;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -33,6 +37,7 @@ import static li.l1t.common.util.PredicateHelper.not;
  */
 @Singleton
 public class SimpleHandlerService implements HandlerService {
+    private final Logger LOGGER = LoggingManager.getLogger(SimpleHandlerService.class);
     private final HandlerMap handlerMap;
     private final HandlerFactoryGraph factories;
     private final SkillService skillService;
@@ -50,7 +55,8 @@ public class SimpleHandlerService implements HandlerService {
         skillService.getSkills(playerData)
                 .forEach(skill -> {
                     skillRequirementsMap.put(skill, playerData.getUniqueId());
-                    handlerMap.findHandler(skill).orElseGet(() -> createAndRegisterHandlerFor(skill));
+                    handlerMap.findHandler(skill).map(Optional::of)
+                            .orElseGet(() -> createAndRegisterHandlerFor(skill));
                 });
     }
 
@@ -63,10 +69,15 @@ public class SimpleHandlerService implements HandlerService {
                 .forEach(handlerMap::unregisterHandler);
     }
 
-    private SkillHandler createAndRegisterHandlerFor(Skill skill) {
-        SkillHandler handler = factories.createHandler(skill);
-        handlerMap.registerHandler(handler);
-        return handler;
+    private Optional<SkillHandler> createAndRegisterHandlerFor(Skill skill) {
+        try {
+            SkillHandler handler = factories.createHandler(skill);
+            handlerMap.registerHandler(handler);
+            return Optional.of(handler);
+        } catch (InvalidHandlerSpecException e) {
+            LOGGER.warn("Failed to resolve handler for skill " + skill, e);
+            return Optional.empty();
+        }
     }
 
     @Override
