@@ -14,6 +14,7 @@ import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.api.skill.SkillService;
 import me.minotopia.expvp.skill.meta.SimpleSkillService;
+import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skill.obtainment.CostCheckingObtainmentService;
 import me.minotopia.expvp.skill.obtainment.SimpleSkillObtainmentService;
 import me.minotopia.expvp.util.SessionProvider;
@@ -27,6 +28,7 @@ import me.minotopia.expvp.util.SessionProvider;
 public class SkillModule extends AbstractModule {
     @Override
     protected void configure() {
+        bind(SkillManager.class);
         bind(SkillService.class).to(SimpleSkillService.class);
     }
 

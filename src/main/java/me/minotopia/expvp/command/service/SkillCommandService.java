@@ -32,8 +32,8 @@ public class SkillCommandService extends YamlManagerCommandService<Skill> {
         registerInjections(commandsManager);
     }
 
+    @Override
     protected void registerInjections(CommandsManager commandsManager) {
-        commandsManager.bind(SkillManager.class).toInstance(getManager());
         commandsManager.bind(SkillCommandService.class).toInstance(this);
         commandsManager.bind(Skill.class).toProvider(new YamlObjectProvider<>(this));
     }

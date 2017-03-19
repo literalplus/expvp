@@ -65,8 +65,8 @@ public class LocaleService {
             } else {
                 locale = playerData.getLocale();
             }
-            scoped.commitIfLastAndChanged();
             I18n.setLocaleFor(player.getUniqueId(), locale);
+            scoped.commitIfLastAndChanged();
             return locale;
         }
     }

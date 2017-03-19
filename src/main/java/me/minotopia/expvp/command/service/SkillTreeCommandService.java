@@ -35,7 +35,6 @@ public class SkillTreeCommandService extends YamlManagerCommandService<SkillTree
 
     @Override
     protected void registerInjections(CommandsManager commandsManager) {
-        commandsManager.bind(SkillTreeManager.class).toInstance(getManager());
         commandsManager.bind(SkillTreeCommandService.class).toInstance(this);
         commandsManager.bind(SkillTree.class).toProvider(new YamlObjectProvider<>(this));
     }
