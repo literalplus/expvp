@@ -16,6 +16,8 @@ import me.minotopia.expvp.api.handler.kit.compilation.KitCompiler;
 import me.minotopia.expvp.api.handler.kit.compilation.KitElement;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.util.ScopedSession;
+import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -30,19 +32,25 @@ public class SkillKitService implements KitService {
     private final KitCompiler compiler;
     private final PlayerDataService players;
     private final HandlerService handlerService;
+    private final SessionProvider sessionProvider;
 
     @Inject
-    public SkillKitService(KitCompiler compiler, PlayerDataService players, HandlerService handlerService) {
+    public SkillKitService(KitCompiler compiler, PlayerDataService players, HandlerService handlerService,
+                           SessionProvider sessionProvider) {
         this.compiler = compiler;
         this.players = players;
         this.handlerService = handlerService;
+        this.sessionProvider = sessionProvider;
     }
 
     @Override
     public void applyKit(Player player) {
-        PlayerData data = players.findOrCreateData(player.getUniqueId());
-        KitCompilation kit = compiler.compile(player, data);
-        applyCompilation(player, kit);
+        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+            PlayerData data = players.findOrCreateData(player.getUniqueId());
+            KitCompilation kit = compiler.compile(player, data);
+            applyCompilation(player, kit);
+            scoped.commitIfLastAndChanged();
+        }
     }
 
     private void applyCompilation(Player player, KitCompilation kit) {
