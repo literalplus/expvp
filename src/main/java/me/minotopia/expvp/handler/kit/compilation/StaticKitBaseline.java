@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.handler.kit.compilation;
 
+import me.minotopia.expvp.api.handler.kit.compilation.KitBaseline;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
 import me.minotopia.expvp.api.handler.kit.compilation.KitElementBuilder;
 import org.bukkit.Material;
@@ -18,11 +19,11 @@ import org.bukkit.Material;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-17
  */
-public class StaticKitBaseline implements me.minotopia.expvp.api.handler.kit.compilation.KitBaseline {
-    private static final int ARMOR_HELMET_ID = 103;
-    private static final int ARMOR_CHESTPLATE_ID = 102;
-    private static final int ARMOR_LEGGINGS_ID = 101;
-    private static final int ARMOR_BOOTS_ID = 100;
+public class StaticKitBaseline implements KitBaseline {
+    private static final int ARMOR_HELMET_ID = 39;
+    private static final int ARMOR_CHESTPLATE_ID = 38;
+    private static final int ARMOR_LEGGINGS_ID = 37;
+    private static final int ARMOR_BOOTS_ID = 36;
     private static final int HOTBAR_LEFTMOST_ID = 0;
 
     @Override

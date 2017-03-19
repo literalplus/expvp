@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.handler.kit.compilation;
 
+import com.google.common.base.Preconditions;
 import li.l1t.common.collections.Pair;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
 import me.minotopia.expvp.api.handler.kit.compilation.KitElement;
@@ -55,6 +56,8 @@ public class SkillKitCompilation implements KitCompilation {
 
     @Override
     public KitElementBuilder slot(int slotId, Material type) {
+        Preconditions.checkElementIndex(slotId, 40,
+                "Bukkit player slot ids are between 0, inclusive, and 39, inclusive.");
         return slotMap.computeIfAbsent(slotId, id -> new ItemKitElementBuilder(type, id));
     }
 
