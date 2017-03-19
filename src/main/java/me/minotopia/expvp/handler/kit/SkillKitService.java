@@ -16,8 +16,10 @@ import me.minotopia.expvp.api.handler.kit.compilation.KitCompiler;
 import me.minotopia.expvp.api.handler.kit.compilation.KitElement;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -29,6 +31,7 @@ import java.util.UUID;
  * @since 2017-03-17
  */
 public class SkillKitService implements KitService {
+    private static final Logger LOGGER = LoggingManager.getLogger(SkillKitService.class);
     private final KitCompiler compiler;
     private final PlayerDataService players;
     private final HandlerService handlerService;
@@ -59,6 +62,7 @@ public class SkillKitService implements KitService {
     }
 
     private void applyItem(Player player, int slotId, KitElement element) {
+        LOGGER.debug("{}'s compiled item: {} -> {}", player.getName(), slotId, element);
         player.getInventory().setItem(slotId, element.toItemStack());
     }
 

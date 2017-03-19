@@ -42,4 +42,10 @@ public class SimpleKitElement implements KitElement {
     public Collection<Enchantment> getEnchantments() {
         return stack.getEnchantments().keySet();
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + ": " +
+                stack.toString();
+    }
 }
