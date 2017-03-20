@@ -93,6 +93,7 @@ public class EPPlugin extends GenericXyPlugin {
             inject(LocaleService.class).enable(this);
             skillManager = inject(SkillManager.class);
             skillTreeManager = inject(SkillTreeManager.class);
+            obtainmentService = inject(SkillObtainmentService.class);
 
             // Register commands
             registerCommands();
