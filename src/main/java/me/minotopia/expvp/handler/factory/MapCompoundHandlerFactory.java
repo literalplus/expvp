@@ -59,7 +59,6 @@ public class MapCompoundHandlerFactory<T extends HandlerFactory>
         return "MapCompoundHandlerFactory{" +
                 "handlerSpec=" + getHandlerSpec() +
                 ",fullHandlerSpec=" + getFullHandlerSpec() +
-                ",children=" + getChildren() +
                 '}';
     }
 }
