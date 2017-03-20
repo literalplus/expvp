@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.handler;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.google.inject.Inject;
@@ -23,7 +24,6 @@ import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -64,7 +64,7 @@ public class SimpleHandlerService implements HandlerService {
     @Override
     public void unregisterHandlers(PlayerData playerData) {
         skillRequirementsMap.values().removeIf(playerData.getUniqueId()::equals);
-        Collections.unmodifiableCollection(handlerMap.getAllHandlers()).stream()
+        ImmutableList.copyOf(handlerMap.getAllHandlers()).stream()
                 .map(SkillHandler::getSkill)
                 .filter(not(skillRequirementsMap::containsKey))
                 .forEach(handlerMap::unregisterHandler);
