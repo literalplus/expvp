@@ -54,6 +54,7 @@ public class SkillKitService implements KitService {
     }
 
     private void applyCompilation(Player player, KitCompilation kit) {
+        player.getInventory().clear();
         kit.getResult().entrySet()
                 .forEach(e -> applyItem(player, e.getKey(), e.getValue()));
     }
