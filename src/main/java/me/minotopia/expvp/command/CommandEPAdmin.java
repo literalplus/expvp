@@ -18,6 +18,7 @@ import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.CommandService;
 import me.minotopia.expvp.handler.kit.SkillKitService;
+import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -116,5 +117,11 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
         skillKitService.invalidateCache(player.getUniqueId());
         skillKitService.applyKit(player);
         player.sendMessage("§eok sollte passen");
+    }
+
+    @Command(aliases = "clearcache", desc = "Leert diverse Caches")
+    @EnumRequires(Permission.ADMIN_BASIC)
+    public void clearCache(SessionProvider sessionProvider) {
+        sessionProvider.getSessionFactory().getCache().evictAllRegions();
     }
 }
