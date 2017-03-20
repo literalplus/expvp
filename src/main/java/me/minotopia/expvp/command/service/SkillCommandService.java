@@ -9,6 +9,7 @@
 package me.minotopia.expvp.command.service;
 
 import com.google.inject.Inject;
+import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.CommandsManager;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
@@ -39,6 +40,9 @@ public class SkillCommandService extends YamlManagerCommandService<Skill> {
     }
 
     public void changeHandlerSpec(Skill skill, String newSpec, CommandSender sender) {
+        if (!newSpec.startsWith("/")) {
+            throw new UserException("HandlerSpecs müssen mit / beginnen.");
+        }
         String previousName = skill.getHandlerSpec();
         skill.setHandlerSpec(newSpec);
         saveObject(skill);
