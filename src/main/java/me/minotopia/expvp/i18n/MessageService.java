@@ -9,6 +9,7 @@
 package me.minotopia.expvp.i18n;
 
 import com.google.common.base.Preconditions;
+import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,6 +34,26 @@ import java.util.ResourceBundle;
 public class MessageService {
     private static final Logger LOGGER = LoggingManager.getLogger(MessageService.class);
     private final BundleCache bundleCache = new BundleCache();
+
+    public String getMessage(Locale locale, Message message) {
+        Preconditions.checkNotNull(locale, "locale");
+        if ("debug".equals(locale.getVariant())) {
+            return message.toString();
+        }
+        MessagePath path = MessagePath.of(message.getKey());
+        Optional<ResourceBundle> bundle = bundleCache.findBundleContaining(locale, path);
+        if (!bundle.isPresent()) {
+            if (message.hasFallback()) {
+                return getMessage(locale, message.getFallback());
+            } else {
+                LOGGER.warn("Missing {} for {}", path, locale);
+                return message.toString();
+            }
+        } else {
+            String pattern = bundle.get().getString(path.key());
+            return String.format(pattern, message.getArguments());
+        }
+    }
 
     public String getMessage(Locale locale, String key, Object... args) {
         Preconditions.checkNotNull(locale, "locale");

@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.i18n;
 
+import li.l1t.common.intake.i18n.Message;
 import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
@@ -94,6 +95,52 @@ public class I18n {
      */
     public static String loc(CommandSender sender, String key, Object... args) {
         return loc(CommandHelper.getSenderId(sender), key, args);
+    }
+
+    /**
+     * Returns the string value for given message in given locale.
+     *
+     * @param locale  the locale to query
+     * @param message the message object, with the key formatted according to {@link MessagePath} specifications, and
+     *                the arguments being inserted back into the resolved message like in {@link String#format(String,
+     *                Object...)}
+     * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
+     */
+    public static String loc(Locale locale, Message message) {
+        if (message.isStatic()) {
+            return message.toString();
+        }
+        if (messageService == null) {
+            LOGGER.warn("Requested localisation for {} before I18n was initialised", message);
+            return message.toString();
+        }
+        return messageService.getMessage(locale, message);
+    }
+
+    /**
+     * Returns the string value for given message in given locale.
+     *
+     * @param senderId the unique id of the command sender whose locale to use from the cache
+     * @param message  the message object, with the key formatted according to {@link MessagePath} specifications, and
+     *                 the arguments being inserted back into the resolved message like in {@link String#format(String,
+     *                 Object...)}
+     * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
+     */
+    public static String loc(UUID senderId, Message message) {
+        return loc(getLocaleFor(senderId), message);
+    }
+
+    /**
+     * Returns the string value for given message in given locale.
+     *
+     * @param sender  the command sender whose locale to use from the cache
+     * @param message the message object, with the key formatted according to {@link MessagePath} specifications, and
+     *                the arguments being inserted back into the resolved message like in {@link String#format(String,
+     *                Object...)}
+     * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
+     */
+    public static String loc(CommandSender sender, Message message) {
+        return loc(CommandHelper.getSenderId(sender), message);
     }
 
     public static void setLocaleFor(UUID senderId, Locale locale) {
