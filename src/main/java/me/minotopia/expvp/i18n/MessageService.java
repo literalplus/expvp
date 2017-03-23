@@ -37,27 +37,44 @@ public class MessageService {
 
     public String getMessage(Locale locale, Message message) {
         Preconditions.checkNotNull(locale, "locale");
-        if ("debug".equals(locale.getVariant())) {
+        if (isDebugLocale(locale)) {
             return message.toString();
         }
         MessagePath path = MessagePath.of(message.getKey());
         Optional<ResourceBundle> bundle = bundleCache.findBundleContaining(locale, path);
-        if (!bundle.isPresent()) {
+        if (bundle.isPresent()) {
+            return doTranslation(locale, bundle.get(), path.key(), message.getArguments());
+        } else {
             if (message.hasFallback()) {
                 return getMessage(locale, message.getFallback());
             } else {
                 LOGGER.warn("Missing {} for {}", path, locale);
                 return message.toString();
             }
-        } else {
-            String pattern = bundle.get().getString(path.key());
-            return String.format(pattern, message.getArguments());
         }
+    }
+
+    private boolean isDebugLocale(Locale locale) {
+        return "debug".equals(locale.getVariant());
+    }
+
+    private String doTranslation(Locale locale, ResourceBundle bundle, String key, Object... args) {
+        String pattern = bundle.getString(key);
+        return String.format(pattern, localizeMessageArguments(locale, args));
+    }
+
+    private Object[] localizeMessageArguments(Locale locale, Object[] args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof Message) {
+                args[i] = getMessage(locale, (Message) args[i]);
+            }
+        }
+        return args;
     }
 
     public String getMessage(Locale locale, String key, Object... args) {
         Preconditions.checkNotNull(locale, "locale");
-        if ("debug".equals(locale.getVariant())) {
+        if (isDebugLocale(locale)) {
             return messageKeyString(key, args);
         }
         MessagePath path = MessagePath.of(key);
@@ -66,8 +83,7 @@ public class MessageService {
             LOGGER.warn("Missing {} for {}", path, locale);
             return messageKeyString(key, args);
         } else {
-            String pattern = bundle.get().getString(path.key());
-            return String.format(pattern, args);
+            return doTranslation(locale, bundle.get(), path.key(), args);
         }
     }
 
