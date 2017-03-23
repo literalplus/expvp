@@ -11,6 +11,7 @@ package me.minotopia.expvp.handler.factory;
 import com.google.inject.Inject;
 import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
+import me.minotopia.expvp.handler.factory.damage.CompoundDamageHandlerFactory;
 import me.minotopia.expvp.handler.factory.kit.CompoundKitHandlerFactory;
 
 /**
@@ -21,16 +22,24 @@ import me.minotopia.expvp.handler.factory.kit.CompoundKitHandlerFactory;
  */
 public class EPHandlerFactoryGraph extends MapCompoundHandlerFactory<HandlerFactory> implements HandlerFactoryGraph {
     private CompoundKitHandlerFactory rootKitFactory;
+    private CompoundDamageHandlerFactory rootDamageFactory;
 
     @Inject
     public EPHandlerFactoryGraph() {
         super(null, "");
         rootKitFactory = new CompoundKitHandlerFactory(this, "kit");
         addChild(rootKitFactory);
+        rootDamageFactory = new CompoundDamageHandlerFactory("damage");
+        addChild(rootDamageFactory);
     }
 
     @Override
     public CompoundKitHandlerFactory kits() {
         return rootKitFactory;
+    }
+
+    @Override
+    public CompoundDamageHandlerFactory damages() {
+        return rootDamageFactory;
     }
 }

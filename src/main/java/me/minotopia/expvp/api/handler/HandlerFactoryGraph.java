@@ -11,6 +11,7 @@ package me.minotopia.expvp.api.handler;
 import me.minotopia.expvp.api.handler.factory.CompoundHandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
 import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
+import me.minotopia.expvp.handler.factory.damage.CompoundDamageHandlerFactory;
 import me.minotopia.expvp.handler.factory.kit.CompoundKitHandlerFactory;
 
 /**
@@ -47,4 +48,6 @@ public interface HandlerFactoryGraph extends CompoundHandlerFactory<HandlerFacto
     }
 
     CompoundKitHandlerFactory kits();
+
+    CompoundDamageHandlerFactory damages();
 }
