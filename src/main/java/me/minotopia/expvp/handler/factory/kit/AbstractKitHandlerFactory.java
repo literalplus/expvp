@@ -13,6 +13,7 @@ import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
 import me.minotopia.expvp.api.handler.factory.KitHandlerFactory;
 import me.minotopia.expvp.api.handler.kit.KitHandler;
 import me.minotopia.expvp.handler.factory.AbstractHandlerSpecNode;
+import me.minotopia.expvp.handler.factory.HandlerArgs;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.bukkit.Material;
 
@@ -36,7 +37,7 @@ public abstract class AbstractKitHandlerFactory extends AbstractHandlerSpecNode
     public KitHandler createHandler(Skill skill) throws InvalidHandlerSpecException {
         try {
             String relativeSpec = findRelativeSpec(skill);
-            return createHandler(skill, new KitArgs(relativeSpec));
+            return createHandler(skill, new HandlerArgs(relativeSpec));
         } catch (ArgumentFormatException e) {
             throw new InvalidHandlerSpecException(e.getMessage(), skill.getHandlerSpec(), this);
         }
@@ -46,25 +47,24 @@ public abstract class AbstractKitHandlerFactory extends AbstractHandlerSpecNode
      * Creates a handler using this kit handler factory's specific creation mechanism.
      *
      * @param skill  the skill to create the handler for
-     * @param args   the argument list, retrieved from the skill's handler spec, where 1 is the first argument that is
-     *               specifically mean for the implementation
+     * @param args   the argument list, retrieved from the skill's handler spec
      * @return the created kit handler for given arguments
      */
-    protected abstract KitHandler createHandler(Skill skill, KitArgs args);
+    protected abstract KitHandler createHandler(Skill skill, HandlerArgs args);
 
     /**
      * @param args the arguments to get the slot id from
      * @return the slot id for given arguments
      */
-    protected int slotId(KitArgs args) {
+    protected int slotId(HandlerArgs args) {
         return args.intArg(SLOT_ID_INDEX);
     }
 
-    protected Material material(KitArgs args) {
+    protected Material material(HandlerArgs args) {
         return args.enumArg(Material.class, MATERIAL_INDEX);
     }
 
-    protected int amount(KitArgs args) {
+    protected int amount(HandlerArgs args) {
         return args.intArg(AMOUNT_INDEX);
     }
 }

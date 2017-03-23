@@ -9,6 +9,7 @@
 package me.minotopia.expvp.handler.factory.kit;
 
 import li.l1t.common.string.ArgumentFormatException;
+import me.minotopia.expvp.handler.factory.HandlerArgs;
 import me.minotopia.expvp.handler.kit.EnchantKitHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.bukkit.enchantments.Enchantment;
@@ -33,11 +34,11 @@ public class EnchantKitHandlerFactory extends AbstractKitHandlerFactory {
     }
 
     @Override
-    protected EnchantKitHandler createHandler(Skill skill, KitArgs args) {
+    protected EnchantKitHandler createHandler(Skill skill, HandlerArgs args) {
         return new EnchantKitHandler(skill, slotId(args), material(args), enchantment(args), level(args));
     }
 
-    private Enchantment enchantment(KitArgs args) {
+    private Enchantment enchantment(HandlerArgs args) {
         String enchantmentName = args.arg(ENCHANTMENT_INDEX).toLowerCase().replaceAll("[ -]", "_");
         Enchantment enchantment = Enchantment.getByName(enchantmentName);
         if (enchantment == null) {
@@ -49,7 +50,7 @@ public class EnchantKitHandlerFactory extends AbstractKitHandlerFactory {
         return enchantment;
     }
 
-    private int level(KitArgs args) {
+    private int level(HandlerArgs args) {
         return args.intArg(LEVEL_INDEX);
     }
 

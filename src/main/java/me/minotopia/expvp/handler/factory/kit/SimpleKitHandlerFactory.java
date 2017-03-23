@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.handler.factory.kit;
 
+import me.minotopia.expvp.handler.factory.HandlerArgs;
 import me.minotopia.expvp.handler.kit.SimpleKitHandler;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -28,7 +29,7 @@ public class SimpleKitHandlerFactory extends AbstractKitHandlerFactory {
     }
 
     @Override
-    protected SimpleKitHandler createHandler(Skill skill, KitArgs args) {
+    protected SimpleKitHandler createHandler(Skill skill, HandlerArgs args) {
         return new SimpleKitHandler(skill, slotId(args), material(args), amount(args));
     }
 
