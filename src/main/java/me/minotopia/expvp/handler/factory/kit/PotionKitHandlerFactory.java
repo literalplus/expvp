@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionType;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-16
  */
-public class PotionKitHandlerFactory extends AbstractKitHandlerFactory<PotionKitHandler> {
+public class PotionKitHandlerFactory extends AbstractKitHandlerFactory {
     public static final int EFFECT_INDEX = 3;
     public static final int LEVEL_INDEX = 4;
 

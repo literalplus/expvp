@@ -19,7 +19,7 @@ import org.bukkit.enchantments.Enchantment;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-16
  */
-public class EnchantKitHandlerFactory extends AbstractKitHandlerFactory<EnchantKitHandler> {
+public class EnchantKitHandlerFactory extends AbstractKitHandlerFactory {
     public static final int ENCHANTMENT_INDEX = 2;
     public static final int LEVEL_INDEX = 3;
 

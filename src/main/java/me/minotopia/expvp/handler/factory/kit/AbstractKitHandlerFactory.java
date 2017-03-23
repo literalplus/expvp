@@ -9,7 +9,6 @@
 package me.minotopia.expvp.handler.factory.kit;
 
 import li.l1t.common.string.ArgumentFormatException;
-import me.minotopia.expvp.api.handler.factory.HandlerSpecNode;
 import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
 import me.minotopia.expvp.api.handler.factory.KitHandlerFactory;
 import me.minotopia.expvp.api.handler.kit.KitHandler;
@@ -23,7 +22,7 @@ import org.bukkit.Material;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-10
  */
-public abstract class AbstractKitHandlerFactory<R extends KitHandler> extends AbstractHandlerSpecNode
+public abstract class AbstractKitHandlerFactory extends AbstractHandlerSpecNode
         implements KitHandlerFactory {
     public static int SLOT_ID_INDEX = 0;
     public static int MATERIAL_INDEX = 1;
@@ -33,12 +32,8 @@ public abstract class AbstractKitHandlerFactory<R extends KitHandler> extends Ab
         super(ownHandlerSpec);
     }
 
-    public AbstractKitHandlerFactory(HandlerSpecNode parent, String ownHandlerSpec) {
-        super(parent, ownHandlerSpec);
-    }
-
     @Override
-    public R createHandler(Skill skill) throws InvalidHandlerSpecException {
+    public KitHandler createHandler(Skill skill) throws InvalidHandlerSpecException {
         try {
             String relativeSpec = findRelativeSpec(skill);
             return createHandler(skill, new KitArgs(relativeSpec));
@@ -55,7 +50,7 @@ public abstract class AbstractKitHandlerFactory<R extends KitHandler> extends Ab
      *               specifically mean for the implementation
      * @return the created kit handler for given arguments
      */
-    protected abstract R createHandler(Skill skill, KitArgs args);
+    protected abstract KitHandler createHandler(Skill skill, KitArgs args);
 
     /**
      * @param args the arguments to get the slot id from

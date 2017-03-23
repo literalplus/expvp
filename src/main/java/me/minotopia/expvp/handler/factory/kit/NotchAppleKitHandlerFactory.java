@@ -17,7 +17,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-16
  */
-public class NotchAppleKitHandlerFactory extends AbstractKitHandlerFactory<NotchAppleKitHandler> {
+public class NotchAppleKitHandlerFactory extends AbstractKitHandlerFactory {
     public NotchAppleKitHandlerFactory(String ownHandlerSpec) {
         super(ownHandlerSpec);
     }

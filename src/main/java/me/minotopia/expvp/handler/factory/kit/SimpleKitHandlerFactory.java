@@ -17,7 +17,7 @@ import me.minotopia.expvp.skill.meta.Skill;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-10
  */
-public class SimpleKitHandlerFactory extends AbstractKitHandlerFactory<SimpleKitHandler> {
+public class SimpleKitHandlerFactory extends AbstractKitHandlerFactory {
     public SimpleKitHandlerFactory(String ownHandlerSpec) {
         super(ownHandlerSpec);
     }
