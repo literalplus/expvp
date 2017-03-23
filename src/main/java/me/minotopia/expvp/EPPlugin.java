@@ -15,6 +15,7 @@ import com.google.inject.Injector;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.command.*;
+import me.minotopia.expvp.handler.damage.DamageHandlerCaller;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.LocaleService;
 import me.minotopia.expvp.logging.LoggingManager;
@@ -91,6 +92,7 @@ public class EPPlugin extends GenericXyPlugin {
             inject(LocaleService.class).enable(this);
             skillManager = inject(SkillManager.class);
             skillTreeManager = inject(SkillTreeManager.class);
+            getServer().getPluginManager().registerEvents(inject(DamageHandlerCaller.class), this);
 
             // Register commands
             registerCommands();

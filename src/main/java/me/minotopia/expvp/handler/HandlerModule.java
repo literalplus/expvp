@@ -17,6 +17,7 @@ import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.handler.kit.compilation.KitBaseline;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompiler;
+import me.minotopia.expvp.handler.damage.DamageHandlerCaller;
 import me.minotopia.expvp.handler.factory.EPHandlerFactoryGraph;
 import me.minotopia.expvp.handler.factory.HandlerFactoryWiring;
 import me.minotopia.expvp.handler.kit.SkillKitService;
@@ -37,6 +38,7 @@ public class HandlerModule extends AbstractModule {
         bind(KitBaseline.class).to(StaticKitBaseline.class);
         bind(KitCompiler.class).to(SkillKitCompiler.class);
         bind(KitService.class).to(SkillKitService.class);
+        bind(DamageHandlerCaller.class);
     }
 
     @Singleton
