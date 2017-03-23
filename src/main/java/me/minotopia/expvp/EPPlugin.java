@@ -14,7 +14,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
-import me.minotopia.expvp.api.service.SkillObtainmentService;
+import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.command.*;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.LocaleService;
@@ -52,7 +52,7 @@ public class EPPlugin extends GenericXyPlugin {
     private SessionProvider sessionProvider;
     private SkillTreeManager skillTreeManager;
     private SkillManager skillManager;
-    private SkillObtainmentService obtainmentService;
+    private ResearchService obtainmentService;
     private Injector injector;
 
     public EPPlugin() {
@@ -93,7 +93,7 @@ public class EPPlugin extends GenericXyPlugin {
             inject(LocaleService.class).enable(this);
             skillManager = inject(SkillManager.class);
             skillTreeManager = inject(SkillTreeManager.class);
-            obtainmentService = inject(SkillObtainmentService.class);
+            obtainmentService = inject(ResearchService.class);
 
             // Register commands
             registerCommands();
@@ -225,7 +225,7 @@ public class EPPlugin extends GenericXyPlugin {
         }
     }
 
-    public SkillObtainmentService getSkillObtainmentService() {
+    public ResearchService getSkillObtainmentService() {
         return obtainmentService;
     }
 

@@ -13,10 +13,12 @@ import com.sk89q.intake.argument.ArgumentException;
 import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.parametric.Provider;
 import com.sk89q.intake.parametric.ProvisionException;
+import li.l1t.common.intake.CommandExceptionListener;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.exception.InternationalException;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.annotation.Annotation;
@@ -42,6 +44,7 @@ public class CommandsModule extends AbstractModule {
         commandsManager.setLocale(sender -> I18n.getLocaleFor(CommandHelper.getSenderId(sender)));
         commandsManager.getBuilder().addInvokeListener(new EnumPermissionInvokeListener());
         injector.getAllBindings().values().forEach(binding -> bindGuiceToIntake(commandsManager, binding));
+        commandsManager.addExceptionListener(i18nCommandExceptionListener());
         return commandsManager;
     }
 
@@ -67,6 +70,18 @@ public class CommandsModule extends AbstractModule {
             public List<String> getSuggestions(String s) {
                 return Collections.emptyList();
             }
+        };
+    }
+
+    private CommandExceptionListener i18nCommandExceptionListener() {
+        return (argLine, sender, exception) -> {
+            if (exception instanceof InternationalException) {
+                InternationalException ie = (InternationalException) exception;
+                String innerMessage = I18n.loc(sender, ie.getMessageKey(), ie.getMessageParameters());
+                sender.sendMessage(I18n.loc(sender, ie.getWrapperMessageKey(), innerMessage));
+                return false;
+            }
+            return true;
         };
     }
 }
