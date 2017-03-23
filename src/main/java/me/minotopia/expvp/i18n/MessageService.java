@@ -17,6 +17,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
@@ -60,7 +61,8 @@ public class MessageService {
 
     private String doTranslation(Locale locale, ResourceBundle bundle, String key, Object... args) {
         String pattern = bundle.getString(key);
-        return String.format(pattern, localizeMessageArguments(locale, args));
+        return new MessageFormat(pattern, locale)
+                .format(localizeMessageArguments(locale, args));
     }
 
     private Object[] localizeMessageArguments(Locale locale, Object[] args) {

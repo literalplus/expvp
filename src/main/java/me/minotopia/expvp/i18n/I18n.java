@@ -58,8 +58,7 @@ public class I18n {
      *
      * @param locale the locale to query
      * @param key    the message key, according to {@link MessagePath} specifications.
-     * @param args   the arguments for the message, which will be inserted like in {@link String#format(String,
-     *               Object...)}
+     * @param args   the arguments for the message, which will be inserted using {@link java.text.MessageFormat}
      * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
      */
     public static String loc(Locale locale, String key, Object... args) {
@@ -76,8 +75,7 @@ public class I18n {
      *
      * @param senderId the unique id of the command sender whose locale to use from the cache
      * @param key      the message key, according to {@link MessagePath} specifications.
-     * @param args     the arguments for the message, which will be inserted like in {@link String#format(String,
-     *                 Object...)}
+     * @param args     the arguments for the message, which will be inserted using {@link java.text.MessageFormat}
      * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
      */
     public static String loc(UUID senderId, String key, Object... args) {
@@ -89,8 +87,7 @@ public class I18n {
      *
      * @param sender the command sender whose locale to use from the cache
      * @param key    the message key, according to {@link MessagePath} specifications.
-     * @param args   the arguments for the message, which will be inserted like in {@link String#format(String,
-     *               Object...)}
+     * @param args   the arguments for the message, which will be inserted using {@link java.text.MessageFormat}
      * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
      */
     public static String loc(CommandSender sender, String key, Object... args) {
@@ -102,8 +99,7 @@ public class I18n {
      *
      * @param locale  the locale to query
      * @param message the message object, with the key formatted according to {@link MessagePath} specifications, and
-     *                the arguments being inserted back into the resolved message like in {@link String#format(String,
-     *                Object...)}
+     *                the arguments being inserted back into the resolved message using {@link java.text.MessageFormat}
      * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
      */
     public static String loc(Locale locale, Message message) {
@@ -122,8 +118,7 @@ public class I18n {
      *
      * @param senderId the unique id of the command sender whose locale to use from the cache
      * @param message  the message object, with the key formatted according to {@link MessagePath} specifications, and
-     *                 the arguments being inserted back into the resolved message like in {@link String#format(String,
-     *                 Object...)}
+     *                 the arguments being inserted back into the resolved message using {@link java.text.MessageFormat}
      * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
      */
     public static String loc(UUID senderId, Message message) {
@@ -135,8 +130,7 @@ public class I18n {
      *
      * @param sender  the command sender whose locale to use from the cache
      * @param message the message object, with the key formatted according to {@link MessagePath} specifications, and
-     *                the arguments being inserted back into the resolved message like in {@link String#format(String,
-     *                Object...)}
+     *                the arguments being inserted back into the resolved message using {@link java.text.MessageFormat}
      * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
      */
     public static String loc(CommandSender sender, Message message) {
