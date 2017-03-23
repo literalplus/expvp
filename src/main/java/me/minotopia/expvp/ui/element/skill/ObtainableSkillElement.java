@@ -10,7 +10,7 @@ package me.minotopia.expvp.ui.element.skill;
 
 import li.l1t.common.exception.UserException;
 import li.l1t.common.inventory.gui.InventoryMenu;
-import me.minotopia.expvp.api.service.SkillObtainmentService;
+import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
@@ -48,8 +48,9 @@ public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
             throw new UserException("Da ist nichts!");
         }
         Player player = inventoryMenu.getPlayer();
-        SkillObtainmentService obtainmentService = inventoryMenu.getPlugin().getSkillObtainmentService();
-        obtainmentService.addObtainedSkill(player.getUniqueId(), skill); //handles cost etc
+        inventoryMenu.getPlugin()
+                .inject(ResearchService.class)
+                .research(player.getUniqueId(), skill, inventoryMenu.getTree());
         player.sendMessage(
                 String.format("§e§l➩ §aDu hast '%s' für %d Skillpunkte erforscht.",
                         skill.getDisplayName(), skill.getBookCost())

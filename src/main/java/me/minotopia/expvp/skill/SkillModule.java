@@ -9,15 +9,11 @@
 package me.minotopia.expvp.skill;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import me.minotopia.expvp.api.service.PlayerDataService;
-import me.minotopia.expvp.api.service.SkillObtainmentService;
+import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.api.skill.SkillService;
 import me.minotopia.expvp.skill.meta.SimpleSkillService;
 import me.minotopia.expvp.skill.meta.SkillManager;
-import me.minotopia.expvp.skill.obtainment.CostCheckingObtainmentService;
-import me.minotopia.expvp.skill.obtainment.SimpleSkillObtainmentService;
-import me.minotopia.expvp.util.SessionProvider;
+import me.minotopia.expvp.skill.obtainment.TalentPointResearchService;
 
 /**
  * Provides the dependency wiring for the skill module.
@@ -30,14 +26,6 @@ public class SkillModule extends AbstractModule {
     protected void configure() {
         bind(SkillManager.class);
         bind(SkillService.class).to(SimpleSkillService.class);
-    }
-
-    @Provides
-    SkillObtainmentService skillObtainmentService(PlayerDataService playerDataService, SessionProvider sessionProvider) {
-        return new CostCheckingObtainmentService(
-                new SimpleSkillObtainmentService(playerDataService),
-                playerDataService,
-                sessionProvider
-        );
+        bind(ResearchService.class).to(TalentPointResearchService.class);
     }
 }

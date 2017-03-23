@@ -13,7 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.api.inject.DataFolder;
-import me.minotopia.expvp.api.service.SkillObtainmentService;
+import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.skilltree.SkillTreeNode;
 import me.minotopia.expvp.yaml.AbstractYamlManager;
 import org.bukkit.Material;
@@ -31,10 +31,10 @@ import java.io.File;
  */
 @Singleton
 public class SkillManager extends AbstractYamlManager<Skill> {
-    private final SkillObtainmentService obtainmentService;
+    private final ResearchService obtainmentService;
 
     @Inject
-    public SkillManager(@DataFolder File dataFolder, SkillObtainmentService obtainmentService) {
+    public SkillManager(@DataFolder File dataFolder, ResearchService obtainmentService) {
         super(new File(dataFolder, "skills"));
         this.obtainmentService = Preconditions.checkNotNull(obtainmentService, "obtainmentService");
         loadAll();
@@ -50,7 +50,7 @@ public class SkillManager extends AbstractYamlManager<Skill> {
         if (skill == null) {
             return new ItemStack(Material.BARRIER);
         }
-        boolean obtained = obtainmentService.hasObtainedSkill(player.getUniqueId(), skill);
+        boolean obtained = obtainmentService.has(player.getUniqueId(), skill);
         ItemStackFactory icon = createRawSkillIconFor(skill, obtained);
         if (obtained) {
             icon.glow().lore("\n§aDu hast diesen Skill\n§abereits erforscht.");
@@ -75,7 +75,7 @@ public class SkillManager extends AbstractYamlManager<Skill> {
         SkillTreeNode<?> parent = node.getParent();
         return parent == null ||
                 (parent.getValue() != null &&
-                        obtainmentService.hasObtainedSkill(player.getUniqueId(), parent.getValue()));
+                        obtainmentService.has(player.getUniqueId(), parent.getValue()));
     }
 
     private String findColoredDisplayNameFor(Skill skill, boolean obtained) {

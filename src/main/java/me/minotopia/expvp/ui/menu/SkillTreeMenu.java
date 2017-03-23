@@ -102,4 +102,8 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
             }
         }
     }
+
+    public SkillTree getTree() {
+        return renderer.getTree();
+    }
 }

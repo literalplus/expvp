@@ -8,17 +8,17 @@
 
 package me.minotopia.expvp.skill.obtainment;
 
+import com.google.inject.Inject;
 import li.l1t.common.exception.UserException;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
-import me.minotopia.expvp.api.service.SkillObtainmentService;
 import me.minotopia.expvp.skill.meta.Skill;
+import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
-import org.hibernate.HibernateException;
 
-import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -28,48 +28,32 @@ import java.util.UUID;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-11
  */
-public class CostCheckingObtainmentService implements SkillObtainmentService {
-    private final SkillObtainmentService proxy;
+public class TalentPointResearchService extends SimpleResearchService {
     private final PlayerDataService playerDataService;
     private final SessionProvider sessionProvider;
 
-    public CostCheckingObtainmentService(SkillObtainmentService proxy,
-                                         PlayerDataService playerDataService,
-                                         SessionProvider sessionProvider) {
-        this.proxy = proxy;
+    @Inject
+    public TalentPointResearchService(PlayerDataService playerDataService,
+                                      SessionProvider sessionProvider, DisplayNameService displayNameService) {
+        super(playerDataService, displayNameService);
         this.playerDataService = playerDataService;
         this.sessionProvider = sessionProvider;
     }
 
     @Override
-    public void addObtainedSkill(UUID playerId, Skill skill) {
+    public void research(UUID playerId, Skill skill, SkillTree tree) {
         try (ScopedSession scoped = sessionProvider.scoped().join()) {
             scoped.tx();
             MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
             if (playerData.getTalentPoints() < skill.getBookCost()) {
-                throw new UserException("Du hast dafür nicht genügend Skillpunkte!");
+                throw new UserException("Du hast dafür nicht genügend Talentpunkte!");
             }
-            playerData.setTalentPoints(playerData.getTalentPoints() - skill.getBookCost());
-            proxy.addObtainedSkill(playerId, skill);
+            playerData.setTalentPoints(playerData.getTalentPoints() - skill.getBookCost()); //TODO: TalentPointService #740
+            super.research(playerId, skill, tree);
             playerDataService.saveData(playerData);
             scoped.commitIfLast();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             throw sessionProvider.handleException(e);
         }
-    }
-
-    @Override
-    public void removeObtainedSkill(UUID playerId, Skill skill) {
-        proxy.removeObtainedSkill(playerId, skill);
-    }
-
-    @Override
-    public boolean hasObtainedSkill(UUID playerId, Skill skill) {
-        return proxy.hasObtainedSkill(playerId, skill);
-    }
-
-    @Override
-    public Collection<String> getObtainedSkills(UUID playerId) {
-        return proxy.getObtainedSkills(playerId);
     }
 }
