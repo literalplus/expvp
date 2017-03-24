@@ -9,6 +9,7 @@
 package me.minotopia.expvp.i18n.exception;
 
 import li.l1t.common.exception.InternalException;
+import li.l1t.common.intake.i18n.Message;
 
 /**
  * A non-sensitive system-induced exception with a localisable message.
@@ -48,5 +49,10 @@ public class I18nInternalException extends InternalException implements Internat
     @Override
     public Object[] getMessageParameters() {
         return params;
+    }
+
+    @Override
+    public Message toMessage() {
+        return Message.of(getWrapperMessageKey(), Message.of(getMessageKey(), getMessageParameters()));
     }
 }

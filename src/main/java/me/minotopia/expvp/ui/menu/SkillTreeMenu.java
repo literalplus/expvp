@@ -10,10 +10,13 @@ package me.minotopia.expvp.ui.menu;
 
 import com.google.common.base.Preconditions;
 import li.l1t.common.exception.InternalException;
-import li.l1t.common.exception.UserException;
+import li.l1t.common.exception.NonSensitiveException;
 import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.exception.I18nInternalException;
+import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.ui.renderer.TreeStructureRenderer;
 import me.minotopia.expvp.ui.renderer.exception.RenderingException;
@@ -88,18 +91,18 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
     public boolean handleClick(InventoryClickEvent evt) {
         try {
             return super.handleClick(evt);
-        } catch (InternalException e) {
-            getPlayer().sendMessage("§4§lInterner Fehler: §c" + e.getLocalizedMessage());
+        } catch (I18nUserException | I18nInternalException e) {
+            getPlayer().sendMessage(I18n.loc(getPlayer(), e.toMessage()));
             getPlayer().closeInventory();
-            throw e;
-        } catch (UserException e) {
-            getPlayer().sendMessage("§c§lFehler: §c" + e.getLocalizedMessage());
-            getPlayer().closeInventory();
-            if (e.getCause() != null) {
+            if (e.needsLogging()) {
                 throw e;
             } else {
                 return true;
             }
+        } catch (NonSensitiveException e) {
+            getPlayer().sendMessage(e.getColoredMessage());
+            getPlayer().closeInventory();
+            throw e;
         }
     }
 

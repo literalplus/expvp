@@ -9,6 +9,7 @@
 package me.minotopia.expvp.i18n.exception;
 
 import li.l1t.common.exception.UserException;
+import li.l1t.common.intake.i18n.Message;
 
 /**
  * A non-sensitive user-induced exception with a localisable message.
@@ -48,5 +49,9 @@ public class I18nUserException extends UserException implements InternationalExc
     @Override
     public Object[] getMessageParameters() {
         return params;
+    }
+
+    public Message toMessage() {
+        return Message.of(getWrapperMessageKey(), Message.of(getMessageKey(), getMessageParameters()));
     }
 }

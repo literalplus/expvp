@@ -76,9 +76,8 @@ public class CommandsModule extends AbstractModule {
     private CommandExceptionListener i18nCommandExceptionListener() {
         return (argLine, sender, exception) -> {
             if (exception instanceof InternationalException) {
-                InternationalException ie = (InternationalException) exception;
-                String innerMessage = I18n.loc(sender, ie.getMessageKey(), ie.getMessageParameters());
-                sender.sendMessage(I18n.loc(sender, ie.getWrapperMessageKey(), innerMessage));
+                InternationalException internationalException = (InternationalException) exception;
+                sender.sendMessage(I18n.loc(sender, internationalException.toMessage()));
                 return false;
             }
             return true;

@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.i18n.exception;
 
+import li.l1t.common.intake.i18n.Message;
+
 /**
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-23
@@ -18,4 +20,6 @@ public interface InternationalException {
     Object[] getMessageParameters();
 
     String getWrapperMessageKey();
+
+    Message toMessage();
 }
