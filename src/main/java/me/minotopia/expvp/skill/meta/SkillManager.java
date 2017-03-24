@@ -68,6 +68,7 @@ public class SkillManager extends AbstractYamlManager<Skill> {
         }
         ItemStackFactory icon = new ItemStackFactory(skill.getDisplayStack());
         icon.displayName(findColoredDisplayNameFor(skill, obtained));
+        icon.amount(skill.getBookCost());
         return icon;
     }
 
