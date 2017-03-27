@@ -142,8 +142,8 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, Ski
             desc = "Listet Skilltrees auf",
             help = "Listet alle Skilltrees\nin einem Inventar auf")
     @EnumRequires(Permission.ADMIN_BASIC)
-    public void list(EPPlugin plugin, @Sender Player player) {
-        SelectTreeMenu.openNew(plugin, player, tree -> skillInfo(player, tree));
+    public void list(SelectTreeMenu.Factory menuFactory, @Sender Player player) {
+        menuFactory.openMenu(player, tree -> skillInfo(player, tree));
     }
 
     @Command(aliases = "remove", min = 1,

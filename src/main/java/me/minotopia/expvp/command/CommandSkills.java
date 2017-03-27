@@ -10,9 +10,7 @@ package me.minotopia.expvp.command;
 
 import com.sk89q.intake.Command;
 import li.l1t.common.intake.provider.annotation.Sender;
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.ui.menu.SelectTreeMenu;
-import me.minotopia.expvp.ui.menu.SkillTreeMenu;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -27,11 +25,8 @@ public class CommandSkills {
     @Command(aliases = "",
             desc = "Zeigt Skilltrees",
             help = "Zeigt ein Menü,\nin dem Skilltrees\nausgewählt und Skills\nerforscht werden können.")
-    public void newSkill(EPPlugin plugin, @Sender Player player)
+    public void newSkill(SelectTreeMenu.Factory menuFactory, @Sender Player player)
             throws IOException {
-        SelectTreeMenu.openNew(
-                plugin, player,
-                tree -> SkillTreeMenu.openForResearch(plugin, player, tree)
-        );
+        menuFactory.openForResearch(player);
     }
 }

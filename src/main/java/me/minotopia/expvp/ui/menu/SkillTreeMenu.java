@@ -9,6 +9,7 @@
 package me.minotopia.expvp.ui.menu;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 import li.l1t.common.exception.InternalException;
 import li.l1t.common.exception.NonSensitiveException;
 import li.l1t.common.inventory.gui.SimpleInventoryMenu;
@@ -18,6 +19,8 @@ import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skilltree.SkillTree;
+import me.minotopia.expvp.ui.element.BackButton;
+import me.minotopia.expvp.ui.element.TreeInfoElement;
 import me.minotopia.expvp.ui.renderer.TreeStructureRenderer;
 import me.minotopia.expvp.ui.renderer.exception.RenderingException;
 import me.minotopia.expvp.util.ScopedSession;
@@ -35,10 +38,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
     private TreeStructureRenderer renderer;
 
-    SkillTreeMenu(EPPlugin plugin, Player player, TreeStructureRenderer renderer) {
-        super(plugin, renderer.getTree().getDisplayName(), player);
+    private SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree, Runnable backButtonHandler) {
+        super(plugin, tree.getDisplayName(), player);
         Preconditions.checkNotNull(renderer, "renderer");
-        this.renderer = renderer;
+        this.renderer = new TreeStructureRenderer(tree);
+        if (backButtonHandler != null) {
+            addElement(0, new BackButton(inventoryMenu -> backButtonHandler.run()));
+        }
+        addElement(1, new TreeInfoElement(tree, () -> 42 /* TODO: TalentPointService */));
     }
 
     private void applyRenderer() {
@@ -54,14 +61,6 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
         } catch (RenderingException e) {
             throw new InternalException("Konnte Skilltree nicht rendern", e);
         }
-    }
-
-    public static SkillTreeMenu openForResearch(EPPlugin plugin, Player player, SkillTree tree) {
-        TreeStructureRenderer renderer = new TreeStructureRenderer(tree);
-        SkillTreeMenu menu = new SkillTreeMenu(plugin, player, renderer);
-        menu.applyRenderer();
-        openInTransaction(menu);
-        return menu;
     }
 
     private static void openInTransaction(SkillTreeMenu menu) {
@@ -108,5 +107,37 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
 
     public SkillTree getTree() {
         return renderer.getTree();
+    }
+
+    public static class Factory {
+        private final EPPlugin plugin;
+
+        @Inject
+        public Factory(EPPlugin plugin) {
+            this.plugin = plugin;
+        }
+
+        public SkillTreeMenu createMenuWithBackButton(Player player, SkillTree tree, Runnable backButtonHandler) {
+            SkillTreeMenu menu = new SkillTreeMenu(
+                    plugin, player, tree, backButtonHandler
+            );
+            menu.applyRenderer();
+            return menu;
+        }
+
+        public SkillTreeMenu createMenuWithoutBackButton(Player player, SkillTree tree) {
+            return createMenuWithBackButton(player, tree, null);
+        }
+
+        public SkillTreeMenu openMenu(Player player, SkillTree tree, Runnable backButtonHandler) {
+            SkillTreeMenu menu;
+            if (backButtonHandler != null) {
+                menu = createMenuWithBackButton(player, tree, backButtonHandler);
+            } else {
+                menu = createMenuWithoutBackButton(player, tree);
+            }
+            openInTransaction(menu);
+            return menu;
+        }
     }
 }

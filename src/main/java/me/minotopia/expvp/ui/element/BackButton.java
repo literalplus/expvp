@@ -14,6 +14,8 @@ import li.l1t.common.util.inventory.ItemStackFactory;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.util.function.Consumer;
+
 /**
  * A button that restores the previous menu, if any, on click. If no previous menu exists, it closes
  * the current inventory.
@@ -24,19 +26,25 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class BackButton extends Placeholder {
     private static final ItemStackFactory ICON_FACTORY = new ItemStackFactory(Material.WOOD_DOOR)
             .displayName("<< §6§lZurück");
-    private final InventoryMenu previous;
+    private final Consumer<InventoryMenu> clickHandler;
 
     public BackButton(InventoryMenu previous) {
+        this(inventoryMenu -> {
+            if (previous != null) {
+                previous.open();
+            } else {
+                inventoryMenu.getPlayer().closeInventory();
+            }
+        });
+    }
+
+    public BackButton(Consumer<InventoryMenu> clickHandler) {
         super(ICON_FACTORY.produce());
-        this.previous = previous;
+        this.clickHandler = clickHandler;
     }
 
     @Override
     public void handleMenuClick(InventoryClickEvent event, InventoryMenu inventoryMenu) {
-        if (previous != null) {
-            previous.open();
-        } else {
-            inventoryMenu.getPlayer().closeInventory();
-        }
+        clickHandler.accept(inventoryMenu);
     }
 }

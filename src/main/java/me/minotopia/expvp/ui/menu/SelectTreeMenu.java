@@ -8,9 +8,11 @@
 
 package me.minotopia.expvp.ui.menu;
 
+import com.google.inject.Inject;
 import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.skilltree.SkillTree;
+import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.ui.element.SkillTreeElement;
 import org.bukkit.entity.Player;
 
@@ -40,10 +42,32 @@ public class SelectTreeMenu extends SimpleInventoryMenu implements EPMenu {
         trees.forEach(tree -> addElement(tree.getSlotId(), new SkillTreeElement(clickHandler, tree)));
     }
 
-    public static SelectTreeMenu openNew(EPPlugin plugin, Player player, Consumer<SkillTree> clickHandler) {
-        SelectTreeMenu menu = new SelectTreeMenu(plugin, "§6§lSkilltrees", player, clickHandler);
-        menu.populate(plugin.getSkillTreeManager().getAll());
-        menu.open();
-        return menu;
+    public static class Factory {
+        private final EPPlugin plugin;
+        private final SkillTreeManager treeManager;
+        private final SkillTreeMenu.Factory treeMenuFactory;
+
+        @Inject
+        public Factory(EPPlugin plugin, SkillTreeManager treeManager, SkillTreeMenu.Factory treeMenuFactory) {
+            this.plugin = plugin;
+            this.treeManager = treeManager;
+            this.treeMenuFactory = treeMenuFactory;
+        }
+
+        public SelectTreeMenu createMenu(Player player, Consumer<SkillTree> clickHandler) {
+            SelectTreeMenu menu = new SelectTreeMenu(plugin, "§6§lSkilltrees", player, clickHandler);
+            menu.populate(treeManager.getAll());
+            return menu;
+        }
+
+        public SelectTreeMenu openMenu(Player player, Consumer<SkillTree> clickHandler) {
+            SelectTreeMenu menu = createMenu(player, clickHandler);
+            menu.open();
+            return menu;
+        }
+
+        public SelectTreeMenu openForResearch(Player player) {
+            return openMenu(player, tree -> treeMenuFactory.openMenu(player, tree, () -> openForResearch(player)));
+        }
     }
 }
