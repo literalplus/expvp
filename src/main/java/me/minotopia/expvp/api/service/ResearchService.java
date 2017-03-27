@@ -11,6 +11,7 @@ package me.minotopia.expvp.api.service;
 import li.l1t.common.exception.UserException;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -25,22 +26,22 @@ public interface ResearchService {
     /**
      * Researches given skill in given tree.
      *
-     * @param playerId the unique id of the player
-     * @param skill    the skill to obtain
-     * @param tree     the tree to calculate dependencies from
+     * @param player the player to operate on
+     * @param skill  the skill to obtain
+     * @param tree   the tree to calculate dependencies from
      * @throws UserException if the skill is already obtained, a required parent skill has not been researched, or
      *                       something else prevents obtainment
      */
-    void research(UUID playerId, Skill skill, SkillTree tree);
+    void research(Player player, Skill skill, SkillTree tree);
 
     /**
      * Forgets a player's skill, removing it from their skill set.
      *
-     * @param playerId the unique id of the player
+     * @param player the unique id of the player
      * @param skill    the skill to forget
      * @throws UserException if the skill has not been obtained
      */
-    void forget(UUID playerId, Skill skill);
+    void forget(Player player, Skill skill);
 
     /**
      * Checks whether a player has obtained a skill.

@@ -32,6 +32,8 @@ import java.util.UUID;
 @Table(name = "exp_player", schema = "mt_main")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class HibernatePlayerData extends BaseEntity implements MutablePlayerData {
+    public static final int INITIAL_EXP = 100;
+
     @Id
     private UUID uuid; //always use Object types for identifiers, they didn't explain why tho
     @Column(name = "totalkills")
@@ -44,7 +46,7 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     private int currentDeaths;
     @Column(name = "league")
     private String leagueName;
-    private int exp = 100;
+    private int exp = INITIAL_EXP;
     @Column(name = "talentpoints")
     private int talentPoints;
     @Convert(converter = LocaleConverter.class)

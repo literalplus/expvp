@@ -15,6 +15,7 @@ import li.l1t.common.exception.UserException;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
+import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
@@ -22,6 +23,7 @@ import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skilltree.SkillTree;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -45,11 +47,11 @@ public class SimpleResearchService implements ResearchService {
     }
 
     @Override
-    public void research(UUID playerId, Skill skill, SkillTree tree) {
+    public void research(Player player, Skill skill, SkillTree tree) {
         Preconditions.checkNotNull(skill, "skill");
-        MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
-        checkIsNotObtained(playerId, skill);
-        checkIsObtainable(playerId, skill, tree);
+        MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(player.getUniqueId());
+        checkIsNotObtained(player.getUniqueId(), skill);
+        checkIsObtainable(player.getUniqueId(), skill, tree);
         playerData.addSkill(skill);
         playerDataService.saveData(playerData);
     }
@@ -61,10 +63,10 @@ public class SimpleResearchService implements ResearchService {
     }
 
     @Override
-    public void forget(UUID playerId, Skill skill) {
+    public void forget(Player player, Skill skill) {
         Preconditions.checkNotNull(skill, "skill");
-        MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
-        checkIsObtained(playerId, skill);
+        MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(player.getUniqueId());
+        checkIsObtained(player.getUniqueId(), skill);
         playerData.removeSkill(skill);
         playerDataService.saveData(playerData);
     }
@@ -97,14 +99,14 @@ public class SimpleResearchService implements ResearchService {
 
     @Override
     public boolean has(UUID playerId, Skill skill) {
-        MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
+        PlayerData playerData = playerDataService.findOrCreateData(playerId);
         return playerData.getSkills().stream()
                 .anyMatch(skill::matches);
     }
 
     @Override
     public Collection<String> getObtainedSkills(UUID playerId) {
-        MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
+        PlayerData playerData = playerDataService.findOrCreateData(playerId);
         return playerData.getSkills().stream()
                 .map(ObtainedSkill::getSkillId)
                 .collect(Collectors.toList());

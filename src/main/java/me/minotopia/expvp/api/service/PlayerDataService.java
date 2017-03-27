@@ -25,6 +25,7 @@ public interface PlayerDataService {
      * Finds existing data for a player in the underlying data store. If no data exists yet, creates
      * a new data set for the player. <p><b>Note:</b> The data returned by this method is read-only.
      * Use {@link #findOrCreateDataMutable(UUID)} for write access.</p>
+     * <p><b>Note:</b> For the create action to be persisted, any surrounding scoped sessions needs to be committed.</p>
      *
      * @param playerId the unique id of the player
      * @return the existing or created player data

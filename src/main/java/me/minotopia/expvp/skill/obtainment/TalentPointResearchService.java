@@ -9,17 +9,15 @@
 package me.minotopia.expvp.skill.obtainment;
 
 import com.google.inject.Inject;
-import li.l1t.common.exception.UserException;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
-import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
+import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
-
-import java.util.UUID;
+import org.bukkit.entity.Player;
 
 /**
  * A wrapper for skill obtainment services that adds cost checking and payments using {@link
@@ -29,31 +27,23 @@ import java.util.UUID;
  * @since 2016-09-11
  */
 public class TalentPointResearchService extends SimpleResearchService {
-    private final PlayerDataService playerDataService;
     private final SessionProvider sessionProvider;
+    private final TalentPointService talentPoints;
 
     @Inject
-    public TalentPointResearchService(PlayerDataService playerDataService,
-                                      SessionProvider sessionProvider, DisplayNameService displayNameService) {
+    public TalentPointResearchService(PlayerDataService playerDataService, SessionProvider sessionProvider,
+                                      DisplayNameService displayNameService, TalentPointService talentPoints) {
         super(playerDataService, displayNameService);
-        this.playerDataService = playerDataService;
         this.sessionProvider = sessionProvider;
+        this.talentPoints = talentPoints;
     }
 
     @Override
-    public void research(UUID playerId, Skill skill, SkillTree tree) {
+    public void research(Player player, Skill skill, SkillTree tree) {
         try (ScopedSession scoped = sessionProvider.scoped().join()) {
-            scoped.tx();
-            MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
-            if (playerData.getTalentPoints() < skill.getBookCost()) {
-                throw new UserException("Du hast dafür nicht genügend Talentpunkte!");
-            }
-            playerData.setTalentPoints(playerData.getTalentPoints() - skill.getBookCost()); //TODO: TalentPointService #740
-            super.research(playerId, skill, tree);
-            playerDataService.saveData(playerData);
-            scoped.commitIfLast();
-        } catch (Exception e) {
-            throw sessionProvider.handleException(e);
+            talentPoints.consumeTalentPoints(player, skill.getBookCost());
+            super.research(player, skill, tree);
+            scoped.commitIfLastAndChanged();
         }
     }
 }

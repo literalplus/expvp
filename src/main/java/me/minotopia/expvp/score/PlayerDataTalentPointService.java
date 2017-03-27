@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
+import me.minotopia.expvp.api.score.InsufficientTalentPointsException;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.ScopedSession;
@@ -89,5 +90,19 @@ public class PlayerDataTalentPointService implements TalentPointService {
             players.saveData(playerData);
         }
         return difference;
+    }
+
+    @Override
+    public void consumeTalentPoints(Player player, int consumePoints) {
+        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+            MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
+            int currentPoints = playerData.getTalentPoints();
+            if (currentPoints < consumePoints) {
+                throw new InsufficientTalentPointsException(consumePoints, currentPoints);
+            } else {
+                playerData.setTalentPoints(currentPoints - consumePoints);
+            }
+            scoped.commitIfLastAndChanged();
+        }
     }
 }

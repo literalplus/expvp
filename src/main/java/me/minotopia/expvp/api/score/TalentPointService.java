@@ -31,4 +31,13 @@ public interface TalentPointService {
      * @return the amount of Talent Points granted, zero if none
      */
     int grantTalentPointsForKill(Player player);
+
+    /**
+     * Consumes given amount of Talent Points from given player's account.
+     *
+     * @param player the player whose account to use
+     * @param amount the amount if Talent Points to consume
+     * @throws InsufficientTalentPointsException if given player does not have given amount of Talent Points
+     */
+    void consumeTalentPoints(Player player, int amount);
 }
