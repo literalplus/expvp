@@ -44,7 +44,7 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     private int currentDeaths;
     @Column(name = "league")
     private String leagueName;
-    private int exp;
+    private int exp = 100;
     @Column(name = "talentpoints")
     private int talentPoints;
     @Convert(converter = LocaleConverter.class)
