@@ -15,6 +15,7 @@ import li.l1t.common.exception.NonSensitiveException;
 import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
@@ -38,14 +39,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
     private TreeStructureRenderer renderer;
 
-    private SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree, Runnable backButtonHandler) {
+    private SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree, Runnable backButtonHandler,
+                          TalentPointService talentPoints) {
         super(plugin, tree.getDisplayName(), player);
         Preconditions.checkNotNull(renderer, "renderer");
         this.renderer = new TreeStructureRenderer(tree);
         if (backButtonHandler != null) {
             addElement(0, new BackButton(inventoryMenu -> backButtonHandler.run()));
         }
-        addElement(1, new TreeInfoElement(tree, () -> 42 /* TODO: TalentPointService */));
+        addElement(1, new TreeInfoElement(tree, () -> talentPoints.getCurrentTalentPointCount(getPlayer())));
     }
 
     private void applyRenderer() {
@@ -111,15 +113,17 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
 
     public static class Factory {
         private final EPPlugin plugin;
+        private final TalentPointService talentPointService;
 
         @Inject
-        public Factory(EPPlugin plugin) {
+        public Factory(EPPlugin plugin, TalentPointService talentPointService) {
             this.plugin = plugin;
+            this.talentPointService = talentPointService;
         }
 
         public SkillTreeMenu createMenuWithBackButton(Player player, SkillTree tree, Runnable backButtonHandler) {
             SkillTreeMenu menu = new SkillTreeMenu(
-                    plugin, player, tree, backButtonHandler
+                    plugin, player, tree, backButtonHandler, talentPointService
             );
             menu.applyRenderer();
             return menu;
