@@ -10,6 +10,7 @@ package me.minotopia.expvp.score;
 
 import com.google.inject.AbstractModule;
 import me.minotopia.expvp.api.score.ExpService;
+import me.minotopia.expvp.api.score.TalentPointService;
 
 /**
  * Injector module for everything related to scoring, including Exp, Talent Points, and Leagues.
@@ -21,5 +22,6 @@ public class ScoreModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(ExpService.class).to(PlayerDataExpService.class);
+        bind(TalentPointService.class).to(PlayerDataTalentPointService.class);
     }
 }
