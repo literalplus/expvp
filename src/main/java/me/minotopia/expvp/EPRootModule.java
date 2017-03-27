@@ -14,8 +14,10 @@ import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.i18n.EPDisplayNameService;
 import me.minotopia.expvp.model.ModelModule;
+import me.minotopia.expvp.score.ScoreModule;
 import me.minotopia.expvp.skill.SkillModule;
 import me.minotopia.expvp.skilltree.SkillTreeModule;
+import me.minotopia.expvp.ui.InventoryMenuModule;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
@@ -49,5 +51,7 @@ public class EPRootModule extends AbstractModule {
         install(new SkillModule());
         install(new SkillTreeModule());
         install(new HandlerModule());
+        install(new ScoreModule());
+        install(new InventoryMenuModule());
     }
 }
