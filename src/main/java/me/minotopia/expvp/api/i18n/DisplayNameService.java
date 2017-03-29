@@ -9,8 +9,10 @@
 package me.minotopia.expvp.api.i18n;
 
 import li.l1t.common.intake.i18n.Message;
+import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
+import org.bukkit.entity.Player;
 
 /**
  * Figures out display names for different Expvp entities.
@@ -30,4 +32,6 @@ public interface DisplayNameService {
      * @return a message object representing given tree's display name
      */
     Message displayName(SkillTree tree);
+
+    Message displayName(Player player, PlayerData playerData);
 }

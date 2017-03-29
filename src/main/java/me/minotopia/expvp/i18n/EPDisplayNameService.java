@@ -10,8 +10,10 @@ package me.minotopia.expvp.i18n;
 
 import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
+import org.bukkit.entity.Player;
 
 /**
  * Resolves display names for Expvp entities.
@@ -22,11 +24,16 @@ import me.minotopia.expvp.skilltree.SkillTree;
 public class EPDisplayNameService implements DisplayNameService {
     @Override
     public Message displayName(Skill skill) {
-        return Message.of("skill/" + skill.getId() + ".name");
+        return Message.of("skill!" + skill.getId() + ".name");
     }
 
     @Override
     public Message displayName(SkillTree tree) {
-        return Message.of("tree/" + tree.getId() + ".name");
+        return Message.of("tree!" + tree.getId() + ".name");
+    }
+
+    @Override
+    public Message displayName(Player player, PlayerData playerData) {
+        return Message.of("core!player.prefixed-name", player.getName(), playerData.getLeagueName()); //TODO: League prefix
     }
 }

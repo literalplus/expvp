@@ -83,7 +83,7 @@ public class SimpleResearchService implements ResearchService {
             Skill parentSkill = next.getValue();
             if (!has(playerId, parentSkill)) {
                 throw new I18nUserException(
-                        "error/tree.missing-parent",
+                        "error!tree.missing-parent",
                         displayNames.displayName(skill), displayNames.displayName(parentSkill)
                 );
             }
@@ -94,7 +94,7 @@ public class SimpleResearchService implements ResearchService {
         return tree.nodeStream()
                 .filter(node -> skill.equals(node.getValue()))
                 .findFirst()
-                .orElseThrow(() -> new I18nInternalException("error/tree.skill-not-in-tree", skill.getDisplayName(), tree.getDisplayName()));
+                .orElseThrow(() -> new I18nInternalException("error!tree.skill-not-in-tree", skill.getDisplayName(), tree.getDisplayName()));
     }
 
     @Override

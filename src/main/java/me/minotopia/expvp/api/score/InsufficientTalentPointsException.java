@@ -18,6 +18,6 @@ import me.minotopia.expvp.i18n.exception.I18nUserException;
  */
 public class InsufficientTalentPointsException extends I18nUserException {
     public InsufficientTalentPointsException(int requiredPoints, int currentPoints) {
-        super("error/tp.insufficient-tp", requiredPoints, currentPoints);
+        super("error!tp.insufficient-tp", requiredPoints, currentPoints);
     }
 }

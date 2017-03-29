@@ -38,7 +38,7 @@ public class I18nInternalException extends InternalException implements Internat
 
     @Override
     public String getWrapperMessageKey() {
-        return "error/internal";
+        return "error!internal";
     }
 
     @Override

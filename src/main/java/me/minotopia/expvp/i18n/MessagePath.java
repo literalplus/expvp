@@ -28,14 +28,10 @@ class MessagePath {
 
     public static MessagePath of(String path) {
         String[] parts = path.split("!");
-        if (parts.length != 2 || parts[1].isEmpty()) {
+        if (parts.length != 2 || parts[1].isEmpty() || parts[0].isEmpty()) {
             throw new IllegalArgumentException(String.format("Malformed message path: '%s'", path));
         }
-        if (parts[0].isEmpty()) {
-            return new MessagePath("core", parts[1]);
-        } else {
-            return new MessagePath(parts[0], parts[1]);
-        }
+        return new MessagePath(parts[0], parts[1]);
     }
 
     public String bundle() {

@@ -30,7 +30,7 @@ class TalentPointDisplayService {
     public void updateDisplay(Player player, PlayerData playerData) {
         int killsUntilNextTalentPoint = this.talentPoints.findKillsUntilNextTalentPoint(player);
         new ActionbarTitleObject(I18n.loc(
-                player, "score/tp.actionbar", playerData.getTalentPoints(), killsUntilNextTalentPoint
+                player, "score!tp.actionbar", playerData.getTalentPoints(), killsUntilNextTalentPoint
         )).send(player);
     }
 }
