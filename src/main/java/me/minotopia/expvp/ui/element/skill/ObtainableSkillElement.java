@@ -50,7 +50,7 @@ public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
         Player player = inventoryMenu.getPlayer();
         inventoryMenu.getPlugin()
                 .inject(ResearchService.class)
-                .research(player.getUniqueId(), skill, inventoryMenu.getTree());
+                .research(player, skill, inventoryMenu.getTree());
         player.sendMessage(
                 String.format("§e§l➩ §aDu hast '%s' für %d Skillpunkte erforscht.",
                         skill.getDisplayName(), skill.getBookCost())
