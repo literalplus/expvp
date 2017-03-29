@@ -15,7 +15,7 @@ package me.minotopia.expvp.score;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-29
  */
-public class TalentPointCalculator {
+class TalentPointCalculator {
     private static final double SCALING_FACTOR = 1.05D;
     private static final double EXPONENT = 73D / 100D;
     private static final double EXPONENT_INVERSE = 100D / 73D;

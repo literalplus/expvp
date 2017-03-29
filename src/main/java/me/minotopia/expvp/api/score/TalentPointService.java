@@ -56,4 +56,11 @@ public interface TalentPointService {
      * @return the amount of kills left
      */
     int findKillsUntilNextTalentPoint(Player player);
+
+    /**
+     * Updates any cached displays related to Talent Points maintained by this service for given player
+     *
+     * @param player the player to operate on
+     */
+    void updateDisplay(Player player);
 }

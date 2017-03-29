@@ -15,6 +15,7 @@ import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.InsufficientTalentPointsException;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.score.display.TalentPointDisplayService;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
@@ -29,6 +30,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
     private final PlayerDataService players;
     private final SessionProvider sessionProvider;
     private final TalentPointCalculator calculator;
+    private final TalentPointDisplayService displayService;
 
     @Inject
     public PlayerDataTalentPointService(PlayerDataService players, SessionProvider sessionProvider,
@@ -36,6 +38,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
         this.players = players;
         this.sessionProvider = sessionProvider;
         this.calculator = calculator;
+        displayService = new TalentPointDisplayService(this);
     }
 
     @Override
@@ -67,6 +70,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
             int talentPointLimit = findTalentPointLimit(player);
             grantedTalentPoints = grantDeservedTalentPoints(playerData, talentPointLimit);
+            displayService.updateDisplay(player, playerData);
             scoped.commitIfLastAndChanged();
         }
         return grantedTalentPoints;
@@ -108,6 +112,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
             } else {
                 playerData.setTalentPoints(currentPoints - consumePoints);
             }
+            displayService.updateDisplay(player, playerData);
             scoped.commitIfLastAndChanged();
         }
     }
@@ -118,5 +123,14 @@ public class PlayerDataTalentPointService implements TalentPointService {
                 .map(PlayerData::getCurrentKills)
                 .orElse(0);
         return calculator.killsLeftUntilNextPoint(currentKills);
+    }
+
+    @Override
+    public void updateDisplay(Player player) {
+        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+            PlayerData playerData = players.findOrCreateData(player.getUniqueId());
+            displayService.updateDisplay(player, playerData);
+            scoped.commitIfLastAndChanged();
+        }
     }
 }
