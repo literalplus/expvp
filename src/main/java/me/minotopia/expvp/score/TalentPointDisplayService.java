@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score.display;
+package me.minotopia.expvp.score;
 
 import io.puharesource.mc.titlemanager.api.ActionbarTitleObject;
 import me.minotopia.expvp.api.model.PlayerData;
@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-27
  */
-public class TalentPointDisplayService {
+class TalentPointDisplayService {
     private final TalentPointService talentPoints;
 
     public TalentPointDisplayService(TalentPointService talentPoints) {

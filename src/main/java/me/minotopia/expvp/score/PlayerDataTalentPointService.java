@@ -15,7 +15,6 @@ import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.InsufficientTalentPointsException;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
-import me.minotopia.expvp.score.display.TalentPointDisplayService;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
