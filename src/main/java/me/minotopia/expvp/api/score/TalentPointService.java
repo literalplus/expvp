@@ -23,6 +23,13 @@ public interface TalentPointService {
     int findTalentPointLimit(Player player);
 
     /**
+     * @param player the player to check
+     * @return whether given player has reached their personal {@link #findTalentPointLimit(Player) Talent Point limit},
+     * that means that they will not receive further Talent Points unless their kills get reset
+     */
+    boolean hasReachedTalentPointLimit(Player player);
+
+    /**
      * Grants given player the talent points they deserve for their latest kill. This works by figuring out how many
      * Talent Points the player deserves overall for their current kill count, and then working out the difference
      * to the deserved Talent Points for the kill count before the kill. The difference in Talent Points is granted.
@@ -40,4 +47,13 @@ public interface TalentPointService {
      * @throws InsufficientTalentPointsException if given player does not have given amount of Talent Points
      */
     void consumeTalentPoints(Player player, int amount);
+
+    /**
+     * Finds the amount of kills given player needs until they are granted the next Talent Point.
+     * <p><b>Note:</b> This method operates theoretically. It does not take into account the Talent Point limit.</p>
+     *
+     * @param player the player to operate on
+     * @return the amount of kills left
+     */
+    int findKillsUntilNextTalentPoint(Player player);
 }

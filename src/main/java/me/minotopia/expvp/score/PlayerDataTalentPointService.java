@@ -26,6 +26,10 @@ import org.bukkit.entity.Player;
  * @since 2017-03-27
  */
 public class PlayerDataTalentPointService implements TalentPointService {
+    private static final double TP_FINAL_FACTOR = 1.05D;
+    private static final double TP_EXPONENT = 73D / 100D;
+    private static final double TP_EXPONENT_INVERSE = 1000D / 73D;
+    private static final double TP_DIVISOR = 0.885D;
     private final PlayerDataService players;
     private final SessionProvider sessionProvider;
 
@@ -37,17 +41,30 @@ public class PlayerDataTalentPointService implements TalentPointService {
 
     @Override
     public int getCurrentTalentPointCount(Player player) {
-        Integer talentPoints;
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
-            talentPoints = players.findData(player.getUniqueId()).map(PlayerData::getTalentPoints).orElse(0);
-            scoped.commitIfLastAndChanged();
+        try (ScopedSession ignored = sessionProvider.scoped().join()) {
+            return players.findData(player.getUniqueId())
+                    .map(PlayerData::getTalentPoints)
+                    .orElse(0);
         }
-        return talentPoints;
     }
 
     @Override
     public int findTalentPointLimit(Player player) {
         return 75; //TODO: Lanatus product for this maybe
+    }
+
+    @Override
+    public boolean hasReachedTalentPointLimit(Player player) {
+        Integer kills = players.findData(player.getUniqueId())
+                .map(PlayerData::getCurrentKills)
+                .orElse(0);
+        int totalTalentPoints = findTotalDeservedTalentPoints(kills);
+        return totalTalentPoints >= findTalentPointLimit(player);
+    }
+
+    private int findTotalDeservedTalentPoints(int killCount) {
+        double rawPoints = TP_FINAL_FACTOR * Math.pow(killCount / TP_DIVISOR, TP_EXPONENT);
+        return Double.valueOf(Math.ceil(rawPoints)).intValue();
     }
 
     @Override
@@ -76,10 +93,6 @@ public class PlayerDataTalentPointService implements TalentPointService {
         }
     }
 
-    private int findTotalDeservedTalentPoints(int killCount) {
-        return Double.valueOf(Math.ceil(1.05D * Math.pow(killCount / 0.885D, 0.73D))).intValue();
-    }
-
     private int grantTalentPointDifference(MutablePlayerData playerData, int newPoints, int previousPoints) {
         Preconditions.checkArgument(newPoints >= previousPoints,
                 "new must not be less than previous points, for: ",
@@ -104,5 +117,22 @@ public class PlayerDataTalentPointService implements TalentPointService {
             }
             scoped.commitIfLastAndChanged();
         }
+    }
+
+    @Override
+    public int findKillsUntilNextTalentPoint(Player player) {
+        int currentKills = players.findData(player.getUniqueId())
+                .map(PlayerData::getCurrentKills)
+                .orElse(0);
+        int currentTotalPoints = findTotalDeservedTalentPoints(currentKills);
+        int currentPointMaxKills = findMaxKillsForTalentPoint(currentTotalPoints);
+        int totalRequiredKills = currentPointMaxKills + 1;
+        return totalRequiredKills - currentKills;
+    }
+
+    private int findMaxKillsForTalentPoint(int talentPoints) {
+        // this is the inverse of the deserved points function, with the n-th root simplified to an exponent
+        double neededKillsRaw = TP_DIVISOR * Math.pow((double) talentPoints / TP_FINAL_FACTOR, TP_EXPONENT_INVERSE);
+        return Double.valueOf(Math.floor(neededKillsRaw)).intValue();
     }
 }
