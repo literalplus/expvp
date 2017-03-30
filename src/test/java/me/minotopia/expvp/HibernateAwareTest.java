@@ -41,7 +41,7 @@ public abstract class HibernateAwareTest extends EPPluginAwareTest {
 
     protected SessionProvider givenHibernateIsInitialised() throws IOException {
         if (sessionProvider == null) {
-            sessionProvider = new SessionProvider(whenHibernateIsInitialisedOn(givenAPluginInstance()));
+            sessionProvider = new SessionProvider(whenHibernateIsInitialisedOn(givenAPluginInstance()), plugin);
         }
         return sessionProvider;
     }

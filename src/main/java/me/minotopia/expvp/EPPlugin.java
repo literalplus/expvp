@@ -83,7 +83,7 @@ public class EPPlugin extends GenericXyPlugin {
             I18n.setDataFolder(new File(getDataFolder(), "lang"));
 
             // Initialise Hibernate ORM
-            this.sessionProvider = new SessionProvider(initHibernate(getClassLoader()));
+            this.sessionProvider = new SessionProvider(initHibernate(getClassLoader()), this);
 
             // Initialise Dependency Injection
             injector = Guice.createInjector(new EPRootModule(this), new CommandsModule());

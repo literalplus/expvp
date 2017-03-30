@@ -9,12 +9,17 @@
 package me.minotopia.expvp.util;
 
 import li.l1t.common.exception.InternalException;
+import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 import javax.persistence21.RollbackException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Provides ScopedSession instances scoped to the current thread. Recreates sessions after they have
@@ -25,11 +30,13 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class SessionProvider {
     private final SessionFactory sessionFactory;
+    private final EPPlugin plugin;
     private ThreadLocal<ScopedSession> sessionLocal = new ThreadLocal<>();
     private ReentrantLock sessionLock = new ReentrantLock();
 
-    public SessionProvider(SessionFactory sessionFactory) {
+    public SessionProvider(SessionFactory sessionFactory, EPPlugin plugin) {
         this.sessionFactory = sessionFactory;
+        this.plugin = plugin;
     }
 
     /**
@@ -78,11 +85,11 @@ public class SessionProvider {
     public InternalException handleException(Exception e) {
         closeAndRollbackIfDirty(sessionLocal.get());
         if (e instanceof RollbackException || e instanceof javax.persistence.RollbackException) {
-            return new InternalException("Datenbankfehler (Rollback)", e);
+            return new I18nInternalException("error!db.hibernate-rollback", e);
         } else if (e instanceof HibernateException) {
-            return new InternalException("Datenbankfehler", e);
+            return new I18nInternalException("error!db.hibernate-misc", e);
         } else {
-            return new InternalException("Fehler während der Interaktion mit der Datenbank", e);
+            return new I18nInternalException("error!db.other", e);
         }
     }
 
@@ -105,5 +112,65 @@ public class SessionProvider {
      */
     public SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    /**
+     * Executes some code in a scoped session and {@link ScopedSession#commitIfLastAndChanged() commits afterwards, if
+     * necessary}.
+     *
+     * @param what what to do in the session
+     */
+    public void inSession(Consumer<ScopedSession> what) {
+        try (ScopedSession scoped = scoped().join()) {
+            what.accept(scoped);
+            scoped.commitIfLastAndChanged();
+        }
+    }
+
+    /**
+     * Executes some code in a scoped session {@link ScopedSession#commitIfLastAndChanged() commits afterwards if
+     * necessary}, and returns some value.
+     *
+     * @param what what to do in the session
+     * @return the result of calling given function
+     */
+    public <T> T inSession(Function<ScopedSession, T> what) {
+        T result;
+        try (ScopedSession scoped = scoped().join()) {
+            result = what.apply(scoped);
+            scoped.commitIfLastAndChanged();
+        }
+        return result;
+    }
+
+    /**
+     * Executes some code in a scoped session in {@link EPPlugin#async(Runnable) an async thread} and {@link
+     * ScopedSession#commitIfLastAndChanged() commits afterwards, if necessary}.
+     *
+     * @param what what to do in the session
+     */
+    public void inSessionAsync(Consumer<ScopedSession> what) {
+        plugin.async(() -> {
+            inSession(what);
+        });
+    }
+
+    /**
+     * Executes some code in a scoped session in {@link EPPlugin#async(Runnable) an async thread} {@link
+     * ScopedSession#commitIfLastAndChanged() commits afterwards if necessary}, and returns some value.
+     *
+     * @param what what to do in the session
+     * @return the result of calling given function
+     */
+    public <T> CompletableFuture<T> inSessionAsync(Function<ScopedSession, T> what) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        plugin.async(() -> {
+            try {
+                future.complete(inSession(what));
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+        return future;
     }
 }
