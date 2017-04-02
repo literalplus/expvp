@@ -49,12 +49,13 @@ public class SimpleResearchService implements ResearchService {
     }
 
     @Override
-    public void research(Player player, Skill skill, SkillTree tree) {
-        Preconditions.checkNotNull(skill, "skill");
+    public void research(Player player, SimpleSkillTreeNode node) {
+        Preconditions.checkNotNull(node, "node");
+        Preconditions.checkNotNull(node.getValue(), "node.getValue()");
         MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(player.getUniqueId());
-        checkIsNotObtained(player.getUniqueId(), skill);
-        checkIsObtainable(player.getUniqueId(), skill, tree);
-        playerData.addSkill(skill);
+        checkIsNotObtained(player.getUniqueId(), node.getValue());
+        checkIsObtainable(player.getUniqueId(), node);
+        playerData.addSkill(node.getValue());
         playerDataService.saveData(playerData);
     }
 
@@ -79,13 +80,11 @@ public class SimpleResearchService implements ResearchService {
         }
     }
 
-    private void checkIsObtainable(UUID playerId, Skill skill, SkillTree tree) {
-        SimpleSkillTreeNode node = findFirstSkillNodeInTree(skill, tree);
-        System.out.println(node + " -> " + node.getParent());
+    private void checkIsObtainable(UUID playerId, SimpleSkillTreeNode node) {
         if (!doesParentPermitObtainment(node, playerId)) {
             throw new I18nUserException(
                     "error!tree.missing-parent",
-                    displayNames.displayName(skill), displayNames.displayName(node.getParent().getValue())
+                    displayNames.displayName(node.getValue()), displayNames.displayName(node.getParent().getValue())
             );
         }
     }
