@@ -35,11 +35,13 @@ import java.util.stream.Collectors;
  */
 public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService> {
     private final SkillKitService skillKitService;
+    private final SessionProvider sessionProvider;
 
     @Inject
-    CommandEPAdmin(CommandService commandService, SkillKitService skillKitService) {
+    CommandEPAdmin(CommandService commandService, SkillKitService skillKitService, SessionProvider sessionProvider) {
         super(commandService);
         this.skillKitService = skillKitService;
+        this.sessionProvider = sessionProvider;
     }
 
     @Command(aliases = "settp", min = 2,
@@ -84,27 +86,29 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
     @EnumRequires(Permission.ADMIN_BASIC)
     public void whoIs(CommandSender sender, String playerInput)
             throws IOException {
-        UUID playerId = service().findPlayerByNameOrIdOrFail(playerInput);
-        PlayerData playerData = service().findPlayerData(playerId);
-        sender.sendMessage("§a»»» §eSpielerinfo §a«««"); //TODO: player name -> xyc profile api
-        formatMessage(sender,
-                "§e§l➩ §eLiga: §a%d §eExp: §a%d §eTP: §a%d §eSprache: §a%s",
-                playerData.getLeagueName(), playerData.getExp(), playerData.getTalentPoints(), playerData.getLocale().getDisplayName()
-        );
-        int totalKD = playerData.getTotalKills() / (playerData.getTotalDeaths() == 0 ? 1 : playerData.getTotalDeaths());
-        formatMessage(sender,
-                "§e§l➩ §aGesamte §eKills: §a%d §eDeaths: §a%d §eK/D: §a%d",
-                playerData.getTotalKills(), playerData.getTotalDeaths(), totalKD
-        );
-        int currentKD = playerData.getCurrentKills() / (playerData.getCurrentDeaths() == 0 ? 1 : playerData.getCurrentDeaths());
-        formatMessage(sender,
-                "§e§l➩ §aAktuelle §eKills: §a%d §eDeaths: §a%d §eK/D: §a%d",
-                playerData.getCurrentKills(), playerData.getCurrentDeaths(), currentKD
-        );
-        formatMessage(sender,
-                "§e§l➩ §eSkills: §a%s",
-                playerData.getSkills().stream().map(ObtainedSkill::getSkillId).collect(Collectors.joining())
-        );
+        sessionProvider.inSession(ignored -> {
+            UUID playerId = service().findPlayerByNameOrIdOrFail(playerInput);
+            PlayerData playerData = service().findPlayerData(playerId);
+            sender.sendMessage("§a»»» §eSpielerinfo §a«««"); //TODO: player name -> xyc profile api
+            formatMessage(sender,
+                    "§e§l➩ §eLiga: §a%d §eExp: §a%d §eTP: §a%d §eSprache: §a%s",
+                    playerData.getLeagueName(), playerData.getExp(), playerData.getTalentPoints(), playerData.getLocale().getDisplayName()
+            );
+            int totalKD = playerData.getTotalKills() / (playerData.getTotalDeaths() == 0 ? 1 : playerData.getTotalDeaths());
+            formatMessage(sender,
+                    "§e§l➩ §aGesamte §eKills: §a%d §eDeaths: §a%d §eK/D: §a%d",
+                    playerData.getTotalKills(), playerData.getTotalDeaths(), totalKD
+            );
+            int currentKD = playerData.getCurrentKills() / (playerData.getCurrentDeaths() == 0 ? 1 : playerData.getCurrentDeaths());
+            formatMessage(sender,
+                    "§e§l➩ §aAktuelle §eKills: §a%d §eDeaths: §a%d §eK/D: §a%d",
+                    playerData.getCurrentKills(), playerData.getCurrentDeaths(), currentKD
+            );
+            formatMessage(sender,
+                    "§e§l➩ §eSkills: §a%s",
+                    playerData.getSkills().stream().map(ObtainedSkill::getSkillId).collect(Collectors.joining())
+            );
+        });
     }
 
     private void formatMessage(CommandSender sender, String format, Object... args) {
