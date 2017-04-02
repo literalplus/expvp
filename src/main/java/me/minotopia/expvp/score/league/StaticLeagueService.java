@@ -31,7 +31,8 @@ public class StaticLeagueService implements LeagueService {
     private final StaticLeagueChangeService changeService;
 
     @Inject
-    public StaticLeagueService(PlayerDataService players, SessionProvider sessionProvider, StaticLeagueChangeService changeService) {
+    public StaticLeagueService(PlayerDataService players, SessionProvider sessionProvider,
+                               StaticLeagueChangeService changeService) {
         this.players = players;
         this.sessionProvider = sessionProvider;
         this.changeService = changeService;
