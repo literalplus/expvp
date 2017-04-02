@@ -11,6 +11,7 @@ package me.minotopia.expvp.score;
 import com.google.inject.Inject;
 import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.model.MutablePlayerData;
+import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.KillDeathService;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.score.league.LeagueService;
@@ -33,13 +34,15 @@ public class PlayerDataKillDeathService implements KillDeathService {
     private final SessionProvider sessionProvider;
     private final PlayerDataService players;
     private final LeagueService leagues;
+    private final ExpService exps;
 
     @Inject
-    public PlayerDataKillDeathService(TalentPointService talentPoints, SessionProvider sessionProvider, PlayerDataService players, LeagueService leagues) {
+    public PlayerDataKillDeathService(TalentPointService talentPoints, SessionProvider sessionProvider, PlayerDataService players, LeagueService leagues, ExpService exps) {
         this.talentPoints = talentPoints;
         this.sessionProvider = sessionProvider;
         this.players = players;
         this.leagues = leagues;
+        this.exps = exps;
     }
 
     @Override
@@ -60,6 +63,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
     private void recordDeath(Player victim) {
         MutablePlayerData playerData = players.findOrCreateDataMutable(victim.getUniqueId());
         playerData.addDeath();
+        exps.decrementExp(victim, leagues.getCurrentLeague(victim).getDeathExpPenalty());
         leagues.updateLeague(victim);
     }
 
@@ -67,6 +71,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
         MutablePlayerData playerData = players.findOrCreateDataMutable(culprit.getUniqueId());
         playerData.addKill();
         leagues.updateLeague(culprit);
+        exps.incrementExp(culprit, leagues.getCurrentLeague(culprit).getKillExpReward());
         int grantedTalentPoints = talentPoints.grantTalentPointsForKill(culprit);
         if (grantedTalentPoints == 1) {
             I18n.sendLoc(culprit, Format.resultSuccess(Message.of("score!tp.kill.one")));
