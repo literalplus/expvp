@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.ui.menu;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import li.l1t.common.exception.InternalException;
 import li.l1t.common.exception.NonSensitiveException;
@@ -42,7 +41,6 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
     private SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree, Runnable backButtonHandler,
                           TalentPointService talentPoints) {
         super(plugin, tree.getDisplayName(), player);
-        Preconditions.checkNotNull(renderer, "renderer");
         this.renderer = new TreeStructureRenderer(tree);
         if (backButtonHandler != null) {
             addElement(0, new BackButton(inventoryMenu -> backButtonHandler.run()));
