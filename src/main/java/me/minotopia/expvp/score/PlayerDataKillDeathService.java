@@ -37,7 +37,8 @@ public class PlayerDataKillDeathService implements KillDeathService {
     private final ExpService exps;
 
     @Inject
-    public PlayerDataKillDeathService(TalentPointService talentPoints, SessionProvider sessionProvider, PlayerDataService players, LeagueService leagues, ExpService exps) {
+    public PlayerDataKillDeathService(TalentPointService talentPoints, SessionProvider sessionProvider,
+                                      PlayerDataService players, LeagueService leagues, ExpService exps) {
         this.talentPoints = talentPoints;
         this.sessionProvider = sessionProvider;
         this.players = players;
