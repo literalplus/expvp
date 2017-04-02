@@ -64,13 +64,11 @@ public class PlayerDataKillDeathService implements KillDeathService {
         MutablePlayerData playerData = players.findOrCreateDataMutable(victim.getUniqueId());
         playerData.addDeath();
         exps.decrementExp(victim, leagues.getCurrentLeague(victim).getDeathExpPenalty());
-        leagues.updateLeague(victim);
     }
 
     private void recordKill(Player culprit) {
         MutablePlayerData playerData = players.findOrCreateDataMutable(culprit.getUniqueId());
         playerData.addKill();
-        leagues.updateLeague(culprit);
         exps.incrementExp(culprit, leagues.getCurrentLeague(culprit).getKillExpReward());
         int grantedTalentPoints = talentPoints.grantTalentPointsForKill(culprit);
         if (grantedTalentPoints == 1) {
