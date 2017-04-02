@@ -50,6 +50,7 @@ public class PlayerDataExpService implements ExpService {
             playerData.setExp(playerData.getExp() + expModifier);
             players.saveData(playerData);
             leagues.updateLeague(player);
+            player.setLevel(playerData.getExp());
             scoped.commitIfLastAndChanged();
         }
     }
