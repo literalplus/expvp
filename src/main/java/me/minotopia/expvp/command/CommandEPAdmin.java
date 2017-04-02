@@ -106,7 +106,7 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
             );
             formatMessage(sender,
                     "§e§l➩ §eSkills: §a%s",
-                    playerData.getSkills().stream().map(ObtainedSkill::getSkillId).collect(Collectors.joining())
+                    playerData.getSkills().stream().map(ObtainedSkill::getSkillId).collect(Collectors.joining("§e, §a"))
             );
         });
     }
