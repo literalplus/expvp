@@ -101,7 +101,11 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
         } catch (NonSensitiveException e) {
             getPlayer().sendMessage(e.getColoredMessage());
             getPlayer().closeInventory();
-            throw e;
+            if (e.needsLogging()) {
+                throw e;
+            } else {
+                return true;
+            }
         }
     }
 
