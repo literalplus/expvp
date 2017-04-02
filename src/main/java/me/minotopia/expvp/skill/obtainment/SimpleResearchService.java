@@ -12,12 +12,14 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.exception.UserException;
+import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.service.ResearchService;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skill.meta.Skill;
@@ -51,12 +53,14 @@ public class SimpleResearchService implements ResearchService {
     @Override
     public void research(Player player, SimpleSkillTreeNode node) {
         Preconditions.checkNotNull(node, "node");
-        Preconditions.checkNotNull(node.getValue(), "node.getValue()");
+        Skill skill = node.getValue();
+        Preconditions.checkNotNull(skill, "node.getValue()");
         MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(player.getUniqueId());
-        checkIsNotObtained(player.getUniqueId(), node.getValue());
+        checkIsNotObtained(player.getUniqueId(), skill);
         checkIsObtainable(player.getUniqueId(), node);
-        playerData.addSkill(node.getValue());
+        playerData.addSkill(skill);
         playerDataService.saveData(playerData);
+        I18n.sendLoc(player, Message.of("core!research.success", displayNames.displayName(skill)));
     }
 
     private void checkIsNotObtained(UUID playerId, Skill skill) {
