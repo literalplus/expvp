@@ -9,6 +9,7 @@
 package me.minotopia.expvp.i18n;
 
 import com.google.common.base.Preconditions;
+import li.l1t.common.i18n.Utf8Control;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -33,7 +34,7 @@ class CachedBundle {
     }
 
     private ResourceBundle loadBundle(Locale locale) {
-        return ResourceBundle.getBundle(baseName, locale, loader);
+        return ResourceBundle.getBundle(baseName, locale, loader, new Utf8Control());
     }
 
     public ResourceBundle getGermanBundle() {
@@ -46,7 +47,7 @@ class CachedBundle {
 
     public ResourceBundle getBundleFor(Locale locale) {
         Preconditions.checkNotNull(locale, "locale");
-        if(locale.getISO3Language().equals(Locale.GERMAN.getISO3Language())) {
+        if (locale.getISO3Language().equals(Locale.GERMAN.getISO3Language())) {
             return getGermanBundle();
         } else {
             return getEnglishBundle();
