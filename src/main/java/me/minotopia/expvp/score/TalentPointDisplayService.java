@@ -55,8 +55,8 @@ class TalentPointDisplayService {
         int killsUntilNextTalentPoint = this.talentPoints.findKillsUntilNextTalentPoint(player);
         new ActionbarTitleObject(I18n.loc(
                 player, messageKey,
-                Plurals.plural("tp", talentPoints),
-                Plurals.plural("kill", killsUntilNextTalentPoint)
+                Plurals.talentPointPlural(talentPoints),
+                Plurals.killPlural(killsUntilNextTalentPoint)
         )).send(player);
     }
 }

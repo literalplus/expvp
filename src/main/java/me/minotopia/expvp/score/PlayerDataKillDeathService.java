@@ -88,7 +88,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
         int grantedTalentPoints = talentPoints.grantTalentPointsForKill(culprit);
         if (grantedTalentPoints > 0) {
             I18n.sendLoc(culprit, Format.resultSuccess(
-                    Message.of("score!tp.status", Plurals.plural("tp", grantedTalentPoints))
+                    Message.of("score!tp.status", Plurals.talentPointPlural(grantedTalentPoints))
             ));
         }
     }

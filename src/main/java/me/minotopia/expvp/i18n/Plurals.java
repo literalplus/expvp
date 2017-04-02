@@ -21,6 +21,14 @@ public class Plurals {
 
     }
 
+    public static Message talentPointPlural(int count) {
+        return plural("score!tp", count);
+    }
+
+    public static Message killPlural(int count) {
+        return plural("score!kill", count);
+    }
+
     /**
      * Resolves the correct singular/plural form for a thing. For singular (count = 1), {@code .one} is appended to the
      * base key, and for plural, {@code .many} is appended to the base key. The resolved key is then passed to the
