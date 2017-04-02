@@ -35,7 +35,7 @@ class TalentPointDisplayService {
         if (count <= 0) {
             displayCurrentTP(player);
         } else {
-            sendActionbarMessage("score!tp.actionbar-gain", player, count);
+            sendActionbarMessage("score!tp.actionbar.gain", player, count);
         }
     }
 
@@ -43,7 +43,7 @@ class TalentPointDisplayService {
         if (count <= 0) {
             displayCurrentTP(player);
         } else {
-            sendActionbarMessage("score!tp.actionbar-lose", player, count);
+            sendActionbarMessage("score!tp.actionbar.lose", player, count);
         }
     }
 
