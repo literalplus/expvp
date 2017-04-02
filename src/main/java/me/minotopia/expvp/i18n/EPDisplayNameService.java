@@ -9,10 +9,11 @@
 package me.minotopia.expvp.i18n;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
-import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.league.League;
+import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
 import org.bukkit.entity.Player;
@@ -24,6 +25,13 @@ import org.bukkit.entity.Player;
  * @since 2017-03-23
  */
 public class EPDisplayNameService implements DisplayNameService {
+    private final LeagueService leagueService;
+
+    @Inject
+    public EPDisplayNameService(LeagueService leagueService) {
+        this.leagueService = leagueService;
+    }
+
     @Override
     public Message displayName(Skill skill) {
         return Message.of("skill!" + skill.getId() + ".name");
@@ -35,8 +43,11 @@ public class EPDisplayNameService implements DisplayNameService {
     }
 
     @Override
-    public Message displayName(Player player, PlayerData playerData) {
-        return Message.of("core!player.prefixed-name", player.getName(), playerData.getLeagueName()); //TODO: League prefix
+    public Message displayName(Player player) {
+        Preconditions.checkNotNull(player, "player");
+        return Message.of("core!player.prefixed-name",
+                player.getName(), displayName(leagueService.getCurrentLeague(player))
+        );
     }
 
     @Override

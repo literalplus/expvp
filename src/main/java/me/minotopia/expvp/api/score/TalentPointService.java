@@ -58,9 +58,10 @@ public interface TalentPointService {
     int findKillsUntilNextTalentPoint(Player player);
 
     /**
-     * Updates any cached displays related to Talent Points maintained by this service for given player
+     * Communicates to the player their current amount of Talent Points and how many kills they need until their next
+     * Talent Point, via some means other than the chat.
      *
      * @param player the player to operate on
      */
-    void updateDisplay(Player player);
+    void displayCurrentCount(Player player);
 }

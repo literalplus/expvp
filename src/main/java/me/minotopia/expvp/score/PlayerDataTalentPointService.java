@@ -69,7 +69,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
             int talentPointLimit = findTalentPointLimit(player);
             grantedTalentPoints = grantDeservedTalentPoints(playerData, talentPointLimit);
-            displayService.updateDisplay(player, playerData);
+            displayService.displayTPGained(player, grantedTalentPoints);
             scoped.commitIfLastAndChanged();
         }
         return grantedTalentPoints;
@@ -103,7 +103,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
 
     @Override
     public void consumeTalentPoints(Player player, int consumePoints) {
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+        sessionProvider.inSession(ignored -> {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
             int currentPoints = playerData.getTalentPoints();
             if (currentPoints < consumePoints) {
@@ -111,9 +111,8 @@ public class PlayerDataTalentPointService implements TalentPointService {
             } else {
                 playerData.setTalentPoints(currentPoints - consumePoints);
             }
-            displayService.updateDisplay(player, playerData);
-            scoped.commitIfLastAndChanged();
-        }
+            displayService.displayTPSpent(player, consumePoints);
+        });
     }
 
     @Override
@@ -125,11 +124,10 @@ public class PlayerDataTalentPointService implements TalentPointService {
     }
 
     @Override
-    public void updateDisplay(Player player) {
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+    public void displayCurrentCount(Player player) {
+        sessionProvider.inSession(ignored -> {
             PlayerData playerData = players.findOrCreateData(player.getUniqueId());
-            displayService.updateDisplay(player, playerData);
-            scoped.commitIfLastAndChanged();
-        }
+            displayService.displayCurrentTP(player);
+        });
     }
 }

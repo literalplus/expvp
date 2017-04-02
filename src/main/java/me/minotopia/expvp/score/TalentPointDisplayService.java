@@ -9,9 +9,9 @@
 package me.minotopia.expvp.score;
 
 import io.puharesource.mc.titlemanager.api.ActionbarTitleObject;
-import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.Plurals;
 import org.bukkit.entity.Player;
 
 /**
@@ -27,10 +27,36 @@ class TalentPointDisplayService {
         this.talentPoints = talentPoints;
     }
 
-    public void updateDisplay(Player player, PlayerData playerData) {
+    public void displayCurrentTP(Player player) {
+        sendActionbarMessage("score!tp.actionbar", player);
+    }
+
+    public void displayTPGained(Player player, int count) {
+        if (count <= 0) {
+            displayCurrentTP(player);
+        } else {
+            sendActionbarMessage("score!tp.actionbar-gain", player, count);
+        }
+    }
+
+    public void displayTPSpent(Player player, int count) {
+        if (count <= 0) {
+            displayCurrentTP(player);
+        } else {
+            sendActionbarMessage("score!tp.actionbar-lose", player, count);
+        }
+    }
+
+    private void sendActionbarMessage(String messageKey, Player player) {
+        sendActionbarMessage(messageKey, player, talentPoints.getCurrentTalentPointCount(player));
+    }
+
+    private void sendActionbarMessage(String messageKey, Player player, int talentPoints) {
         int killsUntilNextTalentPoint = this.talentPoints.findKillsUntilNextTalentPoint(player);
         new ActionbarTitleObject(I18n.loc(
-                player, "score!tp.actionbar", playerData.getTalentPoints(), killsUntilNextTalentPoint
+                player, messageKey,
+                Plurals.plural("tp", talentPoints),
+                Plurals.plural("kill", killsUntilNextTalentPoint)
         )).send(player);
     }
 }

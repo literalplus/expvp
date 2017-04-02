@@ -9,7 +9,6 @@
 package me.minotopia.expvp.api.i18n;
 
 import li.l1t.common.intake.i18n.Message;
-import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
@@ -34,7 +33,11 @@ public interface DisplayNameService {
      */
     Message displayName(SkillTree tree);
 
-    Message displayName(Player player, PlayerData playerData);
+    /**
+     * @param player the player whose display name to compute
+     * @return a message object representing given player's display name
+     */
+    Message displayName(Player player);
 
     Message displayName(League league);
 }
