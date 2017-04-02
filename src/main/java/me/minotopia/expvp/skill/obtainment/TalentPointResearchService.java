@@ -40,8 +40,8 @@ public class TalentPointResearchService extends SimpleResearchService {
     @Override
     public void research(Player player, Skill skill, SkillTree tree) {
         sessionProvider.inSession(ignored -> {
-            talentPoints.consumeTalentPoints(player, skill.getBookCost());
             super.research(player, skill, tree);
+            talentPoints.consumeTalentPoints(player, skill.getBookCost());
         });
     }
 }
