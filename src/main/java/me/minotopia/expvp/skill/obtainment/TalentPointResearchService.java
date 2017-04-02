@@ -13,8 +13,7 @@ import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
-import me.minotopia.expvp.skill.meta.Skill;
-import me.minotopia.expvp.skilltree.SkillTree;
+import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 
@@ -38,10 +37,10 @@ public class TalentPointResearchService extends SimpleResearchService {
     }
 
     @Override
-    public void research(Player player, Skill skill, SkillTree tree) {
+    public void research(Player player, SimpleSkillTreeNode node) {
         sessionProvider.inSession(ignored -> {
-            super.research(player, skill, tree);
-            talentPoints.consumeTalentPoints(player, skill.getBookCost());
+            super.research(player, node);
+            talentPoints.consumeTalentPoints(player, node.getValue().getBookCost());
         });
     }
 }
