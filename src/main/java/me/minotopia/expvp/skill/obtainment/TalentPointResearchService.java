@@ -15,7 +15,6 @@ import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
-import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 
@@ -40,10 +39,9 @@ public class TalentPointResearchService extends SimpleResearchService {
 
     @Override
     public void research(Player player, Skill skill, SkillTree tree) {
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+        sessionProvider.inSession(ignored -> {
             talentPoints.consumeTalentPoints(player, skill.getBookCost());
             super.research(player, skill, tree);
-            scoped.commitIfLastAndChanged();
-        }
+        });
     }
 }

@@ -23,9 +23,11 @@ import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skilltree.SkillTree;
+import me.minotopia.expvp.skilltree.SkillTreeNode;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -78,16 +80,18 @@ public class SimpleResearchService implements ResearchService {
     }
 
     private void checkIsObtainable(UUID playerId, Skill skill, SkillTree tree) {
-        SimpleSkillTreeNode next = findFirstSkillNodeInTree(skill, tree);
-        while ((next = next.getParent()) != null) {
-            Skill parentSkill = next.getValue();
-            if (!has(playerId, parentSkill)) {
-                throw new I18nUserException(
-                        "error!tree.missing-parent",
-                        displayNames.displayName(skill), displayNames.displayName(parentSkill)
-                );
-            }
+        SimpleSkillTreeNode node = findFirstSkillNodeInTree(skill, tree);
+        if (!doesParentPermitObtainment(node, playerId)) {
+            throw new I18nUserException(
+                    "error!tree.missing-parent",
+                    displayNames.displayName(skill), displayNames.displayName(node.getParent().getValue())
+            );
         }
+    }
+
+    private boolean doesParentPermitObtainment(SimpleSkillTreeNode node, UUID playerId) {
+        SkillTreeNode<?> parent = node.getParent();
+        return parent == null || (parent.getValue() != null && has(playerId, parent.getValue()));
     }
 
     private SimpleSkillTreeNode findFirstSkillNodeInTree(Skill skill, SkillTree tree) {
@@ -99,9 +103,9 @@ public class SimpleResearchService implements ResearchService {
 
     @Override
     public boolean has(UUID playerId, Skill skill) {
-        PlayerData playerData = playerDataService.findOrCreateData(playerId);
-        return playerData.getSkills().stream()
-                .anyMatch(skill::matches);
+        return playerDataService.findData(playerId)
+                .map(PlayerData::getSkills).orElseGet(Collections::emptySet)
+                .stream().anyMatch(skill::matches);
     }
 
     @Override
