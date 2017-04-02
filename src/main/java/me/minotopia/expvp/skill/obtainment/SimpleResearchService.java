@@ -81,6 +81,7 @@ public class SimpleResearchService implements ResearchService {
 
     private void checkIsObtainable(UUID playerId, Skill skill, SkillTree tree) {
         SimpleSkillTreeNode node = findFirstSkillNodeInTree(skill, tree);
+        System.out.println(node + " -> " + node.getParent());
         if (!doesParentPermitObtainment(node, playerId)) {
             throw new I18nUserException(
                     "error!tree.missing-parent",
