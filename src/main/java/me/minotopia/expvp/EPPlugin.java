@@ -19,6 +19,7 @@ import me.minotopia.expvp.handler.damage.DamageHandlerCaller;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.LocaleService;
 import me.minotopia.expvp.logging.LoggingManager;
+import me.minotopia.expvp.score.KillDeathForwardingListener;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.util.SessionProvider;
@@ -26,6 +27,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -92,9 +94,8 @@ public class EPPlugin extends GenericXyPlugin {
             inject(LocaleService.class).enable(this);
             skillManager = inject(SkillManager.class);
             skillTreeManager = inject(SkillTreeManager.class);
-            getServer().getPluginManager().registerEvents(inject(DamageHandlerCaller.class), this);
 
-            // Register commands
+            registerListeners();
             registerCommands();
 
             saveConfig();
@@ -102,6 +103,24 @@ public class EPPlugin extends GenericXyPlugin {
             handleEnableException(e);
 
         }
+    }
+
+    public <T> T inject(Class<T> clazz) {
+        return injector.getInstance(clazz);
+    }
+
+    private void registerListeners() {
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(inject(DamageHandlerCaller.class), this);
+        pm.registerEvents(inject(KillDeathForwardingListener.class), this);
+    }
+
+    private void registerCommands() {
+        CommandsManager commandsManager = inject(CommandsManager.class);
+        commandsManager.registerCommand(inject(CommandEPAdmin.class), "epa");
+        commandsManager.registerCommand(inject(CommandSkillTreeAdmin.class), "sta");
+        commandsManager.registerCommand(inject(CommandSkillAdmin.class), "ska");
+        commandsManager.registerCommand(inject(CommandSkills.class), "sk", "skills");
     }
 
     private void handleEnableException(Exception e) {
@@ -125,18 +144,6 @@ public class EPPlugin extends GenericXyPlugin {
                         player.kickPlayer("§cInterner Fehler bei Expvp.\n§aKeine Panik.\n§eBitte kontaktiere das Team.");
                     }
                 });
-    }
-
-    private void registerCommands() {
-        CommandsManager commandsManager = inject(CommandsManager.class);
-        commandsManager.registerCommand(inject(CommandEPAdmin.class), "epa");
-        commandsManager.registerCommand(inject(CommandSkillTreeAdmin.class), "sta");
-        commandsManager.registerCommand(inject(CommandSkillAdmin.class), "ska");
-        commandsManager.registerCommand(inject(CommandSkills.class), "sk", "skills");
-    }
-
-    public <T> T inject(Class<T> clazz) {
-        return injector.getInstance(clazz);
     }
 
     SessionFactory initHibernate(ClassLoader classLoader) throws IOException { //TODO: Querydsl
