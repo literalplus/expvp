@@ -118,7 +118,8 @@ public class I18n {
      *
      * @param senderId the unique id of the command sender whose locale to use from the cache
      * @param message  the message object, with the key formatted according to {@link MessagePath} specifications, and
-     *                 the arguments being inserted back into the resolved message using {@link java.text.MessageFormat}
+     *                 the arguments being inserted back into the resolved message using {@link
+     *                 java.text.MessageFormat}
      * @return requested string value, or a representation of the query if I18n hasn't been initialised yet
      */
     public static String loc(UUID senderId, Message message) {
@@ -151,5 +152,15 @@ public class I18n {
 
     public static void clearLocaleOf(UUID senderId) {
         localeCache.remove(senderId);
+    }
+
+    /**
+     * Sends given message to given sender, localised in the sender's locale.
+     *
+     * @param sender  the sender to send to in their locale
+     * @param message the message to send
+     */
+    public static void sendLoc(CommandSender sender, Message message) {
+        sender.sendMessage(loc(sender, message));
     }
 }

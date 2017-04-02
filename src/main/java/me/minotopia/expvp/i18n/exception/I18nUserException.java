@@ -38,7 +38,7 @@ public class I18nUserException extends UserException implements InternationalExc
 
     @Override
     public String getWrapperMessageKey() {
-        return "error!user";
+        return "core!format.error-user";
     }
 
     @Override

@@ -10,6 +10,7 @@ package me.minotopia.expvp.api.i18n;
 
 import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.model.PlayerData;
+import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
 import org.bukkit.entity.Player;
@@ -34,4 +35,6 @@ public interface DisplayNameService {
     Message displayName(SkillTree tree);
 
     Message displayName(Player player, PlayerData playerData);
+
+    Message displayName(League league);
 }
