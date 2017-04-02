@@ -31,28 +31,39 @@ public class KillDeathForwardingListener implements Listener {
         this.killDeathService = killDeathService;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerHit(EntityDamageByEntityEvent event) {
-        if (isAPlayerHittingAnotherPlayer(event)) {
+        if (isTheVictimAPlayer(event)) {
             Player victim = (Player) event.getEntity();
-            Player culprit = (Player) event.getDamager();
             if (isFatalHit(event, victim)) {
-                killDeathService.onFatalHit(culprit, victim);
-                event.setCancelled(true);
-                victim.sendMessage("This is the point where you'd be teleported to spawn if that was already implemented.");
-                //FIXME: Teleport to spawn
+                handleFatalHit(event, victim);
             }
         }
+    }
+
+    private void handleFatalHit(EntityDamageByEntityEvent event, Player victim) {
+        cancelAndTeleportToSpawn(event, victim);
+        if (isTheCulpritAPlayer(event)) {
+            Player culprit = (Player) event.getDamager();
+            killDeathService.onFatalHit(culprit, victim);
+        }
+    }
+
+    private void cancelAndTeleportToSpawn(EntityDamageByEntityEvent event, Player victim) {
+        event.setCancelled(true);
+        victim.sendMessage("This is the point where you'd be teleported to spawn if that was already implemented.");
+        //FIXME: Teleport to spawn
     }
 
     private boolean isFatalHit(EntityDamageByEntityEvent event, Player victim) {
         return (victim.getHealth() - event.getFinalDamage()) <= 0D;
     }
 
-    private boolean isAPlayerHittingAnotherPlayer(EntityDamageByEntityEvent event) {
-        return event.getEntityType() != EntityType.PLAYER ||
-                event.getDamager().getType() != EntityType.PLAYER;
+    private boolean isTheCulpritAPlayer(EntityDamageByEntityEvent event) {
+        return event.getDamager().getType() != EntityType.PLAYER;
     }
 
-
+    private boolean isTheVictimAPlayer(EntityDamageByEntityEvent event) {
+        return event.getEntityType() == EntityType.PLAYER;
+    }
 }
