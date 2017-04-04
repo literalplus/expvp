@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffect;
 
 /**
  * Forwards kills and deaths to KillDeathService.
@@ -43,6 +44,7 @@ public class KillDeathForwardingListener implements Listener {
 
     private void handleFatalHit(EntityDamageByEntityEvent event, Player victim) {
         cancelAndTeleportToSpawn(event, victim);
+        restoreHealthEtc(victim);
         if (isTheCulpritAPlayer(event)) {
             Player culprit = (Player) event.getDamager();
             killDeathService.onFatalHit(culprit, victim);
@@ -53,6 +55,14 @@ public class KillDeathForwardingListener implements Listener {
         event.setCancelled(true);
         victim.sendMessage("This is the point where you'd be teleported to spawn if that was already implemented.");
         //FIXME: Teleport to spawn
+    }
+
+    private void restoreHealthEtc(Player victim) {
+        victim.setHealth(victim.getMaxHealth());
+        victim.setFoodLevel(20);
+        victim.setSaturation(20);
+        victim.getActivePotionEffects().stream()
+                .map(PotionEffect::getType).forEach(victim::removePotionEffect);
     }
 
     private boolean isFatalHit(EntityDamageByEntityEvent event, Player victim) {
