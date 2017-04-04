@@ -60,7 +60,7 @@ public class KillDeathForwardingListener implements Listener {
     }
 
     private boolean isTheCulpritAPlayer(EntityDamageByEntityEvent event) {
-        return event.getDamager().getType() != EntityType.PLAYER;
+        return event.getDamager().getType() == EntityType.PLAYER;
     }
 
     private boolean isTheVictimAPlayer(EntityDamageByEntityEvent event) {
