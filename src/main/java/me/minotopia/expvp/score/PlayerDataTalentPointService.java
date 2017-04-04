@@ -126,7 +126,6 @@ public class PlayerDataTalentPointService implements TalentPointService {
     @Override
     public void displayCurrentCount(Player player) {
         sessionProvider.inSession(ignored -> {
-            PlayerData playerData = players.findOrCreateData(player.getUniqueId());
             displayService.displayCurrentTP(player);
         });
     }
