@@ -14,6 +14,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
+import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.command.*;
 import me.minotopia.expvp.handler.damage.DamageHandlerCaller;
 import me.minotopia.expvp.i18n.I18n;
@@ -99,6 +100,10 @@ public class EPPlugin extends GenericXyPlugin {
             registerCommands();
 
             saveConfig();
+
+            PlayerInitService initService = inject(PlayerInitService.class);
+            getServer().getOnlinePlayers()
+                    .forEach(initService::callInitHandlers);
         } catch (Exception e) {
             handleEnableException(e);
 
@@ -181,6 +186,10 @@ public class EPPlugin extends GenericXyPlugin {
     @Override
     public void disable() {
         try {
+            PlayerInitService initService = inject(PlayerInitService.class);
+            getServer().getOnlinePlayers()
+                    .forEach(initService::callDeInitHandlers);
+
             if (sessionProvider != null) {
                 sessionProvider.getSessionFactory().close();
             }

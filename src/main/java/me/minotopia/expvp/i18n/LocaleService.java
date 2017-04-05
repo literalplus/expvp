@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.i18n.MinecraftLocale;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.ScopedSession;
@@ -33,19 +34,20 @@ public class LocaleService {
     private final SessionProvider sessionProvider;
 
     @Inject
-    public LocaleService(PlayerDataService players, SessionProvider sessionProvider) {
+    public LocaleService(PlayerDataService players, SessionProvider sessionProvider,
+                         PlayerInitService initService, EPPlugin plugin) {
         this.players = players;
         this.sessionProvider = sessionProvider;
+        initService.registerInitHandler(player -> plugin.async(() -> recomputeClientLocale(player)));
+        initService.registerDeInitHandler(player -> I18n.clearLocaleOf(player.getUniqueId()));
     }
 
     public void enable(EPPlugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(plugin.inject(LocaleJoinLeaveListener.class), plugin);
         ProtocolLibrary.getProtocolManager().addPacketListener(plugin.inject(LocaleChangeListener.class));
         plugin.async(() -> {
-            try (ScopedSession scoped = sessionProvider.scoped().join()) {
-                plugin.getServer().getOnlinePlayers().forEach(this::recomputeClientLocale);
-                scoped.commitIfLastAndChanged();
-            }
+            sessionProvider.inSession(ignored ->
+                    plugin.getServer().getOnlinePlayers().forEach(this::recomputeClientLocale)
+            );
         });
     }
 

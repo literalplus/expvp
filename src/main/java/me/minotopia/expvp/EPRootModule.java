@@ -11,8 +11,10 @@ package me.minotopia.expvp;
 import com.google.inject.AbstractModule;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
+import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.i18n.EPDisplayNameService;
+import me.minotopia.expvp.misc.EPPlayerInitService;
 import me.minotopia.expvp.model.ModelModule;
 import me.minotopia.expvp.score.ScoreModule;
 import me.minotopia.expvp.skill.SkillModule;
@@ -47,6 +49,7 @@ public class EPRootModule extends AbstractModule {
         bind(File.class).annotatedWith(DataFolder.class).toInstance(plugin.getDataFolder());
         bind(SessionProvider.class).toInstance(plugin.getSessionProvider());
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
+        bind(PlayerInitService.class).to(EPPlayerInitService.class);
         install(new ModelModule());
         install(new SkillModule());
         install(new SkillTreeModule());

@@ -134,7 +134,7 @@ public class SessionProvider {
      * @param what what to do in the session
      * @return the result of calling given function
      */
-    public <T> T inSession(Function<ScopedSession, T> what) {
+    public <T> T inSessionAnd(Function<ScopedSession, T> what) {
         T result;
         try (ScopedSession scoped = scoped().join()) {
             result = what.apply(scoped);
@@ -166,7 +166,7 @@ public class SessionProvider {
         CompletableFuture<T> future = new CompletableFuture<>();
         plugin.async(() -> {
             try {
-                future.complete(inSession(what));
+                future.complete(inSessionAnd(what));
             } catch (Exception e) {
                 future.completeExceptionally(e);
             }
