@@ -87,10 +87,11 @@ public class PlayerDataKillDeathService implements KillDeathService {
     private void grantTalentPointsToKiller(Player culprit) {
         int grantedTalentPoints = talentPoints.grantTalentPointsForKill(culprit);
         if (grantedTalentPoints > 0) {
+            int currentTP = talentPoints.getCurrentTalentPointCount(culprit);
             int killsUntilNextTP = talentPoints.findKillsUntilNextTalentPoint(culprit);
             I18n.sendLoc(culprit, Format.resultSuccess(
                     Message.of("score!tp.status",
-                            Plurals.talentPointPlural(grantedTalentPoints),
+                            Plurals.talentPointPlural(currentTP),
                             Plurals.killPlural(killsUntilNextTP)
                     )
             ));
