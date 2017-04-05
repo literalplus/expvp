@@ -11,6 +11,7 @@ package me.minotopia.expvp.handler.factory.kit;
 import me.minotopia.expvp.handler.factory.HandlerArgs;
 import me.minotopia.expvp.handler.kit.PotionKitHandler;
 import me.minotopia.expvp.skill.meta.Skill;
+import org.bukkit.Material;
 import org.bukkit.potion.PotionType;
 
 /**
@@ -29,12 +30,12 @@ public class PotionKitHandlerFactory extends AbstractKitHandlerFactory {
 
     @Override
     public String getDescription() {
-        return "potion kit handler: slot,material,amount,effect,level";
+        return "potion kit handler: slot,amount,effect,level";
     }
 
     @Override
     protected PotionKitHandler createHandler(Skill skill, HandlerArgs args) {
-        return new PotionKitHandler(skill, slotId(args), material(args), amount(args), potionType(args), level(args));
+        return new PotionKitHandler(skill, slotId(args), Material.POTION, amount(args), potionType(args), level(args));
     }
 
     private PotionType potionType(HandlerArgs args) {
