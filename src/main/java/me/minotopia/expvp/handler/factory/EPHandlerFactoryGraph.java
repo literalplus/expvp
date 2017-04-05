@@ -29,7 +29,7 @@ public class EPHandlerFactoryGraph extends MapCompoundHandlerFactory<HandlerFact
         super(null, "");
         rootKitFactory = new CompoundKitHandlerFactory(this, "kit");
         addChild(rootKitFactory);
-        rootDamageFactory = new CompoundDamageHandlerFactory("damage");
+        rootDamageFactory = new CompoundDamageHandlerFactory("dmg");
         addChild(rootDamageFactory);
     }
 
