@@ -14,6 +14,7 @@ import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompiler;
 import me.minotopia.expvp.api.handler.kit.compilation.KitElement;
+import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.ScopedSession;
@@ -36,11 +37,12 @@ public class SkillKitService implements KitService {
 
     @Inject
     public SkillKitService(KitCompiler compiler, PlayerDataService players, HandlerService handlerService,
-                           SessionProvider sessionProvider) {
+                           SessionProvider sessionProvider, PlayerInitService initService) {
         this.compiler = compiler;
         this.players = players;
         this.handlerService = handlerService;
         this.sessionProvider = sessionProvider;
+        initService.registerInitHandler(this::applyKit);
     }
 
     @Override
@@ -64,11 +66,11 @@ public class SkillKitService implements KitService {
 
     @Override
     public void invalidateCache(UUID playerId) {
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
-            PlayerData data = players.findOrCreateData(playerId);
-            handlerService.unregisterHandlers(data);
-            handlerService.registerHandlers(data);
-            scoped.commitIfLastAndChanged();
-        }
+        sessionProvider.inSession(ignored -> {
+            players.findData(playerId).ifPresent(data -> {
+                handlerService.unregisterHandlers(data);
+                handlerService.registerHandlers(data);
+            });
+        });
     }
 }
