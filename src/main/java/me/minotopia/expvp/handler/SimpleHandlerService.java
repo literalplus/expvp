@@ -18,6 +18,7 @@ import me.minotopia.expvp.api.handler.HandlerMap;
 import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
+import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.skill.SkillService;
 import me.minotopia.expvp.logging.LoggingManager;
@@ -45,10 +46,12 @@ public class SimpleHandlerService implements HandlerService {
     private final Multimap<Skill, UUID> skillRequirementsMap = MultimapBuilder.hashKeys().arrayListValues().build();
 
     @Inject
-    public SimpleHandlerService(HandlerMap handlerMap, HandlerFactoryGraph factories, SkillService skillService) {
+    public SimpleHandlerService(HandlerMap handlerMap, HandlerFactoryGraph factories, SkillService skillService,
+                                PlayerInitService initService) {
         this.handlerMap = handlerMap;
         this.factories = factories;
         this.skillService = skillService;
+        initService.registerDeInitHandler(player -> skillRequirementsMap.values().removeIf(player.getUniqueId()::equals));
     }
 
     @Override
@@ -64,6 +67,10 @@ public class SimpleHandlerService implements HandlerService {
     @Override
     public void unregisterHandlers(PlayerData playerData) {
         skillRequirementsMap.values().removeIf(playerData.getUniqueId()::equals);
+        purgeStaleHandlers();
+    }
+
+    private void purgeStaleHandlers() {
         ImmutableList.copyOf(handlerMap.getAllHandlers()).stream()
                 .map(SkillHandler::getSkill)
                 .filter(not(skillRequirementsMap::containsKey))
