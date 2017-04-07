@@ -13,7 +13,7 @@ import me.minotopia.expvp.handler.factory.HandlerArgs;
 import me.minotopia.expvp.skill.meta.Skill;
 
 /**
- * Creates victim effect handlers.
+ * Creates culprit effect handlers.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-23

@@ -10,14 +10,9 @@ package me.minotopia.expvp.ui.menu;
 
 import com.google.inject.Inject;
 import li.l1t.common.exception.InternalException;
-import li.l1t.common.exception.NonSensitiveException;
-import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.score.TalentPointService;
-import me.minotopia.expvp.i18n.I18n;
-import me.minotopia.expvp.i18n.exception.I18nInternalException;
-import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.ui.element.BackButton;
 import me.minotopia.expvp.ui.element.TreeInfoElement;
@@ -27,7 +22,6 @@ import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
 /**
  * An inventory menu that provides the frontend for a skill tree.
@@ -35,7 +29,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-22
  */
-public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
+public class SkillTreeMenu extends AbstractEPMenu {
     private TreeStructureRenderer renderer;
 
     private SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree, Runnable backButtonHandler,
@@ -79,34 +73,6 @@ public class SkillTreeMenu extends SimpleInventoryMenu implements EPMenu {
         return new ItemStackFactory(Material.STAINED_GLASS_PANE)
                 .legacyData((byte) 15)
                 .displayName("§7§l*");
-    }
-
-    @Override
-    public EPPlugin getPlugin() {
-        return (EPPlugin) super.getPlugin();
-    }
-
-    @Override
-    public boolean handleClick(InventoryClickEvent evt) {
-        try {
-            return super.handleClick(evt);
-        } catch (I18nUserException | I18nInternalException e) {
-            getPlayer().sendMessage(I18n.loc(getPlayer(), e.toMessage()));
-            getPlayer().closeInventory();
-            if (e.needsLogging()) {
-                throw e;
-            } else {
-                return true;
-            }
-        } catch (NonSensitiveException e) {
-            getPlayer().sendMessage(e.getColoredMessage());
-            getPlayer().closeInventory();
-            if (e.needsLogging()) {
-                throw e;
-            } else {
-                return true;
-            }
-        }
     }
 
     public SkillTree getTree() {

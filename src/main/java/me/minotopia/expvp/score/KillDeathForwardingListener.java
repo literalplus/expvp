@@ -9,6 +9,7 @@
 package me.minotopia.expvp.score;
 
 import com.google.inject.Inject;
+import me.minotopia.expvp.api.respawn.RespawnService;
 import me.minotopia.expvp.api.score.KillDeathService;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -26,10 +27,12 @@ import org.bukkit.potion.PotionEffect;
  */
 public class KillDeathForwardingListener implements Listener {
     private final KillDeathService killDeathService;
+    private final RespawnService respawnService;
 
     @Inject
-    public KillDeathForwardingListener(KillDeathService killDeathService) {
+    public KillDeathForwardingListener(KillDeathService killDeathService, RespawnService respawnService) {
         this.killDeathService = killDeathService;
+        this.respawnService = respawnService;
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -55,6 +58,8 @@ public class KillDeathForwardingListener implements Listener {
         event.setCancelled(true);
         victim.sendMessage("This is the point where you'd be teleported to spawn if that was already implemented.");
         //FIXME: Teleport to spawn
+        //TODO: this as a callback after teleport
+        respawnService.startPreRespawn(victim);
     }
 
     private void restoreHealthEtc(Player victim) {

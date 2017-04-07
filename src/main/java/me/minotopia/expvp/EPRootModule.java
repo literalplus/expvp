@@ -8,7 +8,10 @@
 
 package me.minotopia.expvp;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.google.inject.AbstractModule;
+import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.misc.PlayerInitService;
@@ -16,6 +19,7 @@ import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.i18n.EPDisplayNameService;
 import me.minotopia.expvp.misc.EPPlayerInitService;
 import me.minotopia.expvp.model.ModelModule;
+import me.minotopia.expvp.respawn.RespawnModule;
 import me.minotopia.expvp.score.ScoreModule;
 import me.minotopia.expvp.skill.SkillModule;
 import me.minotopia.expvp.skilltree.SkillTreeModule;
@@ -50,11 +54,14 @@ public class EPRootModule extends AbstractModule {
         bind(SessionProvider.class).toInstance(plugin.getSessionProvider());
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
+        bind(ProtocolManager.class).toProvider(ProtocolLibrary::getProtocolManager);
+        bind(TaskService.class).toInstance(plugin.tasks());
         install(new ModelModule());
         install(new SkillModule());
         install(new SkillTreeModule());
         install(new HandlerModule());
         install(new ScoreModule());
         install(new InventoryMenuModule());
+        install(new RespawnModule());
     }
 }

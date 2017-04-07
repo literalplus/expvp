@@ -9,7 +9,6 @@
 package me.minotopia.expvp.ui.menu;
 
 import com.google.inject.Inject;
-import li.l1t.common.inventory.gui.SimpleInventoryMenu;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
@@ -25,17 +24,12 @@ import java.util.function.Consumer;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-20
  */
-public class SelectTreeMenu extends SimpleInventoryMenu implements EPMenu {
+public class SelectTreeMenu extends AbstractEPMenu {
     private final Consumer<SkillTree> clickHandler;
 
     private SelectTreeMenu(EPPlugin plugin, String inventoryTitle, Player player, Consumer<SkillTree> clickHandler) {
         super(plugin, inventoryTitle, player);
         this.clickHandler = clickHandler;
-    }
-
-    @Override
-    public EPPlugin getPlugin() {
-        return (EPPlugin) super.getPlugin();
     }
 
     private void populate(Collection<SkillTree> trees) {
