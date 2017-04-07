@@ -21,6 +21,7 @@ import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.LocaleService;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.score.KillDeathForwardingListener;
+import me.minotopia.expvp.score.ScoreJoinListener;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.util.SessionProvider;
@@ -106,7 +107,6 @@ public class EPPlugin extends GenericXyPlugin {
                     .forEach(initService::callInitHandlers);
         } catch (Exception e) {
             handleEnableException(e);
-
         }
     }
 
@@ -118,6 +118,7 @@ public class EPPlugin extends GenericXyPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(inject(DamageHandlerCaller.class), this);
         pm.registerEvents(inject(KillDeathForwardingListener.class), this);
+        pm.registerEvents(inject(ScoreJoinListener.class), this);
     }
 
     private void registerCommands() {

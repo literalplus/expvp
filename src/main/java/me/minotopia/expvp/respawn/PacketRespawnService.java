@@ -85,6 +85,7 @@ public class PacketRespawnService implements RespawnService {
 
     @Override
     public void startPostRespawn(Player player) {
+        kitService.applyKit(player);
         if (pendingLeagueChanges.remove(player.getUniqueId())) {
             player.getInventory().setHelmet(new ItemStack(Material.PUMPKIN));
             tasks.delayed(

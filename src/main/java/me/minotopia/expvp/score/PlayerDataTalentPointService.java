@@ -64,41 +64,41 @@ public class PlayerDataTalentPointService implements TalentPointService {
 
     @Override
     public int grantTalentPointsForKill(Player player) {
-        int grantedTalentPoints;
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
-            MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
+        return sessionProvider.inSessionAnd(ignored -> {
+            PlayerData playerData = players.findOrCreateData(player.getUniqueId());
             int talentPointLimit = findTalentPointLimit(player);
-            grantedTalentPoints = grantDeservedTalentPoints(playerData, talentPointLimit);
+            int grantedTalentPoints = findDeservedTalentPointDifference(talentPointLimit, playerData.getCurrentKills());
+            grantTalentPoints(player, grantedTalentPoints);
             displayService.displayTPGained(player, grantedTalentPoints);
-            scoped.commitIfLastAndChanged();
-        }
-        return grantedTalentPoints;
+            return grantedTalentPoints;
+        });
     }
 
-    private int grantDeservedTalentPoints(MutablePlayerData playerData, int talentPointLimit) {
-        if (playerData.getCurrentKills() <= 0) {
+    private int findDeservedTalentPointDifference(int talentPointLimit, int currentKills) {
+        if (currentKills <= 0) {
             return 0;
         } else {
-            int newPoints = calculator.totalDeservedPoints(playerData.getCurrentKills());
+            int newPoints = calculator.totalDeservedPoints(currentKills);
             if (newPoints > talentPointLimit) {
                 return 0;
             } else {
-                int previousPoints = calculator.totalDeservedPoints(playerData.getCurrentKills() - 1);
-                return grantTalentPointDifference(playerData, newPoints, previousPoints);
+                int previousPoints = calculator.totalDeservedPoints(currentKills - 1);
+                return newPoints - previousPoints;
             }
         }
     }
 
-    private int grantTalentPointDifference(MutablePlayerData playerData, int newPoints, int previousPoints) {
-        Preconditions.checkArgument(newPoints >= previousPoints,
-                "new must not be less than previous points, for: ",
-                newPoints, previousPoints, playerData);
-        int difference = newPoints - previousPoints;
-        if (difference > 0) {
-            playerData.setTalentPoints(playerData.getTalentPoints() + difference);
-            players.saveData(playerData);
+    @Override
+    public void grantTalentPoints(Player player, int talentPoints) {
+        Preconditions.checkArgument(talentPoints >= 0, "talentPoints must be positive", talentPoints);
+        if (talentPoints == 0) {
+            return;
         }
-        return difference;
+        sessionProvider.inSession(ignored -> {
+            MutablePlayerData data = players.findOrCreateDataMutable(player.getUniqueId());
+            data.setTalentPoints(data.getTalentPoints() + talentPoints);
+            players.saveData(data);
+        });
     }
 
     @Override

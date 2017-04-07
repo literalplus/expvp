@@ -39,6 +39,8 @@ public interface TalentPointService {
      */
     int grantTalentPointsForKill(Player player);
 
+    void grantTalentPoints(Player player, int talentPoints);
+
     /**
      * Consumes given amount of Talent Points from given player's account.
      *

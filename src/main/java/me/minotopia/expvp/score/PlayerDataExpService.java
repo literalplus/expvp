@@ -15,7 +15,6 @@ import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.service.PlayerDataService;
-import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 
@@ -67,6 +66,6 @@ public class PlayerDataExpService implements ExpService {
     public int getExpCount(Player player) {
         return players.findData(player.getUniqueId())
                 .map(PlayerData::getExp)
-                .orElse(HibernatePlayerData.INITIAL_EXP);
+                .orElse(0);
     }
 }
