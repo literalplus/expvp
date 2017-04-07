@@ -16,7 +16,6 @@ import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
-import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 
@@ -45,14 +44,17 @@ public class PlayerDataExpService implements ExpService {
     }
 
     private void modifyExp(Player player, int expModifier) {
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+        sessionProvider.inSession(ignored -> {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
-            playerData.setExp(playerData.getExp() + expModifier);
+            int newExp = playerData.getExp() + expModifier;
+            if (expModifier < 0 && newExp < -100) {
+                return;
+            }
+            playerData.setExp(newExp);
             players.saveData(playerData);
             leagues.updateLeague(player);
             player.setLevel(playerData.getExp());
-            scoped.commitIfLastAndChanged();
-        }
+        });
     }
 
     @Override
