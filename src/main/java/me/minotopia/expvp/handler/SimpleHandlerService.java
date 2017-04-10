@@ -24,6 +24,7 @@ import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.skill.SkillService;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.skill.meta.Skill;
+import me.minotopia.expvp.util.SessionProvider;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
@@ -48,14 +49,14 @@ public class SimpleHandlerService implements HandlerService {
 
     @Inject
     public SimpleHandlerService(HandlerMap handlerMap, HandlerFactoryGraph factories, SkillService skillService,
-                                PlayerInitService initService, PlayerDataService players) {
+                                PlayerInitService initService, PlayerDataService players, SessionProvider sessionProvider) {
         this.handlerMap = handlerMap;
         this.factories = factories;
         this.skillService = skillService;
-        initService.registerInitHandler(player -> {
-            players.findData(player.getUniqueId())
-                    .ifPresent(this::registerHandlers);
-        });
+        initService.registerInitHandler(player ->
+                sessionProvider.inSession(
+                        ignored -> players.findData(player.getUniqueId()).ifPresent(this::registerHandlers)
+                ));
         initService.registerDeInitHandler(player -> skillRequirementsMap.values().removeIf(player.getUniqueId()::equals));
     }
 
