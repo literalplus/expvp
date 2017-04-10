@@ -15,6 +15,7 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import com.google.inject.Inject;
 import li.l1t.common.exception.InternalException;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -37,7 +38,9 @@ class BedPacketService {
         sendIntoBed(player, player.getLocation());
     }
 
+    @SuppressWarnings("deprecation")
     public void sendIntoBed(Player player, Location bedLocation) {
+        player.sendBlockChange(player.getLocation(), Material.BED_BLOCK, (byte) 0);
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.BED);
         packet.getEntityModifier(player.getWorld()).write(0, player);
         packet.getBlockPositionModifier().write(0, new BlockPosition(bedLocation.toVector()));
