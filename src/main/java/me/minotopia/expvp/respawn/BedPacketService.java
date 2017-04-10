@@ -40,7 +40,7 @@ class BedPacketService {
 
     @SuppressWarnings("deprecation")
     public void sendIntoBed(Player player, Location bedLocation) {
-        player.sendBlockChange(player.getLocation(), Material.BED_BLOCK, (byte) 0);
+        player.sendBlockChange(bedLocation, Material.BED_BLOCK, (byte) 0);
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.BED);
         packet.getEntityModifier(player.getWorld()).write(0, player);
         packet.getBlockPositionModifier().write(0, new BlockPosition(bedLocation.toVector()));
@@ -48,6 +48,17 @@ class BedPacketService {
             protocolManager.sendServerPacket(player, packet);
         } catch (InvocationTargetException e) {
             throw new InternalException("Error sending bed packet", e);
+        }
+    }
+
+    public void forceBedExit(Player player) {
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.ANIMATION);
+        packet.getEntityModifier(player.getWorld()).write(0, player);
+        packet.getIntegers().write(0, 2);
+        try {
+            protocolManager.sendServerPacket(player, packet);
+        } catch (InvocationTargetException e) {
+            throw new InternalException("Error sending bed exit packet", e);
         }
     }
 }

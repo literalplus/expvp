@@ -28,10 +28,12 @@ import org.bukkit.plugin.Plugin;
  */
 class BedLeaveListener extends PacketAdapter {
     private final RespawnService respawnService;
+    private final BedPacketService packetService;
 
-    public BedLeaveListener(Plugin plugin, RespawnService respawnService) {
+    public BedLeaveListener(Plugin plugin, RespawnService respawnService, BedPacketService packetService) {
         super(plugin, PacketType.Play.Client.ENTITY_ACTION);
         this.respawnService = respawnService;
+        this.packetService = packetService;
     }
 
     @Override
@@ -48,6 +50,7 @@ class BedLeaveListener extends PacketAdapter {
     private void handleBedLeave(Player player, PacketEvent event) {
         if (respawnService.hasDelayPassed(player)) {
             respawnService.startRespawn(player);
+            packetService.forceBedExit(player);
         } else {
             I18n.sendLoc(player, Format.userError(Message.of("core!respawn.delay-wait")));
             event.setCancelled(true);

@@ -53,7 +53,7 @@ public class PacketRespawnService implements RespawnService {
         this.kitService = kitService;
         this.talentPoints = talentPoints;
         initService.registerDeInitHandler(this::purgePlayerLeagueChangeCache);
-        protocolManager.addPacketListener(new BedLeaveListener(plugin, this));
+        protocolManager.addPacketListener(new BedLeaveListener(plugin, this, packetService));
     }
 
     @Override
