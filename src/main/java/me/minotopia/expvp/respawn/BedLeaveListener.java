@@ -50,7 +50,7 @@ class BedLeaveListener extends PacketAdapter {
 
     private void handleBedLeave(Player player, PacketEvent event) {
         if (respawnService.hasDelayPassed(player)) {
-            //respawnService.startRespawn(player);
+            respawnService.startRespawn(player);
             if (RandomUtils.nextInt(0, 2) == 1) {
                 player.closeInventory();
                 player.sendMessage("cInv");
