@@ -52,9 +52,8 @@ class BedPacketService {
     }
 
     public void forceBedExit(Player player) {
-        PacketContainer packet = new PacketContainer(PacketType.Play.Server.ANIMATION);
-        packet.getEntityModifier(player.getWorld()).write(0, player);
-        packet.getIntegers().write(0, 2);
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.POSITION);
+        packet.getBlockPositionModifier().write(0, new BlockPosition(player.getLocation().toVector()));
         try {
             protocolManager.sendServerPacket(player, packet);
         } catch (InvocationTargetException e) {
