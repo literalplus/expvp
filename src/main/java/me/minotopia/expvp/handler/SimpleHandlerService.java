@@ -20,6 +20,7 @@ import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.handler.SkillHandler;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.model.PlayerData;
+import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.skill.SkillService;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.skill.meta.Skill;
@@ -47,10 +48,14 @@ public class SimpleHandlerService implements HandlerService {
 
     @Inject
     public SimpleHandlerService(HandlerMap handlerMap, HandlerFactoryGraph factories, SkillService skillService,
-                                PlayerInitService initService) {
+                                PlayerInitService initService, PlayerDataService players) {
         this.handlerMap = handlerMap;
         this.factories = factories;
         this.skillService = skillService;
+        initService.registerInitHandler(player -> {
+            players.findData(player.getUniqueId())
+                    .ifPresent(this::registerHandlers);
+        });
         initService.registerDeInitHandler(player -> skillRequirementsMap.values().removeIf(player.getUniqueId()::equals));
     }
 

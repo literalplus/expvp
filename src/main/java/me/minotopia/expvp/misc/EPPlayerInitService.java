@@ -15,6 +15,7 @@ import me.minotopia.expvp.api.misc.PlayerInitService;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -62,9 +63,8 @@ public class EPPlayerInitService implements PlayerInitService, Listener {
         deInitHandlers.add(handler);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.setJoinMessage(null);
         callInitHandlers(event.getPlayer());
     }
 

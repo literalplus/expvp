@@ -12,10 +12,13 @@ import com.google.inject.Inject;
 import me.minotopia.expvp.api.reset.ResetService;
 import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.time.LocalDate;
@@ -32,23 +35,36 @@ public class ScoreJoinListener implements Listener {
     private final ExpService exps;
     private final TalentPointService talentPoints;
     private final ResetService resetService;
+    private final PlayerDataService players;
+    private final SessionProvider sessionProvider;
 
     @Inject
-    public ScoreJoinListener(ExpService exps, TalentPointService talentPoints, ResetService resetService) {
+    public ScoreJoinListener(ExpService exps, TalentPointService talentPoints, ResetService resetService,
+                             PlayerDataService players, SessionProvider sessionProvider) {
         this.exps = exps;
         this.talentPoints = talentPoints;
         this.resetService = resetService;
+        this.players = players;
+        this.sessionProvider = sessionProvider;
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        sessionProvider.inSession(ignored -> players.findOrCreateData(event.getUniqueId()));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        event.setJoinMessage(null);
         Player player = event.getPlayer();
-        if (!player.hasPlayedBefore()) {
-            exps.incrementExp(player, 100);
-            talentPoints.grantTalentPoints(player, getFullDaysSinceReset() * 10);
-        } else {
-            player.setLevel(exps.getExpCount(player));
-        }
+        sessionProvider.inSession(ignored -> {
+            if (!player.hasPlayedBefore()) {
+                exps.incrementExp(player, 100);
+                talentPoints.grantTalentPoints(player, getFullDaysSinceReset() * 10);
+            } else {
+                player.setLevel(exps.getExpCount(player));
+            }
+        });
     }
 
     private int getFullDaysSinceReset() {
