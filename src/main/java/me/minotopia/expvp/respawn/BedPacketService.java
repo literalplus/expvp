@@ -40,8 +40,7 @@ class BedPacketService {
 
     @SuppressWarnings("deprecation")
     public void sendIntoBed(Player player, Location bedLocation) {
-        //player.sendBlockChange(bedLocation, Material.BED_BLOCK, (byte) 0);
-        bedLocation.getBlock().setType(Material.BED_BLOCK);
+        player.sendBlockChange(bedLocation, Material.BED_BLOCK, (byte) 0);
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.BED);
         packet.getEntityModifier(player.getWorld()).write(0, player);
         packet.getBlockPositionModifier().write(0, new BlockPosition(bedLocation.toVector()));
