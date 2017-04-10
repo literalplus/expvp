@@ -50,7 +50,9 @@ public class ScoreJoinListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        sessionProvider.inSession(ignored -> players.findOrCreateData(event.getUniqueId()));
+        sessionProvider.inSession(ignored -> {
+            players.saveData(players.findOrCreateDataMutable(event.getUniqueId()));
+        });
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
