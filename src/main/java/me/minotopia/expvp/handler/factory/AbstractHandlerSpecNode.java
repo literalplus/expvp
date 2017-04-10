@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class AbstractHandlerSpecNode implements HandlerSpecNode {
     private final String ownHandlerSpec;
     private HandlerSpecNode parent;
+    private Pattern fullHandlerSpecPattern;
 
     public AbstractHandlerSpecNode(HandlerSpecNode parent, String ownHandlerSpec) {
         this.parent = parent;
@@ -62,8 +63,15 @@ public class AbstractHandlerSpecNode implements HandlerSpecNode {
                 .collect(Collectors.joining(HandlerFactoryGraph.SEPARATOR));
     }
 
+    private Pattern findFullHandlerSpecPattern() {
+        if (fullHandlerSpecPattern == null) {
+            fullHandlerSpecPattern = Pattern.compile(Pattern.quote(this.getFullHandlerSpec()) + "/");
+        }
+        return fullHandlerSpecPattern;
+    }
+
     protected String findRelativeSpec(Skill skill) {
-        Matcher matcher = Pattern.compile(Pattern.quote(this.getFullHandlerSpec()) + "/").matcher(skill.getHandlerSpec());
+        Matcher matcher = findFullHandlerSpecPattern().matcher(skill.getHandlerSpec());
         if (matcher.find()) {
             return matcher.replaceFirst("");
         } else {

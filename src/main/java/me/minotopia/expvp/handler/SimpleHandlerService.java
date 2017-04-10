@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.handler;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -17,7 +18,6 @@ import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
 import me.minotopia.expvp.api.handler.HandlerMap;
 import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.handler.SkillHandler;
-import me.minotopia.expvp.api.handler.factory.InvalidHandlerSpecException;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.skill.SkillService;
@@ -78,11 +78,19 @@ public class SimpleHandlerService implements HandlerService {
     }
 
     private Optional<SkillHandler> createAndRegisterHandlerFor(Skill skill) {
+        Preconditions.checkNotNull(skill, "skill");
+        if (skill.getHandlerSpec() == null || skill.getHandlerSpec().isEmpty()) {
+            return Optional.empty();
+        }
+        return tryCreateAndRegisterHandlerFor(skill);
+    }
+
+    private Optional<SkillHandler> tryCreateAndRegisterHandlerFor(Skill skill) {
         try {
             SkillHandler handler = factories.createHandler(skill);
             handlerMap.registerHandler(handler);
             return Optional.of(handler);
-        } catch (InvalidHandlerSpecException e) {
+        } catch (Exception e) {
             LOGGER.warn("Failed to resolve handler for skill " + skill, e);
             return Optional.empty();
         }
