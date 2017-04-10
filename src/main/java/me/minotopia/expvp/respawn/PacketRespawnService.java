@@ -62,7 +62,7 @@ public class PacketRespawnService implements RespawnService {
         I18n.sendLoc(player, Format.result(Message.of("core!respawn.delay-start")));
         packetService.sendIntoBed(player);
         tasks.delayed(
-                () -> I18n.sendLoc(player, Format.resultSuccess(Message.of("core!respawn-end"))),
+                () -> I18n.sendLoc(player, Format.resultSuccess(Message.of("core!respawn.delay-end"))),
                 Duration.ofSeconds(5)
         );
     }
