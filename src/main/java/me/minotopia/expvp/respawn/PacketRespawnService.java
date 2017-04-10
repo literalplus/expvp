@@ -85,7 +85,6 @@ public class PacketRespawnService implements RespawnService {
 
     @Override
     public void startPostRespawn(Player player) {
-        player.spigot().respawn();
         kitService.applyKit(player);
         if (pendingLeagueChanges.remove(player.getUniqueId())) {
             player.getInventory().setHelmet(new ItemStack(Material.PUMPKIN));

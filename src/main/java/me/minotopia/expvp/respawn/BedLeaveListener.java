@@ -16,7 +16,6 @@ import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.respawn.RespawnService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
-import org.apache.commons.lang3.RandomUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -51,12 +50,7 @@ class BedLeaveListener extends PacketAdapter {
     private void handleBedLeave(Player player, PacketEvent event) {
         if (respawnService.hasDelayPassed(player)) {
             respawnService.startRespawn(player);
-            if (RandomUtils.nextInt(0, 2) == 1) {
-                player.closeInventory();
-                player.sendMessage("cInv");
-            } else {
-                packetService.forceBedExit(player);
-            }
+            packetService.forceBedExit(player);
         } else {
             I18n.sendLoc(player, Format.userError(Message.of("core!respawn.delay-wait")));
             event.setCancelled(true);
