@@ -20,7 +20,6 @@ import me.minotopia.expvp.api.respawn.RespawnService;
 public class RespawnModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(RespawnService.class).to(PacketRespawnService.class);
-        bind(BedPacketService.class);
+        bind(RespawnService.class).to(SpectatorRespawnService.class);
     }
 }

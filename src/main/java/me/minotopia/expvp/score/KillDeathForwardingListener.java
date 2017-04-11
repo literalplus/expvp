@@ -69,10 +69,7 @@ public class KillDeathForwardingListener implements Listener {
     }
 
     private void teleportToSpawn(Player victim) {
-        victim.sendMessage("This is the point where you'd be teleported to spawn if that was already implemented.");
-        //FIXME: Teleport to spawn
-        //TODO: this as a callback after teleport
-        respawnService.startPreRespawn(victim);
+        respawnService.startRespawnDelay(victim);
     }
 
     private void restoreHealthEtc(Player victim) {

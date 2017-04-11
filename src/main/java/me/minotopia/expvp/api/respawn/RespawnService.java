@@ -20,24 +20,19 @@ import java.util.UUID;
  */
 public interface RespawnService {
     /**
-     * Starts the pre-respawn process for given player. Assumes that the player is already at the correct spawn
-     * location. This sets the player into bed state until the respawn delay has passed.
+     * Starts the pre-respawn process for given player, delaying their actual respawn by a small implementation-specific
+     * amount of time. Assumes that the player is still at their death location. This will start the actual respawn
+     * process once the delay has elapsed.
      *
-     * @param player the player to respawn
+     * @param player the player to start the delay for
      */
-    void startPreRespawn(Player player);
+    void startRespawnDelay(Player player);
 
     /**
-     * @param player the player to check
-     * @return whether given player's respawn delay has passed yet
-     */
-    boolean hasDelayPassed(Player player);
-
-    /**
-     * Starts the actual respawn process of given player. This includes opening the research menu if they have any
-     * Talent Points left to spend. If there are no actual respawn tasks to do (e.g. if the player has no TP left),
-     * this method immediately calls {@link #startPostRespawn(Player)}. Otherwise, that method is called once the
-     * respawn tasks are finished.
+     * Starts the actual respawn process of given player. This includes teleporting them to the current map's spawn and
+     * opening the research menu if they have any Talent Points left to spend. If given player has no TP left, this
+     * method immediately calls {@link #startPostRespawn(Player)}. Otherwise, that method is called once research menu
+     * is closed.
      *
      * @param player the player to respawn
      */

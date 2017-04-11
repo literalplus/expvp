@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.respawn;
 
-import com.comphenix.protocol.ProtocolManager;
 import com.google.inject.Inject;
 import li.l1t.common.intake.i18n.Message;
 import li.l1t.common.util.task.TaskService;
@@ -19,14 +18,15 @@ import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.ui.menu.SelectTreeMenu;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Creates special effects on respawn using packets.
@@ -34,47 +34,44 @@ import java.util.*;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-06
  */
-public class PacketRespawnService implements RespawnService {
+public class SpectatorRespawnService implements RespawnService {
     private final List<UUID> pendingLeagueChanges = new ArrayList<>();
-    private final Map<UUID, Instant> respawnDelayTimeouts = new HashMap<>();
-    private final BedPacketService packetService;
     private final TaskService tasks;
     private final SelectTreeMenu.Factory treeMenuFactory;
     private final KitService kitService;
     private final TalentPointService talentPoints;
 
     @Inject
-    public PacketRespawnService(PlayerInitService initService, BedPacketService packetService, Plugin plugin,
-                                ProtocolManager protocolManager, TaskService tasks, SelectTreeMenu.Factory treeMenuFactory,
-                                KitService kitService, TalentPointService talentPoints) {
-        this.packetService = packetService;
+    public SpectatorRespawnService(PlayerInitService initService, TaskService tasks,
+                                   SelectTreeMenu.Factory treeMenuFactory,
+                                   KitService kitService, TalentPointService talentPoints) {
         this.tasks = tasks;
         this.treeMenuFactory = treeMenuFactory;
         this.kitService = kitService;
         this.talentPoints = talentPoints;
         initService.registerDeInitHandler(this::purgePlayerLeagueChangeCache);
-        protocolManager.addPacketListener(new BedLeaveListener(plugin, this, packetService));
     }
 
     @Override
-    public void startPreRespawn(Player player) {
-        respawnDelayTimeouts.put(player.getUniqueId(), Instant.now().plusSeconds(5));
+    public void startRespawnDelay(Player player) {
+        player.getInventory().clear();
+        player.setGameMode(GameMode.SPECTATOR);
         I18n.sendLoc(player, Format.result(Message.of("core!respawn.delay-start")));
-        packetService.sendIntoBed(player);
         tasks.delayed(
-                () -> I18n.sendLoc(player, Format.resultSuccess(Message.of("core!respawn.delay-end"))),
+                () -> {
+                    I18n.sendLoc(player, Format.resultSuccess(Message.of("core!respawn.delay-end")));
+                    startRespawn(player);
+                },
                 Duration.ofSeconds(5)
         );
     }
 
     @Override
-    public boolean hasDelayPassed(Player player) {
-        Optional<Instant> timeout = Optional.ofNullable(respawnDelayTimeouts.get(player.getUniqueId()));
-        return timeout.map(instant -> Instant.now().isAfter(instant)).orElse(true);
-    }
-
-    @Override
     public void startRespawn(Player player) {
+        player.setGameMode(GameMode.SURVIVAL);
+        player.getInventory().clear();
+        //TODO: Teleport to current map spawn
+        player.sendMessage("This is the point where you'd be teleported to spawn if that was already implemented.");
         if (talentPoints.getCurrentTalentPointCount(player) > 0) {
             treeMenuFactory.openForResearch(player)
                     .addCloseHandler(ignored -> startPostRespawn(player));
