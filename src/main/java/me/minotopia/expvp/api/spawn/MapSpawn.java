@@ -18,6 +18,8 @@ import me.minotopia.expvp.api.Identifiable;
  * @since 2017-04-12
  */
 public interface MapSpawn extends Identifiable {
+    boolean hasLocation();
+
     XyLocation getLocation();
 
     void setLocation(XyLocation newLocation);

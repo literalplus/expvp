@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.api.spawn;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +21,11 @@ public interface SpawnService {
     Optional<MapSpawn> getCurrentSpawn();
 
     void forceNextSpawn(MapSpawn spawn);
+
+    /**
+     * @return all the spawns known to this service that have a location set
+     */
+    List<MapSpawn> getSpawns();
 
     Optional<MapSpawn> getSpawnById(String spawnId);
 

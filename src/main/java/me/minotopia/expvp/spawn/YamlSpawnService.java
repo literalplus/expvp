@@ -15,9 +15,9 @@ import me.minotopia.expvp.api.spawn.SpawnService;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Keeps track of the current spawn and provides an API for accessing spawns.
@@ -36,18 +36,32 @@ public class YamlSpawnService implements SpawnService {
 
     @Override
     public Optional<MapSpawn> getCurrentSpawn() {
-        if (currentSpawn == null && !spawnManager.getAll().isEmpty()) {
-            List<MapSpawn> spawns = new ArrayList<>(spawnManager.getAll());
-            int randomIndex = RandomUtils.nextInt(0, spawns.size());
-            MapSpawn randomSpawn = spawns.get(randomIndex);
-            forceNextSpawn(randomSpawn);
+        if (currentSpawn == null) {
+            findRandomSpawn().ifPresent(this::forceNextSpawn);
         }
         return Optional.ofNullable(currentSpawn);
+    }
+
+    private Optional<MapSpawn> findRandomSpawn() {
+        List<MapSpawn> spawns = getSpawns();
+        if (spawns.isEmpty()) {
+            return Optional.empty();
+        } else {
+            int randomIndex = RandomUtils.nextInt(0, spawns.size());
+            return Optional.of(spawns.get(randomIndex));
+        }
     }
 
     @Override
     public void forceNextSpawn(MapSpawn spawn) {
         currentSpawn = spawn;
+    }
+
+    @Override
+    public List<MapSpawn> getSpawns() {
+        return spawnManager.getAll().stream()
+                .filter(MapSpawn::hasLocation)
+                .collect(Collectors.toList());
     }
 
     @Override

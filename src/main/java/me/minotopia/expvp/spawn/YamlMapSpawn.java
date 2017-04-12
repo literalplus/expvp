@@ -33,6 +33,11 @@ public class YamlMapSpawn implements MapSpawn {
     }
 
     @Override
+    public boolean hasLocation() {
+        return location != null;
+    }
+
+    @Override
     public XyLocation getLocation() {
         return location;
     }
