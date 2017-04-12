@@ -23,6 +23,7 @@ import me.minotopia.expvp.respawn.RespawnModule;
 import me.minotopia.expvp.score.ScoreModule;
 import me.minotopia.expvp.skill.SkillModule;
 import me.minotopia.expvp.skilltree.SkillTreeModule;
+import me.minotopia.expvp.spawn.SpawnModule;
 import me.minotopia.expvp.ui.InventoryMenuModule;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Server;
@@ -63,5 +64,6 @@ public class EPRootModule extends AbstractModule {
         install(new ScoreModule());
         install(new InventoryMenuModule());
         install(new RespawnModule());
+        install(new SpawnModule());
     }
 }

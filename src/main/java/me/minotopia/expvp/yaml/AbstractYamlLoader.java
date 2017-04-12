@@ -11,7 +11,7 @@ package me.minotopia.expvp.yaml;
 import com.google.common.base.Preconditions;
 import com.google.common.io.Files;
 import li.l1t.common.intake.exception.UncheckedException;
-import me.minotopia.expvp.api.Nameable;
+import me.minotopia.expvp.api.Identifiable;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +27,7 @@ import java.util.Set;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
-public abstract class AbstractYamlLoader<T extends Nameable> implements YamlLoader<T> {
+public abstract class AbstractYamlLoader<T extends Identifiable> implements YamlLoader<T> {
     public static final String DATA_PATH = "data";
     private static Logger LOGGER = LoggingManager.getLogger(AbstractYamlLoader.class);
     private final YamlManager<T> manager;

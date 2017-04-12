@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.yaml;
 
-import me.minotopia.expvp.api.Nameable;
+import me.minotopia.expvp.api.Identifiable;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.Collection;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-24
  */
-public interface YamlManager<T extends Nameable> {
+public interface YamlManager<T extends Identifiable> {
     /**
      * Loads all objects from disk.
      */
