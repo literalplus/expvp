@@ -9,15 +9,15 @@
 package me.minotopia.expvp.score;
 
 import com.google.inject.Inject;
+import li.l1t.common.util.DamageHelper;
 import me.minotopia.expvp.api.respawn.RespawnService;
 import me.minotopia.expvp.api.score.KillDeathService;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 
@@ -38,34 +38,29 @@ public class KillDeathForwardingListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerHit(EntityDamageByEntityEvent event) {
+    public void onPlayerHit(EntityDamageEvent event) {
         if (isTheVictimAPlayer(event)) {
             Player victim = (Player) event.getEntity();
             if (isFatalHit(event, victim)) {
                 event.setCancelled(true);
-                handleFatalHit(victim, event.getDamager());
+                handleFatalHit(victim, event);
             }
         }
     }
 
-    private boolean isTheVictimAPlayer(EntityDamageByEntityEvent event) {
+    private boolean isTheVictimAPlayer(EntityDamageEvent event) {
         return event.getEntityType() == EntityType.PLAYER;
     }
 
-    private boolean isFatalHit(EntityDamageByEntityEvent event, Player victim) {
+    private boolean isFatalHit(EntityDamageEvent event, Player victim) {
         return (victim.getHealth() - event.getFinalDamage()) <= 0D;
     }
 
-    private void handleFatalHit(Player victim, Entity culprit) {
+    private void handleFatalHit(Player victim, EntityDamageEvent event) {
         teleportToSpawn(victim);
         restoreHealthEtc(victim);
-        if (isAPlayer(culprit)) {
-            killDeathService.onFatalHit((Player) culprit, victim);
-        }
-    }
-
-    private boolean isAPlayer(Entity entity) {
-        return entity != null && entity.getType() == EntityType.PLAYER;
+        DamageHelper.findActualDamager(event)
+                .ifPresent(culprit -> killDeathService.onFatalHit(culprit, victim));
     }
 
     private void teleportToSpawn(Player victim) {
@@ -83,6 +78,6 @@ public class KillDeathForwardingListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.getEntity().spigot().respawn();
-        handleFatalHit(event.getEntity(), event.getEntity().getKiller());
+        handleFatalHit(event.getEntity(), event.getEntity().getLastDamageCause());
     }
 }
