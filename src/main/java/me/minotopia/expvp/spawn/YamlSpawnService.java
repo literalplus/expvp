@@ -10,9 +10,14 @@ package me.minotopia.expvp.spawn;
 
 import com.google.inject.Inject;
 import li.l1t.common.exception.InternalException;
+import li.l1t.common.intake.i18n.Message;
+import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.SpawnService;
+import me.minotopia.expvp.i18n.Format;
+import me.minotopia.expvp.i18n.I18n;
 import org.apache.commons.lang3.RandomUtils;
+import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,8 +35,9 @@ public class YamlSpawnService implements SpawnService {
     private final SpawnManager spawnManager;
 
     @Inject
-    public YamlSpawnService(SpawnManager spawnManager) {
+    public YamlSpawnService(SpawnManager spawnManager, PlayerInitService initService) {
         this.spawnManager = spawnManager;
+        initService.registerInitHandler(this::teleportToSpawnIfPossible);
     }
 
     @Override
@@ -75,6 +81,16 @@ public class YamlSpawnService implements SpawnService {
             spawnManager.save(spawn);
         } catch (IOException e) {
             throw new InternalException("Unable to save spawn " + spawn, e);
+        }
+    }
+
+    @Override
+    public void teleportToSpawnIfPossible(Player player) {
+        Optional<MapSpawn> currentSpawn = getCurrentSpawn();
+        if (currentSpawn.isPresent()) {
+            player.teleport(currentSpawn.get().getLocation());
+        } else {
+            I18n.sendLoc(player, Format.warning(Message.of("core!respawn.no-spawn")));
         }
     }
 }

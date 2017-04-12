@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.api.spawn;
 
+import org.bukkit.entity.Player;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,4 +32,13 @@ public interface SpawnService {
     Optional<MapSpawn> getSpawnById(String spawnId);
 
     void saveSpawn(MapSpawn spawn);
+
+    /**
+     * Teleports given player to the current spawn, if possible. This might not be possible due to no spawns existing or
+     * due to no spawns with a location existing. If the teleport fails, an informational message is sent to given
+     * player.
+     *
+     * @param player the player to teleport
+     */
+    void teleportToSpawnIfPossible(Player player);
 }

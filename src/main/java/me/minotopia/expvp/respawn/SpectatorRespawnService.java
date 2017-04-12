@@ -15,7 +15,6 @@ import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.respawn.RespawnService;
 import me.minotopia.expvp.api.score.TalentPointService;
-import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
@@ -28,7 +27,6 @@ import org.bukkit.inventory.ItemStack;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -76,21 +74,12 @@ public class SpectatorRespawnService implements RespawnService {
     public void startRespawn(Player player) {
         player.setGameMode(GameMode.SURVIVAL);
         player.getInventory().clear();
-        teleportToSpawnIfPossible(player);
+        spawns.teleportToSpawnIfPossible(player);
         if (talentPoints.getCurrentTalentPointCount(player) > 0) {
             treeMenuFactory.openForResearch(player)
                     .addCloseHandler(ignored -> startPostRespawn(player));
         } else {
             startPostRespawn(player);
-        }
-    }
-
-    private void teleportToSpawnIfPossible(Player player) {
-        Optional<MapSpawn> currentSpawn = spawns.getCurrentSpawn();
-        if (currentSpawn.isPresent()) {
-            player.teleport(currentSpawn.get().getLocation());
-        } else {
-            I18n.sendLoc(player, Message.of("core!respawn.no-spawn"));
         }
     }
 
