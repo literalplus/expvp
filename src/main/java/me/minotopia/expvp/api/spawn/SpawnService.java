@@ -17,7 +17,7 @@ import java.util.Optional;
  * @since 2017-04-12
  */
 public interface SpawnService {
-    MapSpawn getCurrentSpawn();
+    Optional<MapSpawn> getCurrentSpawn();
 
     void forceNextSpawn(MapSpawn spawn);
 

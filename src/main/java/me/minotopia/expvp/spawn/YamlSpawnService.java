@@ -35,14 +35,14 @@ public class YamlSpawnService implements SpawnService {
     }
 
     @Override
-    public MapSpawn getCurrentSpawn() {
-        if (currentSpawn == null) {
+    public Optional<MapSpawn> getCurrentSpawn() {
+        if (currentSpawn == null && !spawnManager.getAll().isEmpty()) {
             List<MapSpawn> spawns = new ArrayList<>(spawnManager.getAll());
             int randomIndex = RandomUtils.nextInt(0, spawns.size());
             MapSpawn randomSpawn = spawns.get(randomIndex);
             forceNextSpawn(randomSpawn);
         }
-        return currentSpawn;
+        return Optional.ofNullable(currentSpawn);
     }
 
     @Override
