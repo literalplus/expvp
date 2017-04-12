@@ -76,6 +76,7 @@ public class SubskillButton extends EditButton {
             } else {
                 menu.getPlayer().sendMessage("§e§l➩ §aSubskill aus dem Baum entfernt: " + getSkillDisplayName());
                 removeThisChild();
+                menu.saveTree();
             }
             menu.open();
         } else {

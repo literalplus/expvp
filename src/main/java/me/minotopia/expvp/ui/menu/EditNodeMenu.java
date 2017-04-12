@@ -128,6 +128,7 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
         openSelectSkillMenu(skill -> {
             child.setValue(skill);
             getPlayer().sendMessage("§e§l➩ §aNeuer Subskill erstellt.");
+            saveTree();
             open(); //return to this menu in case they want to add more
         });
     }
