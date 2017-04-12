@@ -10,6 +10,8 @@ package me.minotopia.expvp.ui.menu;
 
 import com.google.inject.Inject;
 import li.l1t.common.exception.InternalException;
+import li.l1t.common.inventory.SlotPosition;
+import li.l1t.common.util.inventory.InventoryHelper;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.score.TalentPointService;
@@ -22,6 +24,8 @@ import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
+import java.util.stream.IntStream;
 
 /**
  * An inventory menu that provides the frontend for a skill tree.
@@ -46,7 +50,13 @@ public class SkillTreeMenu extends AbstractEPMenu {
         if (!renderer.isRendered()) {
             attemptRender(renderer);
         }
-        renderer.applyStructureTo(this);
+        clearContents();
+        renderer.getTemplate().applySoft(this);
+    }
+
+    private void clearContents() {
+        IntStream.range(SlotPosition.ofXYValidated(0, 1).toSlotId(), InventoryHelper.DEFAULT_MAX_INVENTORY_SIZE)
+                .forEach(slotId -> setElementRaw(slotId, null));
     }
 
     private void attemptRender(TreeStructureRenderer renderer) {

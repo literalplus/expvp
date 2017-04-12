@@ -9,7 +9,6 @@
 package me.minotopia.expvp.ui.renderer;
 
 import li.l1t.common.inventory.gui.element.MenuElement;
-import li.l1t.common.inventory.gui.holder.ElementHolder;
 import li.l1t.common.inventory.gui.holder.TemplateElementHolder;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skilltree.SkillTree;
@@ -56,10 +55,6 @@ public class TreeStructureRenderer {
         } else if (tree.getWidth() > MAX_WIDTH) {
             throw new RenderingException("Dieser Baum ist zu hoch! (fünf Skills in einer Zeile erlaubt)");
         }
-    }
-
-    public void applyStructureTo(ElementHolder holder) {
-        template.apply(holder);
     }
 
     public TemplateElementHolder getTemplate() {
