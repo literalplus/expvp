@@ -9,6 +9,8 @@
 package me.minotopia.expvp.ui;
 
 import com.google.inject.AbstractModule;
+import me.minotopia.expvp.ui.menu.EditNodeMenu;
+import me.minotopia.expvp.ui.menu.SelectSkillMenu;
 import me.minotopia.expvp.ui.menu.SelectTreeMenu;
 import me.minotopia.expvp.ui.menu.SkillTreeMenu;
 
@@ -21,6 +23,8 @@ import me.minotopia.expvp.ui.menu.SkillTreeMenu;
 public class InventoryMenuModule extends AbstractModule {
     @Override
     protected void configure() {
+        bind(EditNodeMenu.Factory.class);
+        bind(SelectSkillMenu.Factory.class);
         bind(SelectTreeMenu.Factory.class);
         bind(SkillTreeMenu.Factory.class);
     }
