@@ -37,7 +37,11 @@ public enum Permission {
     /**
      * Allows to administer player data.
      */
-    ADMIN_PLAYERS("expvp.admin.players");
+    ADMIN_PLAYERS("expvp.admin.players"),
+    /**
+     * Allows to create and edit map spawns.
+     */
+    ADMIN_SPAWN("expvp.admin.spawn");
 
     private final String value;
 

@@ -9,10 +9,11 @@
 package me.minotopia.expvp.command.service;
 
 import com.google.inject.Inject;
-import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.CommandsManager;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
+import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.util.SessionProvider;
@@ -29,7 +30,7 @@ public class SkillCommandService extends YamlManagerCommandService<Skill> {
     @Inject
     public SkillCommandService(SkillManager skillManager, PlayerDataService playerDataService,
                                SessionProvider sessionProvider, CommandsManager commandsManager) {
-        super(sessionProvider, playerDataService, skillManager, "Skill", commandsManager);
+        super(sessionProvider, playerDataService, skillManager, "admin!skill.skill", commandsManager);
         registerInjections(commandsManager);
     }
 
@@ -41,26 +42,26 @@ public class SkillCommandService extends YamlManagerCommandService<Skill> {
 
     public void changeHandlerSpec(Skill skill, String newSpec, CommandSender sender) {
         if (!newSpec.startsWith("/")) {
-            throw new UserException("HandlerSpecs müssen mit / beginnen.");
+            throw new I18nUserException("error!skill.handlerspec-slash");
         }
         String previousName = skill.getHandlerSpec();
         skill.setHandlerSpec(newSpec);
         saveObject(skill);
-        sendChangeNotification("Handler", previousName, newSpec, skill, sender);
+        sendChangeNotification("admin!skill.prop.handler", previousName, newSpec, skill, sender);
     }
 
     public void changeIconStack(Skill skill, ItemStack newStack, CommandSender sender) {
         ItemStack previousStack = skill.getIconStack();
         skill.setIconStack(newStack);
         saveObject(skill);
-        sendChangeNotification("Icon", previousStack, newStack, skill, sender);
+        sendChangeNotification("admin!reg.prop.icon", previousStack, newStack, skill, sender);
     }
 
     public void changeBookCost(Skill skill, int newCost, CommandSender sender) {
         int previousCost = skill.getBookCost();
         skill.setBookCost(newCost);
         saveObject(skill);
-        sendChangeNotification("Preis in Skillpunkten", previousCost, newCost, skill, sender);
+        sendChangeNotification(I18n.loc(sender, "admin!skill.prop.cost"), previousCost, newCost, skill, sender);
     }
 
 

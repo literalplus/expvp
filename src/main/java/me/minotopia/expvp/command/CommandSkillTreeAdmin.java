@@ -13,15 +13,16 @@ import com.sk89q.intake.Command;
 import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
-import li.l1t.common.exception.UserException;
-import li.l1t.common.intake.provider.annotation.Colored;
+import li.l1t.common.intake.i18n.Message;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
-import li.l1t.common.intake.provider.annotation.Merged;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Permission;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillTreeCommandService;
+import me.minotopia.expvp.i18n.Format;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.ui.menu.EditNodeMenu;
 import me.minotopia.expvp.ui.menu.SelectTreeMenu;
@@ -40,9 +41,12 @@ import java.io.IOException;
  * @since 2016-07-23
  */
 public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, SkillTreeCommandService> {
+    private final DisplayNameService names;
+
     @Inject
-    CommandSkillTreeAdmin(SkillTreeCommandService commandService) {
+    CommandSkillTreeAdmin(SkillTreeCommandService commandService, DisplayNameService names) {
         super(commandService);
+        this.names = names;
     }
 
     @Override
@@ -50,32 +54,18 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, Ski
         return "Skilltree";
     }
 
-    @Command(aliases = "new", min = 2,
+    @Command(aliases = "new", min = 1,
             desc = "Erstellt neuen Skilltree",
             help = "Erstellt einen neuen Skilltree\nDie Id besteht " +
                     "dabei aus\nZahlen, Buchstaben und Bindestrichen\nund ist eindeutig.",
-            usage = "[id] [name...]")
+            usage = "[id]")
     @EnumRequires(Permission.ADMIN_TREE)
-    public void newSkill(CommandSender sender,
-                         @Validate(regex = "[a-zA-Z0-9\\-]+") String id,
-                         @Merged @Colored String name)
+    public void newSkill(CommandSender sender, @Validate(regex = "[a-zA-Z0-9\\-]+") String id)
             throws IOException {
-        createNew(sender, id, name);
+        createNew(sender, id);
     }
 
-    @Command(aliases = "name", min = 2,
-            desc = "Ändert den Namen",
-            usage = "[id] [name...]")
-    @EnumRequires(Permission.ADMIN_TREE)
-    public void editName(CommandSender sender, SkillTree tree, @Merged @Colored String name)
-            throws IOException {
-        if (name.length() > 32) {
-            throw new UserException("Der Name darf maximal 32 Zeichen lang sein (#BlameMojang)");
-        }
-        service().changeName(tree, name, sender);
-    }
-
-    @Command(aliases = "icon", min = 2,
+    @Command(aliases = "icon", min = 1,
             desc = "Ändert das Icon",
             help = "Ändert das Icon auf das\nItem in deiner Hand",
             usage = "[id]")
@@ -95,11 +85,11 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, Ski
         service().changeSlotId(tree, slotId, sender);
     }
 
-    @Command(aliases = "branches-exclusive", min = 2,
+    @Command(aliases = {"be", "branches-exclusive"}, min = 2,
             desc = "§e",
             help = "Setzt, ob sich die Äste\ndes Baums gegenseitig\nausschließen.\nDas bedeutet, " +
                     "wenn true,\nund man einen Ast erforscht hat,\nkann man den Nachbarn\nnicht " +
-                    "mehr erforschen. (true)",
+                    "mehr erforschen.",
             usage = "[id] [true|false]")
     @EnumRequires(Permission.ADMIN_TREE)
     public void editBranchesExclusive(CommandSender sender, SkillTree tree, boolean branchesExclusive)
@@ -111,7 +101,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, Ski
             desc = "Zeigt Vorschau",
             help = "Zeigt eine Vorschau des Skilltrees",
             usage = "[id]")
-    @EnumRequires(Permission.ADMIN_BASIC)
+    @EnumRequires(Permission.ADMIN_TREE)
     public void showPreview(EPPlugin plugin, @Sender Player player, SkillTree tree)
             throws IOException, RenderingException {
         EditNodeMenu.openNew(plugin, player, tree);
@@ -122,16 +112,14 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, Ski
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void skillInfo(CommandSender sender, SkillTree tree) {
-        sender.sendMessage(String.format("§e➩ §lSkilltree: §6%s §e(ID: %s§e)",
-                tree.getDisplayName(), tree.getId()));
-        sender.sendMessage(String.format("§e➩ §lBranches Exclusive (siehe /sta help): §6%s",
-                tree.areBranchesExclusive()));
-        sender.sendMessage(String.format("§e➩ §lSlot-Id in der Übersicht: §6%s",
-                tree.getSlotId()));
-        sender.sendMessage(String.format("§e➩ §lIcon: %s",
-                tree.getIconStack() == null ? "§cnein" : tree.getIconStack()));
+        I18n.sendLoc(sender, Format.header(Message.of("admin!tree.info.header", tree.getId())));
+        I18n.sendLoc(sender, Format.result(Message.of("admin!tree.info.name", names.displayName(tree))));
+        I18n.sendLoc(sender, Format.result(Message.of("admin!tree.info.desc", names.description(tree))));
+        I18n.sendLoc(sender, Format.result(Message.of("admin!tree.info.be", Format.bool(tree.areBranchesExclusive()))));
+        I18n.sendLoc(sender, Format.result(Message.of("admin!tree.info.misc",
+                tree.getSlotId(), Format.bool(tree.getIconStack() != null))));
         ComponentSender.sendTo(
-                new XyComponentBuilder("[Vorschau anzeigen]", ChatColor.GOLD).italic(true)
+                new XyComponentBuilder(I18n.loc(sender, "admin!tree.info.preview-button"), ChatColor.GOLD).italic(true)
                         .hintedCommand("/sta preview " + tree.getId())
                         .create(),
                 sender

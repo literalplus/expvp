@@ -8,11 +8,12 @@
 
 package me.minotopia.expvp.command.service;
 
-import li.l1t.common.exception.InternalException;
-import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.CommandsManager;
-import me.minotopia.expvp.api.Nameable;
+import li.l1t.common.intake.i18n.Message;
+import me.minotopia.expvp.api.Identifiable;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.util.SessionProvider;
 import me.minotopia.expvp.yaml.YamlManager;
 import org.bukkit.command.CommandSender;
@@ -25,24 +26,23 @@ import java.io.IOException;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-13
  */
-public class YamlManagerCommandService<T extends Nameable> extends CommandService {
+public class YamlManagerCommandService<T extends Identifiable> extends CommandService {
     protected final YamlManager<T> manager;
-    private String objectTypeName;
+    private Message objectType;
 
     YamlManagerCommandService(SessionProvider sessionProvider, PlayerDataService playerDataService,
-                              YamlManager<T> manager, String objectTypeName, CommandsManager commandsManager) {
+                              YamlManager<T> manager, String objectTypeKey, CommandsManager commandsManager) {
         super(sessionProvider, playerDataService, commandsManager);
         this.manager = manager;
-        this.objectTypeName = objectTypeName;
+        this.objectType = Message.of(objectTypeKey);
     }
 
     public void saveObject(T object) {
         try {
             manager.save(object);
         } catch (IOException e) {
-            throw new InternalException(String.format(
-                    "Fehler beim Speichern vom %s mit der ID '%s'",
-                    objectTypeName, object.getId()), e);
+            e.printStackTrace();
+            throw new I18nUserException("error!reg.error-saving", objectType, object.getId());
         }
     }
 
@@ -53,37 +53,28 @@ public class YamlManagerCommandService<T extends Nameable> extends CommandServic
 
     private void assureThereIsNoObjectWithId(String id) {
         if (manager.contains(id)) {
-            throw new UserException(String.format(
-                    "Es gibt bereits einen " + objectTypeName + " mit der ID '%s'!",
-                    id));
+            throw new I18nUserException("error!reg.already-exists", objectType, id);
         }
     }
 
     public T getObjectOrFail(String id) {
         T object = manager.get(id);
         if (object == null) {
-            throw new UserException(String.format(
-                    "Es gibt keinen %s mit der ID '%s'!",
-                    objectTypeName, id));
+            throw new I18nUserException("error!reg.there-is-no", objectType, id);
         }
         return object;
     }
 
-    public void changeName(T object, String newName, CommandSender sender) {
-        String previousName = object.getName();
-        object.setName(newName);
-        saveObject(object);
-        sendChangeNotification("Name", previousName, newName, object, sender);
-    }
-
-    public void sendChangeNotification(String description, Object previous, Object changed,
+    public void sendChangeNotification(String descriptionKey, Object previous, Object changed,
                                        T object, CommandSender sender) {
-        sender.sendMessage(String.format(
-                "§e➩ %s des %ss '%s' von '%s' auf '%s§e' geändert.",
-                description, objectTypeName, object.getId(), previous, changed));
+        I18n.sendLoc(sender, Message.of("admin!reg.changed", Message.of(descriptionKey), object.getId(), previous, changed));
     }
 
     public YamlManager<T> getManager() {
         return manager;
+    }
+
+    public Message getObjectType() {
+        return objectType;
     }
 }

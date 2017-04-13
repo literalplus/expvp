@@ -9,7 +9,7 @@
 package me.minotopia.expvp.skilltree;
 
 import com.google.common.base.Preconditions;
-import me.minotopia.expvp.api.Nameable;
+import me.minotopia.expvp.api.Identifiable;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
@@ -23,20 +23,17 @@ import java.util.Map;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-23
  */
-public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSerializable, Nameable {
-    public static final String NAME_PATH = "name";
-    public static final String ICON_PATH = "icon";
-    public static final String BRANCHES_EXCLUSIVE_PATH = "b-excl";
-    public static final String SLOT_ID_PATH = "slot-id";
-    public static final String TREE_ID_PATH = "tree-id";
+public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSerializable, Identifiable {
+    private static final String ICON_PATH = "icon";
+    private static final String BRANCHES_EXCLUSIVE_PATH = "b-excl";
+    private static final String SLOT_ID_PATH = "slot-id";
+    private static final String TREE_ID_PATH = "tree-id";
 
     static {
         ConfigurationSerialization.registerClass(SkillTree.class);
     }
 
     private final String treeId;
-
-    private String name;
     private ItemStack icon;
     private boolean branchesExclusive;
     private int slotId;
@@ -67,9 +64,6 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
         super(source, null);
         Preconditions.checkArgument(source.containsKey(TREE_ID_PATH), "no tree id specified");
         this.treeId = source.get(TREE_ID_PATH).toString();
-        if (source.containsKey(NAME_PATH)) {
-            setName(String.valueOf(source.get(NAME_PATH)));
-        }
         Object iconObj = source.get(ICON_PATH);
         if (iconObj != null) {
             Preconditions.checkArgument(iconObj instanceof ItemStack, "icon must be an item stack: %s", iconObj);
@@ -81,24 +75,6 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
         if (source.containsKey(SLOT_ID_PATH)) {
             setSlotId((Integer) source.get(SLOT_ID_PATH));
         }
-    }
-
-    /**
-     * @return the human-readable name of this tree
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the human-readable name of this tree.
-     *
-     * @param name the new human-readable name of this tree
-     */
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -197,7 +173,6 @@ public class SkillTree extends SimpleSkillTreeNode implements ConfigurationSeria
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = super.serialize();
-        map.put(NAME_PATH, name);
         map.put(ICON_PATH, icon);
         map.put(BRANCHES_EXCLUSIVE_PATH, branchesExclusive);
         map.put(SLOT_ID_PATH, slotId);

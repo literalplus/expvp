@@ -14,6 +14,7 @@ import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.api.score.league.LeagueService;
+import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
 import org.bukkit.entity.Player;
@@ -38,8 +39,18 @@ public class EPDisplayNameService implements DisplayNameService {
     }
 
     @Override
+    public Message description(Skill skill) {
+        return Message.of("skill!" + skill.getId() + ".desc");
+    }
+
+    @Override
     public Message displayName(SkillTree tree) {
         return Message.of("tree!" + tree.getId() + ".name");
+    }
+
+    @Override
+    public Message description(SkillTree tree) {
+        return Message.of("tree!" + tree.getId() + ".desc");
     }
 
     @Override
@@ -54,5 +65,11 @@ public class EPDisplayNameService implements DisplayNameService {
     public Message displayName(League league) {
         Preconditions.checkNotNull(league, "league");
         return Message.of("score!league." + league.name() + ".name");
+    }
+
+    @Override
+    public Message displayName(MapSpawn spawn) {
+        Preconditions.checkNotNull(spawn, "spawn");
+        return Message.of("spawn!" + spawn.getId() + ".name");
     }
 }

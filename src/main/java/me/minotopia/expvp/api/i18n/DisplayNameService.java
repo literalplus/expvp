@@ -10,12 +10,13 @@ package me.minotopia.expvp.api.i18n;
 
 import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.score.league.League;
+import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
 import org.bukkit.entity.Player;
 
 /**
- * Figures out display names for different Expvp entities.
+ * Figures out display names and descriptions for different Expvp entities.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-23
@@ -27,11 +28,15 @@ public interface DisplayNameService {
      */
     Message displayName(Skill skill);
 
+    Message description(Skill skill);
+
     /**
      * @param tree the tree to display
      * @return a message object representing given tree's display name
      */
     Message displayName(SkillTree tree);
+
+    Message description(SkillTree tree);
 
     /**
      * @param player the player whose display name to compute
@@ -40,4 +45,6 @@ public interface DisplayNameService {
     Message displayName(Player player);
 
     Message displayName(League league);
+
+    Message displayName(MapSpawn spawn);
 }

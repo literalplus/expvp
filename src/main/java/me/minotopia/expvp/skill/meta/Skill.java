@@ -9,8 +9,7 @@
 package me.minotopia.expvp.skill.meta;
 
 import com.google.common.base.Preconditions;
-import li.l1t.common.util.inventory.ItemStackFactory;
-import me.minotopia.expvp.api.Nameable;
+import me.minotopia.expvp.api.Identifiable;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -26,18 +25,16 @@ import java.util.Map;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-06-23
  */
-public class Skill implements ConfigurationSerializable, Nameable {
-    public static final String ID_PATH = "id";
-    public static final String BOOK_COST_PATH = "cost";
-    public static final String NAME_PATH = "name";
-    public static final String ICON_PATH = "icon";
-    public static final String HANDLER_SPEC_PATH = "handler";
+public class Skill implements ConfigurationSerializable, Identifiable {
+    private static final String ID_PATH = "id";
+    private static final String BOOK_COST_PATH = "cost";
+    private static final String ICON_PATH = "icon";
+    private static final String HANDLER_SPEC_PATH = "handler";
     private SkillManager manager;
     private final String id;
     private int bookCost = 1; //sane default value
-    private String name;
     private ItemStack iconStack;
-    private String handlerSpec; //arbitrary string handled by handlers - like XYC Kit API
+    private String handlerSpec;
 
     /**
      * Creates a new skill.
@@ -88,22 +85,6 @@ public class Skill implements ConfigurationSerializable, Nameable {
     }
 
     /**
-     * @return the non-unique, human-readable name of this skill
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the non-unique, human-readable name of this skill.
-     *
-     * @param name the new name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * @return the item stack used to represent this skill in inventories
      */
     public ItemStack getIconStack() {
@@ -120,17 +101,14 @@ public class Skill implements ConfigurationSerializable, Nameable {
     }
 
     /**
-     * @return a non-null stack representing this skill
+     * @return this skill's {@link #getIconStack() icon stack}, or a default stack
      */
     public ItemStack getDisplayStack() {
         return iconStack == null ? createDefaultStack() : getIconStack();
     }
 
     private ItemStack createDefaultStack() {
-        return new ItemStackFactory(Material.PAPER)
-                .displayName("§7<Kein Icon>")
-                .lore("§6" + getDisplayName())
-                .produce();
+        return new ItemStack(Material.PAPER);
     }
 
     /**
@@ -169,7 +147,6 @@ public class Skill implements ConfigurationSerializable, Nameable {
         Map<String, Object> map = new HashMap<>();
         map.put(ID_PATH, id);
         map.put(BOOK_COST_PATH, bookCost);
-        map.put(NAME_PATH, name);
         map.put(ICON_PATH, iconStack);
         map.put(HANDLER_SPEC_PATH, handlerSpec);
         return map;
@@ -185,7 +162,6 @@ public class Skill implements ConfigurationSerializable, Nameable {
         Preconditions.checkArgument(source.containsKey("id"), "source must have id");
         String id = (String) source.get(ID_PATH);
         Skill skill = new Skill(id);
-        skill.setName((String) source.get(NAME_PATH));
         skill.setHandlerSpec((String) source.get(HANDLER_SPEC_PATH));
         if (source.containsKey(BOOK_COST_PATH)) {
             skill.setBookCost((Integer) source.get(BOOK_COST_PATH));

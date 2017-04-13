@@ -9,11 +9,11 @@
 package me.minotopia.expvp.command.service;
 
 import com.google.inject.Inject;
-import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.inventory.SlotPosition;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.command.provider.YamlObjectProvider;
+import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.util.SessionProvider;
@@ -30,7 +30,7 @@ public class SkillTreeCommandService extends YamlManagerCommandService<SkillTree
     @Inject
     public SkillTreeCommandService(SkillTreeManager manager, SessionProvider sessionProvider,
                                    PlayerDataService playerDataService, CommandsManager commandsManager) {
-        super(sessionProvider, playerDataService, manager, "Skilltree", commandsManager);
+        super(sessionProvider, playerDataService, manager, "admin!tree.tree", commandsManager);
     }
 
     @Override
@@ -43,24 +43,24 @@ public class SkillTreeCommandService extends YamlManagerCommandService<SkillTree
         ItemStack previousStack = tree.getIconStack();
         tree.setIconStack(newStack);
         saveObject(tree);
-        sendChangeNotification("Icon", previousStack, newStack, tree, sender);
+        sendChangeNotification("admin!reg.prop.icon", previousStack, newStack, tree, sender);
     }
 
     public void changeSlotId(SkillTree tree, int newSlotId, CommandSender sender) {
         if (!SlotPosition.fromSlotId(newSlotId).isValidSlot()) {
-            throw new UserException("Das ist keine valide Slot-ID: " + newSlotId);
+            throw new I18nUserException("error!inv.invalid-slot", newSlotId);
         }
         int previous = tree.getSlotId();
         tree.setSlotId(newSlotId);
         saveObject(tree);
-        sendChangeNotification("Iconslot", previous, newSlotId, tree, sender);
+        sendChangeNotification("admin!tree.prop.slot", previous, newSlotId, tree, sender);
     }
 
     public void changeBranchesExclusive(SkillTree tree, boolean newValue, CommandSender sender) {
         boolean previous = tree.areBranchesExclusive();
         tree.setBranchesExclusive(newValue);
         saveObject(tree);
-        sendChangeNotification("Branches Exclusive", previous, newValue, tree, sender);
+        sendChangeNotification("admin!tree.prop.be", previous, newValue, tree, sender);
     }
 
     @Override

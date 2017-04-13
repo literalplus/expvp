@@ -9,17 +9,15 @@
 package me.minotopia.expvp.command.service;
 
 import com.google.inject.Inject;
-import li.l1t.common.exception.InternalException;
-import li.l1t.common.exception.UserException;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.shared.uuid.UUIDRepositories;
 import li.l1t.common.shared.uuid.UUIDRepository;
+import me.minotopia.expvp.api.exception.UnknownPlayerException;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
-import me.minotopia.expvp.util.ScopedSession;
+import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.util.SessionProvider;
-import org.hibernate.HibernateException;
 
 import java.util.UUID;
 import java.util.function.Function;
@@ -33,13 +31,13 @@ import java.util.function.Function;
 public class CommandService {
     private static boolean registeredPlainService = false;
     private final SessionProvider sessionProvider;
-    private final PlayerDataService playerDataService;
+    private final PlayerDataService players;
 
     @Inject
-    public CommandService(SessionProvider sessionProvider, PlayerDataService playerDataService,
+    public CommandService(SessionProvider sessionProvider, PlayerDataService players,
                           CommandsManager commandsManager) {
         this.sessionProvider = sessionProvider;
-        this.playerDataService = playerDataService;
+        this.players = players;
         registerInjections(commandsManager);
     }
 
@@ -55,24 +53,21 @@ public class CommandService {
     }
 
     public <T> T modifyPlayerData(UUID playerId, Function<MutablePlayerData, T> mutator) {
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
-            MutablePlayerData playerData = playerDataService.findOrCreateDataMutable(playerId);
+        return sessionProvider.inSessionAnd(ignored -> {
+            MutablePlayerData playerData = players.findOrCreateDataMutable(playerId);
             T result = mutator.apply(playerData);
-            playerDataService.saveData(playerData);
-            scoped.commitIfLast();
+            players.saveData(playerData);
             return result;
-        } catch (HibernateException e) {
-            throw new InternalException("Datenbankfehler", e);
-        }
+        });
     }
 
     public UUID findPlayerByNameOrIdOrFail(String playerInput) {
         try {
             return UUIDRepositories.getUUIDChecked(playerInput);
         } catch (UUIDRepository.UnknownKeyException e) {
-            throw new UserException("Unbekannter Spieler: " + playerInput);
+            throw new UnknownPlayerException(playerInput);
         } catch (UUIDRepository.InvalidResultException e) {
-            throw new UserException("Zu diesem Namen gibt es mehrere Spieler. Probiere die UUID.");
+            throw new I18nUserException("error!player.multiple");
         }
     }
 }

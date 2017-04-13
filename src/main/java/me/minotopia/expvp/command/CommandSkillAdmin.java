@@ -11,14 +11,17 @@ package me.minotopia.expvp.command;
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import com.sk89q.intake.parametric.annotation.Validate;
-import li.l1t.common.intake.provider.annotation.Colored;
+import li.l1t.common.intake.i18n.Message;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Permission;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SkillCommandService;
+import me.minotopia.expvp.i18n.Format;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.ui.menu.SelectSkillMenu;
@@ -35,9 +38,12 @@ import java.io.IOException;
  * @since 2016-07-23
  */
 public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillCommandService> {
+    private final DisplayNameService names;
+
     @Inject
-    protected CommandSkillAdmin(SkillCommandService commandService) {
+    protected CommandSkillAdmin(SkillCommandService commandService, DisplayNameService names) {
         super(commandService);
+        this.names = names;
     }
 
     @Override
@@ -45,25 +51,15 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillComman
         return "Skill";
     }
 
-    @Command(aliases = "new", min = 2,
+    @Command(aliases = "new", min = 1,
             desc = "Erstellt neuen Skill",
             help = "Erstellt einen neuen Skill\nzur Verwendung in Skilltrees.\nDie Id besteht " +
                     "dabei aus\nZahlen, Buchstaben und Bindestrichen\nund ist eindeutig.",
-            usage = "[id] [name...]")
+            usage = "[id]")
     @EnumRequires(Permission.ADMIN_SKILL)
-    public void newSkill(CommandSender sender, @Validate(regex = "[a-zA-Z0-9\\-]+") String id,
-                         @Merged @Colored String name)
+    public void newSkill(CommandSender sender, @Validate(regex = "[a-zA-Z0-9\\-]+") String id)
             throws IOException {
-        createNew(sender, id, name);
-    }
-
-    @Command(aliases = "name", min = 2,
-            desc = "Ändert den Namen",
-            usage = "[id] [name...]")
-    @EnumRequires(Permission.ADMIN_SKILL)
-    public void editName(CommandSender sender, Skill skill, @Merged @Colored String name)
-            throws IOException {
-        service().changeName(skill, name, sender);
+        createNew(sender, id);
     }
 
     @Command(aliases = "handler", min = 2,
@@ -101,14 +97,12 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillComman
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void skillInfo(CommandSender sender, Skill skill) {
-        sender.sendMessage(String.format("§e➩ §lSkill: §6%s §e(ID: %s§e)",
-                skill.getDisplayName(), skill.getId()));
-        sender.sendMessage(String.format("§e➩ §lHandler (Aktion): §6%s",
-                skill.getHandlerSpec()));
-        sender.sendMessage(String.format("§e➩ §lPreis in Skillpunkten: §6%s",
-                skill.getBookCost()));
-        sender.sendMessage(String.format("§e➩ §lIcon: %s",
-                skill.getIconStack() == null ? "§cnein" : skill.getIconStack()));
+        I18n.sendLoc(sender, Format.header(Message.of("admin!skill.info.header", skill.getId())));
+        I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.name", names.displayName(skill))));
+        I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.desc", names.description(skill))));
+        I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.handler", skill.getHandlerSpec())));
+        I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.misc",
+                skill.getBookCost(), Format.bool(skill.getIconStack() != null))));
     }
 
     @Command(aliases = "list",
@@ -133,6 +127,4 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillComman
             throws IOException {
         service().getManager().remove(skill);
     }
-
-    //TODO: /ska handlers
 }

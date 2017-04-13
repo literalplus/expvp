@@ -127,6 +127,7 @@ public class EPPlugin extends GenericXyPlugin {
         commandsManager.registerCommand(inject(CommandSkillTreeAdmin.class), "sta");
         commandsManager.registerCommand(inject(CommandSkillAdmin.class), "ska");
         commandsManager.registerCommand(inject(CommandSkills.class), "sk", "skills");
+        commandsManager.registerCommand(inject(CommandSpawnAdmin.class), "spa");
     }
 
     private void handleEnableException(Exception e) {

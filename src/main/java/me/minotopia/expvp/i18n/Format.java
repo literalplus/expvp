@@ -49,7 +49,15 @@ public class Format {
         return wrapIn("list-header", message);
     }
 
+    public static Message header(Message message) {
+        return wrapIn("header", message);
+    }
+
     public static Message listItem(Message message) {
         return wrapIn("list-item", message);
+    }
+
+    public static Message bool(boolean input) {
+        return Message.of(input ? "core!yes" : "core!no");
     }
 }

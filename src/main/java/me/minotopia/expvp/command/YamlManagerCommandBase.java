@@ -8,8 +8,10 @@
 
 package me.minotopia.expvp.command;
 
-import me.minotopia.expvp.api.Nameable;
+import li.l1t.common.intake.i18n.Message;
+import me.minotopia.expvp.api.Identifiable;
 import me.minotopia.expvp.command.service.YamlManagerCommandService;
+import me.minotopia.expvp.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.io.IOException;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-13
  */
-abstract class YamlManagerCommandBase<T extends Nameable, S extends YamlManagerCommandService<T>>
+abstract class YamlManagerCommandBase<T extends Identifiable, S extends YamlManagerCommandService<T>>
         extends AbstractServiceBackedCommand<S> {
     protected YamlManagerCommandBase(S commandService) {
         super(commandService);
@@ -28,13 +30,11 @@ abstract class YamlManagerCommandBase<T extends Nameable, S extends YamlManagerC
 
     public abstract String getObjectTypeName();
 
-    void createNew(CommandSender sender,
-                   String id, String name) throws IOException {
+    T createNew(CommandSender sender,
+                String id) throws IOException {
         T object = service().createObjectWithExistsCheck(id);
-        object.setName(name);
         service().saveObject(object);
-        sender.sendMessage(String.format(
-                "§e➩ Neuer %s mit der ID '%s' und dem Namen '%s' erstellt.",
-                getObjectTypeName(), id, name));
+        I18n.sendLoc(sender, Message.of("admin!reg.created", service().getObjectType(), id));
+        return object;
     }
 }
