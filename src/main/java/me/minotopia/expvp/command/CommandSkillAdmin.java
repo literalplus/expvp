@@ -15,7 +15,6 @@ import li.l1t.common.intake.i18n.Message;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
 import li.l1t.common.intake.provider.annotation.Sender;
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.command.permission.EnumRequires;
@@ -23,7 +22,6 @@ import me.minotopia.expvp.command.service.SkillCommandService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.skill.meta.Skill;
-import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.ui.menu.SelectSkillMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -102,21 +100,20 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillComman
         I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.desc", names.description(skill))));
         I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.handler", skill.getHandlerSpec())));
         I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.misc",
-                skill.getBookCost(), Format.bool(skill.getIconStack() != null))));
+                skill.getTalentPointCost(), Format.bool(skill.getIconStack() != null))));
     }
 
     @Command(aliases = "list",
             desc = "Zeigt alle Skills",
             help = "Zeigt alle Skills\nin einem Inventar.")
     @EnumRequires(Permission.ADMIN_SKILL)
-    public void list(EPPlugin plugin, SkillManager manager, @Sender Player player) {
-        SelectSkillMenu.openNew(
-                plugin, manager, player,
-                skill -> {
+    public void list(SelectSkillMenu.Factory selectSkillMenuFactory, @Sender Player player) {
+        selectSkillMenuFactory.openMenu(
+                player, skill -> {
                     skillInfo(player, skill);
                     player.closeInventory();
-                }
-        );
+
+                });
     }
 
     @Command(aliases = "remove", min = 1,

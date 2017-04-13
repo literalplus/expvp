@@ -11,8 +11,11 @@ package me.minotopia.expvp.ui.element;
 import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.element.Placeholder;
 import li.l1t.common.util.inventory.ItemStackFactory;
+import me.minotopia.expvp.i18n.I18n;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
 
@@ -24,23 +27,27 @@ import java.util.function.Consumer;
  * @since 2016-08-15
  */
 public class BackButton extends Placeholder {
-    private static final ItemStackFactory ICON_FACTORY = new ItemStackFactory(Material.WOOD_DOOR)
-            .displayName("<< §6§lZurück");
     private final Consumer<InventoryMenu> clickHandler;
 
-    public BackButton(InventoryMenu previous) {
+    public BackButton(InventoryMenu previous, CommandSender sender) {
         this(inventoryMenu -> {
             if (previous != null) {
                 previous.open();
             } else {
                 inventoryMenu.getPlayer().closeInventory();
             }
-        });
+        }, sender);
     }
 
-    public BackButton(Consumer<InventoryMenu> clickHandler) {
-        super(ICON_FACTORY.produce());
+    public BackButton(Consumer<InventoryMenu> clickHandler, CommandSender sender) {
+        super(createIcon(sender));
         this.clickHandler = clickHandler;
+    }
+
+    private static ItemStack createIcon(CommandSender sender) {
+        return new ItemStackFactory(Material.WOOD_DOOR)
+                .displayName(I18n.loc(sender, "core!inv.back-button"))
+                .produce();
     }
 
     @Override

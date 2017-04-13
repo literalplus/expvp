@@ -8,15 +8,10 @@
 
 package me.minotopia.expvp.ui.element.skill;
 
-import com.google.common.base.Preconditions;
 import li.l1t.common.inventory.gui.InventoryMenu;
-import li.l1t.common.inventory.gui.element.CheckedMenuElement;
-import li.l1t.common.util.inventory.ItemStackFactory;
-import me.minotopia.expvp.skill.meta.Skill;
-import me.minotopia.expvp.skill.meta.SkillManager;
+import li.l1t.common.inventory.gui.element.MenuElement;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Abstract base class for menu elements that store their own instances of skill tree nodes.
@@ -24,11 +19,12 @@ import org.bukkit.inventory.ItemStack;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-08-18
  */
-abstract class AbstractNodeElement<M extends InventoryMenu> extends CheckedMenuElement<InventoryMenu, M> {
+abstract class AbstractNodeElement<M extends InventoryMenu> implements MenuElement {
+    private final M menu;
     protected final SimpleSkillTreeNode node;
 
-    AbstractNodeElement(Class<? extends M> menuType, SimpleSkillTreeNode node) {
-        super(InventoryMenu.class, menuType);
+    AbstractNodeElement(M menu, SimpleSkillTreeNode node) {
+        this.menu = menu;
         this.node = node;
     }
 
@@ -36,22 +32,11 @@ abstract class AbstractNodeElement<M extends InventoryMenu> extends CheckedMenuE
         return node;
     }
 
-    SkillManager getSkillManagerFromValue() {
-        Preconditions.checkNotNull(node.getValue(), "node.getValue()");
-        SkillManager manager = node.getValue().getManager();
-        Preconditions.checkNotNull(manager, "manager");
-        return manager;
+    protected M getMenu() {
+        return menu;
     }
 
-    ItemStack drawRaw(String lore) {
-        Skill skill = getNode().getValue();
-        if (skill == null) {
-            return new ItemStackFactory(Material.BARRIER)
-                    .displayName("§7<Kein Skill>")
-                    .produce();
-        }
-        ItemStackFactory factory = getSkillManagerFromValue().createRawSkillIconFor(skill, true);
-        factory.lore(lore);
-        return factory.produce();
+    protected String localize(String key, Object... arguments) {
+        return I18n.loc(getMenu().getPlayer(), key, arguments);
     }
 }

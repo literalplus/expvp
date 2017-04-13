@@ -63,7 +63,7 @@ public class SpectatorRespawnService implements RespawnService {
         I18n.sendLoc(player, Format.result(Message.of("core!respawn.delay-start")));
         tasks.delayed(
                 () -> {
-                    I18n.sendLoc(player, Format.resultSuccess(Message.of("core!respawn.delay-end")));
+                    I18n.sendLoc(player, Format.success(Message.of("core!respawn.delay-end")));
                     startRespawn(player);
                 },
                 Duration.ofSeconds(5)

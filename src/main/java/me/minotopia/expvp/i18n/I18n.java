@@ -163,4 +163,15 @@ public class I18n {
     public static void sendLoc(CommandSender sender, Message message) {
         sender.sendMessage(loc(sender, message));
     }
+
+    /**
+     * Sends given message to given sender, localised in the sender's locale.
+     *
+     * @param sender    the sender to send to in their locale
+     * @param key       the key of the message to send
+     * @param arguments the arguments for the message
+     */
+    public static void sendLoc(CommandSender sender, String key, Object... arguments) {
+        sendLoc(sender, Message.of(key, arguments));
+    }
 }

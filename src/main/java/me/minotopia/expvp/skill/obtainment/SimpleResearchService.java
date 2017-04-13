@@ -20,11 +20,9 @@ import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.i18n.I18n;
-import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
-import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.skilltree.SkillTreeNode;
 import org.bukkit.entity.Player;
 
@@ -42,12 +40,12 @@ import java.util.stream.Collectors;
 @Singleton
 public class SimpleResearchService implements ResearchService {
     private final PlayerDataService playerDataService;
-    private final DisplayNameService displayNames;
+    private final DisplayNameService names;
 
     @Inject
-    public SimpleResearchService(PlayerDataService playerDataService, DisplayNameService displayNames) {
+    public SimpleResearchService(PlayerDataService playerDataService, DisplayNameService names) {
         this.playerDataService = playerDataService;
-        this.displayNames = displayNames;
+        this.names = names;
     }
 
     @Override
@@ -60,7 +58,7 @@ public class SimpleResearchService implements ResearchService {
         checkIsObtainable(player.getUniqueId(), node);
         playerData.addSkill(skill);
         playerDataService.saveData(playerData);
-        I18n.sendLoc(player, Message.of("core!research.success", displayNames.displayName(skill)));
+        I18n.sendLoc(player, Message.of("core!research.success", names.displayName(skill)));
     }
 
     private void checkIsNotObtained(UUID playerId, Skill skill) {
@@ -88,7 +86,7 @@ public class SimpleResearchService implements ResearchService {
         if (!doesParentPermitObtainment(node, playerId)) {
             throw new I18nUserException(
                     "error!tree.missing-parent",
-                    displayNames.displayName(node.getValue()), displayNames.displayName(node.getParent().getValue())
+                    names.displayName(node.getValue()), names.displayName(node.getParent().getValue())
             );
         }
     }
@@ -96,13 +94,6 @@ public class SimpleResearchService implements ResearchService {
     private boolean doesParentPermitObtainment(SimpleSkillTreeNode node, UUID playerId) {
         SkillTreeNode<?> parent = node.getParent();
         return parent == null || (parent.getValue() != null && has(playerId, parent.getValue()));
-    }
-
-    private SimpleSkillTreeNode findFirstSkillNodeInTree(Skill skill, SkillTree tree) {
-        return tree.nodeStream()
-                .filter(node -> skill.equals(node.getValue()))
-                .findFirst()
-                .orElseThrow(() -> new I18nInternalException("error!tree.skill-not-in-tree", skill.getDisplayName(), tree.getDisplayName()));
     }
 
     @Override

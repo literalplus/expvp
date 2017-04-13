@@ -58,7 +58,7 @@ public class SkillCommandService extends YamlManagerCommandService<Skill> {
     }
 
     public void changeBookCost(Skill skill, int newCost, CommandSender sender) {
-        int previousCost = skill.getBookCost();
+        int previousCost = skill.getTalentPointCost();
         skill.setBookCost(newCost);
         saveObject(skill);
         sendChangeNotification(I18n.loc(sender, "admin!skill.prop.cost"), previousCost, newCost, skill, sender);

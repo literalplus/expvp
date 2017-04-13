@@ -43,9 +43,20 @@ class AbstractEPMenu extends SimpleInventoryMenu implements EPMenu {
     }
 
     @Override
+    public void handleClose(InventoryCloseEvent evt) {
+        super.handleClose(evt);
+        closeHandlers.forEach(handler -> handler.accept(this));
+    }
+
+    public void addCloseHandler(Consumer<EPMenu> handler) {
+        Preconditions.checkNotNull(handler, "handler");
+        closeHandlers.add(handler);
+    }
+
+    @Override
     public boolean handleClick(InventoryClickEvent evt) {
         try {
-            return super.handleClick(evt);
+            return handleClick(evt);
         } catch (I18nUserException | I18nInternalException e) {
             getPlayer().sendMessage(I18n.loc(getPlayer(), e.toMessage()));
             getPlayer().closeInventory();
@@ -63,16 +74,5 @@ class AbstractEPMenu extends SimpleInventoryMenu implements EPMenu {
                 return true;
             }
         }
-    }
-
-    @Override
-    public void handleClose(InventoryCloseEvent evt) {
-        super.handleClose(evt);
-        closeHandlers.forEach(handler -> handler.accept(this));
-    }
-
-    public void addCloseHandler(Consumer<EPMenu> handler) {
-        Preconditions.checkNotNull(handler, "handler");
-        closeHandlers.add(handler);
     }
 }

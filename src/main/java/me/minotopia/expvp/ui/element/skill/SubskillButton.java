@@ -8,7 +8,11 @@
 
 package me.minotopia.expvp.ui.element.skill;
 
+import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.i18n.Format;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.ui.menu.EditNodeMenu;
 import org.bukkit.Material;
@@ -23,10 +27,12 @@ import org.bukkit.inventory.ItemStack;
  */
 public class SubskillButton extends EditButton {
     private final int childId;
+    private final DisplayNameService names;
 
-    public SubskillButton(SimpleSkillTreeNode parentNode, int childId) {
-        super(parentNode);
+    public SubskillButton(EditNodeMenu menu, SimpleSkillTreeNode parentNode, int childId, DisplayNameService names) {
+        super(menu, parentNode);
         this.childId = childId;
+        this.names = names;
     }
 
     @Override
@@ -46,20 +52,20 @@ public class SubskillButton extends EditButton {
     }
 
     private String formatDisplayName() {
-        return "§6§lSubskill " + childId + ":";
+        return localize("admin!ui.skilledit.subskill-title", childId);
     }
 
     private String formatLoreWithActionInfo() {
         StringBuilder lore = new StringBuilder("§a");
         if (subskillExists()) {
-            lore.append(getSubskill().getSkillName()).append("\n\n");
+            lore.append(names.displayName(getSubskill().getValue())).append("\n\n");
             if (subskillHasChildren()) {
-                lore.append("§cZuerst Subskills\n§centfernen, bevor dieser\n§centfernt werden kann.");
+                lore.append(localize("admin!ui.skilledit.remove-children-first"));
             } else {
-                lore.append("§aKlicken zum Entfernen");
+                lore.append(localize("admin!ui.skilledit.click-to-remove"));
             }
         } else {
-            lore.append("Klicken zum Hinzufügen");
+            lore.append(localize("admin!ui.skilledit.click-to-add"));
         }
         return lore.toString();
     }
@@ -69,20 +75,19 @@ public class SubskillButton extends EditButton {
     }
 
     @Override
-    public void checkedHandleMenuClick(InventoryClickEvent evt, EditNodeMenu menu) {
+    public void handleMenuClick(InventoryClickEvent evt, InventoryMenu menu) {
         if (subskillExists()) {
             if (subskillHasChildren()) {
-                menu.getPlayer().sendMessage("§c§lFehler: §cDu musst zuerst die Subskills dieses Subskills entfernen, bevor du ihn selbst entfernen kannst!");
+                I18n.sendLoc(menu.getPlayer(), Format.userError("admin!ui.skilledit.rm-children-first"));
             } else {
-                menu.getPlayer().sendMessage("§e§l➩ §aSubskill aus dem Baum entfernt: " + getSkillDisplayName());
+                I18n.sendLoc(menu.getPlayer(), Format.success("admin!ui.skilledit.rm-subskill-success"));
                 removeThisChild();
-                menu.saveTree();
             }
             menu.open();
         } else {
-            menu.addSubskill(getParentNode());
+            getMenu().addSubskill(getParentNode());
         }
-        menu.saveTree();
+        getMenu().saveTree();
     }
 
     private void removeThisChild() {

@@ -11,9 +11,7 @@ package me.minotopia.expvp.ui.element;
 import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.element.MenuElement;
 import li.l1t.common.inventory.gui.holder.ElementHolder;
-import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.skilltree.SkillTree;
-import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,23 +25,18 @@ import java.util.function.Consumer;
  */
 public class SkillTreeElement implements MenuElement {
     private final Consumer<SkillTree> consumer;
-    private final ItemStack template;
     private final SkillTree tree;
+    private final ItemStack icon;
 
-    public SkillTreeElement(Consumer<SkillTree> consumer, SkillTree tree) {
+    public SkillTreeElement(Consumer<SkillTree> consumer, SkillTree tree, ItemStack icon) {
         this.consumer = consumer;
-        this.template = tree.getIconStack();
         this.tree = tree;
+        this.icon = icon;
     }
 
     @Override
     public ItemStack draw(ElementHolder menu) {
-        if (template == null) {
-            return new ItemStackFactory(Material.BARRIER)
-                    .displayName("§7<Kein Treeicon>")
-                    .produce();
-        }
-        return template;
+        return icon.clone();
     }
 
     @Override

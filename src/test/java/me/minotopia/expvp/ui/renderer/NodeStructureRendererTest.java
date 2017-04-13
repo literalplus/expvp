@@ -44,11 +44,11 @@ public class NodeStructureRendererTest {
         thenTheNodeAtIs(SlotPosition.ofXY(0, 3), tree, renderer);
     }
 
-    public NodeStructureRenderer givenANodeRenderer(SkillTree tree) {
-        return new TreeStructureRenderer(tree).createNodeRenderer();
+    private NodeStructureRenderer givenANodeRenderer(SkillTree tree) {
+        return new TreeStructureRenderer(tree, node -> new ObtainableSkillElement(null, node, null, null)).createNodeRenderer();
     }
 
-    public SkillTree givenASkillTree() {
+    private SkillTree givenASkillTree() {
         SkillTree tree = new SkillTree("test-tree");
         tree.setIconStack(MELON_STACK);
         return tree;

@@ -71,7 +71,7 @@ public class Skill implements ConfigurationSerializable, Identifiable {
     /**
      * @return the cost, in books, of this skill
      */
-    public int getBookCost() {
+    public int getTalentPointCost() {
         return bookCost;
     }
 

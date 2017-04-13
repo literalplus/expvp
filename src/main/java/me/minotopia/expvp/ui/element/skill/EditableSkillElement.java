@@ -9,11 +9,16 @@
 package me.minotopia.expvp.ui.element.skill;
 
 import li.l1t.common.inventory.gui.InventoryMenu;
+import li.l1t.common.inventory.gui.holder.ElementHolder;
+import li.l1t.common.util.inventory.ItemStackFactory;
+import me.minotopia.expvp.api.skill.SkillService;
+import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.ui.menu.EPMenu;
-import me.minotopia.expvp.ui.menu.EditNodeMenu;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.function.BiConsumer;
 
 /**
  * Represents a skill in a menu. This kind of element can be clicked to edit it in an inventory
@@ -23,17 +28,26 @@ import org.bukkit.inventory.ItemStack;
  * @since 2016-07-23
  */
 public class EditableSkillElement extends AbstractNodeElement<EPMenu> {
-    public EditableSkillElement(SimpleSkillTreeNode node) {
-        super(EPMenu.class, node);
+    private final SkillService skills;
+    private final BiConsumer<EPMenu, SimpleSkillTreeNode> clickHandler;
+
+    public EditableSkillElement(EPMenu menu, SimpleSkillTreeNode node, SkillService skills,
+                                BiConsumer<EPMenu, SimpleSkillTreeNode> clickHandler) {
+        super(menu, node);
+        this.skills = skills;
+        this.clickHandler = clickHandler;
     }
 
     @Override
-    public ItemStack checkedDraw(InventoryMenu elementHolder) {
-        return drawRaw("\n§aZum Bearbeiten klicken");
+    public ItemStack draw(ElementHolder elementHolder) {
+        Skill skill = getNode().getValue();
+        ItemStackFactory factory = skills.createRawSkillIconFor(skill, true, getMenu().getPlayer());
+        factory.lore(localize("admin!ui.skilledit.clicktoedit"));
+        return factory.produce();
     }
 
     @Override
-    public void checkedHandleMenuClick(InventoryClickEvent evt, EPMenu menu) {
-        EditNodeMenu.openNew(menu, getNode());
+    public void handleMenuClick(InventoryClickEvent evt, InventoryMenu menu) {
+        clickHandler.accept(getMenu(), getNode());
     }
 }

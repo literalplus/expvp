@@ -69,12 +69,6 @@ public interface SkillTreeNode<N extends SkillTreeNode<N>> extends TreeNode<N, S
     SkillTree getTree();
 
     /**
-     * @return the node's value's display name or a placeholder string, if the node doesn't have any
-     * value
-     */
-    String getSkillName();
-
-    /**
      * @return the unique identifier of the skill associated with this node, or null for none
      */
     String getSkillId();

@@ -8,7 +8,11 @@
 
 package me.minotopia.expvp.ui.element.skill;
 
+import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.util.inventory.ItemStackFactory;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.i18n.Format;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.ui.menu.EditNodeMenu;
 import org.bukkit.Material;
@@ -22,32 +26,27 @@ import org.bukkit.inventory.ItemStack;
  * @since 2016-08-19
  */
 public class NodeEditButton extends EditButton {
-    public NodeEditButton(SimpleSkillTreeNode node) {
-        super(node);
+    private final DisplayNameService names;
+
+    public NodeEditButton(SimpleSkillTreeNode node, EditNodeMenu menu, DisplayNameService names) {
+        super(menu, node);
+        this.names = names;
     }
 
     @Override
     protected ItemStack createTemplate() {
         return new ItemStackFactory(Material.BOOK_AND_QUILL)
-                .displayName(formatDisplayName())
-                .lore(formatLore())
+                .displayName(localize("admin!ui.skilledit.item-name"))
+                .lore(localize("admin!ui.skilledit.change-add-lore", names.displayName(getNode().getValue())))
                 .produce();
     }
 
-    private String formatLore() {
-        return "§a" + getSkillDisplayName() + "\n\n§aHier klicken zum Ändern";
-    }
-
-    private String formatDisplayName() {
-        return "§6§lBearbeiten:";
-    }
-
     @Override
-    protected void checkedHandleMenuClick(InventoryClickEvent evt, EditNodeMenu menu) {
-        menu.openSelectSkillMenu(skill -> {
+    public void handleMenuClick(InventoryClickEvent evt, InventoryMenu menu) {
+        getMenu().openSelectSkillMenu(skill -> {
             getNode().setValue(skill);
-            menu.getPlayer().sendMessage("§e§l➩ §aSkillzuweisung geändert.");
-            menu.saveTree();
+            I18n.sendLoc(menu.getPlayer(), Format.success("admin!ui.skilledit.success"));
+            getMenu().saveTree();
             menu.open();
         });
     }

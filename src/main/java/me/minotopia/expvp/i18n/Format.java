@@ -25,36 +25,72 @@ public class Format {
         return wrapIn("broadcast", message);
     }
 
+    public static Message broadcast(String key, Object... arguments) {
+        return wrapIn("broadcast", Message.of(key, arguments));
+    }
+
     public static Message internalError(Message message) {
         return wrapIn("error-internal", message);
+    }
+
+    public static Message internalError(String key, Object... arguments) {
+        return wrapIn("error-internal", Message.of(key, arguments));
     }
 
     public static Message userError(Message message) {
         return wrapIn("error-user", message);
     }
 
+    public static Message userError(String key, Object... arguments) {
+        return wrapIn("error-user", Message.of(key, arguments));
+    }
+
     public static Message warning(Message message) {
         return wrapIn("warning", message);
+    }
+
+    public static Message warning(String key, Object... arguments) {
+        return wrapIn("warning", Message.of(key, arguments));
     }
 
     public static Message result(Message message) {
         return wrapIn("result", message);
     }
 
-    public static Message resultSuccess(Message message) {
+    public static Message result(String key, Object... arguments) {
+        return wrapIn("result", Message.of(key, arguments));
+    }
+
+    public static Message success(Message message) {
         return wrapIn("result-success", message);
+    }
+
+    public static Message success(String key, Object... arguments) {
+        return wrapIn("result-success", Message.of(key, arguments));
     }
 
     public static Message listHeader(Message message) {
         return wrapIn("list-header", message);
     }
 
+    public static Message listHeader(String key, Object... arguments) {
+        return wrapIn("list-header", Message.of(key, arguments));
+    }
+
     public static Message header(Message message) {
         return wrapIn("header", message);
     }
 
+    public static Message header(String key, Object... arguments) {
+        return wrapIn("header", Message.of(key, arguments));
+    }
+
     public static Message listItem(Message message) {
         return wrapIn("list-item", message);
+    }
+
+    public static Message listItem(String key, Object... arguments) {
+        return wrapIn("list-item", Message.of(key, arguments));
     }
 
     public static Message bool(boolean input) {

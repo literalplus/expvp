@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.ui.element.skill;
 
-import li.l1t.common.inventory.gui.InventoryMenu;
+import li.l1t.common.inventory.gui.holder.ElementHolder;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.ui.menu.EditNodeMenu;
 import org.bukkit.inventory.ItemStack;
@@ -22,21 +22,17 @@ import org.bukkit.inventory.ItemStack;
 abstract class EditButton extends AbstractNodeElement<EditNodeMenu> {
     private ItemStack template = null;
 
-    EditButton(SimpleSkillTreeNode node) {
-        super(EditNodeMenu.class, node);
+    EditButton(EditNodeMenu menu, SimpleSkillTreeNode node) {
+        super(menu, node);
     }
 
     protected abstract ItemStack createTemplate();
 
     @Override
-    public ItemStack checkedDraw(InventoryMenu menu) {
+    public ItemStack draw(ElementHolder holder) {
         if (template == null) {
             template = createTemplate();
         }
         return template.clone();
-    }
-
-    String getSkillDisplayName() {
-        return getNode().getSkillName();
     }
 }

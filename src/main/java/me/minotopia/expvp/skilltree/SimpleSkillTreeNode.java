@@ -20,13 +20,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Simple implementation of a skill tree node. This implementation notifies the root node when
- * children are added or removed, so subclasses must make sure to always call the super method from
- * {@link #addChild(SimpleSkillTreeNode)} and {@link #removeChild(SimpleSkillTreeNode)}.
- * <p><b>Note:</b> This class does not implement {@link org.bukkit.configuration.serialization.ConfigurationSerializable}
- * because of its limitations. Nodes must be manually serialized and deserialized from a map. The
- * only correct way to serialise a complete skill tree is to serialise the root {@link SkillTree}.
- * Also note that deserialising part of a skill tree is <b>not</b> supported: That would mess up
+ * Simple implementation of a skill tree node. This implementation notifies the root node when children are added or
+ * removed, so subclasses must make sure to always call the super method from {@link #addChild(SimpleSkillTreeNode)} and
+ * {@link #removeChild(SimpleSkillTreeNode)}. <p><b>Note:</b> This class does not implement {@link
+ * org.bukkit.configuration.serialization.ConfigurationSerializable} because of its limitations. Nodes must be manually
+ * serialized and deserialized from a map. The only correct way to serialise a complete skill tree is to serialise the
+ * root {@link SkillTree}. Also note that deserialising part of a skill tree is <b>not</b> supported: That would mess up
  * tree ids.</p>
  *
  * @author <a href="https://l1t.li/">Literallie</a>
@@ -34,8 +33,8 @@ import java.util.stream.Collectors;
  */
 public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, Skill>
         implements SkillTreeNode<SimpleSkillTreeNode> {
-    public static final String SKILL_ID_PATH = "skill-id";
-    public static final String CHILDREN_PATH = "children";
+    private static final String SKILL_ID_PATH = "skill-id";
+    private static final String CHILDREN_PATH = "children";
     private String skillId;
     private SkillTree tree;
 
@@ -62,8 +61,7 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
      *
      * @param source the source map
      * @param parent the parent of the node, or null for a root node
-     * @throws IllegalArgumentException if the source map doesn't contain both id and tree-id,
-     *                                  children is not a list
+     * @throws IllegalArgumentException if the source map doesn't contain both id and tree-id, children is not a list
      */
     @SuppressWarnings("unchecked")
     SimpleSkillTreeNode(Map<String, Object> source, SimpleSkillTreeNode parent) {
@@ -113,10 +111,7 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
 
     @Override
     public boolean matches(Collection<ObtainedSkill> modelSkills) {
-        return modelSkills.stream()
-                .filter(this::matches)
-                .findAny()
-                .isPresent();
+        return modelSkills.stream().anyMatch(this::matches);
     }
 
     @Override
@@ -147,11 +142,6 @@ public class SimpleSkillTreeNode extends AbstractTreeNode<SimpleSkillTreeNode, S
     @Override
     public SkillTree getTree() {
         return tree;
-    }
-
-    @Override
-    public String getSkillName() {
-        return getValue() == null ? "(leer)" : getValue().getDisplayName();
     }
 
     @Override

@@ -10,6 +10,7 @@ package me.minotopia.expvp.ui.menu;
 
 import com.google.inject.Inject;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.ui.element.SkillTreeElement;
@@ -26,14 +27,20 @@ import java.util.function.Consumer;
  */
 public class SelectTreeMenu extends AbstractEPMenu {
     private final Consumer<SkillTree> clickHandler;
+    private final SkillTreeManager manager;
 
-    private SelectTreeMenu(EPPlugin plugin, String inventoryTitle, Player player, Consumer<SkillTree> clickHandler) {
+    private SelectTreeMenu(EPPlugin plugin, String inventoryTitle, Player player, Consumer<SkillTree> clickHandler,
+                           SkillTreeManager manager) {
         super(plugin, inventoryTitle, player);
         this.clickHandler = clickHandler;
+        this.manager = manager;
     }
 
     private void populate(Collection<SkillTree> trees) {
-        trees.forEach(tree -> addElement(tree.getSlotId(), new SkillTreeElement(clickHandler, tree)));
+        trees.forEach(tree -> addElement(
+                tree.getSlotId(),
+                new SkillTreeElement(clickHandler, tree, manager.createIconFor(tree, getPlayer()))
+        ));
     }
 
     public static class Factory {
@@ -49,7 +56,8 @@ public class SelectTreeMenu extends AbstractEPMenu {
         }
 
         public SelectTreeMenu createMenu(Player player, Consumer<SkillTree> clickHandler) {
-            SelectTreeMenu menu = new SelectTreeMenu(plugin, "§6§lSkilltrees", player, clickHandler);
+            String title = I18n.loc(player, "core!tree-select.title");
+            SelectTreeMenu menu = new SelectTreeMenu(plugin, title, player, clickHandler, treeManager);
             menu.populate(treeManager.getAll());
             return menu;
         }

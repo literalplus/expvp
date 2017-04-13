@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
  * @since 2017-03-23
  */
 public class EPDisplayNameService implements DisplayNameService {
+    private static final Message UNKNOWN = Message.of("core!unknown");
     private final LeagueService leagueService;
 
     @Inject
@@ -35,21 +36,33 @@ public class EPDisplayNameService implements DisplayNameService {
 
     @Override
     public Message displayName(Skill skill) {
+        if (skill == null) {
+            return UNKNOWN;
+        }
         return Message.of("skill!" + skill.getId() + ".name");
     }
 
     @Override
     public Message description(Skill skill) {
+        if (skill == null) {
+            return Message.ofText("");
+        }
         return Message.of("skill!" + skill.getId() + ".desc");
     }
 
     @Override
     public Message displayName(SkillTree tree) {
+        if (tree == null) {
+            return UNKNOWN;
+        }
         return Message.of("tree!" + tree.getId() + ".name");
     }
 
     @Override
     public Message description(SkillTree tree) {
+        if (tree == null) {
+            return Message.ofText("");
+        }
         return Message.of("tree!" + tree.getId() + ".desc");
     }
 
@@ -63,13 +76,17 @@ public class EPDisplayNameService implements DisplayNameService {
 
     @Override
     public Message displayName(League league) {
-        Preconditions.checkNotNull(league, "league");
+        if (league == null) {
+            return UNKNOWN;
+        }
         return Message.of("score!league." + league.name() + ".name");
     }
 
     @Override
     public Message displayName(MapSpawn spawn) {
-        Preconditions.checkNotNull(spawn, "spawn");
+        if (spawn == null) {
+            return UNKNOWN;
+        }
         return Message.of("spawn!" + spawn.getId() + ".name");
     }
 }

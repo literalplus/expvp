@@ -8,14 +8,14 @@
 
 package me.minotopia.expvp.ui.element.skill;
 
-import li.l1t.common.exception.UserException;
 import li.l1t.common.inventory.gui.InventoryMenu;
+import li.l1t.common.inventory.gui.holder.ElementHolder;
 import me.minotopia.expvp.api.service.ResearchService;
+import me.minotopia.expvp.api.skill.SkillService;
+import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.skill.meta.Skill;
-import me.minotopia.expvp.skill.meta.SkillManager;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.ui.menu.SkillTreeMenu;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,30 +27,29 @@ import org.bukkit.inventory.ItemStack;
  * @since 2016-07-22
  */
 public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
+    private final ResearchService researchService;
+    private final SkillService skills;
 
-    public ObtainableSkillElement(SimpleSkillTreeNode node) {
-        super(SkillTreeMenu.class, node);
+    public ObtainableSkillElement(SkillTreeMenu menu, SimpleSkillTreeNode node, SkillService skills,
+                                  ResearchService researchService) {
+        super(menu, node);
+        this.researchService = researchService;
+        this.skills = skills;
     }
 
     @Override
-    public ItemStack checkedDraw(InventoryMenu menu) {
-        if (node.getValue() == null) {
-            return new ItemStack(Material.BARRIER);
-        }
-        SkillManager manager = getSkillManagerFromValue();
-        return manager.createSkillIconFor(node, menu.getPlayer());
+    public ItemStack draw(ElementHolder menu) {
+        return skills.createSkillIconFor(node, getMenu().getPlayer());
     }
 
     @Override
-    public void checkedHandleMenuClick(InventoryClickEvent inventoryClickEvent, SkillTreeMenu inventoryMenu) {
+    public void handleMenuClick(InventoryClickEvent inventoryClickEvent, InventoryMenu menu) {
         Skill skill = node.getValue();
         if (skill == null) {
-            throw new UserException("Da ist nichts!");
+            throw new I18nInternalException("error!skill.missing-value");
         }
-        Player player = inventoryMenu.getPlayer();
-        inventoryMenu.getPlugin()
-                .inject(ResearchService.class)
-                .research(player, node);
+        Player player = menu.getPlayer();
+        researchService.research(player, node);
         player.closeInventory();
     }
 

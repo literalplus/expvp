@@ -40,7 +40,7 @@ public class TalentPointResearchService extends SimpleResearchService {
     public void research(Player player, SimpleSkillTreeNode node) {
         sessionProvider.inSession(ignored -> {
             super.research(player, node);
-            talentPoints.consumeTalentPoints(player, node.getValue().getBookCost());
+            talentPoints.consumeTalentPoints(player, node.getValue().getTalentPointCost());
         });
     }
 }

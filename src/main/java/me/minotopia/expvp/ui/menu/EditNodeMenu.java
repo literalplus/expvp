@@ -9,15 +9,21 @@
 package me.minotopia.expvp.ui.menu;
 
 import com.google.common.base.Preconditions;
-import li.l1t.common.inventory.gui.InventoryMenu;
+import com.google.inject.Inject;
 import li.l1t.common.inventory.gui.TopRowMenu;
+import li.l1t.common.inventory.gui.element.MenuElement;
+import li.l1t.common.inventory.gui.element.Placeholder;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.api.skill.SkillService;
+import me.minotopia.expvp.i18n.Format;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.skilltree.SkillTree;
+import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.ui.element.BackButton;
-import me.minotopia.expvp.ui.element.SkillTreeElement;
 import me.minotopia.expvp.ui.element.skill.EditableSkillElement;
 import me.minotopia.expvp.ui.element.skill.NodeEditButton;
 import me.minotopia.expvp.ui.element.skill.SubskillButton;
@@ -25,11 +31,12 @@ import me.minotopia.expvp.ui.renderer.NodeStructureRenderer;
 import me.minotopia.expvp.ui.renderer.TreeStructureRenderer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * An inventory menu that provides the frontend for editing a skill tree node.
@@ -38,47 +45,49 @@ import java.util.function.Consumer;
  * @since 2016-07-22
  */
 public class EditNodeMenu extends TopRowMenu implements EPMenu {
-    private static final BiConsumer<InventoryClickEvent, InventoryMenu> NOOP_BICONSUMER = (thing1, thing2) -> {
-    };
     private final EPMenu parent;
     private final SimpleSkillTreeNode node;
+    private final DisplayNameService names;
+    private final SkillService skills;
+    private final BiConsumer<EPMenu, SimpleSkillTreeNode> childFactory;
+    private final SelectSkillMenu.Factory selectSkillFactory;
+    private final SkillTreeManager treeManager;
 
-    private EditNodeMenu(SimpleSkillTreeNode node, EPPlugin plugin, Player player) {
-        super(plugin, node.getSkillName(), player);
-        this.parent = null;
+    private EditNodeMenu(SimpleSkillTreeNode node, EPPlugin plugin, EPMenu parent, Player player,
+                         DisplayNameService names, SkillService skills,
+                         BiConsumer<EPMenu, SimpleSkillTreeNode> childFactory, SelectSkillMenu.Factory selectSkillFactory, SkillTreeManager treeManager) {
+        super(plugin, I18n.loc(player, names.displayName(node.getValue())), player);
+        this.parent = parent;
         this.node = Preconditions.checkNotNull(node, "node");
-    }
-
-    private EditNodeMenu(EPMenu parent, SimpleSkillTreeNode node) {
-        super(parent.getPlugin(), node.getSkillName(), parent.getPlayer());
-        this.parent = Preconditions.checkNotNull(parent, "parent");
-        this.node = Preconditions.checkNotNull(node, "node");
+        this.names = names;
+        this.skills = skills;
+        this.childFactory = childFactory;
+        this.selectSkillFactory = selectSkillFactory;
+        this.treeManager = treeManager;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected ItemStackFactory getPlaceholderFactory() {
-        return new ItemStackFactory(Material.IRON_FENCE)
+        return new ItemStackFactory(Material.STAINED_GLASS_PANE)
+                .legacyData((byte) 15)
                 .displayName("§7§l*");
     }
 
     @Override
     protected void initTopRow() {
-        BackButton backButton = new BackButton(parent);
-        SkillTreeElement treeIcon = new SkillTreeElement(openTreeRootMenu(), node.getTree());
-        NodeEditButton nodeEditButton = new NodeEditButton(node);
+        BackButton backButton = new BackButton(parent, getPlayer());
+        Placeholder treeIcon = new Placeholder(treeManager.createIconFor(node.getTree(), getPlayer()));
+        NodeEditButton nodeEditButton = new NodeEditButton(node, this, names);
         addToTopRow(0, backButton);
         addToTopRow(1, treeIcon);
         addToTopRow(2, nodeEditButton);
-        addToTopRow(3, new SubskillButton(node, 0));
-        addToTopRow(4, new SubskillButton(node, 1));
-        addToTopRow(5, new SubskillButton(node, 2));
+        addToTopRow(3, new SubskillButton(this, node, 0, names));
+        addToTopRow(4, new SubskillButton(this, node, 1, names));
+        addToTopRow(5, new SubskillButton(this, node, 2, names));
         addToTopRow(6, nodeEditButton);
         addToTopRow(7, treeIcon);
         addToTopRow(8, backButton);
-    }
-
-    private Consumer<SkillTree> openTreeRootMenu() {
-        return tree -> EditNodeMenu.openNew(null, tree);
     }
 
     @Override
@@ -92,26 +101,16 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
             clear();
             getInventory().clear();
             initTopRow();
-            new NodeStructureRenderer(node, this, EditableSkillElement::new).render();
+            new NodeStructureRenderer(node, this, editableElement()).render();
         } catch (Exception e) {
             e.printStackTrace();
-            getPlayer().sendMessage(
-                    "§e§lWarnung: §eDieser Skilltree konnte nicht vollständig gerendert werden. " +
-                            "Spieler können diesen daher nicht sehen! Bitte entferne den " +
-                            "äußersten Skill und versuche es nochmal. (Dies sollte nicht passieren)");
+            I18n.sendLoc(getPlayer(), Format.userError("admin!ui.skilledit.unrederable"));
         }
     }
 
-    public static EditNodeMenu openNew(EPMenu parent, SimpleSkillTreeNode node) {
-        EditNodeMenu menu = new EditNodeMenu(parent, node);
-        menu.open();
-        return menu;
-    }
-
-    public static EditNodeMenu openNew(EPPlugin plugin, Player player, SkillTree tree) {
-        EditNodeMenu menu = new EditNodeMenu(tree, plugin, player);
-        menu.open();
-        return menu;
+    @NotNull
+    private Function<SimpleSkillTreeNode, MenuElement> editableElement() {
+        return node -> new EditableSkillElement(this, node, skills, childFactory);
     }
 
     @Override
@@ -127,7 +126,7 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
         }
         openSelectSkillMenu(skill -> {
             child.setValue(skill);
-            getPlayer().sendMessage("§e§l➩ §aNeuer Subskill erstellt.");
+            I18n.sendLoc(getPlayer(), Format.success("admin!ui.skilledit.add-subskill-success"));
             saveTree();
             open(); //return to this menu in case they want to add more
         });
@@ -140,12 +139,12 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
 
     private void rollbackChildAddBecauseNotRenderable(SimpleSkillTreeNode parent, SimpleSkillTreeNode child) {
         parent.removeChild(child);
-        getPlayer().sendMessage("§c§lFehler: §cDiese Aktion ist nicht durchführbar, weil der Baum sonst nicht mehr in ein Inventar passen würde!");
+        I18n.sendLoc(getPlayer(), Format.userError("error!tree.prevented-render-fail"));
         getPlayer().closeInventory();
     }
 
     public void openSelectSkillMenu(Consumer<Skill> callback) {
-        SelectSkillMenu.openNew(getPlugin(), getPlugin().getSkillManager(), getPlayer(), callback);
+        selectSkillFactory.openMenu(getPlayer(), callback);
     }
 
     public void saveTree() {
@@ -153,7 +152,38 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
             getPlugin().getSkillTreeManager().save(node.getTree());
         } catch (IOException e) {
             e.printStackTrace(); //welp
-            getPlayer().sendMessage("§4§lInterner Fehler: §cKonnte Baum nicht speichern");
+            I18n.sendLoc(getPlayer(), Format.internalError("error!ui.skilledit.unable-to-save"));
+        }
+    }
+
+    public static class Factory {
+        private final EPPlugin plugin;
+        private final SkillService skills;
+        private final DisplayNameService names;
+        private final SelectSkillMenu.Factory selectSkillFactory;
+        private final SkillTreeManager treeManager;
+
+        @Inject
+        public Factory(EPPlugin plugin, SkillService skills, DisplayNameService names,
+                       SelectSkillMenu.Factory selectSkillFactory, SkillTreeManager treeManager) {
+            this.plugin = plugin;
+            this.skills = skills;
+            this.names = names;
+            this.selectSkillFactory = selectSkillFactory;
+            this.treeManager = treeManager;
+        }
+
+        public EditNodeMenu createRoot(Player player, SkillTree tree) {
+            return new EditNodeMenu(
+                    tree, plugin, null, player, names, skills, this::createWithParent, selectSkillFactory,
+                    treeManager);
+        }
+
+
+        public EditNodeMenu createWithParent(EPMenu parent, SimpleSkillTreeNode node) {
+            return new EditNodeMenu(
+                    node, plugin, parent, parent.getPlayer(), names, skills, this::createWithParent, selectSkillFactory,
+                    treeManager);
         }
     }
 }

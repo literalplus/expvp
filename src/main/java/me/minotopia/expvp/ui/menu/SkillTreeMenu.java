@@ -9,21 +9,27 @@
 package me.minotopia.expvp.ui.menu;
 
 import com.google.inject.Inject;
-import li.l1t.common.exception.InternalException;
 import li.l1t.common.inventory.SlotPosition;
+import li.l1t.common.inventory.gui.element.Placeholder;
 import li.l1t.common.util.inventory.InventoryHelper;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.service.ResearchService;
+import me.minotopia.expvp.api.skill.SkillService;
+import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.skilltree.SkillTree;
+import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.ui.element.BackButton;
-import me.minotopia.expvp.ui.element.TreeInfoElement;
+import me.minotopia.expvp.ui.element.skill.ObtainableSkillElement;
 import me.minotopia.expvp.ui.renderer.TreeStructureRenderer;
 import me.minotopia.expvp.ui.renderer.exception.RenderingException;
-import me.minotopia.expvp.util.ScopedSession;
-import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.IntStream;
 
@@ -34,16 +40,29 @@ import java.util.stream.IntStream;
  * @since 2016-07-22
  */
 public class SkillTreeMenu extends AbstractEPMenu {
+    private final SkillTree tree;
     private TreeStructureRenderer renderer;
 
     private SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree, Runnable backButtonHandler,
-                          TalentPointService talentPoints) {
-        super(plugin, tree.getDisplayName(), player);
-        this.renderer = new TreeStructureRenderer(tree);
+                          TalentPointService talentPoints, String displayName,
+                          SkillService skills, ResearchService researchService, SkillTreeManager manager) {
+        super(plugin, displayName, player);
+        this.tree = tree;
+        this.renderer = new TreeStructureRenderer(tree,
+                node -> new ObtainableSkillElement(this, node, skills, researchService)
+        );
         if (backButtonHandler != null) {
-            addElement(0, new BackButton(inventoryMenu -> backButtonHandler.run()));
+            addElement(0, new BackButton(inventoryMenu -> backButtonHandler.run(), getPlayer()));
         }
-        addElement(1, new TreeInfoElement(tree, () -> talentPoints.getCurrentTalentPointCount(getPlayer())));
+        addElement(1, createTreeInfoElement(manager, talentPoints));
+    }
+
+    @NotNull
+    private Placeholder createTreeInfoElement(SkillTreeManager manager, TalentPointService talentPoints) {
+        ItemStack icon = new ItemStackFactory(manager.createIconFor(tree, getPlayer()))
+                .amount(talentPoints.getCurrentTalentPointCount(getPlayer()))
+                .produce();
+        return new Placeholder(icon);
     }
 
     private void applyRenderer() {
@@ -63,18 +82,12 @@ public class SkillTreeMenu extends AbstractEPMenu {
         try {
             renderer.render();
         } catch (RenderingException e) {
-            throw new InternalException("Konnte Skilltree nicht rendern", e);
+            throw new I18nInternalException("error!tree.render-fail");
         }
     }
 
     private static void openInTransaction(SkillTreeMenu menu) {
-        SessionProvider sessionProvider = menu.getPlugin().getSessionProvider();
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
-            menu.open();
-            scoped.commitIfLastAndChanged();
-        } catch (Exception e) {
-            throw sessionProvider.handleException(e);
-        }
+        menu.getPlugin().getSessionProvider().inSession(ignored -> menu.open());
     }
 
     @Override
@@ -91,17 +104,28 @@ public class SkillTreeMenu extends AbstractEPMenu {
 
     public static class Factory {
         private final EPPlugin plugin;
-        private final TalentPointService talentPointService;
+        private final TalentPointService talentPoints;
+        private final DisplayNameService names;
+        private final SkillService skills;
+        private final ResearchService researchService;
+        private final SkillTreeManager manager;
 
         @Inject
-        public Factory(EPPlugin plugin, TalentPointService talentPointService) {
+        public Factory(EPPlugin plugin, TalentPointService talentPoints, DisplayNameService names, SkillService skills,
+                       ResearchService researchService, SkillTreeManager manager) {
             this.plugin = plugin;
-            this.talentPointService = talentPointService;
+            this.talentPoints = talentPoints;
+            this.names = names;
+            this.skills = skills;
+            this.researchService = researchService;
+            this.manager = manager;
         }
 
         public SkillTreeMenu createMenuWithBackButton(Player player, SkillTree tree, Runnable backButtonHandler) {
             SkillTreeMenu menu = new SkillTreeMenu(
-                    plugin, player, tree, backButtonHandler, talentPointService
+                    plugin, player, tree, backButtonHandler, talentPoints,
+                    I18n.loc(player, names.displayName(tree)),
+                    skills, researchService, manager
             );
             menu.applyRenderer();
             return menu;

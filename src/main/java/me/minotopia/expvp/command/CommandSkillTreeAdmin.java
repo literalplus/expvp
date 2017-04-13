@@ -102,9 +102,10 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, Ski
             help = "Zeigt eine Vorschau des Skilltrees",
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_TREE)
-    public void showPreview(EPPlugin plugin, @Sender Player player, SkillTree tree)
+    public void showPreview(EPPlugin plugin, @Sender Player player, SkillTree tree, EditNodeMenu.Factory factory)
             throws IOException, RenderingException {
-        EditNodeMenu.openNew(plugin, player, tree);
+        factory.createRoot(player, tree)
+                .open();
     }
 
     @Command(aliases = "info", min = 1,
