@@ -119,6 +119,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, Ski
         I18n.sendLoc(sender, Format.result(Message.of("admin!tree.info.be", Format.bool(tree.areBranchesExclusive()))));
         I18n.sendLoc(sender, Format.result(Message.of("admin!tree.info.misc",
                 tree.getSlotId(), Format.bool(tree.getIconStack() != null))));
+        I18n.sendLoc(sender, Format.result("admin!tree.info.lang-files"));
         ComponentSender.sendTo(
                 new XyComponentBuilder(I18n.loc(sender, "admin!tree.info.preview-button"), ChatColor.GOLD).italic(true)
                         .hintedCommand("/sta preview " + tree.getId())

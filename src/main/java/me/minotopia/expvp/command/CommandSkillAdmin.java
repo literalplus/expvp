@@ -100,6 +100,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillComman
         I18n.sendLoc(sender, Format.result("admin!skill.info.handler", skill.getHandlerSpec()));
         I18n.sendLoc(sender, Format.result("admin!skill.info.misc",
                 skill.getTalentPointCost(), Format.bool(skill.getIconStack() != null)));
+        I18n.sendLoc(sender, Format.result("admin!skill.info.lang-files"));
     }
 
     @Command(aliases = "list",
