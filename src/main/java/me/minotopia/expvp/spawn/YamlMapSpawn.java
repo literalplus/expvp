@@ -9,13 +9,13 @@
 package me.minotopia.expvp.spawn;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import li.l1t.common.misc.XyLocation;
 import li.l1t.common.util.config.HashMapConfig;
 import li.l1t.common.util.config.MapConfig;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -77,11 +77,11 @@ public class YamlMapSpawn implements MapSpawn, ConfigurationSerializable {
 
     @Override
     public Map<String, Object> serialize() {
-        return ImmutableMap.<String, Object>builder()
-                .put(ID_PATH, id)
-                .put(LOCATION_PATH, location)
-                .put(AUTHOR_PATH, author)
-                .build();
+        HashMap<String, Object> result = new HashMap<>();
+        result.put(ID_PATH, id);
+        result.put(LOCATION_PATH, location);
+        result.put(AUTHOR_PATH, author);
+        return result;
     }
 
     @Override
