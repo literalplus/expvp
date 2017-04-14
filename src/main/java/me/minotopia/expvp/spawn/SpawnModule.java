@@ -10,6 +10,7 @@ package me.minotopia.expvp.spawn;
 
 import com.google.inject.AbstractModule;
 import me.minotopia.expvp.api.spawn.SpawnService;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 /**
  * Provides the dependency wiring for the spawn module.
@@ -20,6 +21,7 @@ import me.minotopia.expvp.api.spawn.SpawnService;
 public class SpawnModule extends AbstractModule {
     @Override
     protected void configure() {
+        ConfigurationSerialization.registerClass(YamlMapSpawn.class, "exp.map-spawn");
         bind(SpawnManager.class);
         bind(SpawnService.class).to(YamlSpawnService.class);
     }
