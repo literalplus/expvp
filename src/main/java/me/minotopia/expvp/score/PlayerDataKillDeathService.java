@@ -62,8 +62,8 @@ public class PlayerDataKillDeathService implements KillDeathService {
         victim.getServer().getOnlinePlayers()
                 .forEach(player -> I18n.sendLoc(player, Format.broadcast(Message.of(
                         "score!kill.broadcast",
-                        names.displayName(victim),
-                        names.displayName(culprit)
+                        names.displayName(culprit),
+                        names.displayName(victim)
                 ))));
     }
 
