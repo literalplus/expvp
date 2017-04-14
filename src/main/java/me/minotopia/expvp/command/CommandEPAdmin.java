@@ -96,17 +96,17 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
             PlayerData playerData = service().findPlayerData(playerId);
             sender.sendMessage("§a»»» §eSpielerinfo §a«««"); //TODO: player name -> xyc profile api
             formatMessage(sender,
-                    "§e§l➩ §eLiga: §a%d §eExp: §a%d §eTP: §a%d §eSprache: §a%s",
+                    "§e§l➩ §eLiga: §a%s §eExp: §a%d §eTP: §a%d §eSprache: §a%s",
                     playerData.getLeagueName(), playerData.getExp(), playerData.getTalentPoints(), playerData.getLocale().getDisplayName()
             );
             int totalKD = playerData.getTotalKills() / (playerData.getTotalDeaths() == 0 ? 1 : playerData.getTotalDeaths());
             formatMessage(sender,
-                    "§e§l➩ §aGesamte §eKills: §a%d §eDeaths: §a%d §eK/D: §a%d",
+                    "§e§l➩ §aGesamte §eKills: §a%d §eDeaths: §a%d §eK/D: §a%.2f",
                     playerData.getTotalKills(), playerData.getTotalDeaths(), totalKD
             );
             int currentKD = playerData.getCurrentKills() / (playerData.getCurrentDeaths() == 0 ? 1 : playerData.getCurrentDeaths());
             formatMessage(sender,
-                    "§e§l➩ §aAktuelle §eKills: §a%d §eDeaths: §a%d §eK/D: §a%d",
+                    "§e§l➩ §aAktuelle §eKills: §a%d §eDeaths: §a%d §eK/D: §a%.2f",
                     playerData.getCurrentKills(), playerData.getCurrentDeaths(), currentKD
             );
             formatMessage(sender,
