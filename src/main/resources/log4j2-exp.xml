@@ -23,8 +23,11 @@
 <!--suppress ALL -->
 <Configuration status="trace" monitorInterval="60" name="Expvp">
     <properties>
-        <property name="filters">com.mysql,sun.reflect,java.lang.reflect,net.minecraft</property>
-        <property name="pattern">[%d{HH:mm:ss} %p]: %-20.20c{1.} || %msg%xEx{filters(${filters})}%n
+        <property name="filters">
+            com.mysql,org.hibernate,sun.reflect,java.lang.reflect,net.minecraft
+        </property>
+        <property name="pattern">%highlight{[%d{HH:mm:ss} %level{length=1}]: %-20.20c{1.} || %msg
+            %ex{filters(${filters})}}{STYLE=Logback}%n
         </property>
     </properties>
 
