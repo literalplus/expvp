@@ -186,6 +186,9 @@ public class EPPlugin extends GenericXyPlugin {
                     .build()
                     .buildSessionFactory();
         } catch (Exception e) {
+            if (e instanceof IllegalArgumentException && e.getMessage().equals("MALDFORMED")) {
+                getLogger().severe(" *** Sadly, Hibernate/Fluent Hibernate cannot deal with reloads due to certain limitations. Please restart the server instead.");
+            }
             StandardServiceRegistryBuilder.destroy(registry);
             getLogger().log(java.util.logging.Level.SEVERE, "Could not build Hibernate SessionFactory: ", e);
             getLogger().log(java.util.logging.Level.SEVERE, "*** This is a CRITICAL error");
