@@ -10,7 +10,9 @@ package me.minotopia.expvp.command;
 
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
+import li.l1t.common.intake.i18n.Message;
 import li.l1t.common.intake.provider.annotation.Sender;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
@@ -18,6 +20,8 @@ import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.CommandService;
 import me.minotopia.expvp.handler.kit.SkillKitService;
+import me.minotopia.expvp.i18n.Format;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -120,13 +124,22 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
     public void testKit(@Sender Player player) {
         skillKitService.invalidateCache(player.getUniqueId());
         skillKitService.applyKit(player);
-        player.sendMessage("§eok sollte passen");
+        player.sendMessage(I18n.loc(player, Format.success(Message.ofText(
+                "Viel Spaß mit deinem Kit!"
+        ))));
     }
 
     @Command(aliases = "clearcache", desc = "Leert diverse Caches")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void clearCache(CommandSender sender) {
         sessionProvider.getSessionFactory().getCache().evictAllRegions();
-        sender.sendMessage("§a -> Ja mehr oder weniger sollten jetzt zumindest die schlimmsten Caches geleert sein.");
+        sender.sendMessage(I18n.loc(sender, Format.success(Message.ofText(
+                "Ja mehr oder weniger sollten jetzt zumindest die schlimmsten Caches geleert sein."
+        ))));
+    }
+
+    @Command(aliases = "info", desc = "Zeigt Versionsinformationen.")
+    public void info(EPPlugin plugin, CommandSender sender) {
+        plugin.printBanner(sender);
     }
 }
