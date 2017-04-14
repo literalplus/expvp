@@ -16,7 +16,13 @@ import me.minotopia.expvp.skill.meta.Skill;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence21.*;
+import javax.persistence21.CascadeType;
+import javax.persistence21.Column;
+import javax.persistence21.Convert;
+import javax.persistence21.Entity;
+import javax.persistence21.Id;
+import javax.persistence21.OneToMany;
+import javax.persistence21.Table;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -117,7 +123,6 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     @Override
     public void setLeagueName(String leagueName) {
         this.leagueName = leagueName;
-        this.exp = 0;
     }
 
     @Override
