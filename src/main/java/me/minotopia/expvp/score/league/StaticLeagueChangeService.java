@@ -17,7 +17,9 @@ import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.api.score.league.LeagueChanger;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.util.SessionProvider;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import java.util.Map;
  * @since 2017-03-30
  */
 class StaticLeagueChangeService {
+    private final Logger LOGGER = LoggingManager.getLogger(StaticLeagueChangeService.class);
     private final SessionProvider sessionProvider;
     private final DisplayNameService names;
     private final Map<League, LeagueChanger> leagueChangers = new HashMap<>();
@@ -54,11 +57,14 @@ class StaticLeagueChangeService {
     public void updateLeagueIfNecessary(Player player, MutablePlayerData playerData, League league) {
         LeagueChanger changer = leagueChangers.get(league);
         if (changer == null) {
+            LOGGER.warn("No league changer for {} at {}", league, player.getName());
             return;
         }
         if (changer.needsLeagueChangeUp(playerData)) {
+            LOGGER.debug("Changing league up from {} for {}", league, player.getName());
             league.next().ifPresent(nextLeague -> changeLeagueUp(player, playerData, nextLeague));
         } else if (changer.needsLeagueChangeDown(playerData)) {
+            LOGGER.debug("Changing league down from {} for {}", league, player.getName());
             league.previous().ifPresent(nextLeague -> changeLeagueDown(player, playerData, nextLeague));
         }
     }
