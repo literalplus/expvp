@@ -58,7 +58,7 @@ public enum StaticLeague implements League {
 
     public Optional<League> next() {
         int nextLeagueIndex = ordinal() + 1;
-        if (StaticLeague.values().length < nextLeagueIndex) {
+        if (nextLeagueIndex < StaticLeague.values().length) {
             return Optional.of(StaticLeague.values()[nextLeagueIndex]);
         } else {
             return Optional.empty();

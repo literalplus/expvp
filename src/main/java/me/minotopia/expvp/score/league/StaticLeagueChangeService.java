@@ -66,8 +66,6 @@ class StaticLeagueChangeService {
         } else if (changer.needsLeagueChangeDown(playerData)) {
             LOGGER.debug("Changing league down from {} for {}", league, player.getName());
             league.previous().ifPresent(nextLeague -> changeLeagueDown(player, playerData, nextLeague));
-        } else {
-            LOGGER.debug("No league change for {} --> {} < {} < {}", player.getName(), league.previous(), league, league.next());
         }
     }
 
