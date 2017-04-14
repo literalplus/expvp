@@ -15,7 +15,12 @@ import com.google.inject.Injector;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.api.misc.PlayerInitService;
-import me.minotopia.expvp.command.*;
+import me.minotopia.expvp.command.CommandEPAdmin;
+import me.minotopia.expvp.command.CommandSkillAdmin;
+import me.minotopia.expvp.command.CommandSkillTreeAdmin;
+import me.minotopia.expvp.command.CommandSkills;
+import me.minotopia.expvp.command.CommandSpawnAdmin;
+import me.minotopia.expvp.command.CommandsModule;
 import me.minotopia.expvp.handler.damage.DamageHandlerCaller;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.LocaleService;
@@ -40,6 +45,7 @@ import org.hibernate.type.UUIDCharType;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -158,10 +164,12 @@ public class EPPlugin extends GenericXyPlugin {
         if (!propertiesFile.exists()) {
             Files.copy(getResource("hibernate.properties"), propertiesFile.toPath());
         }
+        File xmlFile = new File(getDataFolder(), "hibernate.cfg.tmp.xml");
+        Files.copy(getResource("hibernate.cfg.xml"), propertiesFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .loadProperties(propertiesFile) // configures settings from hibernate.properties
-                .configure(getClass().getResource("/hibernate.cfg.xml"))
+                .configure(xmlFile)
                 .build();
         try {
             List<Class<?>> classes = EntityScanner //Hibernate doesn't do entity scanning sadly
