@@ -165,7 +165,7 @@ public class EPPlugin extends GenericXyPlugin {
             Files.copy(getResource("hibernate.properties"), propertiesFile.toPath());
         }
         File xmlFile = new File(getDataFolder(), "hibernate.cfg.tmp.xml");
-        Files.copy(getResource("hibernate.cfg.xml"), propertiesFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(getResource("hibernate.cfg.xml"), xmlFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .loadProperties(propertiesFile) // configures settings from hibernate.properties
