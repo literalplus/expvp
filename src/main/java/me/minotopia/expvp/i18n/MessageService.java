@@ -38,7 +38,7 @@ public class MessageService {
 
     public String getMessage(Locale locale, Message message) {
         Preconditions.checkNotNull(locale, "locale");
-        if (isDebugLocale(locale)) {
+        if (isDebugLocale(locale) || message.getKey() == null) {
             return message.toString();
         }
         MessagePath path = MessagePath.of(message.getKey());
