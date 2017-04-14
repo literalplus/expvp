@@ -99,6 +99,11 @@ public class SpectatorRespawnService implements RespawnService {
         pendingLeagueChanges.add(playerId);
     }
 
+    @Override
+    public void unqueueLeagueChange(UUID playerId) {
+        pendingLeagueChanges.remove(playerId);
+    }
+
     private void purgePlayerLeagueChangeCache(Player player) {
         pendingLeagueChanges.remove(player.getUniqueId());
     }

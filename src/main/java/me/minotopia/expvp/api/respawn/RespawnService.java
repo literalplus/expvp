@@ -52,4 +52,6 @@ public interface RespawnService {
      * @param playerId the unique id of the player to notify upon respawn
      */
     void queueLeagueChange(UUID playerId);
+
+    void unqueueLeagueChange(UUID playerId);
 }
