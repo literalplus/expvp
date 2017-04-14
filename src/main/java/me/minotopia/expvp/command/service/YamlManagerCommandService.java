@@ -12,6 +12,7 @@ import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.Identifiable;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.util.SessionProvider;
@@ -67,7 +68,7 @@ public class YamlManagerCommandService<T extends Identifiable> extends CommandSe
 
     public void sendChangeNotification(String descriptionKey, Object previous, Object changed,
                                        T object, CommandSender sender) {
-        I18n.sendLoc(sender, Message.of("admin!reg.changed", Message.of(descriptionKey), object.getId(), previous, changed));
+        I18n.sendLoc(sender, Format.success("admin!reg.changed", Message.of(descriptionKey), object.getId(), previous, changed));
     }
 
     public YamlManager<T> getManager() {
