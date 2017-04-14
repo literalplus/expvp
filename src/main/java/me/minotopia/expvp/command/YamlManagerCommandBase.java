@@ -8,9 +8,9 @@
 
 package me.minotopia.expvp.command;
 
-import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.Identifiable;
 import me.minotopia.expvp.command.service.YamlManagerCommandService;
+import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import org.bukkit.command.CommandSender;
 
@@ -33,7 +33,7 @@ abstract class YamlManagerCommandBase<T extends Identifiable, S extends YamlMana
     T createNew(CommandSender sender,
                 String id) throws IOException {
         T object = service().createObjectWithExistsCheck(id);
-        I18n.sendLoc(sender, Message.of("admin!reg.created", service().getObjectType(), id));
+        I18n.sendLoc(sender, Format.success("admin!reg.created", service().getObjectType(), id));
         return object;
     }
 }
