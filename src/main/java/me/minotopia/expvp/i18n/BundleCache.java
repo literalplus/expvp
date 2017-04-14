@@ -12,7 +12,12 @@ import com.google.common.base.Preconditions;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * Caches resource bundles, forwarding to a loader for cache misses.
@@ -50,7 +55,7 @@ class BundleCache {
     }
 
     private Optional<CachedBundle> getFromFile(String baseName) {
-        if(fileLoader == null) {
+        if (fileLoader == null) {
             return Optional.empty();
         }
         return fileBundles.computeIfAbsent(baseName, this::fileBundleFor);
@@ -64,7 +69,8 @@ class BundleCache {
         try {
             return Optional.of(new CachedBundle(baseName, classLoader));
         } catch (MissingResourceException e) {
-            LOGGER.debug(String.format("No %s language bundle for I18n key %s", bundleTypeDesc, baseName), e);
+            LOGGER.debug(String.format("No %s language bundle for I18n key %s <> %s %s",
+                    bundleTypeDesc, baseName, e.getClass().getSimpleName(), e.getMessage()));
             return Optional.empty();
         } catch (Exception e) {
             LOGGER.warn(String.format("Unable to load %s language bundle for I18n key %s", bundleTypeDesc, baseName), e);
