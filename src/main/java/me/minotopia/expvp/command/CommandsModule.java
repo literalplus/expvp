@@ -8,7 +8,11 @@
 
 package me.minotopia.expvp.command;
 
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Binding;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.sk89q.intake.argument.ArgumentException;
 import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.parametric.Provider;
@@ -19,6 +23,7 @@ import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.InternationalException;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.annotation.Annotation;
@@ -76,11 +81,19 @@ public class CommandsModule extends AbstractModule {
     private CommandExceptionListener i18nCommandExceptionListener() {
         return (argLine, sender, exception) -> {
             if (exception instanceof InternationalException) {
-                InternationalException internationalException = (InternationalException) exception;
-                sender.sendMessage(I18n.loc(sender, internationalException.toMessage()));
+                sendI18nExceptionText(sender, (InternationalException) exception);
+                return false;
+            } else if (exception.getCause() instanceof InternationalException) {
+                //cannot change message to translated version, so this looks like the only way
+                //we can still benefit from Intake-Spigot's translation
+                sendI18nExceptionText(sender, (InternationalException) exception.getCause());
                 return false;
             }
             return true;
         };
+    }
+
+    private void sendI18nExceptionText(CommandSender sender, InternationalException exception) {
+        sender.sendMessage(I18n.loc(sender, exception.toMessage()));
     }
 }
