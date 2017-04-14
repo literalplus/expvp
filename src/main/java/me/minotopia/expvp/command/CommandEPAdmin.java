@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -124,22 +125,24 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
     public void testKit(@Sender Player player) {
         skillKitService.invalidateCache(player.getUniqueId());
         skillKitService.applyKit(player);
-        player.sendMessage(I18n.loc(player, Format.success(Message.ofText(
+        I18n.sendLoc(player, Format.success(Message.ofText(
                 "Viel Spaß mit deinem Kit!"
-        ))));
+        )));
     }
 
     @Command(aliases = "clearcache", desc = "Leert diverse Caches")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void clearCache(CommandSender sender) {
         sessionProvider.getSessionFactory().getCache().evictAllRegions();
-        sender.sendMessage(I18n.loc(sender, Format.success(Message.ofText(
+        I18n.sendLoc(sender, Format.success(Message.ofText(
                 "Ja mehr oder weniger sollten jetzt zumindest die schlimmsten Caches geleert sein."
-        ))));
+        )));
     }
 
     @Command(aliases = "info", desc = "Zeigt Versionsinformationen.")
     public void info(EPPlugin plugin, CommandSender sender) {
-        plugin.printBanner(sender);
+        sender.sendMessage("§6Expvp Minecraft Game Mode for MinoTopia.me");
+        sender.sendMessage("§6Copyright (C) 2016-" + LocalDateTime.now().getYear() + " Literallie");
+        sender.sendMessage("§e" + plugin.getPluginVersion());
     }
 }
