@@ -56,7 +56,7 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillComman
     @EnumRequires(Permission.ADMIN_SKILL)
     public void newSkill(CommandSender sender, @Validate(regex = "[a-zA-Z0-9\\-]+") String id)
             throws IOException {
-        createNew(sender, id);
+        service().saveObject(createNew(sender, id));
     }
 
     @Command(aliases = "handler", min = 2,

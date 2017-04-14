@@ -62,7 +62,7 @@ public class CommandSkillTreeAdmin extends YamlManagerCommandBase<SkillTree, Ski
     @EnumRequires(Permission.ADMIN_TREE)
     public void newSkill(CommandSender sender, @Validate(regex = "[a-zA-Z0-9\\-]+") String id)
             throws IOException {
-        createNew(sender, id);
+        service().saveObject(createNew(sender, id));
     }
 
     @Command(aliases = "icon", min = 1,

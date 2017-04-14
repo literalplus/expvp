@@ -33,7 +33,6 @@ abstract class YamlManagerCommandBase<T extends Identifiable, S extends YamlMana
     T createNew(CommandSender sender,
                 String id) throws IOException {
         T object = service().createObjectWithExistsCheck(id);
-        service().saveObject(object);
         I18n.sendLoc(sender, Message.of("admin!reg.created", service().getObjectType(), id));
         return object;
     }
