@@ -56,7 +56,7 @@ class AbstractEPMenu extends SimpleInventoryMenu implements EPMenu {
     @Override
     public boolean handleClick(InventoryClickEvent evt) {
         try {
-            return handleClick(evt);
+            return super.handleClick(evt);
         } catch (I18nUserException | I18nInternalException e) {
             getPlayer().sendMessage(I18n.loc(getPlayer(), e.toMessage()));
             getPlayer().closeInventory();
