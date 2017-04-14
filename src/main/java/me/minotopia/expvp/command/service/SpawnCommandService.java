@@ -44,7 +44,7 @@ public class SpawnCommandService extends YamlManagerCommandService<MapSpawn> {
         XyLocation previousLocation = spawn.getLocation();
         spawn.setLocation(XyLocation.of(player.getLocation()));
         saveObject(spawn);
-        sendChangeNotification("admin!spawn.prop.loc", previousLocation.prettyPrint(),
+        sendChangeNotification("admin!spawn.prop.loc", LocationHelper.prettyPrint(previousLocation),
                 LocationHelper.prettyPrint(player.getLocation()), spawn, player);
     }
 
