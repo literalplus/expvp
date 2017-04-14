@@ -11,7 +11,6 @@ package me.minotopia.expvp.command;
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import com.sk89q.intake.parametric.annotation.Validate;
-import li.l1t.common.intake.i18n.Message;
 import li.l1t.common.intake.provider.annotation.ItemInHand;
 import li.l1t.common.intake.provider.annotation.Merged;
 import li.l1t.common.intake.provider.annotation.Sender;
@@ -95,12 +94,12 @@ public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillComman
             usage = "[id]")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void skillInfo(CommandSender sender, Skill skill) {
-        I18n.sendLoc(sender, Format.header(Message.of("admin!skill.info.header", skill.getId())));
-        I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.name", names.displayName(skill))));
-        I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.desc", names.description(skill))));
-        I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.handler", skill.getHandlerSpec())));
-        I18n.sendLoc(sender, Format.result(Message.of("admin!skill.info.misc",
-                skill.getTalentPointCost(), Format.bool(skill.getIconStack() != null))));
+        I18n.sendLoc(sender, Format.header("admin!skill.info.header", skill.getId()));
+        I18n.sendLoc(sender, Format.result("admin!skill.info.name", names.displayName(skill)));
+        I18n.sendLoc(sender, Format.result("admin!skill.info.desc", names.description(skill)));
+        I18n.sendLoc(sender, Format.result("admin!skill.info.handler", skill.getHandlerSpec()));
+        I18n.sendLoc(sender, Format.result("admin!skill.info.misc",
+                skill.getTalentPointCost(), Format.bool(skill.getIconStack() != null)));
     }
 
     @Command(aliases = "list",

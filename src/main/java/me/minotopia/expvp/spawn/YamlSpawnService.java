@@ -10,7 +10,6 @@ package me.minotopia.expvp.spawn;
 
 import com.google.inject.Inject;
 import li.l1t.common.exception.InternalException;
-import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.SpawnService;
@@ -90,7 +89,7 @@ public class YamlSpawnService implements SpawnService {
         if (currentSpawn.isPresent()) {
             player.teleport(currentSpawn.get().getLocation());
         } else {
-            I18n.sendLoc(player, Format.warning(Message.of("core!respawn.no-spawn")));
+            I18n.sendLoc(player, Format.warning("core!respawn.no-spawn"));
         }
     }
 }
