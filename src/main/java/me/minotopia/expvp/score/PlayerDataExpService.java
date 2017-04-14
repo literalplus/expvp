@@ -52,7 +52,7 @@ public class PlayerDataExpService implements ExpService {
             playerData.setExp(newExp);
             players.saveData(playerData);
             leagues.updateLeague(player);
-            player.setLevel(playerData.getExp());
+            player.setLevel(playerData.getExp()); //The client displays negative numbers as zero
         });
     }
 
