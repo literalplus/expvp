@@ -34,6 +34,7 @@ import java.io.IOException;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-23
  */
+@AutoRegister("ska")
 public class CommandSkillAdmin extends YamlManagerCommandBase<Skill, SkillCommandService> {
     private final DisplayNameService names;
 

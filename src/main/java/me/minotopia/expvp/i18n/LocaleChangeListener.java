@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-07
  */
-class LocaleChangeListener extends PacketAdapter {
+public class LocaleChangeListener extends PacketAdapter {
     private final EPPlugin plugin;
     private final LocaleService localeService;
 

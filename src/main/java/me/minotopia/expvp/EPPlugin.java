@@ -9,32 +9,26 @@
 package me.minotopia.expvp;
 
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketListener;
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
+import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.api.misc.PlayerInitService;
-import me.minotopia.expvp.command.CommandEPAdmin;
-import me.minotopia.expvp.command.CommandSkillAdmin;
-import me.minotopia.expvp.command.CommandSkillTreeAdmin;
-import me.minotopia.expvp.command.CommandSkills;
-import me.minotopia.expvp.command.CommandSpawnAdmin;
+import me.minotopia.expvp.command.AutoRegister;
 import me.minotopia.expvp.command.CommandsModule;
-import me.minotopia.expvp.handler.damage.DamageHandlerCaller;
 import me.minotopia.expvp.i18n.I18n;
-import me.minotopia.expvp.i18n.LocaleService;
 import me.minotopia.expvp.logging.LoggingManager;
-import me.minotopia.expvp.score.KillDeathForwardingListener;
-import me.minotopia.expvp.score.ScoreJoinListener;
-import me.minotopia.expvp.skill.meta.SkillManager;
-import me.minotopia.expvp.skilltree.SkillTreeManager;
 import me.minotopia.expvp.util.SessionProvider;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -44,11 +38,15 @@ import org.hibernate.type.UUIDCharType;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Plugin class for interfacing with the Bukkit API.
@@ -57,11 +55,8 @@ import java.util.UUID;
  * @since 2016-06-20
  */
 public class EPPlugin extends GenericXyPlugin {
-    private final String chatPrefix = "§6[§7Exp§6] ";
     private Logger log;
     private SessionProvider sessionProvider;
-    private SkillTreeManager skillTreeManager;
-    private SkillManager skillManager;
     private Injector injector;
 
     public EPPlugin() {
@@ -98,13 +93,8 @@ public class EPPlugin extends GenericXyPlugin {
             // Initialise Dependency Injection
             injector = Guice.createInjector(new EPRootModule(this), new CommandsModule());
 
-            // Start some services
-            inject(LocaleService.class).enable(this);
-            skillManager = inject(SkillManager.class);
-            skillTreeManager = inject(SkillTreeManager.class);
-
-            registerListeners();
-            registerCommands();
+            registerBoundListeners();
+            registerBoundCommands();
 
             saveConfig();
 
@@ -120,20 +110,40 @@ public class EPPlugin extends GenericXyPlugin {
         return injector.getInstance(clazz);
     }
 
-    private void registerListeners() {
-        PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(inject(DamageHandlerCaller.class), this);
-        pm.registerEvents(inject(KillDeathForwardingListener.class), this);
-        pm.registerEvents(inject(ScoreJoinListener.class), this);
+    private void registerBoundListeners() {
+        doForAllBound(Listener.class, listener -> getServer().getPluginManager().registerEvents(listener, this));
+        doForAllBound(PacketListener.class, listener -> ProtocolLibrary.getProtocolManager().addPacketListener(listener));
     }
 
-    private void registerCommands() {
+    private <T> void doForAllBound(Class<T> baseType, Consumer<T> consumer) {
+        injector.getBindings().entrySet().stream()
+                .filter(bindingEntryInstanceOf(baseType))
+                .map(this::bindingEntryToInstance)
+                .map(baseType::cast)
+                .forEach(consumer);
+    }
+
+    private <T> Predicate<Map.Entry<Key<?>, ?>> bindingEntryInstanceOf(Class<T> baseType) {
+        return en -> baseType.isAssignableFrom(en.getKey().getTypeLiteral().getRawType());
+    }
+
+    private Object bindingEntryToInstance(Map.Entry<?, Binding<?>> entry) {
+        return entry.getValue().getProvider().get();
+    }
+
+    private void registerBoundCommands() {
         CommandsManager commandsManager = inject(CommandsManager.class);
-        commandsManager.registerCommand(inject(CommandEPAdmin.class), "epa");
-        commandsManager.registerCommand(inject(CommandSkillTreeAdmin.class), "sta");
-        commandsManager.registerCommand(inject(CommandSkillAdmin.class), "ska");
-        commandsManager.registerCommand(inject(CommandSkills.class), "sk", "skills");
-        commandsManager.registerCommand(inject(CommandSpawnAdmin.class), "spa");
+        injector.getBindings().entrySet().stream()
+                .filter(bindingEntryHasAnnotation(AutoRegister.class))
+                .map(this::bindingEntryToInstance)
+                .forEach(handler -> {
+                    AutoRegister meta = handler.getClass().getAnnotation(AutoRegister.class);
+                    commandsManager.registerCommand(handler, meta.value(), meta.aliases());
+                });
+    }
+
+    private Predicate<Map.Entry<Key<?>, Binding<?>>> bindingEntryHasAnnotation(Class<? extends Annotation> annotationClass) {
+        return en -> en.getKey().getTypeLiteral().getRawType().isAnnotationPresent(annotationClass);
     }
 
     private void handleEnableException(Exception e) {
@@ -186,7 +196,7 @@ public class EPPlugin extends GenericXyPlugin {
                     .build()
                     .buildSessionFactory();
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException && e.getMessage().equals("MALDFORMED")) {
+            if (e instanceof IllegalArgumentException && e.getMessage().equals("MALFORMED")) {
                 getLogger().severe(" *** Sadly, Hibernate/Fluent Hibernate cannot deal with reloads due to certain limitations. Please restart the server instead.");
             }
             StandardServiceRegistryBuilder.destroy(registry);
@@ -236,7 +246,7 @@ public class EPPlugin extends GenericXyPlugin {
 
     @Override
     public String getChatPrefix() {
-        return chatPrefix;
+        return "§6[§7Exp§6] ";
     }
 
 
@@ -251,13 +261,5 @@ public class EPPlugin extends GenericXyPlugin {
         if (log != null) {
             log.log(level, message);
         }
-    }
-
-    public SkillTreeManager getSkillTreeManager() {
-        return skillTreeManager;
-    }
-
-    public SkillManager getSkillManager() {
-        return skillManager;
     }
 }

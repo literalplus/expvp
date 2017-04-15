@@ -31,5 +31,7 @@ public class ScoreModule extends AbstractModule {
         bind(LeagueService.class).to(StaticLeagueService.class);
         bind(KillDeathService.class).to(PlayerDataKillDeathService.class);
         bind(ResetService.class).to(TaskResetService.class);
+        bind(KillDeathForwardingListener.class);
+        bind(ScoreJoinListener.class);
     }
 }

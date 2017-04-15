@@ -39,7 +39,11 @@ import java.util.List;
 public class CommandsModule extends AbstractModule {
     @Override
     protected void configure() {
-
+        bind(CommandEPAdmin.class);
+        bind(CommandSkillAdmin.class);
+        bind(CommandSkills.class);
+        bind(CommandSkillTreeAdmin.class);
+        bind(CommandSpawnAdmin.class);
     }
 
     @Singleton

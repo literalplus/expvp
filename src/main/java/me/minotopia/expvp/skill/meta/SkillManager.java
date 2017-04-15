@@ -8,12 +8,9 @@
 
 package me.minotopia.expvp.skill.meta;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
-import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.yaml.AbstractYamlManager;
 
 import java.io.File;
@@ -27,14 +24,9 @@ import java.io.File;
  */
 @Singleton
 public class SkillManager extends AbstractYamlManager<Skill> {
-    private final ResearchService obtainmentService;
-    private final DisplayNameService names;
-
     @Inject
-    public SkillManager(@DataFolder File dataFolder, ResearchService obtainmentService, DisplayNameService names) {
+    public SkillManager(@DataFolder File dataFolder) {
         super(new File(dataFolder, "skills"));
-        this.obtainmentService = Preconditions.checkNotNull(obtainmentService, "obtainmentService");
-        this.names = names;
         loadAll();
     }
 

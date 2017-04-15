@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.command;
 
+import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.ui.menu.SelectTreeMenu;
@@ -21,7 +22,13 @@ import java.io.IOException;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-23
  */
+@AutoRegister("skills")
 public class CommandSkills {
+    @Inject
+    public CommandSkills() {
+
+    }
+
     @Command(aliases = "",
             desc = "Zeigt Skilltrees",
             help = "Zeigt ein Menü,\nin dem Skilltrees\nausgewählt und Skills\nerforscht werden können.")

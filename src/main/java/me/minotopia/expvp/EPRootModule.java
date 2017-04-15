@@ -11,12 +11,14 @@ package me.minotopia.expvp;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.inject.AbstractModule;
+import com.google.inject.util.Providers;
 import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.i18n.EPDisplayNameService;
+import me.minotopia.expvp.i18n.LocaleChangeListener;
 import me.minotopia.expvp.misc.EPPlayerInitService;
 import me.minotopia.expvp.model.ModelModule;
 import me.minotopia.expvp.respawn.RespawnModule;
@@ -46,15 +48,10 @@ public class EPRootModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(Plugin.class).toInstance(plugin);
-        bind(EPPlugin.class).toInstance(plugin);
-        bind(Server.class).toInstance(plugin.getServer());
-        bind(File.class).annotatedWith(DataFolder.class).toInstance(plugin.getDataFolder());
-        bind(SessionProvider.class).toInstance(plugin.getSessionProvider());
+        bindPluginProperties();
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
-        bind(ProtocolManager.class).toProvider(ProtocolLibrary::getProtocolManager);
-        bind(TaskService.class).toInstance(plugin.tasks());
+        bind(LocaleChangeListener.class);
         install(new ModelModule());
         install(new SkillModule());
         install(new SkillTreeModule());
@@ -63,5 +60,15 @@ public class EPRootModule extends AbstractModule {
         install(new InventoryMenuModule());
         install(new RespawnModule());
         install(new SpawnModule());
+    }
+
+    private void bindPluginProperties() {
+        bind(Plugin.class).toInstance(plugin);
+        bind(EPPlugin.class).toInstance(plugin);
+        bind(Server.class).toInstance(plugin.getServer());
+        bind(TaskService.class).toInstance(plugin.tasks());
+        bind(File.class).annotatedWith(DataFolder.class).toInstance(plugin.getDataFolder());
+        bind(SessionProvider.class).toProvider(Providers.of(plugin.getSessionProvider())); //this is null in some tests
+        bind(ProtocolManager.class).toProvider(ProtocolLibrary::getProtocolManager);
     }
 }

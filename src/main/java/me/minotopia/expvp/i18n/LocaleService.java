@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.i18n;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.i18n.MinecraftLocale;
@@ -40,15 +39,6 @@ public class LocaleService {
         this.sessionProvider = sessionProvider;
         initService.registerInitHandler(player -> plugin.async(() -> recomputeClientLocale(player)));
         initService.registerDeInitHandler(player -> I18n.clearLocaleOf(player.getUniqueId()));
-    }
-
-    public void enable(EPPlugin plugin) {
-        ProtocolLibrary.getProtocolManager().addPacketListener(plugin.inject(LocaleChangeListener.class));
-        plugin.async(() -> {
-            sessionProvider.inSession(ignored ->
-                    plugin.getServer().getOnlinePlayers().forEach(this::recomputeClientLocale)
-            );
-        });
     }
 
     /**

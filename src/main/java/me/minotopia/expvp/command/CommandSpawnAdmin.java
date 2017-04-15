@@ -40,6 +40,7 @@ import java.util.Collection;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-12
  */
+@AutoRegister("spa")
 public class CommandSpawnAdmin extends YamlManagerCommandBase<MapSpawn, SpawnCommandService> {
     private final DisplayNameService names;
 

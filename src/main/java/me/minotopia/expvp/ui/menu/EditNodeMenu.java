@@ -55,7 +55,8 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
 
     private EditNodeMenu(SimpleSkillTreeNode node, EPPlugin plugin, EPMenu parent, Player player,
                          DisplayNameService names, SkillService skills,
-                         BiConsumer<EPMenu, SimpleSkillTreeNode> childFactory, SelectSkillMenu.Factory selectSkillFactory, SkillTreeManager treeManager) {
+                         BiConsumer<EPMenu, SimpleSkillTreeNode> childFactory,
+                         SelectSkillMenu.Factory selectSkillFactory, SkillTreeManager treeManager) {
         super(plugin, I18n.loc(player, names.displayName(node.getValue())), player);
         this.parent = parent;
         this.node = Preconditions.checkNotNull(node, "node");
@@ -149,7 +150,7 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
 
     public void saveTree() {
         try {
-            getPlugin().getSkillTreeManager().save(node.getTree());
+            treeManager.save(node.getTree());
         } catch (IOException e) {
             e.printStackTrace(); //welp
             I18n.sendLoc(getPlayer(), Format.internalError("error!ui.skilledit.unable-to-save"));

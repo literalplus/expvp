@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-14
  */
+@AutoRegister("epa")
 public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService> {
     private final SkillKitService skillKitService;
     private final SessionProvider sessionProvider;
