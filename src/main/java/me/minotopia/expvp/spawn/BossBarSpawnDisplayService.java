@@ -16,6 +16,7 @@ import me.minotopia.expvp.api.spawn.SpawnChangeService;
 import me.minotopia.expvp.api.spawn.SpawnDisplayService;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.i18n.I18n;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.inventivetalent.bossbar.BossBarAPI;
@@ -74,10 +75,12 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     }
 
     private void sendToAll(String message, List<Player> players) {
-        BossBarAPI.addBar(
-                players, message, BossBarAPI.Color.BLUE,
-                BossBarAPI.Style.PROGRESS, findFractionProgressToNextSpawn()
-        );
+        float fractionProgress = findFractionProgressToNextSpawn();
+        TextComponent wrapperComponent = new TextComponent(TextComponent.fromLegacyText(message));
+        // the method with the collection of players does. not. support. 1.8. should find another lib
+        players.forEach(player -> BossBarAPI.addBar(
+                player, wrapperComponent, BossBarAPI.Color.BLUE, BossBarAPI.Style.PROGRESS, fractionProgress
+        ));
     }
 
     private float findFractionProgressToNextSpawn() {
