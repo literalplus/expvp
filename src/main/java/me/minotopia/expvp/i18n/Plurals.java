@@ -21,12 +21,16 @@ public class Plurals {
 
     }
 
-    public static Message talentPointPlural(int count) {
+    public static Message talentPointPlural(long count) {
         return plural("score!tp", count);
     }
 
-    public static Message killPlural(int count) {
+    public static Message killPlural(long count) {
         return plural("score!kill", count);
+    }
+
+    public static Message minutePlural(long count) {
+        return plural("core!minute", count);
     }
 
     /**
@@ -38,11 +42,11 @@ public class Plurals {
      * @param count   the actual count
      * @return a resolved message
      */
-    public static Message plural(String baseKey, int count) {
+    public static Message plural(String baseKey, long count) {
         return Message.of("core!plural-base", count, Message.of(resolveKey(baseKey, count)));
     }
 
-    private static String resolveKey(String baseKey, int count) {
+    private static String resolveKey(String baseKey, long count) {
         return baseKey + (count == 1 ? ".one" : ".many");
     }
 }
