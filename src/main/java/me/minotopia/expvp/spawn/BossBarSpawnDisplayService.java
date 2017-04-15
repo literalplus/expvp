@@ -81,7 +81,7 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     }
 
     private Message createStatusMessage() {
-        return Message.of("core!spawn.bossbar-format",
+        return Message.of("spawn!bossbar-format",
                 findCurrentMapName(),
                 findMinutesLeftUntilNextChange()
         );
