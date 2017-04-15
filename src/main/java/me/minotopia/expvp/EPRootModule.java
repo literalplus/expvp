@@ -28,7 +28,6 @@ import me.minotopia.expvp.ui.InventoryMenuModule;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 
@@ -50,7 +49,6 @@ public class EPRootModule extends AbstractModule {
         bind(Plugin.class).toInstance(plugin);
         bind(EPPlugin.class).toInstance(plugin);
         bind(Server.class).toInstance(plugin.getServer());
-        bind(BukkitScheduler.class).toInstance(plugin.getServer().getScheduler());
         bind(File.class).annotatedWith(DataFolder.class).toInstance(plugin.getDataFolder());
         bind(SessionProvider.class).toInstance(plugin.getSessionProvider());
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
