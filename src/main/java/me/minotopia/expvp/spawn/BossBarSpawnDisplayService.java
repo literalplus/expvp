@@ -51,13 +51,26 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     @Override
     public void updateForAllPlayers() {
         if (spawnService.getCurrentSpawn().isPresent()) {
-            Message statusMessage = createStatusMessage();
-            new ArrayList<Player>(server.getOnlinePlayers()).stream()
-                    .collect(Collectors.groupingBy(player -> I18n.getLocaleFor(player.getUniqueId())))
-                    .forEach(((locale, players) -> sendToAll(I18n.loc(locale, statusMessage), players)));
+            setWorldTimeBasedOnMapProgress();
+            updatePlayersBossBars();
         } else {
             resetAllBars();
         }
+    }
+
+    private void setWorldTimeBasedOnMapProgress() {
+        server.getWorlds().forEach(world -> world.setTime(findDayTimeForSpawnProgress(findFractionProgressToNextSpawn())));
+    }
+
+    private int findDayTimeForSpawnProgress(float fractionProgress) {
+        return Math.round(22_500F + (fractionProgress * 17520F));
+    }
+
+    private void updatePlayersBossBars() {
+        Message statusMessage = createStatusMessage();
+        new ArrayList<Player>(server.getOnlinePlayers()).stream()
+                .collect(Collectors.groupingBy(player -> I18n.getLocaleFor(player.getUniqueId())))
+                .forEach(((locale, players) -> sendToAll(I18n.loc(locale, statusMessage), players)));
     }
 
     private void sendToAll(String message, List<Player> players) {
