@@ -9,6 +9,8 @@
 package me.minotopia.expvp.spawn;
 
 import com.google.inject.AbstractModule;
+import me.minotopia.expvp.api.spawn.SpawnChangeService;
+import me.minotopia.expvp.api.spawn.SpawnDisplayService;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
@@ -24,5 +26,7 @@ public class SpawnModule extends AbstractModule {
         ConfigurationSerialization.registerClass(YamlMapSpawn.class, "exp.map-spawn");
         bind(SpawnManager.class);
         bind(SpawnService.class).to(YamlSpawnService.class);
+        bind(SpawnChangeService.class).to(FullHourSpawnChangeService.class);
+        bind(SpawnDisplayService.class).to(BossBarSpawnDisplayService.class);
     }
 }

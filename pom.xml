@@ -139,6 +139,19 @@
             <groupId>org.inventivetalent</groupId>
             <artifactId>bossbarapi</artifactId>
             <version>2.4.1</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <!-- wrong version -->
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <!-- remote repo down at time of inclusion, plus not needed by Expvp -->
+                    <groupId>org.mcstats.bukkit</groupId>
+                    <artifactId>metrics-lite</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
