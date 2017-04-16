@@ -16,12 +16,7 @@ import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.api.spawn.SpawnVoteService;
 import org.apache.commons.lang.math.RandomUtils;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,6 +55,13 @@ public class MapSpawnVoteService implements SpawnVoteService {
             return Optional.empty();
         }
         return Optional.of(randomSpawnFrom(allSpawns));
+    }
+
+    @Override
+    public long findVoteCount(MapSpawn spawn) {
+        return currentVotes.values().stream()
+                .filter(spawn::equals)
+                .count();
     }
 
     private MapSpawn randomSpawnFrom(List<MapSpawn> input) {

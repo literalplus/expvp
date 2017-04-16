@@ -19,6 +19,8 @@ import java.util.UUID;
  * @since 2017-04-15
  */
 public interface SpawnVoteService {
+    long findVoteCount(MapSpawn spawn);
+
     void castVoteFor(UUID playerId, MapSpawn spawn);
 
     Optional<MapSpawn> findVote(UUID playerId);

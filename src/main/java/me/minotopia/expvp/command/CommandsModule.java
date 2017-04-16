@@ -8,11 +8,7 @@
 
 package me.minotopia.expvp.command;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Binding;
-import com.google.inject.Injector;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.sk89q.intake.argument.ArgumentException;
 import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.parametric.Provider;
@@ -44,6 +40,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandSkills.class);
         bind(CommandSkillTreeAdmin.class);
         bind(CommandSpawnAdmin.class);
+        bind(CommandMapVote.class);
     }
 
     @Singleton

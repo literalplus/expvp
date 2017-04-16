@@ -43,7 +43,11 @@ public class Plurals {
      * @return a resolved message
      */
     public static Message plural(String baseKey, long count) {
-        return Message.of("core!plural-base", count, Message.of(resolveKey(baseKey, count)));
+        return Message.of("core!plural-base", resolveCountString(count), Message.of(resolveKey(baseKey, count)));
+    }
+
+    private static Object resolveCountString(long count) {
+        return count == 0 ? Message.of("core!plural-none") : count;
     }
 
     private static String resolveKey(String baseKey, long count) {
