@@ -11,11 +11,7 @@ package me.minotopia.expvp.spawn;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.util.task.TaskService;
-import me.minotopia.expvp.api.spawn.MapSpawn;
-import me.minotopia.expvp.api.spawn.SpawnChangeService;
-import me.minotopia.expvp.api.spawn.SpawnDisplayService;
-import me.minotopia.expvp.api.spawn.SpawnService;
-import me.minotopia.expvp.api.spawn.SpawnVoteService;
+import me.minotopia.expvp.api.spawn.*;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
 import org.bukkit.Server;
@@ -82,6 +78,8 @@ public class SpawnVoteTask implements Runnable {
         spawns.forceNextSpawn(spawn);
         voteService.resetAllVotes();
         changeService.registerSpawnChange();
+        server.getOnlinePlayers()
+                .forEach(spawns::teleportToSpawnIfPossible);
     }
 
     private boolean hasNotCastAVote(Player player) {
