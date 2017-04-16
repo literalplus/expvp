@@ -87,6 +87,11 @@
             <!-- BossBar-API -->
             <url>https://repo.inventivetalent.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>oss-sonatype</id>
+            <!-- BungeeCord -->
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
