@@ -78,6 +78,6 @@ public class KillDeathForwardingListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.getEntity().spigot().respawn();
-        handleFatalHit(event.getEntity(), event.getEntity().getLastDamageCause());
+        respawnService.startRespawn(event.getEntity());
     }
 }
