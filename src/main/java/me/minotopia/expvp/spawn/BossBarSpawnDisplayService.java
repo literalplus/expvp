@@ -80,9 +80,12 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
         float fractionProgress = findFractionProgressToNextSpawn();
         TextComponent wrapperComponent = new TextComponent(TextComponent.fromLegacyText(message));
         // the method with the collection of players does. not. support. 1.8. should find another lib
-        players.forEach(player -> BossBarAPI.addBar(
-                player, wrapperComponent, BossBarAPI.Color.BLUE, BossBarAPI.Style.PROGRESS, fractionProgress
-        ));
+        players.forEach(player -> {
+            BossBarAPI.removeAllBars(player);
+            BossBarAPI.addBar(
+                    player, wrapperComponent, BossBarAPI.Color.BLUE, BossBarAPI.Style.PROGRESS, fractionProgress
+            );
+        });
     }
 
     private float findFractionProgressToNextSpawn() {
