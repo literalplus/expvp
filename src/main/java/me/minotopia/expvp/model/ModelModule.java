@@ -11,6 +11,7 @@ package me.minotopia.expvp.model;
 import com.google.inject.AbstractModule;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.model.player.HibernatePlayerDataService;
+import me.minotopia.expvp.model.player.HibernateResetService;
 
 /**
  * Provides the dependency wiring for the model module.
@@ -22,5 +23,6 @@ public class ModelModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(PlayerDataService.class).to(HibernatePlayerDataService.class);
+        bind(HibernateResetService.class);
     }
 }

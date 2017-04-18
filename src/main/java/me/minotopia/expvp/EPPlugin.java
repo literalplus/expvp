@@ -11,19 +11,21 @@ package me.minotopia.expvp;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketListener;
-import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
 import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
+import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.command.AutoRegister;
 import me.minotopia.expvp.command.CommandsModule;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.logging.LoggingManager;
+import me.minotopia.expvp.model.hibernate.player.HibernateObtainedSkill;
+import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
 import me.minotopia.expvp.util.SessionProvider;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -42,8 +44,6 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -98,6 +98,7 @@ public class EPPlugin extends GenericXyPlugin {
 
             registerBoundListeners();
             registerBoundCommands();
+            instantiateBoundConstructOnEnableClasses();
 
             saveConfig();
 
@@ -149,6 +150,12 @@ public class EPPlugin extends GenericXyPlugin {
         return en -> en.getKey().getTypeLiteral().getRawType().isAnnotationPresent(annotationClass);
     }
 
+    private void instantiateBoundConstructOnEnableClasses() {
+        injector.getBindings().entrySet().stream()
+                .filter(bindingEntryHasAnnotation(ConstructOnEnable.class))
+                .forEach(this::bindingEntryToInstance);
+    }
+
     private void handleEnableException(Exception e) {
         //Using jul here because Log4J2 might not have been initialised
         getLogger().log(java.util.logging.Level.SEVERE, " --- Exception while trying to enable Expvp: ", e);
@@ -185,13 +192,9 @@ public class EPPlugin extends GenericXyPlugin {
                 .configure(xmlFile)
                 .build();
         try {
-            List<Class<?>> classes = EntityScanner //Hibernate doesn't do entity scanning sadly
-                    .scanPackages(
-                            Collections.singletonList(classLoader),
-                            EPPlugin.class.getPackage().getName()
-                    ).result();
             MetadataSources sources = new MetadataSources(registry);
-            classes.forEach(sources::addAnnotatedClass);
+            sources.addAnnotatedClass(HibernatePlayerData.class);
+            sources.addAnnotatedClass(HibernateObtainedSkill.class);
             return sources
                     .getMetadataBuilder()
                     //Map UUIDs to CHAR(36) instead of binary; readability > storage
@@ -199,9 +202,6 @@ public class EPPlugin extends GenericXyPlugin {
                     .build()
                     .buildSessionFactory();
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException && e.getMessage().equals("MALFORMED")) {
-                getLogger().severe(" *** Sadly, Hibernate/Fluent Hibernate cannot deal with reloads due to certain limitations. Please restart the server instead.");
-            }
             StandardServiceRegistryBuilder.destroy(registry);
             getLogger().log(java.util.logging.Level.SEVERE, "Could not build Hibernate SessionFactory: ", e);
             getLogger().log(java.util.logging.Level.SEVERE, "*** This is a CRITICAL error");
