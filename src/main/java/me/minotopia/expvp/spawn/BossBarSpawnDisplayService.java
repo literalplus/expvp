@@ -11,6 +11,7 @@ package me.minotopia.expvp.spawn;
 import com.google.inject.Inject;
 import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.spawn.SpawnChangeService;
 import me.minotopia.expvp.api.spawn.SpawnDisplayService;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-14
  */
+@ConstructOnEnable
 public class BossBarSpawnDisplayService implements SpawnDisplayService {
     private final SpawnService spawnService;
     private final SpawnChangeService spawnChangeService;
