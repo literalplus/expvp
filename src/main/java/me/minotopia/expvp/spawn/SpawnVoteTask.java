@@ -46,7 +46,7 @@ public class SpawnVoteTask implements Runnable {
         this.changeService = changeService;
         this.voteService = voteService;
         this.server = server;
-        tasks.repeating(this, Duration.ofMinutes(1));
+        tasks.repeating(this, Duration.ofSeconds(20));
     }
 
     @Override
