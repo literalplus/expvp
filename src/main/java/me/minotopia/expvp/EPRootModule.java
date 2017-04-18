@@ -21,6 +21,7 @@ import me.minotopia.expvp.i18n.EPDisplayNameService;
 import me.minotopia.expvp.i18n.LocaleChangeListener;
 import me.minotopia.expvp.misc.EPPlayerInitService;
 import me.minotopia.expvp.model.ModelModule;
+import me.minotopia.expvp.prevention.PreventionModule;
 import me.minotopia.expvp.respawn.RespawnModule;
 import me.minotopia.expvp.score.ScoreModule;
 import me.minotopia.expvp.skill.SkillModule;
@@ -60,6 +61,7 @@ public class EPRootModule extends AbstractModule {
         install(new InventoryMenuModule());
         install(new RespawnModule());
         install(new SpawnModule());
+        install(new PreventionModule());
     }
 
     private void bindPluginProperties() {

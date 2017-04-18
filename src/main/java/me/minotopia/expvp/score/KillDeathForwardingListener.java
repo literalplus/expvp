@@ -79,5 +79,7 @@ public class KillDeathForwardingListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.getEntity().spigot().respawn();
         respawnService.startRespawn(event.getEntity());
+        event.setDroppedExp(0);
+        event.getDrops().clear();
     }
 }
