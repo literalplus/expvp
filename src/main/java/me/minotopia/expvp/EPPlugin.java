@@ -19,7 +19,6 @@ import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
-import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.command.AutoRegister;
 import me.minotopia.expvp.command.CommandsModule;
 import me.minotopia.expvp.i18n.I18n;
@@ -93,8 +92,6 @@ public class EPPlugin extends GenericXyPlugin {
 
             // Initialise Dependency Injection
             injector = Guice.createInjector(new EPRootModule(this), new CommandsModule());
-
-            inject(SpawnService.class);
 
             registerBoundListeners();
             registerBoundCommands();

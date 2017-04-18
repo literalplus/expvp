@@ -9,6 +9,7 @@
 package me.minotopia.expvp.model.player;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.util.SessionProvider;
@@ -23,6 +24,7 @@ import java.time.LocalTime;
  * @since 2017-04-18
  */
 @ConstructOnEnable
+@Singleton
 public class HibernateResetService {
     private final SessionProvider sessionProvider;
 

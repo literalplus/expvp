@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
  * @since 2017-04-14
  */
 public class FullHourSpawnChangeService implements SpawnChangeService {
-    private LocalDateTime lastChangeTime = null;
-    private LocalDateTime nextChangeTime = null;
+    private LocalDateTime lastChangeTime;
+    private LocalDateTime nextChangeTime;
 
     @Inject
     public FullHourSpawnChangeService() {
@@ -35,7 +35,8 @@ public class FullHourSpawnChangeService implements SpawnChangeService {
 
     @Override
     public boolean needsSpawnChange() {
-        return findTimeUntilNextChange().getSeconds() <= 0;
+        Duration timeLeft = findTimeUntilNextChange();
+        return timeLeft.isNegative() || timeLeft.isZero();
     }
 
     @Override

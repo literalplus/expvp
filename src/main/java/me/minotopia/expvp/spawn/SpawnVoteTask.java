@@ -11,6 +11,7 @@ package me.minotopia.expvp.spawn;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.util.task.TaskService;
+import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.spawn.*;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
@@ -28,12 +29,12 @@ import java.util.function.Consumer;
  * @since 2017-04-14
  */
 @Singleton
+@ConstructOnEnable
 public class SpawnVoteTask implements Runnable {
     private final SpawnDisplayService displayService;
     private final SpawnService spawns;
     private final SpawnChangeService changeService;
     private final SpawnVoteService voteService;
-    private final TaskService tasks;
     private final Server server;
 
     @Inject
@@ -44,11 +45,7 @@ public class SpawnVoteTask implements Runnable {
         this.spawns = spawns;
         this.changeService = changeService;
         this.voteService = voteService;
-        this.tasks = tasks;
         this.server = server;
-    }
-
-    public void start() {
         tasks.repeating(this, Duration.ofMinutes(1));
     }
 

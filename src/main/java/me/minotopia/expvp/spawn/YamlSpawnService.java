@@ -34,10 +34,9 @@ public class YamlSpawnService implements SpawnService {
     private final SpawnManager spawnManager;
 
     @Inject
-    public YamlSpawnService(SpawnManager spawnManager, PlayerInitService initService, SpawnVoteTask spawnVoteTask) {
+    public YamlSpawnService(SpawnManager spawnManager, PlayerInitService initService) {
         this.spawnManager = spawnManager;
         initService.registerInitHandler(this::teleportToSpawnIfPossible);
-        spawnVoteTask.start();
     }
 
     @Override
