@@ -12,7 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.exception.UserException;
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;

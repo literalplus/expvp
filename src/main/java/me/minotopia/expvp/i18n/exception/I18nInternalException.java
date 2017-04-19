@@ -9,7 +9,7 @@
 package me.minotopia.expvp.i18n.exception;
 
 import li.l1t.common.exception.InternalException;
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 
 /**
  * A non-sensitive system-induced exception with a localisable message.

@@ -48,7 +48,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <xyc.version>4.4.2.3</xyc.version>
+        <xyc.version>4.4.2.4</xyc.version>
         <minecraft.version>1.8.8</minecraft.version>
         <spigot-api.release>R0.1</spigot-api.release>
         <rootDir>${project.basedir}</rootDir>
@@ -56,7 +56,7 @@
         <log4j.version>2.0-beta9</log4j.version>
         <!-- Mojang ship outdated Beta code in Production -->
         <hibernate.version>5.2.3-SNAPSHOT</hibernate.version>
-        <intake-spigot.version>4.2.25</intake-spigot.version>
+        <intake-spigot.version>4.2.27</intake-spigot.version>
         <!-- maven-release-plugin -->
         <ignoreSnapshots>true</ignoreSnapshots>
     </properties>

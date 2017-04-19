@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.i18n;
 
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;

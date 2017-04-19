@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.i18n;
 
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 
 /**
  * Resolves message strings for names that need to be pluralised.

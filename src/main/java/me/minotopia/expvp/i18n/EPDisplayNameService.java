@@ -10,7 +10,7 @@ package me.minotopia.expvp.i18n;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.api.score.league.LeagueService;

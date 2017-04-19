@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.i18n.exception;
 
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 
 /**
  * @author <a href="https://l1t.li/">Literallie</a>

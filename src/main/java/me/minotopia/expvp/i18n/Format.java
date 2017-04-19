@@ -8,7 +8,8 @@
 
 package me.minotopia.expvp.i18n;
 
-import li.l1t.common.intake.i18n.Message;
+
+import li.l1t.common.i18n.Message;
 
 /**
  * Static utility class that contains a few helpful methods for wrapping messages in common formats.

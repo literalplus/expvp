@@ -13,7 +13,7 @@ import com.sk89q.intake.Command;
 import com.sk89q.intake.parametric.annotation.Validate;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 import li.l1t.common.intake.provider.annotation.Colored;
 import li.l1t.common.intake.provider.annotation.Merged;
 import li.l1t.common.intake.provider.annotation.Sender;

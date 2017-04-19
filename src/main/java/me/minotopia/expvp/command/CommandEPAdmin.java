@@ -10,7 +10,7 @@ package me.minotopia.expvp.command;
 
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Permission;

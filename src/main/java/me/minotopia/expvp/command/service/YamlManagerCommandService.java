@@ -8,8 +8,8 @@
 
 package me.minotopia.expvp.command.service;
 
+import li.l1t.common.i18n.Message;
 import li.l1t.common.intake.CommandsManager;
-import li.l1t.common.intake.i18n.Message;
 import me.minotopia.expvp.api.Identifiable;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.i18n.Format;

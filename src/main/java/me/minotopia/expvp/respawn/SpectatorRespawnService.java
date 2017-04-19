@@ -9,7 +9,7 @@
 package me.minotopia.expvp.respawn;
 
 import com.google.inject.Inject;
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.misc.PlayerInitService;

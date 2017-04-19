@@ -9,7 +9,7 @@
 package me.minotopia.expvp.i18n;
 
 import com.google.common.base.Preconditions;
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 

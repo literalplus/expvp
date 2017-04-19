@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.api.i18n;
 
-import li.l1t.common.intake.i18n.Message;
+import li.l1t.common.i18n.Message;
 import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.skill.meta.Skill;
