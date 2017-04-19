@@ -13,6 +13,8 @@ import me.minotopia.expvp.api.spawn.SpawnChangeService;
 import me.minotopia.expvp.api.spawn.SpawnDisplayService;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.api.spawn.SpawnVoteService;
+import me.minotopia.expvp.api.spawn.button.VoteButtonService;
+import me.minotopia.expvp.spawn.button.YamlVoteButtonService;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 /**
@@ -30,5 +32,6 @@ public class SpawnModule extends AbstractModule {
         bind(SpawnVoteService.class).to(MapSpawnVoteService.class);
         bind(SpawnChangeService.class).to(FullHourSpawnChangeService.class);
         bind(SpawnDisplayService.class).to(BossBarSpawnDisplayService.class);
+        bind(VoteButtonService.class).to(YamlVoteButtonService.class);
     }
 }

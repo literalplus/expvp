@@ -41,6 +41,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandSkillTreeAdmin.class);
         bind(CommandSpawnAdmin.class);
         bind(CommandMapVote.class);
+        bind(CommandSpawnLink.class);
     }
 
     @Singleton
@@ -51,6 +52,7 @@ public class CommandsModule extends AbstractModule {
         commandsManager.getBuilder().addInvokeListener(new EnumPermissionInvokeListener());
         injector.getAllBindings().values().forEach(binding -> bindGuiceToIntake(commandsManager, binding));
         commandsManager.addExceptionListener(i18nCommandExceptionListener());
+        commandsManager.getHelpProvider().setMetaTranslator((key, locale) -> I18n.loc(locale, key));
         return commandsManager;
     }
 
