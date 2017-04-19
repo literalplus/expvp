@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.spawn.button;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.misc.XyLocation;
@@ -100,12 +101,18 @@ public class YamlVoteButtonService implements VoteButtonService {
 
     @Override
     public void setButton(Location location, MapSpawn spawn) {
-        set(new YamlVoteButton(XyLocation.of(location), spawn));
+        Preconditions.checkNotNull(location, "location");
+        if (spawn != null) {
+            set(new YamlVoteButton(XyLocation.of(location), spawn));
+        } else {
+            removeButton(location);
+        }
         saveConfig();
     }
 
     @Override
     public void removeButton(Location location) {
+        Preconditions.checkNotNull(location, "location");
         XyLocation xyLoc = XyLocation.of(location);
         buttons.remove(xyLoc);
         config.set(xyLoc.serializeToString(), null);
@@ -118,11 +125,13 @@ public class YamlVoteButtonService implements VoteButtonService {
 
     @Override
     public void startLinkingSession(Player player, MapSpawn spawn) {
+        Preconditions.checkNotNull(player, "player");
         linkingSessions.put(player.getUniqueId(), spawn);
     }
 
     @Override
     public Optional<MapSpawn> getLinkingSession(Player player) {
+        Preconditions.checkNotNull(player, "player");
         return Optional.ofNullable(linkingSessions.get(player.getUniqueId()));
     }
 }

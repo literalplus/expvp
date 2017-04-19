@@ -11,8 +11,10 @@ package me.minotopia.expvp.command;
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import li.l1t.common.intake.provider.annotation.Sender;
+import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.button.VoteButtonService;
+import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import org.bukkit.entity.Player;
@@ -35,6 +37,7 @@ public class CommandSpawnLink {
     @Command(aliases = "link",
             desc = "admin!splink.link.desc", help = "admin!splink.link.help",
             usage = "admin!splink.link.usage", min = 1)
+    @EnumRequires(Permission.ADMIN_SPAWN)
     public void link(@Sender Player player, MapSpawn spawn) {
         buttons.startLinkingSession(player, spawn);
         I18n.sendLoc(player, Format.success("admin!spawn.link.session-start"));
@@ -42,6 +45,7 @@ public class CommandSpawnLink {
 
     @Command(aliases = "unlink",
             desc = "admin!splink.link.desc", help = "admin!splink.link.help")
+    @EnumRequires(Permission.ADMIN_SPAWN)
     public void unlink(@Sender Player player) {
         buttons.startLinkingSession(player, null);
         I18n.sendLoc(player, Format.success("admin!spawn.unlink.session-start"));
