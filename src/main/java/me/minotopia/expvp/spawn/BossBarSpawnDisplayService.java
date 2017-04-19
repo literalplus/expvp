@@ -10,6 +10,7 @@ package me.minotopia.expvp.spawn;
 
 import com.google.inject.Inject;
 import li.l1t.common.i18n.Message;
+import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
@@ -40,24 +41,26 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     private final SpawnChangeService spawnChangeService;
     private final Server server;
     private final DisplayNameService names;
+    private final TaskService tasks;
 
     @Inject
     public BossBarSpawnDisplayService(SpawnService spawnService, SpawnChangeService spawnChangeService,
-                                      Server server, DisplayNameService names, PlayerInitService initService) {
+                                      Server server, DisplayNameService names, PlayerInitService initService, TaskService tasks) {
         this.spawnService = spawnService;
         this.spawnChangeService = spawnChangeService;
         this.server = server;
         this.names = names;
+        this.tasks = tasks;
         initService.registerInitHandler(player -> updateForAllPlayers());
     }
 
     @Override
     public void updateForAllPlayers() {
+        resetAllBars();
         if (spawnService.getCurrentSpawn().isPresent()) {
             setWorldTimeBasedOnMapProgress();
+            tasks.serverThread(this::updatePlayersBossBars); //removing and instantly adding doesn't seem to work well
             updatePlayersBossBars();
-        } else {
-            resetAllBars();
         }
     }
 
@@ -81,7 +84,6 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
         TextComponent wrapperComponent = new TextComponent(TextComponent.fromLegacyText(message));
         // the method with the collection of players does. not. support. 1.8. should find another lib
         players.forEach(player -> {
-            BossBarAPI.removeAllBars(player);
             BossBarAPI.addBar(
                     player, wrapperComponent, BossBarAPI.Color.BLUE, BossBarAPI.Style.PROGRESS, fractionProgress
             );
