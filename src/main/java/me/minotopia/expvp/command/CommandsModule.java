@@ -52,7 +52,9 @@ public class CommandsModule extends AbstractModule {
         commandsManager.getBuilder().addInvokeListener(new EnumPermissionInvokeListener());
         injector.getAllBindings().values().forEach(binding -> bindGuiceToIntake(commandsManager, binding));
         commandsManager.addExceptionListener(i18nCommandExceptionListener());
-        commandsManager.getHelpProvider().setMetaTranslator((key, locale) -> I18n.loc(locale, key));
+        commandsManager.getHelpProvider().setMetaTranslator(
+                (key, locale) -> key == null || key.isEmpty() ? key : I18n.loc(locale, key)
+        );
         return commandsManager;
     }
 
