@@ -53,7 +53,7 @@ public class CommandsModule extends AbstractModule {
         injector.getAllBindings().values().forEach(binding -> bindGuiceToIntake(commandsManager, binding));
         commandsManager.addExceptionListener(i18nCommandExceptionListener());
         commandsManager.getHelpProvider().setMetaTranslator(
-                (key, locale) -> key == null || key.isEmpty() ? key : I18n.loc(locale, key)
+                (key, locale) -> key == null || !key.contains("!") ? key : I18n.loc(locale, key)
         );
         return commandsManager;
     }
