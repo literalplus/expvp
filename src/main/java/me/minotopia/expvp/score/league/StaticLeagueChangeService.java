@@ -13,7 +13,6 @@ import com.google.inject.Inject;
 import li.l1t.common.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
-import me.minotopia.expvp.api.respawn.RespawnService;
 import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.api.score.league.LeagueChanger;
 import me.minotopia.expvp.i18n.Format;
@@ -38,13 +37,13 @@ class StaticLeagueChangeService {
     private final DisplayNameService names;
     private final Map<League, LeagueChanger> leagueChangers = new HashMap<>();
     //can't use EnumMap because that would be Map<StaticLeague, LeagueChanger>, but that doesn't conform to EnumMap<League, LeagueChanger>
-    private final RespawnService respawnService;
+    private final LeagueChangeDisplayQueue leagueChangeDisplayQueue;
 
     @Inject
-    public StaticLeagueChangeService(SessionProvider sessionProvider, DisplayNameService names, RespawnService respawnService) {
+    public StaticLeagueChangeService(SessionProvider sessionProvider, DisplayNameService names, LeagueChangeDisplayQueue leagueChangeDisplayQueue) {
         this.sessionProvider = sessionProvider;
         this.names = names;
-        this.respawnService = respawnService;
+        this.leagueChangeDisplayQueue = leagueChangeDisplayQueue;
         putDefaultChanger(StaticLeague.WOOD);
         putDefaultChanger(StaticLeague.STONE);
         putDefaultChanger(StaticLeague.EMERALD);
@@ -76,7 +75,7 @@ class StaticLeagueChangeService {
         sessionProvider.inSession(ignored -> {
             setPlayerDataLeague(playerData, newLeague);
         });
-        respawnService.queueLeagueChange(player.getUniqueId());
+        leagueChangeDisplayQueue.queueLeagueChange(player.getUniqueId());
         I18n.sendLoc(player, Format.broadcast(Message.of("score!league.change.up", names.displayName(newLeague))));
     }
 
@@ -89,7 +88,7 @@ class StaticLeagueChangeService {
         sessionProvider.inSession(ignored -> {
             setPlayerDataLeague(playerData, newLeague);
         });
-        respawnService.unqueueLeagueChange(player.getUniqueId());
+        leagueChangeDisplayQueue.unqueueLeagueChange(player.getUniqueId());
         I18n.sendLoc(player, Format.broadcast(Message.of("score!league.change.down", names.displayName(newLeague))));
     }
 }

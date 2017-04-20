@@ -10,8 +10,6 @@ package me.minotopia.expvp.api.respawn;
 
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 /**
  * Handles special effects on players respawning.
  *
@@ -45,13 +43,4 @@ public interface RespawnService {
      * @param player the player to respawn
      */
     void startPostRespawn(Player player);
-
-    /**
-     * Queues a league change for fancy display after given player has respawned.
-     *
-     * @param playerId the unique id of the player to notify upon respawn
-     */
-    void queueLeagueChange(UUID playerId);
-
-    void unqueueLeagueChange(UUID playerId);
 }
