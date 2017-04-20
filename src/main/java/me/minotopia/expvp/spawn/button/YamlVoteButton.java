@@ -12,6 +12,9 @@ import com.google.common.base.Preconditions;
 import li.l1t.common.misc.XyLocation;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.button.VoteButton;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -32,7 +35,7 @@ public class YamlVoteButton implements VoteButton {
     }
 
     public void saveTo(YamlConfiguration config) {
-        config.set(location.serializeToString(), spawn.getId());
+        config.set(serializeLocation(location), spawn.getId());
     }
 
     @Override
@@ -68,5 +71,24 @@ public class YamlVoteButton implements VoteButton {
     @Override
     public int hashCode() {
         return location.hashCode();
+    }
+
+    public static String serializeLocation(Location location) {
+        return location.getWorld() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ();
+    }
+
+    public static XyLocation deserializeLocation(String input) {
+        Preconditions.checkNotNull(input, "input");
+        String[] parts = input.split("_");
+        Preconditions.checkArgument(parts.length == 4, "expected 4 parts in {}", input);
+        World world = Bukkit.getWorld(parts[0]);
+        Preconditions.checkNotNull(world, "world with name {} from {}", parts[0], input);
+        try {
+            return new XyLocation(
+                    world, Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])
+            );
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("argument not a number in " + input, e);
+        }
     }
 }

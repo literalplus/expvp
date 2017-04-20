@@ -12,7 +12,6 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.misc.XyLocation;
-import li.l1t.common.util.LocationHelper;
 import li.l1t.common.util.config.YamlHelper;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.spawn.MapSpawn;
@@ -74,12 +73,13 @@ public class YamlVoteButtonService implements VoteButtonService {
 
     private void loadConfig() {
         config.getValues(false).entrySet().stream()
-                .map(e -> new HashMap.SimpleEntry<>(LocationHelper.deserialize(e.getKey()), String.valueOf(e.getValue())))
-                .forEach(e ->
-                        spawnService.getSpawnById(e.getValue())
-                                .map(spawn -> new YamlVoteButton(e.getKey(), spawn))
-                                .ifPresent(this::set)
-                );
+                .map(e -> new HashMap.SimpleEntry<>(
+                        YamlVoteButton.deserializeLocation(e.getKey()), String.valueOf(e.getValue())
+                )).forEach(e ->
+                spawnService.getSpawnById(e.getValue())
+                        .map(spawn -> new YamlVoteButton(e.getKey(), spawn))
+                        .ifPresent(this::set)
+        );
     }
 
     private void set(YamlVoteButton button) {
@@ -115,7 +115,7 @@ public class YamlVoteButtonService implements VoteButtonService {
         Preconditions.checkNotNull(location, "location");
         XyLocation xyLoc = XyLocation.of(location);
         buttons.remove(xyLoc);
-        config.set(xyLoc.serializeToString(), null);
+        config.set(YamlVoteButton.serializeLocation(location), null);
     }
 
     @Override
