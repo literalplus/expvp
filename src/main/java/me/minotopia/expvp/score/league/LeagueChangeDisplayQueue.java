@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.score.league;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ import java.util.UUID;
 public class LeagueChangeDisplayQueue {
     private final Set<UUID> pendingLeagueChanges = new HashSet<>();
 
+    @Inject
     public LeagueChangeDisplayQueue(PlayerInitService initService) {
         initService.registerDeInitHandler(this::purgePlayerLeagueChangeCache);
     }
