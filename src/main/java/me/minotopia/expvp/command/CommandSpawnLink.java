@@ -35,8 +35,8 @@ public class CommandSpawnLink {
     }
 
     @Command(aliases = "link",
-            desc = "admin!splink.link.desc", help = "admin!splink.link.help",
-            usage = "admin!splink.link.usage", min = 1)
+            desc = "cmd!splink.link.desc", help = "cmd!splink.link.help",
+            usage = "cmd!splink.link.usage", min = 1)
     @EnumRequires(Permission.ADMIN_SPAWN)
     public void link(@Sender Player player, MapSpawn spawn) {
         buttons.startLinkingSession(player, spawn);
@@ -44,7 +44,7 @@ public class CommandSpawnLink {
     }
 
     @Command(aliases = "unlink",
-            desc = "admin!splink.link.desc", help = "admin!splink.link.help")
+            desc = "cmd!splink.link.desc", help = "cmd!splink.link.help")
     @EnumRequires(Permission.ADMIN_SPAWN)
     public void unlink(@Sender Player player) {
         buttons.startLinkingSession(player, null);
