@@ -56,7 +56,8 @@ public class VoteButtonListener implements Listener {
     }
 
     private boolean isIrrelevant(PlayerInteractEvent event) {
-        return event.getAction() != Action.LEFT_CLICK_BLOCK ||
+        return (event.getAction() != Action.RIGHT_CLICK_BLOCK &&
+                event.getAction() != Action.LEFT_CLICK_BLOCK) ||
                 event.getClickedBlock() == null ||
                 event.getClickedBlock().getType() != Material.STONE_BUTTON;
     }

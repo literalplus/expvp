@@ -132,6 +132,6 @@ public class YamlVoteButtonService implements VoteButtonService {
     @Override
     public Optional<MapSpawn> getLinkingSession(Player player) {
         Preconditions.checkNotNull(player, "player");
-        return Optional.ofNullable(linkingSessions.get(player.getUniqueId()));
+        return Optional.ofNullable(linkingSessions.remove(player.getUniqueId()));
     }
 }
