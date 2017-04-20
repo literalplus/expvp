@@ -76,7 +76,7 @@ public class MessageService {
 
     public String getMessage(Locale locale, String key, Object... args) {
         Preconditions.checkNotNull(locale, "locale");
-        if (isDebugLocale(locale)) {
+        if (isDebugLocale(locale) || !key.contains("!")) {
             return messageKeyString(key, args);
         }
         MessagePath path = MessagePath.of(key);
