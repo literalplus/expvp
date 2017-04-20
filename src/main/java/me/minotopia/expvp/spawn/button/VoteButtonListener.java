@@ -78,7 +78,7 @@ public class VoteButtonListener implements Listener {
             event.setCancelled(true);
             MapSpawn spawn = voteButton.getSpawn();
             votes.castVoteFor(player.getUniqueId(), spawn);
-            I18n.sendLoc(player, "spawn!vote.voted", names.displayName(spawn));
+            I18n.sendLoc(player, Format.success("spawn!vote.voted", names.displayName(spawn)));
         };
     }
 }
