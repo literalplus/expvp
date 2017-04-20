@@ -100,12 +100,12 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
                     "§e§l➩ §eLiga: §a%s §eExp: §a%d §eTP: §a%d §eSprache: §a%s",
                     playerData.getLeagueName(), playerData.getExp(), playerData.getTalentPoints(), playerData.getLocale().getDisplayName()
             );
-            int totalKD = playerData.getTotalKills() / (playerData.getTotalDeaths() == 0 ? 1 : playerData.getTotalDeaths());
+            double totalKD = computeKDRatio(playerData.getTotalKills(), playerData.getTotalDeaths());
             formatMessage(sender,
                     "§e§l➩ §aGesamte §eKills: §a%d §eDeaths: §a%d §eK/D: §a%.2f",
                     playerData.getTotalKills(), playerData.getTotalDeaths(), totalKD
             );
-            int currentKD = playerData.getCurrentKills() / (playerData.getCurrentDeaths() == 0 ? 1 : playerData.getCurrentDeaths());
+            double currentKD = computeKDRatio(playerData.getCurrentKills(), playerData.getCurrentDeaths());
             formatMessage(sender,
                     "§e§l➩ §aAktuelle §eKills: §a%d §eDeaths: §a%d §eK/D: §a%.2f",
                     playerData.getCurrentKills(), playerData.getCurrentDeaths(), currentKD
@@ -115,6 +115,10 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
                     playerData.getSkills().stream().map(ObtainedSkill::getSkillId).collect(Collectors.joining("§e, §a"))
             );
         });
+    }
+
+    private double computeKDRatio(int kills, int deaths) {
+        return (double) kills / (deaths == 0 ? 1D : (double) deaths);
     }
 
     private void formatMessage(CommandSender sender, String format, Object... args) {
