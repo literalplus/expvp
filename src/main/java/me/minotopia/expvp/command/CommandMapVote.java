@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
-import li.l1t.common.i18n.Message;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.spawn.MapSpawn;
@@ -73,11 +72,9 @@ public class CommandMapVote {
 
     private void sendSpawnItem(CommandSender sender, MapSpawn spawn) {
         long voteCount = voteService.findVoteCount(spawn);
-        Message itemMessage = Message.of("spawn!spawn-item",
-                names.displayName(spawn), Plurals.plural("spawn!vote.vote", voteCount)
-        );
         BaseComponent[] nameComponents = TextComponent.fromLegacyText(
-                I18n.loc(sender, Format.listItem(itemMessage)) + " "
+                I18n.loc(sender, Format.listItem("spawn!vote.spawn-item",
+                        names.displayName(spawn), Plurals.plural("spawn!vote.vote", voteCount))) + " "
         );
         BaseComponent[] buttonComponents = new XyComponentBuilder(I18n.loc(sender, "spawn!spawn-button"))
                 .color(ChatColor.GREEN)
