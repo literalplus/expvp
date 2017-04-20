@@ -74,15 +74,15 @@ public class YamlVoteButton implements VoteButton {
     }
 
     public static String serializeLocation(Location location) {
-        return location.getWorld() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ();
+        return location.getWorld().getName() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ();
     }
 
     public static XyLocation deserializeLocation(String input) {
         Preconditions.checkNotNull(input, "input");
         String[] parts = input.split("_");
-        Preconditions.checkArgument(parts.length == 4, "expected 4 parts in {}", input);
+        Preconditions.checkArgument(parts.length == 4, "expected 4 parts in %s", input);
         World world = Bukkit.getWorld(parts[0]);
-        Preconditions.checkNotNull(world, "world with name {} from {}", parts[0], input);
+        Preconditions.checkNotNull(world, "world with name %s from %s", parts[0], input);
         try {
             return new XyLocation(
                     world, Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])
