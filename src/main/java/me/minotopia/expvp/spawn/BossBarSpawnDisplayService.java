@@ -100,7 +100,7 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
                 lastChange, spawnChangeService.findNextSpawnChangeTime()
         );
         Duration passedDuration = Duration.between(lastChange, LocalDateTime.now());
-        return ((float) passedDuration.toMinutes()) / ((float) fullDuration.toMinutes());
+        return ((float) passedDuration.getSeconds()) / ((float) fullDuration.getSeconds());
     }
 
     private void resetAllBars() {
