@@ -55,7 +55,9 @@ public class EPRootModule extends AbstractModule {
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
         bind(LocaleChangeListener.class);
-        bind(XLoginRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
+        if (PreferencesHolder.getConsumer() != null) { // unit tests
+            bind(XLoginRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
+        }
         install(new ModelModule());
         install(new SkillModule());
         install(new SkillTreeModule());
