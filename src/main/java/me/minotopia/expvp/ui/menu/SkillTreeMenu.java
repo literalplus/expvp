@@ -27,9 +27,8 @@ import me.minotopia.expvp.ui.element.skill.ObtainableSkillElement;
 import me.minotopia.expvp.ui.renderer.TreeStructureRenderer;
 import me.minotopia.expvp.ui.renderer.exception.RenderingException;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.IntStream;
 
@@ -57,12 +56,17 @@ public class SkillTreeMenu extends AbstractEPMenu {
         addElement(1, createTreeInfoElement(manager, talentPoints));
     }
 
-    @NotNull
     private Placeholder createTreeInfoElement(SkillTreeManager manager, TalentPointService talentPoints) {
-        ItemStack icon = new ItemStackFactory(manager.createIconFor(tree, getPlayer()))
-                .amount(talentPoints.getCurrentTalentPointCount(getPlayer()))
-                .produce();
-        return new Placeholder(icon);
+        ItemStackFactory factory = new ItemStackFactory(manager.createIconFor(tree, getPlayer()));
+        int talentPointCount = talentPoints.getCurrentTalentPointCount(getPlayer());
+        if (talentPointCount > 0) {
+            factory.enchantUnsafe(Enchantment.WATER_WORKER, 1).hideEnchants()
+                    .amount(talentPointCount)
+                    .lore(I18n.loc(getPlayer(), "core!inv.tree.tp-count", talentPointCount));
+        } else {
+            factory.lore(I18n.loc(getPlayer(), "core!inv.tree.no-tp"));
+        }
+        return new Placeholder(factory.produce());
     }
 
     private void applyRenderer() {
