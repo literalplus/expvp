@@ -16,9 +16,11 @@ import me.minotopia.expvp.api.handler.kit.compilation.KitElementBuilder;
 import me.minotopia.expvp.api.model.PlayerData;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -61,4 +63,10 @@ public class SkillKitCompilation implements KitCompilation {
         return slotMap.computeIfAbsent(slotId, id -> new ItemKitElementBuilder(type, id));
     }
 
+    @Override
+    public KitElement snapshotOf(int slotId) {
+        return Optional.ofNullable(slotMap.get(slotId))
+                .map(KitElementBuilder::build)
+                .orElse(new SimpleKitElement(new ItemStack(Material.AIR)));
+    }
 }

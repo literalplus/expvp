@@ -10,7 +10,6 @@ package me.minotopia.expvp.handler.kit.compilation;
 
 import me.minotopia.expvp.api.handler.kit.compilation.KitBaseline;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
-import me.minotopia.expvp.api.handler.kit.compilation.KitElementBuilder;
 import org.bukkit.Material;
 
 /**
@@ -39,7 +38,7 @@ public class StaticKitBaseline implements KitBaseline {
         compilation.slot(ARMOR_BOOTS_ID, Material.LEATHER_BOOTS).include();
     }
 
-    private KitElementBuilder baselineHotbar(KitCompilation compilation) {
-        return compilation.slot(HOTBAR_LEFTMOST_ID, Material.WOOD_SWORD);
+    private void baselineHotbar(KitCompilation compilation) {
+        compilation.slot(HOTBAR_LEFTMOST_ID, Material.WOOD_SWORD);
     }
 }

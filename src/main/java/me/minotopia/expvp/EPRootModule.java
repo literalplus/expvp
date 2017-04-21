@@ -13,6 +13,8 @@ import com.comphenix.protocol.ProtocolManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.util.Providers;
 import li.l1t.common.util.task.TaskService;
+import li.l1t.xlogin.common.PreferencesHolder;
+import li.l1t.xlogin.common.api.XLoginRepository;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.misc.PlayerInitService;
@@ -53,6 +55,7 @@ public class EPRootModule extends AbstractModule {
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
         bind(LocaleChangeListener.class);
+        bind(XLoginRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
         install(new ModelModule());
         install(new SkillModule());
         install(new SkillTreeModule());

@@ -9,6 +9,7 @@
 package me.minotopia.expvp.score.league;
 
 import me.minotopia.expvp.api.score.league.League;
+import org.bukkit.Material;
 
 import java.util.Optional;
 
@@ -20,21 +21,23 @@ import java.util.Optional;
  * @since 2017-03-29
  */
 public enum StaticLeague implements League {
-    WOOD(-100, 1, 1),
-    STONE(0, 1, 1),
-    EMERALD(200, 2, 2),
-    DIAMOND(300, 2, 3),
-    OBSIDIAN(400, 2, 4),
-    BEDROCK(OBSIDIAN.getMinExp(), 3, 5);
+    WOOD(-100, 1, 1, Material.WOOD),
+    STONE(0, 1, 1, Material.STONE),
+    EMERALD(200, 2, 2, Material.EMERALD_BLOCK),
+    DIAMOND(300, 2, 3, Material.DIAMOND_BLOCK),
+    OBSIDIAN(400, 2, 4, Material.OBSIDIAN),
+    BEDROCK(OBSIDIAN.getMinExp(), 3, 5, Material.BEDROCK);
 
     private final int minExp;
     private final int killExpReward;
     private final int deathExpPenalty;
+    private final Material displayMaterial;
 
-    StaticLeague(int minExp, int killExpReward, int deathExpPenalty) {
+    StaticLeague(int minExp, int killExpReward, int deathExpPenalty, Material displayMaterial) {
         this.minExp = minExp;
         this.killExpReward = killExpReward;
         this.deathExpPenalty = deathExpPenalty;
+        this.displayMaterial = displayMaterial;
     }
 
     public static StaticLeague getDefaultLeague() {
@@ -54,6 +57,11 @@ public enum StaticLeague implements League {
     @Override
     public int getDeathExpPenalty() {
         return deathExpPenalty;
+    }
+
+    @Override
+    public Material getDisplayMaterial() {
+        return displayMaterial;
     }
 
     public Optional<League> next() {

@@ -35,10 +35,15 @@ public class SkillKitCompiler implements KitCompiler {
 
     @Override
     public KitCompilation compile(Player player, PlayerData data) {
-        SkillKitCompilation compilation = new SkillKitCompilation(player, data);
-        baseline.baseline(compilation);
+        SkillKitCompilation compilation = startCompilation(player, data);
         handlerService.handlersOfTypeStream(KitHandler.class, data)
                 .forEach(handler -> handler.handle(compilation));
+        return compilation;
+    }
+
+    private SkillKitCompilation startCompilation(Player player, PlayerData data) {
+        SkillKitCompilation compilation = new SkillKitCompilation(player, data);
+        baseline.baseline(compilation);
         return compilation;
     }
 }

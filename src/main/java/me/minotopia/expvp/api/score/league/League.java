@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.api.score.league;
 
+import org.bukkit.Material;
+
 import java.util.Optional;
 
 /**
@@ -24,6 +26,8 @@ public interface League {
     int getKillExpReward();
 
     int getDeathExpPenalty();
+
+    Material getDisplayMaterial();
 
     /**
      * @return the next league higher than this league

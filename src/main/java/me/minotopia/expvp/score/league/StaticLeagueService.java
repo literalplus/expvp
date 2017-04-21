@@ -45,7 +45,8 @@ public class StaticLeagueService implements LeagueService {
                 .orElse(StaticLeague.getDefaultLeague());
     }
 
-    private League getPlayerLeague(PlayerData playerData) {
+    @Override
+    public League getPlayerLeague(PlayerData playerData) {
         return getLeague(playerData.getLeagueName())
                 .orElseGet(StaticLeague::getDefaultLeague);
     }

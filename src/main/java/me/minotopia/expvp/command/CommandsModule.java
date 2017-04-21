@@ -42,6 +42,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandSpawnAdmin.class);
         bind(CommandMapVote.class);
         bind(CommandSpawnLink.class);
+        bind(CommandMainMenu.class);
     }
 
     @Singleton

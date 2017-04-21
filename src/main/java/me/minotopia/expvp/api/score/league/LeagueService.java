@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.api.score.league;
 
+import me.minotopia.expvp.api.model.PlayerData;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -25,6 +26,8 @@ public interface LeagueService {
      * invalid
      */
     League getCurrentLeague(Player player);
+
+    League getPlayerLeague(PlayerData playerData);
 
     /**
      * @param leagueName the name of the league to get
