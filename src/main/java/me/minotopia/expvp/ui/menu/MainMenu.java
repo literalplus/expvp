@@ -14,7 +14,6 @@ import li.l1t.common.inventory.gui.element.MenuElement;
 import li.l1t.common.inventory.gui.element.Placeholder;
 import li.l1t.common.shared.uuid.UUIDRepository;
 import li.l1t.common.util.inventory.ItemStackFactory;
-import li.l1t.xlogin.common.api.XLoginRepository;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompiler;
@@ -118,21 +117,21 @@ public class MainMenu extends AbstractEPMenu {
         private final LeagueService leagues;
         private final DisplayNameService names;
         private final KitCompiler kitCompiler;
-        private final XLoginRepository xLogin;
+        private final UUIDRepository uuidRepository;
         private final SelectTreeMenu.Factory selectTreeMenuFactory;
         private final FriendService friendService;
         private final PlayerDataService players;
 
         @Inject
         public Factory(SessionProvider sessionProvider, Plugin plugin, LeagueService leagues, DisplayNameService names,
-                       KitCompiler kitCompiler, XLoginRepository xLogin, SelectTreeMenu.Factory selectTreeMenuFactory,
+                       KitCompiler kitCompiler, UUIDRepository uuidRepository, SelectTreeMenu.Factory selectTreeMenuFactory,
                        FriendService friendService, PlayerDataService players) {
             this.sessionProvider = sessionProvider;
             this.plugin = plugin;
             this.leagues = leagues;
             this.names = names;
             this.kitCompiler = kitCompiler;
-            this.xLogin = xLogin;
+            this.uuidRepository = uuidRepository;
             this.selectTreeMenuFactory = selectTreeMenuFactory;
             this.friendService = friendService;
             this.players = players;
@@ -141,7 +140,7 @@ public class MainMenu extends AbstractEPMenu {
         public MainMenu createMenuFor(Player player) {
             return sessionProvider.inSessionAnd(ignored -> {
                 MainMenu menu = new MainMenu(
-                        plugin, player, leagues, names, kitCompiler, xLogin, selectTreeMenuFactory
+                        plugin, player, leagues, names, kitCompiler, uuidRepository, selectTreeMenuFactory
                 );
                 PlayerData ownData = players.findOrCreateData(player.getUniqueId());
                 PlayerData friendData = friendService.findFriend(ownData).orElse(null);
