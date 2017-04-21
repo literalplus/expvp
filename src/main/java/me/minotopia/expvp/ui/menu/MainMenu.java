@@ -65,7 +65,7 @@ public class MainMenu extends AbstractEPMenu {
         addElementXY(8, 1, new DeathExpElement(getPlayer(), ownLeague));
         makePlaceholderRow(2);
         addElementXY(2, 4, new StatsTopLinkButton(getPlayer()));
-        addElementXY(4, 4, new TreeSelectLinkButton(getPlayer(), selectTreeMenuFactory));
+        addElementXY(4, 4, new TreeSelectLinkButton(getPlayer(), ownData, selectTreeMenuFactory));
     }
 
     private void makePlaceholderColumn(int fromY, int toY, int x) {
