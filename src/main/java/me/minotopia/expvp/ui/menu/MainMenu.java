@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import li.l1t.common.inventory.SlotPosition;
 import li.l1t.common.inventory.gui.element.MenuElement;
 import li.l1t.common.inventory.gui.element.Placeholder;
+import li.l1t.common.shared.uuid.UUIDRepository;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import li.l1t.xlogin.common.api.XLoginRepository;
 import me.minotopia.expvp.api.friend.FriendService;
@@ -41,16 +42,16 @@ public class MainMenu extends AbstractEPMenu {
     private final LeagueService leagues;
     private final DisplayNameService names;
     private final KitCompiler kitCompiler;
-    private final XLoginRepository xLogin;
+    private final UUIDRepository uuidRepository;
     private final SelectTreeMenu.Factory selectTreeMenuFactory;
 
     public MainMenu(Plugin plugin, Player player, LeagueService leagues, DisplayNameService names,
-                    KitCompiler kitCompiler, XLoginRepository xLogin, SelectTreeMenu.Factory selectTreeMenuFactory) {
+                    KitCompiler kitCompiler, UUIDRepository uuidRepository, SelectTreeMenu.Factory selectTreeMenuFactory) {
         super(plugin, I18n.loc(player, "core!inv.main.title"), player);
         this.leagues = leagues;
         this.names = names;
         this.kitCompiler = kitCompiler;
-        this.xLogin = xLogin;
+        this.uuidRepository = uuidRepository;
         this.selectTreeMenuFactory = selectTreeMenuFactory;
     }
 
@@ -87,7 +88,7 @@ public class MainMenu extends AbstractEPMenu {
 
     private void addHumanElements(PlayerData subject, int row) {
         if (subject != null) {
-            addElementXY(4, row, new PlayerHeadElement(getPlayer(), xLogin.getName(subject.getUniqueId())));
+            addElementXY(4, row, new PlayerHeadElement(getPlayer(), uuidRepository.getName(subject.getUniqueId())));
             addElementXY(5, row, new LeagueBlockElement(getPlayer(), leagues.getPlayerLeague(subject), names));
             addElementXY(6, row, new ExpDisplayElement(getPlayer(), subject));
         } else {

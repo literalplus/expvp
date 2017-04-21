@@ -12,12 +12,13 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.util.Providers;
+import li.l1t.common.shared.uuid.UUIDRepositories;
+import li.l1t.common.shared.uuid.UUIDRepository;
 import li.l1t.common.util.task.TaskService;
-import li.l1t.xlogin.common.PreferencesHolder;
-import li.l1t.xlogin.common.api.XLoginRepository;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.misc.PlayerInitService;
+import me.minotopia.expvp.friend.FriendModule;
 import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.i18n.EPDisplayNameService;
 import me.minotopia.expvp.i18n.LocaleChangeListener;
@@ -55,9 +56,7 @@ public class EPRootModule extends AbstractModule {
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
         bind(LocaleChangeListener.class);
-        if (PreferencesHolder.getConsumer() != null) { // unit tests
-            bind(XLoginRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
-        }
+        bind(UUIDRepository.class).toInstance(UUIDRepositories.getRepository());
         install(new ModelModule());
         install(new SkillModule());
         install(new SkillTreeModule());
@@ -67,6 +66,7 @@ public class EPRootModule extends AbstractModule {
         install(new RespawnModule());
         install(new SpawnModule());
         install(new PreventionModule());
+        install(new FriendModule());
     }
 
     private void bindPluginProperties() {
