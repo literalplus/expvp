@@ -30,8 +30,7 @@ public class CommandSkills {
     }
 
     @Command(aliases = "",
-            desc = "Zeigt Skilltrees",
-            help = "Zeigt ein Menü,\nin dem Skilltrees\nausgewählt und Skills\nerforscht werden können.")
+            desc = "cmd!skills.root.desc")
     public void newSkill(SelectTreeMenu.Factory menuFactory, @Sender Player player)
             throws IOException {
         menuFactory.openForResearch(player);

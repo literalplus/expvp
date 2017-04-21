@@ -11,8 +11,12 @@ package me.minotopia.expvp.command;
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import li.l1t.common.intake.provider.annotation.Sender;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.ui.menu.MainMenu;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.time.LocalDateTime;
 
 /**
  * A command that allows players to open the Expvp main menu.
@@ -32,5 +36,12 @@ public class CommandMainMenu {
     @Command(aliases = "", desc = "cmd!menu.root.desc")
     public void root(@Sender Player player) {
         menuFactory.openMenuFor(player);
+    }
+
+    @Command(aliases = "info", desc = "cmd!menu.info.desc")
+    public void info(EPPlugin plugin, CommandSender sender) {
+        sender.sendMessage("§6Expvp Minecraft Game Mode for MinoTopia.me");
+        sender.sendMessage("§6Copyright (C) 2016-" + LocalDateTime.now().getYear() + " Literallie");
+        sender.sendMessage("§e" + plugin.getPluginVersion());
     }
 }

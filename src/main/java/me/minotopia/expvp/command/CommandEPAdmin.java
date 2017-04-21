@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 import com.sk89q.intake.Command;
 import li.l1t.common.i18n.Message;
 import li.l1t.common.intake.provider.annotation.Sender;
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
@@ -27,7 +26,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -142,12 +140,5 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
         I18n.sendLoc(sender, Format.success(Message.ofText(
                 "Ja mehr oder weniger sollten jetzt zumindest die schlimmsten Caches geleert sein."
         )));
-    }
-
-    @Command(aliases = "info", desc = "Zeigt Versionsinformationen.")
-    public void info(EPPlugin plugin, CommandSender sender) {
-        sender.sendMessage("§6Expvp Minecraft Game Mode for MinoTopia.me");
-        sender.sendMessage("§6Copyright (C) 2016-" + LocalDateTime.now().getYear() + " Literallie");
-        sender.sendMessage("§e" + plugin.getPluginVersion());
     }
 }
