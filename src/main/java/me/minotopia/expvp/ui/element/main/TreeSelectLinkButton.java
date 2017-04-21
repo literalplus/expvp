@@ -12,9 +12,11 @@ import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.element.MenuElement;
 import li.l1t.common.inventory.gui.holder.ElementHolder;
 import li.l1t.common.util.inventory.ItemStackFactory;
+import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.ui.menu.SelectTreeMenu;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,11 +31,15 @@ public class TreeSelectLinkButton implements MenuElement {
     private final SelectTreeMenu.Factory selectTreeMenuFactory;
     private final ItemStack stack;
 
-    public TreeSelectLinkButton(Player player, SelectTreeMenu.Factory selectTreeMenuFactory) {
+    public TreeSelectLinkButton(Player player, PlayerData playerData, SelectTreeMenu.Factory selectTreeMenuFactory) {
         this.selectTreeMenuFactory = selectTreeMenuFactory;
-        this.stack = new ItemStackFactory(Material.BREWING_STAND_ITEM)
-                .displayName(I18n.loc(player, "core!tree-select.title"))
-                .produce();
+        ItemStackFactory factory = new ItemStackFactory(Material.BREWING_STAND_ITEM)
+                .displayName(I18n.loc(player, "core!tree-select.title"));
+        if (playerData.getTalentPoints() > 0) {
+            factory.enchantUnsafe(Enchantment.WATER_WORKER, 1).hideEnchants()
+                    .amount(playerData.getTalentPoints());
+        }
+        this.stack = factory.produce();
     }
 
     @Override
