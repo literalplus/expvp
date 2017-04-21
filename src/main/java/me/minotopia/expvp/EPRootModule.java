@@ -15,6 +15,7 @@ import com.google.inject.util.Providers;
 import li.l1t.common.shared.uuid.UUIDRepositories;
 import li.l1t.common.shared.uuid.UUIDRepository;
 import li.l1t.common.util.task.TaskService;
+import li.l1t.xlogin.common.PreferencesHolder;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.misc.PlayerInitService;
@@ -56,7 +57,11 @@ public class EPRootModule extends AbstractModule {
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
         bind(LocaleChangeListener.class);
-        bind(UUIDRepository.class).toInstance(UUIDRepositories.getRepository());
+        if (PreferencesHolder.getConsumer() != null) { // unit tests
+            bind(UUIDRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
+        } else {
+            bind(UUIDRepository.class).toInstance(UUIDRepositories.MOJANG_UUID_REPOSITORY);
+        }
         install(new ModelModule());
         install(new SkillModule());
         install(new SkillTreeModule());
