@@ -12,12 +12,7 @@ import com.google.common.base.Preconditions;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Caches resource bundles, forwarding to a loader for cache misses.
@@ -27,23 +22,29 @@ import java.util.ResourceBundle;
  */
 class BundleCache {
     private static final Logger LOGGER = LoggingManager.getLogger(BundleCache.class);
-    private final Map<String, Optional<CachedBundle>> fileBundles = new HashMap<>();
+    private final Map<String, Optional<CachedBundle>> customBundles = new HashMap<>();
     private final Map<String, Optional<CachedBundle>> defaultBundles = new HashMap<>();
-    private ClassLoader fileLoader;
+    private ClassLoader defaultLoader;
+    private ClassLoader customLoader;
 
-    public void setFileLoader(ClassLoader fileLoader) {
-        Preconditions.checkNotNull(fileLoader, "fileLoader");
-        this.fileLoader = fileLoader;
+    public void setDefaultLoader(ClassLoader defaultLoader) {
+        Preconditions.checkNotNull(defaultLoader, "defaultLoader");
+        this.defaultLoader = defaultLoader;
+    }
+
+    public void setCustomLoader(ClassLoader customLoader) {
+        Preconditions.checkNotNull(customLoader, "customLoader");
+        this.customLoader = customLoader;
     }
 
     public Optional<ResourceBundle> findBundleContaining(Locale locale, MessagePath path) {
-        return findFileBundleContaining(locale, path)
+        return findCustomBundleContaining(locale, path)
                 .map(Optional::of)
                 .orElseGet(() -> findDefaultsBundleContaining(locale, path));
     }
 
-    private Optional<ResourceBundle> findFileBundleContaining(Locale locale, MessagePath path) {
-        return getFromFile(path.bundle())
+    private Optional<ResourceBundle> findCustomBundleContaining(Locale locale, MessagePath path) {
+        return getCustom(path.bundle())
                 .map(bundle -> bundle.getBundleFor(locale))
                 .filter(bundle -> bundle.containsKey(path.key()));
     }
@@ -54,15 +55,15 @@ class BundleCache {
                 .filter(bundle -> bundle.containsKey(path.key()));
     }
 
-    private Optional<CachedBundle> getFromFile(String baseName) {
-        if (fileLoader == null) {
+    private Optional<CachedBundle> getCustom(String baseName) {
+        if (customLoader == null) {
             return Optional.empty();
         }
-        return fileBundles.computeIfAbsent(baseName, this::fileBundleFor);
+        return customBundles.computeIfAbsent(baseName, this::customBundleFor);
     }
 
-    private Optional<CachedBundle> fileBundleFor(String baseName) {
-        return bundleFor(baseName, fileLoader, "custom file");
+    private Optional<CachedBundle> customBundleFor(String baseName) {
+        return bundleFor(baseName, customLoader, "custom file");
     }
 
     private Optional<CachedBundle> bundleFor(String baseName, ClassLoader classLoader, String bundleTypeDesc) {
@@ -83,11 +84,11 @@ class BundleCache {
     }
 
     private Optional<CachedBundle> defaultsBundleFor(String baseName) {
-        return bundleFor("me.minotopia.expvp." + baseName, getClass().getClassLoader(), "default");
+        return bundleFor(baseName, defaultLoader, "default");
     }
 
     public void clear() {
-        fileBundles.clear();
+        customBundles.clear();
         defaultBundles.clear();
     }
 }

@@ -14,14 +14,15 @@ import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.net.MalformedURLException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Handles retrieval of messages from the correct resource bundle.
@@ -100,11 +101,43 @@ public class MessageService {
     public void setDataFolder(File dataFolder) {
         Preconditions.checkNotNull(dataFolder, "dataFolder");
         try {
-            bundleCache.setFileLoader(new URLClassLoader(new URL[]{dataFolder.toURI().toURL()}));
-        } catch (MalformedURLException e) {
+            bundleCache.setCustomLoader(folderClassLoader(dataFolder));
+            File defaultsFolder = new File(dataFolder, "defaults_do_not_edit");
+            copyDirectoryFromJarTo(defaultsFolder.toPath());
+            bundleCache.setDefaultLoader(folderClassLoader(defaultsFolder));
+        } catch (IOException | URISyntaxException e) {
             LOGGER.error("Invalid data folder of some sort: " + dataFolder.getAbsolutePath(), e);
-            throw new AssertionError("Invalid URL while in MessageService: " + dataFolder.getAbsolutePath(), e);
+            throw new AssertionError("I/O exception while in MessageService: " + dataFolder.getAbsolutePath(), e);
         }
+    }
+
+    private URLClassLoader folderClassLoader(File folder) throws IOException {
+        Files.createDirectories(folder.toPath());
+        return new URLClassLoader(new URL[]{folder.toURI().toURL()});
+    }
+
+    private void copyDirectoryFromJarTo(Path target) throws URISyntaxException, IOException {
+        URI resource = getClass().getResource("/").toURI();
+        FileSystem fileSystem = FileSystems.newFileSystem(
+                resource, Collections.<String, String>emptyMap()
+        );
+        Path jarPath = fileSystem.getPath("me", "minotopia", "expvp");
+        Files.walkFileTree(jarPath, new SimpleFileVisitor<Path>() {
+            private Path currentTarget;
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                currentTarget = target.resolve(jarPath.relativize(dir).toString());
+                Files.createDirectories(currentTarget);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.copy(file, target.resolve(jarPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 
     public void clearCache() {
