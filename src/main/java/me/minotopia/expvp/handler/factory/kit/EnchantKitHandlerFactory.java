@@ -39,7 +39,7 @@ public class EnchantKitHandlerFactory extends AbstractKitHandlerFactory {
     }
 
     private Enchantment enchantment(HandlerArgs args) {
-        String enchantmentName = args.arg(ENCHANTMENT_INDEX).toLowerCase().replaceAll("[ -]", "_");
+        String enchantmentName = args.arg(ENCHANTMENT_INDEX).toUpperCase().replaceAll("[ -]", "_");
         Enchantment enchantment = Enchantment.getByName(enchantmentName);
         if (enchantment == null) {
             throw new ArgumentFormatException(
