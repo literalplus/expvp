@@ -10,19 +10,26 @@ package me.minotopia.expvp.i18n;
 
 import com.google.common.base.Preconditions;
 import li.l1t.common.i18n.Message;
+import li.l1t.common.util.FileHelper;
 import me.minotopia.expvp.logging.LoggingManager;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
+import sun.net.www.protocol.file.FileURLConnection;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Handles retrieval of messages from the correct resource bundle.
@@ -103,7 +110,7 @@ public class MessageService {
         try {
             bundleCache.setCustomLoader(folderClassLoader(dataFolder));
             File defaultsFolder = new File(dataFolder, "defaults_do_not_edit");
-            copyDirectoryFromJarTo(defaultsFolder.toPath());
+            copyDirectoryFromJarTo(defaultsFolder);
             bundleCache.setDefaultLoader(folderClassLoader(defaultsFolder));
         } catch (IOException | URISyntaxException e) {
             LOGGER.error("Invalid data folder of some sort: " + dataFolder.getAbsolutePath(), e);
@@ -116,28 +123,75 @@ public class MessageService {
         return new URLClassLoader(new URL[]{folder.toURI().toURL()});
     }
 
-    private void copyDirectoryFromJarTo(Path target) throws URISyntaxException, IOException {
-        URI resource = getClass().getResource("").toURI();
-        FileSystem fileSystem = FileSystems.newFileSystem(
-                resource, Collections.<String, String>emptyMap()
-        );
-        Path jarPath = fileSystem.getPath("me", "minotopia", "expvp");
-        Files.walkFileTree(jarPath, new SimpleFileVisitor<Path>() {
-            private Path currentTarget;
+    private void copyDirectoryFromJarTo(File target) throws URISyntaxException, IOException {
+        copyResourcesRecursively(getClass().getResource("/lang/"), target);
+    }
 
-            @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                currentTarget = target.resolve(jarPath.relativize(dir).toString());
-                Files.createDirectories(currentTarget);
-                return FileVisitResult.CONTINUE;
-            }
+    private void copyResourcesRecursively(URL originUrl, File destination) throws IOException {
+        URLConnection urlConnection = originUrl.openConnection();
+        if (urlConnection instanceof JarURLConnection) {
+            copyJarResourcesRecursively(destination.toPath(), (JarURLConnection) urlConnection);
+        } else if (urlConnection instanceof FileURLConnection) {
+            FileHelper.copyFolder(new File(originUrl.getPath()), destination);
+        } else {
+            throw new IllegalArgumentException("URLConnection[" + urlConnection.getClass().getSimpleName() +
+                    "] is not a recognized/implemented connection type.");
+        }
+    }
 
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                Files.copy(file, target.resolve(jarPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
-                return FileVisitResult.CONTINUE;
+    private void copyJarResourcesRecursively(Path destination, JarURLConnection jarConnection) throws IOException {
+        JarFile jarFile = jarConnection.getJarFile();
+        enumerationAsStream(jarFile.entries())
+                .filter(jarEntry -> jarEntry.getName().startsWith(jarConnection.getEntryName()))
+                .forEach(jarEntry -> copyJarEntryTo(destination, jarConnection, jarFile, jarEntry));
+    }
+
+    private void copyJarEntryTo(Path destination, JarURLConnection jarConnection, JarFile jarFile, JarEntry jarEntry) {
+        try {
+            String fileName = StringUtils.removeStart(jarEntry.getName(), jarConnection.getEntryName());
+            if (jarEntry.isDirectory()) {
+                Files.createDirectories(destination.resolve(fileName));
+            } else {
+                try (InputStream entryInputStream = jarFile.getInputStream(jarEntry)) {
+                    Files.copy(entryInputStream, destination, StandardCopyOption.REPLACE_EXISTING);
+                }
             }
-        });
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private static <T> Stream<T> enumerationAsStream(Enumeration<T> e) {
+        /*
+        ─────────▄▄───────────────────▄▄──
+        ──────────▀█───────────────────▀█─
+        ──────────▄█───────────────────▄█─
+        ──█████████▀───────────█████████▀─
+        ───▄██████▄─────────────▄██████▄──
+        ─▄██▀────▀██▄─────────▄██▀────▀██▄
+        ─██────────██─────────██────────██
+        ─██───██───██─────────██───██───██
+        ─██────────██─────────██────────██
+        ──██▄────▄██───────────██▄────▄██─
+        ───▀██████▀─────────────▀██████▀──
+        ──────────────────────────────────
+        ──────────────────────────────────
+        ───────────█████████████──────────
+        ──────────────────────────────────
+        ──────────────────────────────────
+         */
+        return StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(
+                        new Iterator<T>() {
+                            public T next() {
+                                return e.nextElement();
+                            }
+
+                            public boolean hasNext() {
+                                return e.hasMoreElements();
+                            }
+                        },
+                        Spliterator.ORDERED), false);
     }
 
     public void clearCache() {
