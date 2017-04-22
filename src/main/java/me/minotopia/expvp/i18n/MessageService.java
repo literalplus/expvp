@@ -124,7 +124,7 @@ public class MessageService {
     }
 
     private void copyDirectoryFromJarTo(File target) throws URISyntaxException, IOException {
-        copyResourcesRecursively(getClass().getResource("/lang/"), target);
+        copyResourcesRecursively(getClass().getResource("/lang"), target);
     }
 
     private void copyResourcesRecursively(URL originUrl, File destination) throws IOException {
