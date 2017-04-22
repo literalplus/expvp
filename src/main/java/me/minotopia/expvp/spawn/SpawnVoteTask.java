@@ -40,6 +40,7 @@ public class SpawnVoteTask implements Runnable {
     private final SpawnChangeService changeService;
     private final SpawnVoteService voteService;
     private final Server server;
+    private long lastReminderMinute;
 
     @Inject
     public SpawnVoteTask(SpawnDisplayService displayService, SpawnService spawns,
@@ -50,7 +51,7 @@ public class SpawnVoteTask implements Runnable {
         this.changeService = changeService;
         this.voteService = voteService;
         this.server = server;
-        tasks.repeating(this, Duration.ofSeconds(20));
+        tasks.repeating(this, Duration.ofSeconds(30));
     }
 
     @Override
@@ -60,12 +61,24 @@ public class SpawnVoteTask implements Runnable {
         } else {
             long minutesUntilChange = changeService.findTimeUntilNextChange().toMinutes();
             if (minutesUntilChange == 5 || (minutesUntilChange % 15) == 0) {
-                server.getOnlinePlayers().stream()
-                        .filter(this::hasNotCastAVote)
-                        .forEach(remindToCastAVote(minutesUntilChange));
+                remindEligiblePlayersToVote(minutesUntilChange);
             }
         }
         displayService.updateForAllPlayers();
+    }
+
+    private void remindEligiblePlayersToVote(long minutesUntilChange) {
+        if (aReminderWasAlreadySentForThisMinute(minutesUntilChange)) {
+            return;
+        }
+        lastReminderMinute = minutesUntilChange;
+        server.getOnlinePlayers().stream()
+                .filter(this::hasNotCastAVote)
+                .forEach(remindToCastAVote(minutesUntilChange));
+    }
+
+    private boolean aReminderWasAlreadySentForThisMinute(long minutesUntilChange) {
+        return lastReminderMinute == minutesUntilChange;
     }
 
     private Consumer<Player> remindToCastAVote(long minutesUntilChange) {

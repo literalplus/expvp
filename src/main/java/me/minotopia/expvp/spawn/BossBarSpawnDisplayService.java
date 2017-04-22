@@ -18,9 +18,7 @@ import me.minotopia.expvp.api.spawn.SpawnChangeService;
 import me.minotopia.expvp.api.spawn.SpawnDisplayService;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.i18n.I18n;
-import me.minotopia.expvp.logging.LoggingManager;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.inventivetalent.bossbar.BossBarAPI;
@@ -37,7 +35,6 @@ import java.util.stream.Collectors;
  */
 @ConstructOnEnable
 public class BossBarSpawnDisplayService implements SpawnDisplayService {
-    private final Logger LOGGER = LoggingManager.getLogger(BossBarSpawnDisplayService.class);
     private final SpawnService spawnService;
     private final SpawnChangeService spawnChangeService;
     private final Server server;
@@ -75,11 +72,9 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
         float fractionProgress = spawnChangeService.findFractionProgressToNextSpawn();
         TextComponent wrapperComponent = new TextComponent(TextComponent.fromLegacyText(message));
         // the method with the collection of players does. not. support. 1.8. should find another lib
-        players.forEach(player -> {
-            BossBarAPI.addBar(
-                    player, wrapperComponent, BossBarAPI.Color.BLUE, BossBarAPI.Style.PROGRESS, fractionProgress
-            );
-        });
+        players.forEach(player -> BossBarAPI.addBar(
+                player, wrapperComponent, BossBarAPI.Color.BLUE, BossBarAPI.Style.PROGRESS, fractionProgress
+        ));
     }
 
     private void resetAllBars() {
