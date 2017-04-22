@@ -117,7 +117,7 @@ public class MessageService {
     }
 
     private void copyDirectoryFromJarTo(Path target) throws URISyntaxException, IOException {
-        URI resource = getClass().getResource("/").toURI();
+        URI resource = getClass().getResource("").toURI();
         FileSystem fileSystem = FileSystems.newFileSystem(
                 resource, Collections.<String, String>emptyMap()
         );
