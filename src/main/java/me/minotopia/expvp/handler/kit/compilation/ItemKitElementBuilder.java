@@ -12,6 +12,8 @@ import com.google.common.base.Preconditions;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.api.handler.kit.compilation.KitElement;
 import me.minotopia.expvp.api.handler.kit.compilation.KitElementBuilder;
+import me.minotopia.expvp.logging.LoggingManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionType;
@@ -23,11 +25,14 @@ import org.bukkit.potion.PotionType;
  * @since 2017-03-10
  */
 public class ItemKitElementBuilder implements KitElementBuilder {
+    private static final Logger LOGGER = LoggingManager.getLogger(ItemKitElementBuilder.class);
     private final int slotId;
     private final Material type;
     private ItemStackFactory factory;
     private PotionType potionType;
     private int potionLevel;
+    private Enchantment enchantment;
+    private int enchantmentLevel;
 
     public ItemKitElementBuilder(Material type, int slotId) {
         this.slotId = slotId;
@@ -53,7 +58,16 @@ public class ItemKitElementBuilder implements KitElementBuilder {
 
     @Override
     public KitElementBuilder withEnchantment(Enchantment enchantment, int level) {
-        factory().enchantUnsafe(enchantment, level);
+        Preconditions.checkNotNull(enchantment, "enchantment");
+        if (enchantment.equals(this.enchantment)) {
+            this.enchantmentLevel = Math.max(this.enchantmentLevel, level);
+        } else {
+            if (this.enchantment != null) {
+                LOGGER.warn("Conflicting enchantments on {}: Overriding {} with {}.", this, this.enchantment, enchantment);
+            }
+            this.enchantment = enchantment;
+            this.enchantmentLevel = level;
+        }
         return this;
     }
 
@@ -80,6 +94,9 @@ public class ItemKitElementBuilder implements KitElementBuilder {
 
     @Override
     public KitElement build() {
+        if (enchantment != null) {
+            factory().enchantUnsafe(enchantment, enchantmentLevel);
+        }
         if (potionType != null) {
             return new PotionKitElement(factory().produce(), potionType, potionLevel);
         } else {
@@ -95,5 +112,17 @@ public class ItemKitElementBuilder implements KitElementBuilder {
     @Override
     public int getSlotId() {
         return slotId;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemKitElementBuilder{" +
+                "slotId=" + slotId +
+                ", type=" + type +
+                ", potionType=" + potionType +
+                ", potionLevel=" + potionLevel +
+                ", enchantment=" + enchantment +
+                ", enchantmentLevel=" + enchantmentLevel +
+                '}';
     }
 }
