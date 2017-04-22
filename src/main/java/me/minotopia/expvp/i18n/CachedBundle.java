@@ -34,7 +34,7 @@ class CachedBundle {
     }
 
     private ResourceBundle loadBundle(Locale locale) {
-        return ResourceBundle.getBundle(baseName, locale, loader, new Utf8Control());
+        return ResourceBundle.getBundle(baseName, locale, loader, Utf8Control.NO_CACHE);
     }
 
     public ResourceBundle getGermanBundle() {
