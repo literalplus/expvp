@@ -10,6 +10,8 @@ package me.minotopia.expvp.prevention;
 
 import com.google.inject.Inject;
 import li.l1t.common.inventory.gui.InventoryMenu;
+import me.minotopia.expvp.Permission;
+import me.minotopia.expvp.i18n.I18n;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -34,6 +36,10 @@ public class InteractionPreventionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onInvOpen(InventoryOpenEvent event) {
+        if (Permission.ADMIN_OVERRIDE.has(event.getPlayer())) {
+            I18n.sendLoc(event.getPlayer(), "admin!ignore.inv");
+            return;
+        }
         Inventory inventory = event.getInventory();
         if (isNotAnInventoryMenu(inventory) && isNotAPlayerInventory(inventory)) {
             event.setCancelled(true);
