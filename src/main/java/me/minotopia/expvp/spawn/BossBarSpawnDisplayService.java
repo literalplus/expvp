@@ -25,8 +25,6 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.inventivetalent.bossbar.BossBarAPI;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,19 +60,8 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     public void updateForAllPlayers() {
         resetAllBars();
         if (spawnService.getCurrentSpawn().isPresent()) {
-            setWorldTimeBasedOnMapProgress();
             tasks.serverThread(this::updatePlayersBossBars); //removing and instantly adding doesn't seem to work well
-        } else {
-            LOGGER.debug("No current spawn");
         }
-    }
-
-    private void setWorldTimeBasedOnMapProgress() {
-        server.getWorlds().forEach(world -> world.setTime(findDayTimeForSpawnProgress(findFractionProgressToNextSpawn())));
-    }
-
-    private int findDayTimeForSpawnProgress(float fractionProgress) {
-        return Math.round(22_500F + (fractionProgress * 17520F));
     }
 
     private void updatePlayersBossBars() {
@@ -85,7 +72,7 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     }
 
     private void sendToAll(String message, List<Player> players) {
-        float fractionProgress = findFractionProgressToNextSpawn();
+        float fractionProgress = spawnChangeService.findFractionProgressToNextSpawn();
         TextComponent wrapperComponent = new TextComponent(TextComponent.fromLegacyText(message));
         // the method with the collection of players does. not. support. 1.8. should find another lib
         players.forEach(player -> {
@@ -93,15 +80,6 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
                     player, wrapperComponent, BossBarAPI.Color.BLUE, BossBarAPI.Style.PROGRESS, fractionProgress
             );
         });
-    }
-
-    private float findFractionProgressToNextSpawn() {
-        LocalDateTime lastChange = spawnChangeService.findLastSpawnChangeTime();
-        Duration fullDuration = Duration.between(
-                lastChange, spawnChangeService.findNextSpawnChangeTime()
-        );
-        Duration passedDuration = Duration.between(lastChange, LocalDateTime.now());
-        return ((float) passedDuration.getSeconds()) / ((float) fullDuration.getSeconds());
     }
 
     private void resetAllBars() {

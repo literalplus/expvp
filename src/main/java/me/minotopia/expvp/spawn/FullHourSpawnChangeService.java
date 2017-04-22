@@ -55,6 +55,15 @@ public class FullHourSpawnChangeService implements SpawnChangeService {
     }
 
     @Override
+    public float findFractionProgressToNextSpawn() {
+        LocalDateTime lastChange = findLastSpawnChangeTime();
+        Duration fullDuration = Duration.between(lastChange, findNextSpawnChangeTime());
+        Duration passedDuration = Duration.between(lastChange, LocalDateTime.now());
+        float result = ((float) passedDuration.getSeconds()) / ((float) fullDuration.getSeconds());
+        return result > 1F ? 1.0F : result;
+    }
+
+    @Override
     public void registerSpawnChange() {
         setLastChangeTime(LocalDateTime.now());
     }
