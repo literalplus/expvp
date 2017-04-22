@@ -55,6 +55,7 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
         this.names = names;
         this.tasks = tasks;
         initService.registerInitHandler(player -> updateForAllPlayers());
+        initService.registerDeInitHandler(BossBarAPI::removeAllBars); //reloads cause stale bars otherwise
     }
 
     @Override
