@@ -176,15 +176,19 @@ public class EditNodeMenu extends TopRowMenu implements EPMenu {
 
         public EditNodeMenu createRoot(Player player, SkillTree tree) {
             return new EditNodeMenu(
-                    tree, plugin, null, player, names, skills, this::createWithParent, selectSkillFactory,
+                    tree, plugin, null, player, names, skills, this::createAndOpenWithParent, selectSkillFactory,
                     treeManager);
         }
 
 
         public EditNodeMenu createWithParent(EPMenu parent, SimpleSkillTreeNode node) {
             return new EditNodeMenu(
-                    node, plugin, parent, parent.getPlayer(), names, skills, this::createWithParent, selectSkillFactory,
+                    node, plugin, parent, parent.getPlayer(), names, skills, this::createAndOpenWithParent, selectSkillFactory,
                     treeManager);
+        }
+
+        public void createAndOpenWithParent(EPMenu parent, SimpleSkillTreeNode node) {
+            createWithParent(parent, node).open();
         }
     }
 }
