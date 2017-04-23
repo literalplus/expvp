@@ -149,11 +149,12 @@ public class MessageService {
     private void copyJarEntryTo(Path destination, String prefix, JarFile jarFile, JarEntry jarEntry) {
         try {
             String fileName = StringUtils.removeStart(jarEntry.getName(), prefix);
+            Path resolvedPath = destination.resolve(fileName);
             if (jarEntry.isDirectory()) {
-                Files.createDirectories(destination.resolve(fileName));
+                Files.createDirectories(resolvedPath);
             } else {
                 try (InputStream entryInputStream = jarFile.getInputStream(jarEntry)) {
-                    Files.copy(entryInputStream, destination, StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(entryInputStream, resolvedPath, StandardCopyOption.REPLACE_EXISTING);
                 }
             }
         } catch (IOException e) {
