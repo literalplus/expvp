@@ -143,12 +143,12 @@ public class MessageService {
         JarFile jarFile = jarConnection.getJarFile();
         enumerationAsStream(jarFile.entries())
                 .filter(jarEntry -> jarEntry.getName().startsWith("lang"))
-                .forEach(jarEntry -> copyJarEntryTo(destination, jarConnection, jarFile, jarEntry));
+                .forEach(jarEntry -> copyJarEntryTo(destination, "lang", jarFile, jarEntry));
     }
 
-    private void copyJarEntryTo(Path destination, JarURLConnection jarConnection, JarFile jarFile, JarEntry jarEntry) {
+    private void copyJarEntryTo(Path destination, String prefix, JarFile jarFile, JarEntry jarEntry) {
         try {
-            String fileName = StringUtils.removeStart(jarEntry.getName(), jarConnection.getEntryName());
+            String fileName = StringUtils.removeStart(jarEntry.getName(), prefix);
             if (jarEntry.isDirectory()) {
                 Files.createDirectories(destination.resolve(fileName));
             } else {
