@@ -8,10 +8,7 @@
 
 package me.minotopia.expvp.handler.factory;
 
-import me.minotopia.expvp.handler.factory.damage.CulpritEffectHandlerFactory;
-import me.minotopia.expvp.handler.factory.damage.PoisonousArmorHandlerFactory;
-import me.minotopia.expvp.handler.factory.damage.VictimEffectHandlerFactory;
-import me.minotopia.expvp.handler.factory.damage.VictimHealHandlerFactory;
+import me.minotopia.expvp.handler.factory.damage.*;
 import me.minotopia.expvp.handler.factory.kit.EnchantKitHandlerFactory;
 import me.minotopia.expvp.handler.factory.kit.NotchAppleKitHandlerFactory;
 import me.minotopia.expvp.handler.factory.kit.PotionKitHandlerFactory;
@@ -30,6 +27,7 @@ public class HandlerFactoryWiring {
         graph.kits().addChild(new PotionKitHandlerFactory("potion"));
         graph.kits().addChild(new NotchAppleKitHandlerFactory("notch"));
         graph.damages().addChild(new CulpritEffectHandlerFactory("culprit"));
+        graph.damages().addChild(new EvilCulpritEffectHandlerFactory("evil-culprit"));
         graph.damages().addChild(new VictimEffectHandlerFactory("victim"));
         graph.damages().addChild(new VictimHealHandlerFactory("victim-heal"));
         graph.damages().addChild(new PoisonousArmorHandlerFactory("poison-armor"));
