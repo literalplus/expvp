@@ -129,6 +129,7 @@ public class MessageService {
 
     private void copyResourcesRecursively(URL originUrl, File destination) throws IOException {
         URLConnection urlConnection = originUrl.openConnection();
+        urlConnection.setUseCaches(false);
         if (urlConnection instanceof JarURLConnection) {
             copyJarResourcesRecursively(destination.toPath(), (JarURLConnection) urlConnection);
         } else if (urlConnection instanceof FileURLConnection) {
@@ -143,7 +144,7 @@ public class MessageService {
         JarFile jarFile = jarConnection.getJarFile();
         enumerationAsStream(jarFile.entries())
                 .filter(jarEntry -> jarEntry.getName().startsWith("lang"))
-                .forEach(jarEntry -> copyJarEntryTo(destination, "lang", jarFile, jarEntry));
+                .forEach(jarEntry -> copyJarEntryTo(destination, "lang/", jarFile, jarEntry));
     }
 
     private void copyJarEntryTo(Path destination, String prefix, JarFile jarFile, JarEntry jarEntry) {
