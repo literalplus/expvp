@@ -124,7 +124,7 @@ public class MessageService {
     }
 
     private void copyDirectoryFromJarTo(File target) throws URISyntaxException, IOException {
-        copyResourcesRecursively(getClass().getResource("/lang"), target);
+        copyResourcesRecursively(getClass().getResource("/lang/core.properties"), target);
     }
 
     private void copyResourcesRecursively(URL originUrl, File destination) throws IOException {
@@ -142,7 +142,7 @@ public class MessageService {
     private void copyJarResourcesRecursively(Path destination, JarURLConnection jarConnection) throws IOException {
         JarFile jarFile = jarConnection.getJarFile();
         enumerationAsStream(jarFile.entries())
-                .filter(jarEntry -> jarEntry.getName().startsWith(jarConnection.getEntryName()))
+                .filter(jarEntry -> jarEntry.getName().startsWith("lang"))
                 .forEach(jarEntry -> copyJarEntryTo(destination, jarConnection, jarFile, jarEntry));
     }
 
