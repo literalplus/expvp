@@ -58,7 +58,7 @@ public class ItemKitElementBuilder implements KitElementBuilder {
     @Override
     public KitElementBuilder withEnchantment(Enchantment enchantment, int newLevel) {
         Preconditions.checkNotNull(enchantment, "enchantment");
-        this.enchantments.compute(enchantment, (key, existing) -> Math.max(existing, newLevel));
+        this.enchantments.merge(enchantment, newLevel, Math::max);
         return this;
     }
 
