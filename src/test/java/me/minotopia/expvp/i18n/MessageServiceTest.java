@@ -13,7 +13,11 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,6 +28,7 @@ public class MessageServiceTest {
         //given
         MessageService messageService = new MessageService();
         File dataFolder = new File("target/i18n-test");
+        deleteDirectoryRecursively(dataFolder);
         Files.createDirectories(dataFolder.toPath());
         //when
         messageService.setDataFolder(dataFolder);
@@ -31,5 +36,21 @@ public class MessageServiceTest {
         assertThat("core exists",
                 Files.exists(dataFolder.toPath().resolve("defaults_do_not_edit").resolve("core.properties")),
                 is(true));
+    }
+
+    private void deleteDirectoryRecursively(File dataFolder) throws IOException {
+        Files.walkFileTree(dataFolder.toPath(), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 }
