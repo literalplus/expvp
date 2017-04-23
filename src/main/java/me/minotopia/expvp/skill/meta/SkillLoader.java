@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.skill.meta;
 
+import com.google.common.base.Preconditions;
 import li.l1t.common.util.config.YamlHelper;
 import me.minotopia.expvp.yaml.AbstractYamlLoader;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -38,6 +39,7 @@ public class SkillLoader extends AbstractYamlLoader<Skill> {
         checkDoesNotExistInManager(getObjectId(file));
         YamlConfiguration config = YamlHelper.load(file, true);
         Skill skill = (Skill) config.get(DATA_PATH);
+        Preconditions.checkNotNull(skill, "skill ;; ", config.saveToString());
         skill.setManager(manager);
         return skill;
     }
