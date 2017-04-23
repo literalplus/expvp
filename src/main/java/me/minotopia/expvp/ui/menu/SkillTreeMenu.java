@@ -19,6 +19,7 @@ import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.api.skill.SkillService;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.Plurals;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.skilltree.SkillTree;
 import me.minotopia.expvp.skilltree.SkillTreeManager;
@@ -62,7 +63,7 @@ public class SkillTreeMenu extends AbstractEPMenu {
         if (talentPointCount > 0) {
             factory.enchantUnsafe(Enchantment.WATER_WORKER, 1).hideEnchants()
                     .amount(talentPointCount)
-                    .lore(I18n.loc(getPlayer(), "core!inv.tree.tp-count", talentPointCount));
+                    .lore(I18n.loc(getPlayer(), "core!inv.tree.tp-count", Plurals.talentPointPlural(talentPointCount)));
         } else {
             factory.lore(I18n.loc(getPlayer(), "core!inv.tree.no-tp"));
         }
