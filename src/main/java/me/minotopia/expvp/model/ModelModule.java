@@ -10,6 +10,7 @@ package me.minotopia.expvp.model;
 
 import com.google.inject.AbstractModule;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.model.friend.HibernateFriendshipRepository;
 import me.minotopia.expvp.model.player.HibernatePlayerDataService;
 import me.minotopia.expvp.model.player.HibernateResetService;
 
@@ -24,5 +25,6 @@ public class ModelModule extends AbstractModule {
     protected void configure() {
         bind(PlayerDataService.class).to(HibernatePlayerDataService.class);
         bind(HibernateResetService.class);
+        bind(HibernateFriendshipRepository.class);
     }
 }

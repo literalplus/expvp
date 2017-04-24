@@ -84,7 +84,7 @@ public class SessionProvider {
      */
     public InternalException handleException(Exception e) {
         closeAndRollbackIfDirty(sessionLocal.get());
-        if (e instanceof RollbackException || e instanceof javax.persistence.RollbackException) {
+        if (e instanceof RollbackException || e instanceof javax.persistence21.RollbackException) {
             return new I18nInternalException("error!db.hibernate-rollback", e);
         } else if (e instanceof HibernateException) {
             return new I18nInternalException("error!db.hibernate-misc", e);

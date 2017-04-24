@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.api.model;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -18,7 +19,7 @@ import java.util.UUID;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-08
  */
-public interface PlayerData {
+public interface PlayerData extends Serializable {
     /**
      * @return the unique id of the player
      */

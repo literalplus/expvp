@@ -10,16 +10,24 @@ package me.minotopia.expvp.api.friend;
 
 import me.minotopia.expvp.api.model.PlayerData;
 
-import java.util.Optional;
+import java.time.Instant;
 
 /**
- * Provides access to friend data.
+ * Stores metadata about a friendship.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-21
  */
-public interface FriendService {
-    Optional<PlayerData> findFriend(PlayerData data);
+public interface Friendship {
+    /**
+     * @return the player that initiated the friendship
+     */
+    PlayerData getSource();
 
-    void removeFriend(PlayerData data);
+    /**
+     * @return the player that accepted the friendship
+     */
+    PlayerData getTarget();
+
+    Instant getCreationDate();
 }

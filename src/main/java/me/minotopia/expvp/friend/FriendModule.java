@@ -20,6 +20,6 @@ import me.minotopia.expvp.api.friend.FriendService;
 public class FriendModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(FriendService.class).to(DummyFriendService.class);
+        bind(FriendService.class).to(HibernateFriendService.class);
     }
 }
