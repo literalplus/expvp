@@ -57,7 +57,8 @@ public abstract class AbstractYamlLoader<T extends Identifiable> implements Yaml
     private void tryMoveAwayBecauseUnreadable(File file) {
         try {
             File newFile = new File(manager.getDirectory(), file.getName() + ".broken_bkp");
-            Files.move(file, newFile);
+            Files.copy(file, newFile);
+            file.delete();
             LOGGER.warn("Moved to {} to prevent data loss", newFile.getAbsolutePath());
         } catch (IOException e1) {
             throw UncheckedException.wrap(e1); //something is seriously wrong
