@@ -12,7 +12,6 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import me.minotopia.expvp.api.model.MutablePlayerData;
-import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
 import me.minotopia.expvp.util.ScopedSession;
@@ -37,7 +36,7 @@ public class HibernatePlayerDataService implements PlayerDataService {
     }
 
     @Override
-    public PlayerData findOrCreateData(UUID playerId) {
+    public HibernatePlayerData findOrCreateData(UUID playerId) {
         return findOrCreateDataMutable(playerId); //read-only is a type safety thing only, this simplifies usage
     }
 

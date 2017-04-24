@@ -19,10 +19,12 @@ import li.l1t.xlogin.common.PreferencesHolder;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.misc.PlayerInitService;
+import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.friend.FriendModule;
 import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.i18n.EPDisplayNameService;
 import me.minotopia.expvp.i18n.LocaleChangeListener;
+import me.minotopia.expvp.misc.BukkitPlayerService;
 import me.minotopia.expvp.misc.EPPlayerInitService;
 import me.minotopia.expvp.model.ModelModule;
 import me.minotopia.expvp.prevention.PreventionModule;
@@ -57,6 +59,7 @@ public class EPRootModule extends AbstractModule {
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
         bind(LocaleChangeListener.class);
+        bind(PlayerService.class).to(BukkitPlayerService.class);
         if (PreferencesHolder.getConsumer() != null) { // unit tests
             bind(UUIDRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
         } else {

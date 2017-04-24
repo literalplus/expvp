@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.util;
 
+import li.l1t.common.exception.DatabaseException;
 import li.l1t.common.exception.InternalException;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
@@ -84,7 +85,7 @@ public class SessionProvider {
      */
     public InternalException handleException(Exception e) {
         closeAndRollbackIfDirty(sessionLocal.get());
-        if (e instanceof RollbackException || e instanceof javax.persistence21.RollbackException) {
+        if (e instanceof RollbackException || e instanceof javax.transaction.RollbackException) {
             return new I18nInternalException("error!db.hibernate-rollback", e);
         } else if (e instanceof HibernateException) {
             return new I18nInternalException("error!db.hibernate-misc", e);
@@ -124,6 +125,8 @@ public class SessionProvider {
         try (ScopedSession scoped = scoped().join()) {
             what.accept(scoped);
             scoped.commitIfLastAndChanged();
+        } catch (Exception e) {
+            throw new DatabaseException(handleException(e));
         }
     }
 

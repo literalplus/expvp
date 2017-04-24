@@ -8,12 +8,17 @@
 
 package me.minotopia.expvp.model.friend;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.exception.DatabaseException;
+import me.minotopia.expvp.api.friend.Friendship;
 import me.minotopia.expvp.api.model.PlayerData;
+import me.minotopia.expvp.api.model.friend.FriendshipRepository;
 import me.minotopia.expvp.model.hibernate.friend.HibernateFriendship;
 import me.minotopia.expvp.model.hibernate.friend.HibernateFriendship_;
+import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
+import me.minotopia.expvp.model.player.HibernatePlayerDataService;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.hibernate.query.Query;
@@ -32,16 +37,20 @@ import java.util.Optional;
  * @since 2017-04-21
  */
 @Singleton
-public class HibernateFriendshipRepository {
+public class HibernateFriendshipRepository implements FriendshipRepository {
     private final SessionProvider sessionProvider;
+    private final HibernatePlayerDataService players;
 
     @Inject
-    public HibernateFriendshipRepository(SessionProvider sessionProvider) {
+    public HibernateFriendshipRepository(SessionProvider sessionProvider, HibernatePlayerDataService players) {
         this.sessionProvider = sessionProvider;
+        this.players = players;
     }
 
-    public Optional<HibernateFriendship> findFriendshipWith(PlayerData playerData) {
+    @Override
+    public Optional<Friendship> findFriendshipWith(PlayerData playerData) {
         return sessionProvider.inSessionAnd(scoped -> {
+            scoped.tx();
                     List<HibernateFriendship> results = createFriendshipWithQuery(playerData, scoped).getResultList();
                     if (results.isEmpty()) {
                         return Optional.empty();
@@ -77,9 +86,34 @@ public class HibernateFriendshipRepository {
         );
     }
 
-    public void delete(HibernateFriendship friendship) {
+    @Override
+    public void delete(Friendship friendship) {
+        Preconditions.checkArgument(friendship instanceof HibernateFriendship,
+                "expected HibernateFriendship, got: ", friendship, friendship.getClass());
         sessionProvider.inSession(scoped -> {
+            scoped.tx();
             scoped.session().delete(friendship);
         });
+    }
+
+    @Override
+    public HibernateFriendship create(PlayerData source, PlayerData target) {
+        return sessionProvider.inSessionAnd(scoped -> {
+            HibernateFriendship friendship = new HibernateFriendship(
+                    makeHibernate(source),
+                    makeHibernate(target)
+            );
+            scoped.session().save(friendship);
+            return friendship;
+        });
+    }
+
+    private HibernatePlayerData makeHibernate(PlayerData data) {
+        Preconditions.checkNotNull(data, "data");
+        if (data instanceof HibernatePlayerData) {
+            return (HibernatePlayerData) data;
+        } else {
+            return players.findOrCreateData(data.getUniqueId());
+        }
     }
 }

@@ -46,8 +46,8 @@ public class HibernateFriendRequest extends BaseEntity implements FriendRequest 
         //default constructor required for Hibernate
     }
 
-    public HibernateFriendRequest(UUID uniqueId, HibernatePlayerData source, HibernatePlayerData target) {
-        this.uniqueId = Preconditions.checkNotNull(uniqueId, "uniqueId");
+    public HibernateFriendRequest(HibernatePlayerData source, HibernatePlayerData target) {
+        this.uniqueId = UUID.randomUUID();
         this.source = Preconditions.checkNotNull(source, "source");
         this.target = Preconditions.checkNotNull(target, "target");
     }

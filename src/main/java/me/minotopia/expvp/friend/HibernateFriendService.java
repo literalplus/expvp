@@ -13,7 +13,7 @@ import com.google.inject.Inject;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.friend.Friendship;
 import me.minotopia.expvp.api.model.PlayerData;
-import me.minotopia.expvp.model.friend.HibernateFriendshipRepository;
+import me.minotopia.expvp.api.model.friend.FriendshipRepository;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -25,10 +25,10 @@ import java.util.function.Function;
  * @since 2017-04-21
  */
 public class HibernateFriendService implements FriendService {
-    private final HibernateFriendshipRepository friendshipRepository;
+    private final FriendshipRepository friendshipRepository;
 
     @Inject
-    public HibernateFriendService(HibernateFriendshipRepository friendshipRepository) {
+    public HibernateFriendService(FriendshipRepository friendshipRepository) {
         this.friendshipRepository = friendshipRepository;
     }
 
