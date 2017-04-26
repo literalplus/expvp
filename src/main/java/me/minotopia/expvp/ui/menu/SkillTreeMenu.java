@@ -30,6 +30,7 @@ import me.minotopia.expvp.ui.renderer.exception.RenderingException;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.stream.IntStream;
 
@@ -96,10 +97,8 @@ public class SkillTreeMenu extends AbstractEPMenu {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected ItemStackFactory getPlaceholderFactory() {
-        return new ItemStackFactory(Material.STAINED_GLASS_PANE)
-                .legacyData((byte) 15)
+        return new ItemStackFactory(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15))
                 .displayName("§7§l*");
     }
 

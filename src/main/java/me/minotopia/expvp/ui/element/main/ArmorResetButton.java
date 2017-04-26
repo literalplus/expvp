@@ -34,8 +34,7 @@ public class ArmorResetButton implements MenuElement {
     @Override
     @SuppressWarnings("deprecation")
     public ItemStack draw(ElementHolder menu) {
-        return new ItemStackFactory(Material.INK_SACK)
-                .legacyData((byte) 14)
+        return new ItemStackFactory(new ItemStack(Material.INK_SACK, 1, (short) 15))
                 .displayName(title)
                 .produce();
     }
