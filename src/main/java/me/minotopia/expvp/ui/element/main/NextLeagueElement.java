@@ -39,7 +39,7 @@ public class NextLeagueElement implements MenuElement {
         if (next.isPresent()) {
             League nextLeague = next.get();
             Message displayName = names.displayName(nextLeague);
-            factory.displayName(I18n.loc(player, "core!main.inv.next-league", displayName));
+            factory.displayName(I18n.loc(player, "core!inv.main.next-league", displayName));
             if (nextLeague == StaticLeague.BEDROCK) {
                 factory.lore(I18n.loc(player, "core!inv.main.next-bedrock", displayName));
             } else {
@@ -47,7 +47,7 @@ public class NextLeagueElement implements MenuElement {
                 factory.lore(I18n.loc(player, "core!inv.main.next-in", neededExp));
             }
         } else {
-            factory.displayName(" ").lore(I18n.loc(player, "core!main.inv.next-none"));
+            factory.displayName(" ").lore(I18n.loc(player, "core!inv.main.next-none"));
         }
         stack = factory.produce();
     }
