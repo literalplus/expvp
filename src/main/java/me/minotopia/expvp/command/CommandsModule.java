@@ -44,6 +44,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandSpawnLink.class);
         bind(CommandMainMenu.class);
         bind(CommandFriend.class);
+        bind(CommandLang.class);
     }
 
     @Singleton

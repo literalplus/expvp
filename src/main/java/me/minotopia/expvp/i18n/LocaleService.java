@@ -14,8 +14,8 @@ import li.l1t.common.i18n.MinecraftLocale;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
+import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
-import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 
@@ -48,7 +48,7 @@ public class LocaleService {
      * @return the computed preferred locale of given player
      */
     public Locale recomputeClientLocale(Player player) {
-        try (ScopedSession scoped = sessionProvider.scoped().join()) {
+        return sessionProvider.inSessionAnd(ignored -> {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
             Locale locale;
             if (!playerData.hasCustomLocale()) {
@@ -58,9 +58,9 @@ public class LocaleService {
                 locale = playerData.getLocale();
             }
             I18n.setLocaleFor(player.getUniqueId(), locale);
-            scoped.commitIfLastAndChanged();
+            notifySelectedLocale(player, playerData);
             return locale;
-        }
+        });
     }
 
     private void setLocaleIfDifferent(MutablePlayerData playerData, Locale newLocale) {
@@ -69,5 +69,32 @@ public class LocaleService {
             playerData.setLocale(newLocale);
             players.saveData(playerData);
         }
+    }
+
+    private void notifySelectedLocale(Player player, PlayerData playerData) {
+        if (playerData.hasCustomLocale()) {
+            I18n.sendLoc(player, "core!lang.manual-selected");
+        } else {
+            I18n.sendLoc(player, "core!lang.auto-selected");
+        }
+    }
+
+    public void forceLocale(Player player, Locale locale) {
+        sessionProvider.inSession(ignored -> {
+            MutablePlayerData data = players.findOrCreateDataMutable(player.getUniqueId());
+            data.setCustomLocale(true);
+            data.setLocale(locale);
+            I18n.setLocaleFor(player.getUniqueId(), locale);
+            players.saveData(data);
+        });
+    }
+
+    public void resetLocale(Player player) {
+        sessionProvider.inSession(ignored -> {
+            MutablePlayerData data = players.findOrCreateDataMutable(player.getUniqueId());
+            data.setCustomLocale(false);
+            players.saveData(data);
+            recomputeClientLocale(player);
+        });
     }
 }
