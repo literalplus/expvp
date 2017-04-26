@@ -69,7 +69,7 @@ public class HibernateFriendRequest extends BaseEntity implements FriendRequest 
 
     @Override
     public boolean isValid() {
-        return getCreationDate().atZone(ZoneId.systemDefault()).plusMinutes(5).isBefore(ZonedDateTime.now());
+        return getCreationDate().atZone(ZoneId.systemDefault()).plusMinutes(5).isAfter(ZonedDateTime.now());
     }
 
     @Override
