@@ -14,7 +14,6 @@ import li.l1t.common.util.FileHelper;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
-import sun.net.www.protocol.file.FileURLConnection;
 
 import java.io.File;
 import java.io.IOException;
@@ -132,7 +131,7 @@ public class MessageService {
         urlConnection.setUseCaches(false);
         if (urlConnection instanceof JarURLConnection) {
             copyJarResourcesRecursively(destination.toPath(), (JarURLConnection) urlConnection);
-        } else if (urlConnection instanceof FileURLConnection) {
+        } else if (urlConnection.getClass().getSimpleName().equals("FileURLConnection")) {
             FileHelper.copyFolder(new File(originUrl.getPath()), destination);
         } else {
             throw new IllegalArgumentException("URLConnection[" + urlConnection.getClass().getSimpleName() +
