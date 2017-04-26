@@ -37,7 +37,8 @@ public class LocaleService {
                          PlayerInitService initService, EPPlugin plugin) {
         this.players = players;
         this.sessionProvider = sessionProvider;
-        initService.registerInitHandler(player -> plugin.async(() -> recomputeClientLocale(player)));
+        //apparently always sent on join, even though Bungee vv
+        //initService.registerInitHandler(player -> plugin.async(() -> recomputeClientLocale(player)));
         initService.registerDeInitHandler(player -> I18n.clearLocaleOf(player.getUniqueId()));
     }
 
