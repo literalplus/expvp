@@ -27,6 +27,7 @@ import me.minotopia.expvp.i18n.EPDisplayNameService;
 import me.minotopia.expvp.i18n.LocaleChangeListener;
 import me.minotopia.expvp.misc.BukkitPlayerService;
 import me.minotopia.expvp.misc.EPPlayerInitService;
+import me.minotopia.expvp.misc.VillagerClickHandler;
 import me.minotopia.expvp.model.ModelModule;
 import me.minotopia.expvp.prevention.PreventionModule;
 import me.minotopia.expvp.respawn.RespawnModule;
@@ -62,6 +63,7 @@ public class EPRootModule extends AbstractModule {
         bind(LocaleChangeListener.class);
         bind(PlayerService.class).to(BukkitPlayerService.class);
         bind(ChatListener.class);
+        bind(VillagerClickHandler.class);
         if (PreferencesHolder.getConsumer() != null) { // unit tests
             bind(UUIDRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
         } else {
