@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.score.league;
 
+import me.minotopia.expvp.api.score.league.Capability;
 import me.minotopia.expvp.api.score.league.League;
 import org.bukkit.Material;
 
@@ -80,5 +81,19 @@ public enum StaticLeague implements League {
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public boolean may(Capability cap) {
+        switch (cap) {
+            case CHAT_COLOR:
+                return isHigherOrEqualTo(StaticLeague.EMERALD);
+            default:
+                throw new UnsupportedOperationException("Unsupported capability " + cap);
+        }
+    }
+
+    public boolean isHigherOrEqualTo(StaticLeague other) {
+        return this.ordinal() >= other.ordinal();
     }
 }

@@ -38,4 +38,6 @@ public interface League {
      * @return the previous league lower than this league
      */
     Optional<League> previous();
+
+    boolean may(Capability cap);
 }

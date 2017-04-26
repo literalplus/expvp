@@ -46,7 +46,7 @@ public interface DisplayNameService {
 
     Message displayName(League league);
 
-    Message chatFormat(League league);
+    Message chatFormat(League league, String message);
 
     Message displayName(MapSpawn spawn);
 }

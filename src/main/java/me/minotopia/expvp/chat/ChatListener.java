@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.api.score.league.Capability;
 import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.i18n.I18n;
@@ -76,7 +77,17 @@ public class ChatListener implements Listener {
                 .append(event.getPlayer().getName()).color(ChatColor.GRAY)
                 .command("/stats " + event.getPlayer().getUniqueId())
                 .tooltip(I18n.loc(locale, "core!stats-link", event.getPlayer().getName())).create();
-        BaseComponent[] message = TextComponent.fromLegacyText(I18n.loc(locale, names.chatFormat(league)));
+        BaseComponent[] message = TextComponent.fromLegacyText(I18n.loc(
+                locale, names.chatFormat(league, parseMessage(event, league))
+        ));
         return ObjectArrays.concat(ObjectArrays.concat(leagueName, playerName, BaseComponent.class), message, BaseComponent.class);
+    }
+
+    private String parseMessage(AsyncPlayerChatEvent event, League league) {
+        String message = event.getMessage();
+        if (league.may(Capability.CHAT_COLOR)) {
+            message = ChatColor.translateAlternateColorCodes('&', event.getMessage());
+        }
+        return message;
     }
 }
