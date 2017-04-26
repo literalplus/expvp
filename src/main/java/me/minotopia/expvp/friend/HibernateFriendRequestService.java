@@ -27,6 +27,7 @@ import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.util.SessionProvider;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
@@ -95,7 +96,7 @@ public class HibernateFriendRequestService implements FriendRequestService {
         ComponentSender.sendTo(
                 targetPlayer,
                 TextComponent.fromLegacyText(I18n.loc(targetPlayer, Format.broadcast("core!friend.req-inc", source.getName()))),
-                new XyComponentBuilder(" ")
+                new XyComponentBuilder(" ").color(ChatColor.GREEN)
                         .append(I18n.loc(targetPlayer, "core!friend.req-inc-btn"))
                         .hintedCommand("/fs accept " + source.getUniqueId())
                         .create()
