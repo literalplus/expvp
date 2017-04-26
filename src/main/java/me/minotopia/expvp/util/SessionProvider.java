@@ -8,7 +8,6 @@
 
 package me.minotopia.expvp.util;
 
-import li.l1t.common.exception.DatabaseException;
 import li.l1t.common.exception.InternalException;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
@@ -129,7 +128,7 @@ public class SessionProvider {
             what.accept(scoped);
             scoped.commitIfLastAndChanged();
         } catch (Exception e) {
-            throw new DatabaseException(handleException(e));
+            throw handleException(e);
         }
     }
 
@@ -145,6 +144,8 @@ public class SessionProvider {
         try (ScopedSession scoped = scoped().join()) {
             result = what.apply(scoped);
             scoped.commitIfLastAndChanged();
+        } catch (Exception e) {
+            throw handleException(e);
         }
         return result;
     }
@@ -156,9 +157,7 @@ public class SessionProvider {
      * @param what what to do in the session
      */
     public void inSessionAsync(Consumer<ScopedSession> what) {
-        plugin.async(() -> {
-            inSession(what);
-        });
+        plugin.async(() -> inSession(what));
     }
 
     /**
