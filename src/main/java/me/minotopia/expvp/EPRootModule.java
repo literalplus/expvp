@@ -20,6 +20,7 @@ import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.misc.PlayerService;
+import me.minotopia.expvp.chat.ChatListener;
 import me.minotopia.expvp.friend.FriendModule;
 import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.i18n.EPDisplayNameService;
@@ -60,6 +61,7 @@ public class EPRootModule extends AbstractModule {
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
         bind(LocaleChangeListener.class);
         bind(PlayerService.class).to(BukkitPlayerService.class);
+        bind(ChatListener.class);
         if (PreferencesHolder.getConsumer() != null) { // unit tests
             bind(UUIDRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
         } else {

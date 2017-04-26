@@ -83,6 +83,14 @@ public class EPDisplayNameService implements DisplayNameService {
     }
 
     @Override
+    public Message chatFormat(League league) {
+        if (league == null) {
+            return UNKNOWN;
+        }
+        return Message.of("score!league." + league.name() + ".chat-format");
+    }
+
+    @Override
     public Message displayName(MapSpawn spawn) {
         if (spawn == null) {
             return UNKNOWN;
