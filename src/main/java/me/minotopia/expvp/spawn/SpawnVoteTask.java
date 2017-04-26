@@ -16,8 +16,6 @@ import me.minotopia.expvp.api.spawn.*;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
-import me.minotopia.expvp.logging.LoggingManager;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -34,7 +32,6 @@ import java.util.function.Consumer;
 @Singleton
 @ConstructOnEnable
 public class SpawnVoteTask implements Runnable {
-    private static final Logger LOGGER = LoggingManager.getLogger(SpawnVoteTask.class);
     private final SpawnDisplayService displayService;
     private final SpawnService spawns;
     private final SpawnChangeService changeService;
@@ -88,7 +85,6 @@ public class SpawnVoteTask implements Runnable {
     }
 
     private void forceNextSpawn(MapSpawn spawn) {
-        LOGGER.info("Changing spawn to {}", spawn);
         spawns.forceNextSpawn(spawn);
         voteService.resetAllVotes();
         changeService.registerSpawnChange();
