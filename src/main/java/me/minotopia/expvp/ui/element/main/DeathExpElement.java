@@ -31,7 +31,7 @@ public class DeathExpElement implements MenuElement {
     public DeathExpElement(Player player, League league) {
         this.stack = new ItemStackFactory(Material.SKULL_ITEM)
                 .displayName(I18n.loc(player, "core!inv.main.death-exp-title"))
-                .lore(I18n.loc(player, "core!inv.main.death-exp-lore"))
+                .lore(I18n.loc(player, "core!inv.main.death-exp-lore", league.getDeathExpPenalty()))
                 .produce();
     }
 
