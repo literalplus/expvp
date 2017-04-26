@@ -12,6 +12,7 @@ import li.l1t.common.exception.DatabaseException;
 import li.l1t.common.exception.InternalException;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
+import me.minotopia.expvp.i18n.exception.InternationalException;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
@@ -83,9 +84,11 @@ public class SessionProvider {
      * @param e the exception to wrap
      * @return the internal exception wrapping the parameter exception
      */
-    public InternalException handleException(Exception e) {
+    public RuntimeException handleException(Exception e) {
         closeAndRollbackIfDirty(sessionLocal.get());
-        if (e instanceof RollbackException || e instanceof javax.transaction.RollbackException) {
+        if (e instanceof InternationalException) {
+            return (RuntimeException) e;
+        } else if (e instanceof RollbackException || e instanceof javax.transaction.RollbackException) {
             return new I18nInternalException("error!db.hibernate-rollback", e);
         } else if (e instanceof HibernateException) {
             return new I18nInternalException("error!db.hibernate-misc", e);
