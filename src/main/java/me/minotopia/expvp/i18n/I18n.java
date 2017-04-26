@@ -150,6 +150,10 @@ public class I18n {
         return localeCache.getOrDefault(senderId, Locale.getDefault());
     }
 
+    public static boolean hasLocale(UUID senderId) {
+        return localeCache.containsKey(senderId);
+    }
+
     public static void clearLocaleOf(UUID senderId) {
         localeCache.remove(senderId);
     }

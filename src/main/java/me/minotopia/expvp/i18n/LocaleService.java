@@ -37,8 +37,6 @@ public class LocaleService {
                          PlayerInitService initService, EPPlugin plugin) {
         this.players = players;
         this.sessionProvider = sessionProvider;
-        //apparently always sent on join, even though Bungee vv
-        //initService.registerInitHandler(player -> plugin.async(() -> recomputeClientLocale(player)));
         initService.registerDeInitHandler(player -> I18n.clearLocaleOf(player.getUniqueId()));
     }
 
@@ -52,24 +50,29 @@ public class LocaleService {
         return sessionProvider.inSessionAnd(ignored -> {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
             Locale locale;
+            boolean notify = I18n.hasLocale(player.getUniqueId());
             if (!playerData.hasCustomLocale()) {
                 locale = MinecraftLocale.toJava(player.spigot().getLocale());
-                setLocaleIfDifferent(playerData, locale);
+                notify = notify || setLocaleIfDifferent(playerData, locale);
             } else {
                 locale = playerData.getLocale();
             }
             I18n.setLocaleFor(player.getUniqueId(), locale);
-            notifySelectedLocale(player, playerData);
+            if (notify) {
+                notifySelectedLocale(player, playerData);
+            }
             return locale;
         });
     }
 
-    private void setLocaleIfDifferent(MutablePlayerData playerData, Locale newLocale) {
+    private boolean setLocaleIfDifferent(MutablePlayerData playerData, Locale newLocale) {
         Locale oldLocale = playerData.getLocale();
         if (!newLocale.equals(oldLocale)) {
             playerData.setLocale(newLocale);
             players.saveData(playerData);
+            return true;
         }
+        return false;
     }
 
     private void notifySelectedLocale(Player player, PlayerData playerData) {
