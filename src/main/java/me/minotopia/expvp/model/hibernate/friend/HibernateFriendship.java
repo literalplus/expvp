@@ -40,11 +40,11 @@ public class HibernateFriendship extends BaseEntity implements Friendship {
      */
 
     @Id
-    @Column(name = "source_id")
+    @JoinColumn(name = "source_id")
     @OneToOne(targetEntity = HibernatePlayerData.class)
     private HibernatePlayerData source;
 
-    @Column(name = "target_id")
+    @JoinColumn(name = "target_id")
     @OneToOne(targetEntity = HibernatePlayerData.class)
     private HibernatePlayerData target;
 
