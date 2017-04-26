@@ -15,6 +15,7 @@ import li.l1t.common.exception.DatabaseException;
 import me.minotopia.expvp.api.friend.Friendship;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.model.friend.FriendshipRepository;
+import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.model.hibernate.friend.HibernateFriendship;
 import me.minotopia.expvp.model.hibernate.friend.HibernateFriendship_;
 import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
@@ -99,6 +100,8 @@ public class HibernateFriendshipRepository implements FriendshipRepository {
     @Override
     public HibernateFriendship create(PlayerData source, PlayerData target) {
         return sessionProvider.inSessionAnd(scoped -> {
+            checkNoExistingFriendship(source);
+            checkNoExistingFriendship(target);
             HibernateFriendship friendship = new HibernateFriendship(
                     makeHibernate(source),
                     makeHibernate(target)
@@ -114,6 +117,13 @@ public class HibernateFriendshipRepository implements FriendshipRepository {
             return (HibernatePlayerData) data;
         } else {
             return players.findOrCreateData(data.getUniqueId());
+        }
+    }
+
+    private void checkNoExistingFriendship(PlayerData data) {
+        Optional<Friendship> existing = findFriendshipWith(data);
+        if (existing.isPresent()) {
+            throw new I18nInternalException("error!friend.existing-check");
         }
     }
 }

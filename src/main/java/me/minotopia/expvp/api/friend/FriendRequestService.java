@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.api.friend;
 
-import me.minotopia.expvp.api.model.PlayerData;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -21,21 +21,21 @@ import java.util.Optional;
  */
 public interface FriendRequestService {
     /**
-     * @param data the player whose requests to query
+     * @param player the player whose requests to query
      * @return the collection of still-valid friend requests this player has received
      */
-    Collection<FriendRequest> findReceivedRequests(PlayerData data);
+    Collection<FriendRequest> findReceivedRequests(Player player);
 
     /**
-     * @param data the player whose request to query
+     * @param player the player whose request to query
      * @return an optional containing the single still-valid friend request given player has sent, or an empty optional
      * if there is no such request
      */
-    Optional<FriendRequest> findSentRequest(PlayerData data);
+    Optional<FriendRequest> findSentRequest(Player player);
 
-    FriendRequest requestFriendship(PlayerData source, PlayerData target);
+    FriendRequest requestFriendship(Player source, Player target);
 
-    void cancelRequest(PlayerData source);
+    void cancelRequest(Player source);
 
     Friendship acceptRequest(FriendRequest request);
 }

@@ -9,6 +9,7 @@
 package me.minotopia.expvp.api.friend;
 
 import me.minotopia.expvp.api.model.PlayerData;
+import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
  * @since 2017-04-21
  */
 public interface FriendService {
-    Optional<PlayerData> findFriend(PlayerData data);
+    Optional<PlayerData> findFriend(Player player);
 
-    void removeFriend(PlayerData data);
+    void removeFriend(Player player);
 }

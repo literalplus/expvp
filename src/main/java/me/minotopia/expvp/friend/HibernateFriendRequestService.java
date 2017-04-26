@@ -23,12 +23,15 @@ import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.model.friend.FriendRequestRepository;
 import me.minotopia.expvp.api.model.friend.FriendshipRepository;
+import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.util.SessionProvider;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,51 +45,64 @@ public class HibernateFriendRequestService implements FriendRequestService {
     private final FriendRequestRepository requestRepository;
     private final FriendshipRepository friendshipRepository;
     private final PlayerService playerService;
+    private final PlayerDataService players;
+    private final SessionProvider sessionProvider;
 
     @Inject
     public HibernateFriendRequestService(FriendRequestRepository requestRepository, FriendshipRepository friendshipRepository,
-                                         PlayerService playerService) {
+                                         PlayerService playerService, PlayerDataService players, SessionProvider sessionProvider) {
         this.requestRepository = requestRepository;
         this.friendshipRepository = friendshipRepository;
         this.playerService = playerService;
+        this.players = players;
+        this.sessionProvider = sessionProvider;
     }
 
     @Override
-    public Collection<FriendRequest> findReceivedRequests(PlayerData data) {
-        return requestRepository.findReceivedRequests(data);
+    public Collection<FriendRequest> findReceivedRequests(Player player) {
+        return sessionProvider.inSessionAnd(ignored ->
+                players.findData(player.getUniqueId())
+                        .map(requestRepository::findReceivedRequests)
+                        .orElse(Collections.emptyList())
+        );
     }
 
     @Override
-    public Optional<FriendRequest> findSentRequest(PlayerData data) {
-        return requestRepository.findSentRequest(data);
+    public Optional<FriendRequest> findSentRequest(Player player) {
+        return sessionProvider.inSessionAnd(ignored ->
+                players.findData(player.getUniqueId())
+                        .flatMap(requestRepository::findSentRequest)
+        );
     }
 
     @Override
-    public FriendRequest requestFriendship(PlayerData source, PlayerData target) {
+    public FriendRequest requestFriendship(Player source, Player target) {
         Preconditions.checkNotNull(source, "source");
         Preconditions.checkNotNull(target, "target");
-        checkSelfFriend(source, target);
-        checkExistingFriendship(source);
-        checkPendingRequest(source);
-        FriendRequest request = requestRepository.create(source, target);
-        playerService.findOnlinePlayer(target.getUniqueId())
-                .ifPresent(targetPlayer -> notifyIncomingRequest(targetPlayer, source));
-        return request;
+        return sessionProvider.inSessionAnd(ignored -> {
+            PlayerData sourceData = players.findOrCreateData(source.getUniqueId());
+            PlayerData targetData = players.findOrCreateData(target.getUniqueId());
+            checkSelfFriend(source, target);
+            checkExistingFriendship(sourceData);
+            checkPendingRequest(source);
+            FriendRequest request = requestRepository.create(sourceData, targetData);
+            notifyIncomingRequest(target, source);
+            return request;
+        });
     }
 
-    private void notifyIncomingRequest(Player targetPlayer, PlayerData sourceData) {
-        String name = playerService.findNameFor(sourceData.getUniqueId(), targetPlayer);
+    private void notifyIncomingRequest(Player targetPlayer, Player source) {
         ComponentSender.sendTo(
                 targetPlayer,
-                TextComponent.fromLegacyText(I18n.loc(targetPlayer, Format.broadcast("core!friend.req-inc", name))),
+                TextComponent.fromLegacyText(I18n.loc(targetPlayer, Format.broadcast("core!friend.req-inc", source.getName()))),
                 new XyComponentBuilder(" ")
                         .append(I18n.loc(targetPlayer, "core!friend.req-inc-btn"))
-                        .hintedCommand("/fs accept " + sourceData.getUniqueId())
+                        .hintedCommand("/fs accept " + source.getUniqueId())
                         .create()
         );
     }
 
-    private void checkSelfFriend(PlayerData source, PlayerData target) {
+    private void checkSelfFriend(Player source, Player target) {
         if (source.equals(target)) {
             throw new SelfFriendException();
         }
@@ -99,7 +115,7 @@ public class HibernateFriendRequestService implements FriendRequestService {
         }
     }
 
-    private void checkPendingRequest(PlayerData source) {
+    private void checkPendingRequest(Player source) {
         Optional<FriendRequest> pendingRequest = findSentRequest(source);
         if (pendingRequest.isPresent()) {
             throw new PendingRequestException(pendingRequest.get());
@@ -107,19 +123,23 @@ public class HibernateFriendRequestService implements FriendRequestService {
     }
 
     @Override
-    public void cancelRequest(PlayerData source) {
-        Optional<FriendRequest> sent = findSentRequest(source);
-        if (!sent.isPresent()) {
-            throw new NoRequestException();
-        } else {
-            FriendRequest request = sent.get();
-            requestRepository.delete(request);
-            playerService.findOnlinePlayer(request.getTarget().getUniqueId())
-                    .ifPresent(targetPlayer -> {
-                        String sourceName = playerService.findNameFor(source.getUniqueId(), targetPlayer);
-                        I18n.sendLoc(targetPlayer, Format.broadcast("core!req-revoke", sourceName));
-                    });
-        }
+    public void cancelRequest(Player source) {
+        sessionProvider.inSession(ignored -> {
+            Optional<FriendRequest> sent = findSentRequest(source);
+            if (!sent.isPresent()) {
+                throw new NoRequestException();
+            } else {
+                doRevokeRequest(source, sent.get());
+            }
+        });
+    }
+
+    private void doRevokeRequest(Player source, FriendRequest request) {
+        requestRepository.delete(request);
+        playerService.findOnlinePlayer(request.getTarget().getUniqueId())
+                .ifPresent(targetPlayer ->
+                        I18n.sendLoc(targetPlayer, Format.broadcast("core!req-revoke", source.getName()))
+                );
     }
 
     @Override

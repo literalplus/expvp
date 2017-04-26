@@ -9,6 +9,7 @@
 package me.minotopia.expvp.friend;
 
 import com.google.inject.AbstractModule;
+import me.minotopia.expvp.api.friend.FriendRequestService;
 import me.minotopia.expvp.api.friend.FriendService;
 
 /**
@@ -21,5 +22,6 @@ public class FriendModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(FriendService.class).to(HibernateFriendService.class);
+        bind(FriendRequestService.class).to(HibernateFriendRequestService.class);
     }
 }

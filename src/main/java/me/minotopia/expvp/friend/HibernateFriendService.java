@@ -12,8 +12,13 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.friend.Friendship;
+import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.model.friend.FriendshipRepository;
+import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.util.SessionProvider;
+import org.bukkit.entity.Player;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -26,22 +31,32 @@ import java.util.function.Function;
  */
 public class HibernateFriendService implements FriendService {
     private final FriendshipRepository friendshipRepository;
+    private final PlayerDataService players;
+    private final SessionProvider sessionProvider;
+    private final PlayerService playerService;
 
     @Inject
-    public HibernateFriendService(FriendshipRepository friendshipRepository) {
+    public HibernateFriendService(FriendshipRepository friendshipRepository, PlayerDataService players,
+                                  SessionProvider sessionProvider, PlayerService playerService) {
         this.friendshipRepository = friendshipRepository;
+        this.players = players;
+        this.sessionProvider = sessionProvider;
+        this.playerService = playerService;
     }
 
     @Override
-    public Optional<PlayerData> findFriend(PlayerData data) {
-        Preconditions.checkNotNull(data, "data");
-        return friendshipRepository.findFriendshipWith(data)
-                .map(findOtherFriend(data));
+    public Optional<PlayerData> findFriend(Player player) {
+        Preconditions.checkNotNull(player, "player");
+        return sessionProvider.inSessionAnd(ignored ->
+                players.findData(player.getUniqueId())
+                        .flatMap(friendshipRepository::findFriendshipWith)
+                        .map(findOtherFriend(player))
+        );
     }
 
-    private Function<Friendship, PlayerData> findOtherFriend(PlayerData self) {
+    private Function<Friendship, PlayerData> findOtherFriend(Player self) {
         return friendship -> {
-            if (self.equals(friendship.getSource())) {
+            if (self.getUniqueId().equals(friendship.getSource().getUniqueId())) {
                 return friendship.getTarget();
             } else {
                 return friendship.getSource();
@@ -50,8 +65,22 @@ public class HibernateFriendService implements FriendService {
     }
 
     @Override
-    public void removeFriend(PlayerData data) {
-        friendshipRepository.findFriendshipWith(data)
-                .ifPresent(friendshipRepository::delete);
+    public void removeFriend(Player player) {
+        sessionProvider.inSession(ignored ->
+                players.findData(player.getUniqueId())
+                        .flatMap(friendshipRepository::findFriendshipWith)
+                        .ifPresent(this::deleteFriendship)
+        );
+    }
+
+    private void deleteFriendship(Friendship friendship) {
+        friendshipRepository.delete(friendship);
+        notifyFriendshipEnded(friendship.getTarget());
+        notifyFriendshipEnded(friendship.getSource());
+    }
+
+    private void notifyFriendshipEnded(PlayerData data) {
+        playerService.findOnlinePlayer(data.getUniqueId())
+                .ifPresent(player -> I18n.sendLoc(player, "core!friend.fs-ended"));
     }
 }
