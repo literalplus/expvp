@@ -45,7 +45,7 @@ public class CommandFriend {
         I18n.sendLoc(source, Format.success("core!friend.req-sent"));
     }
 
-    @Command(aliases = "end", desc = "cmd!friend.end.desc", usage = "cmd!friend.end.usage")
+    @Command(aliases = "end", desc = "cmd!friend.end.desc")
     public void end(@Sender Player source) {
         friendService.removeFriend(source);
     }
@@ -58,7 +58,7 @@ public class CommandFriend {
         requestService.acceptRequest(request);
     }
 
-    @Command(aliases = "cancel", desc = "cmd!friend.cancel.desc", usage = "cmd!friend.cancel.usage")
+    @Command(aliases = "cancel", desc = "cmd!friend.cancel.desc")
     public void cancel(@Sender Player source) {
         requestService.cancelRequest(source);
         I18n.sendLoc(source, Format.success("core!friend.revoke"));
