@@ -17,6 +17,7 @@ import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.model.friend.FriendshipRepository;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
@@ -87,6 +88,6 @@ public class HibernateFriendService implements FriendService {
 
     private void notifyFriendshipEnded(PlayerData data) {
         playerService.findOnlinePlayer(data.getUniqueId())
-                .ifPresent(player -> I18n.sendLoc(player, "core!friend.fs-ended"));
+                .ifPresent(player -> I18n.sendLoc(player, Format.broadcast("core!friend.fs-ended")));
     }
 }
