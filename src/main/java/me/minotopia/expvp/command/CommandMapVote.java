@@ -76,7 +76,7 @@ public class CommandMapVote {
                 I18n.loc(sender, Format.listItem("spawn!vote.spawn-item",
                         names.displayName(spawn), Plurals.plural("spawn!vote.vote", voteCount))) + " "
         );
-        BaseComponent[] buttonComponents = new XyComponentBuilder(I18n.loc(sender, "spawn!spawn-button"))
+        BaseComponent[] buttonComponents = new XyComponentBuilder(I18n.loc(sender, "spawn!vote.spawn-button"))
                 .color(ChatColor.GREEN)
                 .command("/mv vote " + spawn.getId())
                 .create();
