@@ -15,6 +15,8 @@ import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.sk89q.intake.Command;
+import li.l1t.common.exception.InternalException;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.xyplugin.GenericXyPlugin;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
@@ -139,7 +141,17 @@ public class EPPlugin extends GenericXyPlugin {
                 .map(this::bindingEntryToInstance)
                 .forEach(handler -> {
                     AutoRegister meta = handler.getClass().getAnnotation(AutoRegister.class);
-                    commandsManager.registerCommand(handler, meta.value(), meta.aliases());
+                    try {
+                        commandsManager.registerCommand(handler, meta.value(), meta.aliases());
+                    } catch (Exception e) {
+                        log.warn(" *** Unable to register command /" + meta.value() + ": ", e);
+                        commandsManager.registerCommand(new Object() {
+                            @Command(aliases = "", desc = "")
+                            public void onCommand() {
+                                throw new InternalException("This command is currently unavailable due to an internal error. Report this to staff.");
+                            }
+                        }, meta.value(), meta.aliases());
+                    }
                 });
     }
 
