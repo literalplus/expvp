@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.friend.Friendship;
+import me.minotopia.expvp.api.friend.exception.NoFriendshipException;
 import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.model.friend.FriendshipRepository;
@@ -66,10 +67,15 @@ public class HibernateFriendService implements FriendService {
 
     @Override
     public void removeFriend(Player player) {
-        sessionProvider.inSession(ignored ->
-                players.findData(player.getUniqueId())
-                        .flatMap(friendshipRepository::findFriendshipWith)
-                        .ifPresent(this::deleteFriendship)
+        sessionProvider.inSession(ignored -> {
+                    Optional<Friendship> friendship = players.findData(player.getUniqueId())
+                            .flatMap(friendshipRepository::findFriendshipWith);
+                    if (friendship.isPresent()) {
+                        deleteFriendship(friendship.get());
+                    } else {
+                        throw new NoFriendshipException();
+                    }
+                }
         );
     }
 

@@ -68,6 +68,7 @@ public class HibernateFriendRequestRepository implements FriendRequestRepository
         CriteriaQuery<FriendRequest> criteria = builder.createQuery(FriendRequest.class);
         Root<HibernateFriendRequest> root = criteria.from(HibernateFriendRequest.class);
         criteria.where(targetIsPredicate(data, builder, root));
+        criteria.select(root);
         return criteria;
     }
 
@@ -114,6 +115,7 @@ public class HibernateFriendRequestRepository implements FriendRequestRepository
         CriteriaQuery<FriendRequest> criteria = builder.createQuery(FriendRequest.class);
         Root<HibernateFriendRequest> root = criteria.from(HibernateFriendRequest.class);
         criteria.where(sourceIsPredicate(data, builder, root));
+        criteria.select(root);
         return criteria;
     }
 
