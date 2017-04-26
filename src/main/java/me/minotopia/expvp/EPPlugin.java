@@ -24,6 +24,7 @@ import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.command.AutoRegister;
 import me.minotopia.expvp.command.CommandsModule;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.LocaleService;
 import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.model.hibernate.friend.HibernateFriendRequest;
 import me.minotopia.expvp.model.hibernate.friend.HibernateFriendship;
@@ -106,6 +107,8 @@ public class EPPlugin extends GenericXyPlugin {
             PlayerInitService initService = inject(PlayerInitService.class);
             getServer().getOnlinePlayers()
                     .forEach(initService::callInitHandlers);
+            tasks().serverThread(() -> getServer().getOnlinePlayers()
+                    .forEach(player -> inject(LocaleService.class).recomputeClientLocale(player)));
         } catch (Exception e) {
             handleEnableException(e);
         }
