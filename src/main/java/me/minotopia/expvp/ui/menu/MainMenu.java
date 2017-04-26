@@ -143,7 +143,7 @@ public class MainMenu extends AbstractEPMenu {
                         plugin, player, leagues, names, kitCompiler, uuidRepository, selectTreeMenuFactory
                 );
                 PlayerData ownData = players.findOrCreateData(player.getUniqueId());
-                PlayerData friendData = friendService.findFriend(ownData).orElse(null);
+                PlayerData friendData = friendService.findFriend(player).orElse(null);
                 menu.populate(ownData, friendData);
                 return menu;
             });
