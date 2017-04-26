@@ -79,7 +79,7 @@ public class LocaleService {
         if (playerData.hasCustomLocale()) {
             I18n.sendLoc(player, "core!lang.manual-selected");
         } else {
-            I18n.sendLoc(player, "core!lang.auto-selected");
+            I18n.sendLoc(player, Format.result("core!lang.auto-selected"));
         }
     }
 
