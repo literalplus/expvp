@@ -139,7 +139,7 @@ public class HibernateFriendRequestService implements FriendRequestService {
         requestRepository.delete(request);
         playerService.findOnlinePlayer(request.getTarget().getUniqueId())
                 .ifPresent(targetPlayer ->
-                        I18n.sendLoc(targetPlayer, Format.broadcast("core!req-revoke", source.getName()))
+                        I18n.sendLoc(targetPlayer, Format.broadcast("core!friend.req-revoke", source.getName()))
                 );
     }
 
