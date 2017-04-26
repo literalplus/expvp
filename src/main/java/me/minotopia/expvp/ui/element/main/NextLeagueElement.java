@@ -31,6 +31,8 @@ import java.util.Optional;
  * @since 2017-04-20
  */
 public class NextLeagueElement implements MenuElement {
+    private final ItemStack stack;
+
     public NextLeagueElement(Player player, League currentLeague, PlayerData data, DisplayNameService names) {
         Optional<League> next = currentLeague.next();
         ItemStackFactory factory = new ItemStackFactory(currentLeague.getDisplayMaterial());
@@ -47,11 +49,12 @@ public class NextLeagueElement implements MenuElement {
         } else {
             factory.displayName(" ").lore(I18n.loc(player, "core!main.inv.next-none"));
         }
+        stack = factory.produce();
     }
 
     @Override
     public ItemStack draw(ElementHolder menu) {
-        return null;
+        return stack.clone();
     }
 
     @Override

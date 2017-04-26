@@ -65,7 +65,7 @@ public class MainMenu extends AbstractEPMenu {
         addElementXY(8, 1, new DeathExpElement(getPlayer(), ownLeague));
         makePlaceholderRow(2);
         addElementXY(2, 4, new StatsTopLinkButton(getPlayer()));
-        addElementXY(4, 4, new TreeSelectLinkButton(getPlayer(), ownData, selectTreeMenuFactory));
+        addElementXY(6, 4, new TreeSelectLinkButton(getPlayer(), ownData, selectTreeMenuFactory));
     }
 
     private void makePlaceholderColumn(int fromY, int toY, int x) {
@@ -98,7 +98,7 @@ public class MainMenu extends AbstractEPMenu {
     }
 
     private Placeholder noFriendPlaceholder() {
-        return new Placeholder(new ItemStackFactory(Material.IRON_BARDING)
+        return new Placeholder(new ItemStackFactory(Material.IRON_FENCE)
                 .displayName("§c???").lore(I18n.loc(getPlayer(), "core!inv.main.no-friend"))
                 .produce());
     }
@@ -109,6 +109,14 @@ public class MainMenu extends AbstractEPMenu {
 
     private Placeholder kitElementDisplay(KitCompilation kit, int slotId) {
         return new Placeholder(kit.snapshotOf(slotId).toItemStack());
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    protected ItemStackFactory getPlaceholderFactory() {
+        return new ItemStackFactory(Material.STAINED_GLASS_PANE)
+                .legacyData((byte) 15)
+                .displayName("§7§l*");
     }
 
     public static class Factory {
