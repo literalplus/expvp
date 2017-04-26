@@ -50,7 +50,7 @@ public class LocaleService {
         return sessionProvider.inSessionAnd(ignored -> {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
             Locale locale;
-            boolean notify = I18n.hasLocale(player.getUniqueId());
+            boolean notify = !I18n.hasLocale(player.getUniqueId());
             if (!playerData.hasCustomLocale()) {
                 locale = MinecraftLocale.toJava(player.spigot().getLocale());
                 notify = notify || setLocaleIfDifferent(playerData, locale);
