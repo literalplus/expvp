@@ -145,14 +145,17 @@ public class HibernateFriendRequestService implements FriendRequestService {
 
     @Override
     public Friendship acceptRequest(FriendRequest request) {
-        Preconditions.checkNotNull(request, "request");
-        PlayerData source = request.getSource();
-        PlayerData target = request.getTarget();
-        checkExistingFriendship(target);
-        Friendship friendship = friendshipRepository.create(source, target);
-        notifyAccept(source.getUniqueId(), target.getUniqueId());
-        notifyAccept(target.getUniqueId(), source.getUniqueId());
-        return friendship;
+        return sessionProvider.inSessionAnd(ignored -> {
+            Preconditions.checkNotNull(request, "request");
+            PlayerData source = request.getSource();
+            PlayerData target = request.getTarget();
+            checkExistingFriendship(target);
+            Friendship friendship = friendshipRepository.create(source, target);
+            notifyAccept(source.getUniqueId(), target.getUniqueId());
+            notifyAccept(target.getUniqueId(), source.getUniqueId());
+            requestRepository.delete(request);
+            return friendship;
+        });
     }
 
     private void notifyAccept(UUID receiverId, UUID otherId) {
