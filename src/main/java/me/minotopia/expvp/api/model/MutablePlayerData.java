@@ -61,6 +61,8 @@ public interface MutablePlayerData extends PlayerData {
      */
     void setCustomLocale(boolean customLocale);
 
+    void setBestKillStreak(int bestKillStreak);
+
     /**
      * Adds a new skill to the player's set of skills.
      *

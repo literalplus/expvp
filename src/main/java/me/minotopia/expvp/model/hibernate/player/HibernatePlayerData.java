@@ -16,13 +16,7 @@ import me.minotopia.expvp.skill.meta.Skill;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence21.CascadeType;
-import javax.persistence21.Column;
-import javax.persistence21.Convert;
-import javax.persistence21.Entity;
-import javax.persistence21.Id;
-import javax.persistence21.OneToMany;
-import javax.persistence21.Table;
+import javax.persistence21.*;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -58,6 +52,8 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     private Locale locale;
     @Column(name = "localechanged")
     private boolean customLocale;
+    @Column(name = "bestkillstreak")
+    private int bestKillStreak;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = HibernateObtainedSkill.class, mappedBy = "playerData")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -162,6 +158,16 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
 
     public void setCustomLocale(boolean customLocale) {
         this.customLocale = customLocale;
+    }
+
+    @Override
+    public int getBestKillStreak() {
+        return bestKillStreak;
+    }
+
+    @Override
+    public void setBestKillStreak(int bestKillStreak) {
+        this.bestKillStreak = bestKillStreak;
     }
 
     @Override

@@ -80,6 +80,8 @@ public interface PlayerData extends Serializable {
      */
     boolean hasCustomLocale();
 
+    int getBestKillStreak();
+
     /**
      * Gets the set of skills this player has.
      *
