@@ -15,5 +15,18 @@ package me.minotopia.expvp.api.model;
  * @since 2017-04-27
  */
 public interface RankService {
+    /**
+     * Force-fetches a player's rank by Exp from the database, even if there is one cached.
+     *
+     * @param data the player to find the exp rank for
+     * @return the amount of players that have more Exp than given player, plus one
+     */
     int findExpRank(PlayerData data);
+
+    /**
+     * @param data the player to find the exp rank for
+     * @return the {@link #findExpRank(PlayerData) fetched exp rank} for given player, or a short-term cached value, if
+     * available
+     */
+    int getExpRank(PlayerData data);
 }

@@ -23,6 +23,7 @@ import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -52,18 +53,28 @@ public class HibernateFriendService implements FriendService {
         return sessionProvider.inSessionAnd(ignored ->
                 players.findData(player.getUniqueId())
                         .flatMap(friendshipRepository::findFriendshipWith)
-                        .map(findOtherFriend(player))
+                        .map(findOtherFriend(player.getUniqueId()))
         );
     }
 
-    private Function<Friendship, PlayerData> findOtherFriend(Player self) {
+    private Function<Friendship, PlayerData> findOtherFriend(UUID ownId) {
         return friendship -> {
-            if (self.getUniqueId().equals(friendship.getSource().getUniqueId())) {
+            if (ownId.equals(friendship.getSource().getUniqueId())) {
                 return friendship.getTarget();
             } else {
                 return friendship.getSource();
             }
         };
+    }
+
+    @Override
+    public Optional<PlayerData> findFriend(PlayerData data) {
+        Preconditions.checkNotNull(data, "data");
+        return sessionProvider.inSessionAnd(ignored ->
+                players.findData(data.getUniqueId())
+                        .flatMap(friendshipRepository::findFriendshipWith)
+                        .map(findOtherFriend(data.getUniqueId()))
+        );
     }
 
     @Override

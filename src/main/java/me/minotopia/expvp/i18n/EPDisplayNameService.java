@@ -11,13 +11,17 @@ package me.minotopia.expvp.i18n;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import li.l1t.common.i18n.Message;
+import li.l1t.common.shared.uuid.UUIDRepository;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SkillTree;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 /**
  * Resolves display names for Expvp entities.
@@ -28,10 +32,12 @@ import org.bukkit.entity.Player;
 public class EPDisplayNameService implements DisplayNameService {
     private static final Message UNKNOWN = Message.of("core!unknown");
     private final LeagueService leagueService;
+    private final UUIDRepository uuidRepository;
 
     @Inject
-    public EPDisplayNameService(LeagueService leagueService) {
+    public EPDisplayNameService(LeagueService leagueService, UUIDRepository uuidRepository) {
         this.leagueService = leagueService;
+        this.uuidRepository = uuidRepository;
     }
 
     @Override
@@ -72,6 +78,15 @@ public class EPDisplayNameService implements DisplayNameService {
         return Message.of("core!player.prefixed-name",
                 player.getName(), displayName(leagueService.getCurrentLeague(player))
         );
+    }
+
+    @Override
+    public Message displayName(PlayerData data) {
+        Preconditions.checkNotNull(data, "data");
+        return Optional.ofNullable(uuidRepository.getName(data.getUniqueId()))
+                .map(name -> Message.of("core!player.prefixed-name",
+                        name, displayName(leagueService.getPlayerLeague(data))
+                )).orElse(UNKNOWN);
     }
 
     @Override

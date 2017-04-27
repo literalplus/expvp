@@ -22,5 +22,7 @@ import java.util.Optional;
 public interface FriendService {
     Optional<PlayerData> findFriend(Player player);
 
+    Optional<PlayerData> findFriend(PlayerData data);
+
     void removeFriend(Player player);
 }

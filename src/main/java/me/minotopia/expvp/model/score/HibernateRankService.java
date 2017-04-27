@@ -9,11 +9,15 @@
 package me.minotopia.expvp.model.score;
 
 import com.google.inject.Inject;
+import li.l1t.common.collections.cache.GuavaMapCache;
+import li.l1t.common.collections.cache.MapCache;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.model.RankService;
 import me.minotopia.expvp.util.SessionProvider;
 
 import javax.persistence21.TypedQuery;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Finds ranks with Hibernate.
@@ -23,6 +27,7 @@ import javax.persistence21.TypedQuery;
  */
 public class HibernateRankService implements RankService {
     private final SessionProvider sessionProvider;
+    private final MapCache<UUID, Integer> expRankCache = new GuavaMapCache<>(30, TimeUnit.SECONDS);
 
     @Inject
     public HibernateRankService(SessionProvider sessionProvider) {
@@ -35,7 +40,12 @@ public class HibernateRankService implements RankService {
             TypedQuery<Integer> query = scoped.session().createQuery("SELECT COUNT(*) FROM HibernatePlayerData p " +
                     "WHERE p.exp > :myexp", Integer.class);
             query.setParameter("myexp", data.getExp());
-            return query.getSingleResult();
+            return query.getSingleResult() + 1;
         });
+    }
+
+    @Override
+    public int getExpRank(PlayerData data) {
+        return expRankCache.getOrCompute(data.getUniqueId(), ignored -> findExpRank(data));
     }
 }
