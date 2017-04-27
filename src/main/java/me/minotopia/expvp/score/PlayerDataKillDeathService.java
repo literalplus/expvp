@@ -14,6 +14,7 @@ import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.KillDeathService;
+import me.minotopia.expvp.api.score.KillStreakService;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.service.PlayerDataService;
@@ -36,17 +37,19 @@ public class PlayerDataKillDeathService implements KillDeathService {
     private final LeagueService leagues;
     private final ExpService exps;
     private final DisplayNameService names;
+    private final KillStreakService streakService;
 
     @Inject
     public PlayerDataKillDeathService(TalentPointService talentPoints, SessionProvider sessionProvider,
                                       PlayerDataService players, LeagueService leagues, ExpService exps,
-                                      DisplayNameService names) {
+                                      DisplayNameService names, KillStreakService streakService) {
         this.talentPoints = talentPoints;
         this.sessionProvider = sessionProvider;
         this.players = players;
         this.leagues = leagues;
         this.exps = exps;
         this.names = names;
+        this.streakService = streakService;
     }
 
     @Override
@@ -72,6 +75,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
         playerData.addDeath();
         int expPenalty = leagues.getCurrentLeague(victim).getDeathExpPenalty();
         exps.decrementExp(victim, expPenalty);
+        streakService.resetStreak(victim);
         I18n.sendLoc(victim, Format.result(Message.of("score!kill.victim", expPenalty)));
     }
 
@@ -82,6 +86,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
         exps.incrementExp(culprit, expReward);
         I18n.sendLoc(culprit, Format.result(Message.of("score!kill.culprit", expReward)));
         grantTalentPointsToKiller(culprit);
+        streakService.increaseStreak(culprit);
     }
 
     private void grantTalentPointsToKiller(Player culprit) {
