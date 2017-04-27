@@ -9,6 +9,7 @@
 package me.minotopia.expvp.model;
 
 import com.google.inject.AbstractModule;
+import me.minotopia.expvp.api.model.RankService;
 import me.minotopia.expvp.api.model.friend.FriendRequestRepository;
 import me.minotopia.expvp.api.model.friend.FriendshipRepository;
 import me.minotopia.expvp.api.service.PlayerDataService;
@@ -16,6 +17,7 @@ import me.minotopia.expvp.model.friend.HibernateFriendRequestRepository;
 import me.minotopia.expvp.model.friend.HibernateFriendshipRepository;
 import me.minotopia.expvp.model.player.HibernatePlayerDataService;
 import me.minotopia.expvp.model.player.HibernateResetService;
+import me.minotopia.expvp.model.score.HibernateRankService;
 
 /**
  * Provides the dependency wiring for the model module.
@@ -30,5 +32,6 @@ public class ModelModule extends AbstractModule {
         bind(HibernateResetService.class);
         bind(FriendshipRepository.class).to(HibernateFriendshipRepository.class);
         bind(FriendRequestRepository.class).to(HibernateFriendRequestRepository.class);
+        bind(RankService.class).to(HibernateRankService.class);
     }
 }
