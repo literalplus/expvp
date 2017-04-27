@@ -19,6 +19,7 @@ import me.minotopia.expvp.util.SessionProvider;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Manages PlayerData instances using a Hibernate backend.
@@ -69,6 +70,16 @@ public class HibernatePlayerDataService implements PlayerDataService {
         try (ScopedSession scoped = sessionProvider.scoped().join()) {
             return scoped.session().byId(HibernatePlayerData.class).loadOptional(playerId);
         }
+    }
+
+    @Override
+    public void withMutable(UUID playerId, Consumer<MutablePlayerData> what) {
+        Preconditions.checkNotNull(playerId, "playerId");
+        sessionProvider.inSession(ignored -> {
+            HibernatePlayerData data = findOrCreateDataMutable(playerId);
+            what.accept(data);
+            saveData(data);
+        });
     }
 
     @Override

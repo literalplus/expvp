@@ -12,6 +12,7 @@ import com.google.inject.AbstractModule;
 import me.minotopia.expvp.api.reset.ResetService;
 import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.KillDeathService;
+import me.minotopia.expvp.api.score.KillStreakService;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.score.league.StaticLeagueService;
@@ -31,6 +32,7 @@ public class ScoreModule extends AbstractModule {
         bind(LeagueService.class).to(StaticLeagueService.class);
         bind(KillDeathService.class).to(PlayerDataKillDeathService.class);
         bind(ResetService.class).to(TaskResetService.class);
+        bind(KillStreakService.class).to(PlayerKillStreakService.class);
         bind(KillDeathForwardingListener.class);
         bind(ScoreJoinListener.class);
     }

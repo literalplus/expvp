@@ -13,6 +13,7 @@ import me.minotopia.expvp.api.model.PlayerData;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * A service that manages player data instances.
@@ -45,6 +46,14 @@ public interface PlayerDataService {
     Optional<? extends PlayerData> findData(UUID playerId);
 
     Optional<? extends MutablePlayerData> findDataMutable(UUID playerId);
+
+    /**
+     * Consumes an {@link #findOrCreateDataMutable(UUID) existing or new} data object for given player.
+     *
+     * @param playerId the unique id of the player whose data to consume
+     * @param what     the action to invoke on the data
+     */
+    void withMutable(UUID playerId, Consumer<MutablePlayerData> what);
 
     /**
      * Persists the state of a given player data object to the underlying data store.
