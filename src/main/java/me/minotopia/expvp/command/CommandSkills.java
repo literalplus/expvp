@@ -22,7 +22,7 @@ import java.io.IOException;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-07-23
  */
-@AutoRegister("skills")
+//@AutoRegister("skills")
 public class CommandSkills {
     @Inject
     public CommandSkills() {

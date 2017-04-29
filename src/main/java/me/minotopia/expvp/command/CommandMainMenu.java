@@ -33,7 +33,7 @@ public class CommandMainMenu {
         this.menuFactory = menuFactory;
     }
 
-    @Command(aliases = "", desc = "cmd!menu.root.desc")
+    //@Command(aliases = "", desc = "cmd!menu.root.desc")
     public void root(@Sender Player player) {
         menuFactory.openMenuFor(player);
     }
