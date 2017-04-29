@@ -15,6 +15,7 @@ import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.score.KillStreakService;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
 import org.bukkit.Server;
@@ -67,7 +68,7 @@ public class PlayerKillStreakService implements KillStreakService {
         players.withMutable(player.getUniqueId(), playerData -> {
             if (newStreak > playerData.getBestKillStreak()) {
                 playerData.setBestKillStreak(newStreak);
-                I18n.sendLoc(player, "score!streak.highscore", Plurals.killPlural(newStreak));
+                I18n.sendLoc(player, Format.broadcast("score!streak.highscore", Plurals.killPlural(newStreak)));
             }
         });
     }
@@ -75,7 +76,7 @@ public class PlayerKillStreakService implements KillStreakService {
     private void checkIsAFifthKill(Player player, Integer newStreak) {
         if ((newStreak % 5) == 0) {
             server.getOnlinePlayers().forEach(onlinePlayer ->
-                    I18n.sendLoc(onlinePlayer, "score!streak.fifth", player.getName(), newStreak)
+                    I18n.sendLoc(onlinePlayer, Format.broadcast("score!streak.fifth", player.getName(), newStreak))
             );
             kitService.applyKit(player);
             player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 30 * 20, 0));
