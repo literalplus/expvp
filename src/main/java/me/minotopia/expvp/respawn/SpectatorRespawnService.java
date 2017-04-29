@@ -9,6 +9,7 @@
 package me.minotopia.expvp.respawn;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import li.l1t.common.i18n.Message;
 import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.handler.kit.KitService;
@@ -32,6 +33,7 @@ import java.time.Duration;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-06
  */
+@Singleton
 public class SpectatorRespawnService implements RespawnService {
     private final TaskService tasks;
     private final SelectTreeMenu.Factory treeMenuFactory;

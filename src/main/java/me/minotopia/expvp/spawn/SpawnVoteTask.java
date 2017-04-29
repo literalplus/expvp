@@ -90,6 +90,7 @@ public class SpawnVoteTask implements Runnable {
         changeService.registerSpawnChange();
         server.getOnlinePlayers()
                 .forEach(spawns::teleportToSpawnIfPossible);
+        displayService.updateForAllPlayers();
     }
 
     private boolean hasNotCastAVote(Player player) {

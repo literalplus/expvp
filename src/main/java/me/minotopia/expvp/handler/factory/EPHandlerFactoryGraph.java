@@ -9,6 +9,7 @@
 package me.minotopia.expvp.handler.factory;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import me.minotopia.expvp.api.handler.HandlerFactoryGraph;
 import me.minotopia.expvp.api.handler.factory.HandlerFactory;
 import me.minotopia.expvp.handler.factory.damage.CompoundDamageHandlerFactory;
@@ -20,6 +21,7 @@ import me.minotopia.expvp.handler.factory.kit.CompoundKitHandlerFactory;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-02-21
  */
+@Singleton
 public class EPHandlerFactoryGraph extends MapCompoundHandlerFactory<HandlerFactory> implements HandlerFactoryGraph {
     private CompoundKitHandlerFactory rootKitFactory;
     private CompoundDamageHandlerFactory rootDamageFactory;
