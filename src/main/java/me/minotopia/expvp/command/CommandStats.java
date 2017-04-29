@@ -115,7 +115,7 @@ public class CommandStats {
     private void showOwnExpRelated(PlayerData target, CommandSender receiver) {
         Message leagueName = names.displayName(leagues.getPlayerLeague(target));
         I18n.sendLoc(receiver, Format.result("score!stats.exp-related",
-                target.getExp(), rankService.getExpRank(target), leagueName
+                target.getExp(), Format.rank(rankService.getExpRank(target)), leagueName
         ));
     }
 
@@ -143,6 +143,8 @@ public class CommandStats {
     }
 
     private void showStreakAndSkills(PlayerData target, CommandSender receiver) {
-        I18n.sendLoc(receiver, "score!stats.best-streak-skills", target.getBestKillStreak(), target.getSkills().size());
+        I18n.sendLoc(receiver, Format.result("score!stats.best-streak-skills",
+                target.getBestKillStreak(), target.getSkills().size()
+        ));
     }
 }

@@ -97,4 +97,20 @@ public class Format {
     public static Message bool(boolean input) {
         return Message.of(input ? "core!yes" : "core!no");
     }
+
+    public static Message rank(long num) {
+        if (num >= 11L && num <= 13L) {
+            return Message.of("core!number.other", num); //eleventh, twelfth, thirteenth
+        }
+        switch ((int) (num % 10L)) {
+            case 1:
+                return Message.of("core!number.one", num);
+            case 2:
+                return Message.of("core!number.two", num);
+            case 3:
+                return Message.of("core!number.three", num);
+            default:
+                return Message.of("core!number.other", num);
+        }
+    }
 }

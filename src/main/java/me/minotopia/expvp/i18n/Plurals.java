@@ -57,20 +57,4 @@ public class Plurals {
     private static String resolveKey(String baseKey, long count) {
         return baseKey + (count == 1 ? ".one" : ".many");
     }
-
-    public static Message rank(int num) {
-        if (num >= 11 && num <= 13) {
-            return Message.of("core!number.other", num); //eleventh, twelfth, thirteenth
-        }
-        switch (num % 10) {
-            case 1:
-                return Message.of("core!number.one", num);
-            case 2:
-                return Message.of("core!number.two", num);
-            case 3:
-                return Message.of("core!number.three", num);
-            default:
-                return Message.of("core!number.other", num);
-        }
-    }
 }
