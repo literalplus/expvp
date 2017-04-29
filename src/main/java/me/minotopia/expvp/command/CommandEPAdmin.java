@@ -13,15 +13,16 @@ import com.sk89q.intake.Command;
 import li.l1t.common.i18n.Message;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.Permission;
+import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.CommandService;
-import me.minotopia.expvp.handler.kit.SkillKitService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.util.SessionProvider;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -38,14 +39,16 @@ import java.util.stream.Collectors;
  */
 @AutoRegister("epa")
 public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService> {
-    private final SkillKitService skillKitService;
+    private final KitService kitService;
     private final SessionProvider sessionProvider;
+    private final Server server;
 
     @Inject
-    CommandEPAdmin(CommandService commandService, SkillKitService skillKitService, SessionProvider sessionProvider) {
+    CommandEPAdmin(CommandService commandService, KitService kitService, SessionProvider sessionProvider, Server server) {
         super(commandService);
-        this.skillKitService = skillKitService;
+        this.kitService = kitService;
         this.sessionProvider = sessionProvider;
+        this.server = server;
     }
 
     @Command(aliases = "settp", min = 2,
@@ -126,8 +129,8 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
     @Command(aliases = "testkit", desc = "Testet dein Kit")
     @EnumRequires(Permission.ADMIN_BASIC)
     public void testKit(@Sender Player player) {
-        skillKitService.invalidateCache(player.getUniqueId());
-        skillKitService.applyKit(player);
+        kitService.invalidateCache(player.getUniqueId());
+        kitService.applyKit(player);
         I18n.sendLoc(player, Format.success(Message.ofText(
                 "Viel Spaß mit deinem Kit!"
         )));
@@ -138,6 +141,9 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
     public void clearCache(CommandSender sender) {
         sessionProvider.getSessionFactory().getCache().evictAllRegions();
         I18n.clearCache();
+        server.getOnlinePlayers().stream()
+                .map(Player::getUniqueId)
+                .forEach(kitService::invalidateCache);
         I18n.sendLoc(sender, Format.success(Message.ofText(
                 "Ja mehr oder weniger sollten jetzt zumindest die schlimmsten Caches geleert sein."
         )));
