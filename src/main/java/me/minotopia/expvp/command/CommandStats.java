@@ -79,7 +79,7 @@ public class CommandStats extends BukkitExecutionExecutor {
                 showStatsOfTo(target, exec.sender());
             });
         } catch (I18nInternalException | I18nUserException e) {
-            I18n.sendLoc(exec.sender(), Message.of(e.getWrapperMessageKey(), e.getMessageKey(), e.getMessageParameters()));
+            I18n.sendLoc(exec.sender(), Message.of(e.getWrapperMessageKey(), Message.of(e.getMessageKey(), e.getMessageParameters())));
         } catch (InternalException | UserException e) {
             exec.sender().sendMessage(e.getColoredMessage());
         }
