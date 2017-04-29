@@ -45,6 +45,7 @@ public class KillDeathForwardingListener implements Listener {
         if (isTheVictimAPlayer(event)) {
             Player victim = (Player) event.getEntity();
             if (isFatalHit(event, victim)) {
+                streakService.resetStreak(victim);
                 event.setCancelled(true);
                 handleFatalHit(victim, event);
             }
