@@ -61,4 +61,9 @@ public class SimpleKitHandler extends HandlerAdapter implements KitHandler {
     public int getAmount() {
         return amount;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " -> " + getSkill();
+    }
 }
