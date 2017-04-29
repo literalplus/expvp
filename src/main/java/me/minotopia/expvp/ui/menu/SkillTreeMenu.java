@@ -31,6 +31,7 @@ import me.minotopia.expvp.ui.renderer.exception.RenderingException;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.stream.IntStream;
@@ -107,6 +108,12 @@ public class SkillTreeMenu extends AbstractEPMenu {
 
     public SkillTree getTree() {
         return renderer.getTree();
+    }
+
+    @Override
+    public void handleClose(InventoryCloseEvent evt) {
+        super.handleClose(evt);
+        kitService.applyKit((Player) evt.getPlayer());
     }
 
     public static class Factory {
