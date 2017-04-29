@@ -35,5 +35,6 @@ public class VillagerClickHandler implements Listener {
             return;
         }
         menuFactory.openMenuFor(event.getPlayer());
+        event.setCancelled(true);
     }
 }
