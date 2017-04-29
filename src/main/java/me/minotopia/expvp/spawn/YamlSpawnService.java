@@ -18,6 +18,7 @@ import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import org.apache.commons.lang3.RandomUtils;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -94,6 +95,9 @@ public class YamlSpawnService implements SpawnService {
             player.teleport(currentSpawn.get().getLocation());
         } else {
             I18n.sendLoc(player, Format.warning("core!respawn.no-spawn"));
+        }
+        if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.CREATIVE) {
+            player.setGameMode(GameMode.SURVIVAL);
         }
     }
 }
