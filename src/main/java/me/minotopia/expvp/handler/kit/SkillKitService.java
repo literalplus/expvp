@@ -14,6 +14,7 @@ import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompiler;
 import me.minotopia.expvp.api.handler.kit.compilation.KitElement;
+import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
@@ -29,6 +30,7 @@ import java.util.UUID;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-17
  */
+@ConstructOnEnable
 public class SkillKitService implements KitService {
     private final KitCompiler compiler;
     private final PlayerDataService players;
