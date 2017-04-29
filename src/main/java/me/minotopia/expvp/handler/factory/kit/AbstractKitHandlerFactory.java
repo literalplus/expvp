@@ -40,14 +40,16 @@ public abstract class AbstractKitHandlerFactory extends AbstractHandlerSpecNode
             return createHandler(skill, new HandlerArgs(relativeSpec));
         } catch (ArgumentFormatException e) {
             throw new InvalidHandlerSpecException(e.getMessage(), skill.getHandlerSpec(), this);
+        } catch (Exception e) {
+            throw new InvalidHandlerSpecException(e.getClass().getSimpleName() + ":" + e.getMessage(), skill.getHandlerSpec(), this);
         }
     }
 
     /**
      * Creates a handler using this kit handler factory's specific creation mechanism.
      *
-     * @param skill  the skill to create the handler for
-     * @param args   the argument list, retrieved from the skill's handler spec
+     * @param skill the skill to create the handler for
+     * @param args  the argument list, retrieved from the skill's handler spec
      * @return the created kit handler for given arguments
      */
     protected abstract KitHandler createHandler(Skill skill, HandlerArgs args);
