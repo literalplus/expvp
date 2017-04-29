@@ -10,6 +10,7 @@ package me.minotopia.expvp.command;
 
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
+import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.argument.MissingArgumentException;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
@@ -62,20 +63,20 @@ public class CommandStats {
     }
 
     @Command(aliases = "", usage = "cmd!stats.root.usage", desc = "cmd!stats.root.desc")
-    public void root(CommandSender sender, String arg) throws MissingArgumentException {
+    public void root(CommandSender sender, CommandArgs args) throws MissingArgumentException {
         sessionProvider.inSession(ignored -> {
-            PlayerData target = tryFindTarget(sender, arg);
+            PlayerData target = tryFindTarget(sender, args);
             showStatsOfTo(target, sender);
         });
     }
 
-    private PlayerData tryFindTarget(CommandSender sender, String arg) {
+    private PlayerData tryFindTarget(CommandSender sender, CommandArgs args) {
         try {
-            Optional<? extends PlayerData> target = findTargetFrom(sender, arg);
+            Optional<? extends PlayerData> target = findTargetFrom(sender, args);
             if (target.isPresent()) {
                 return target.get();
             } else {
-                throw new I18nUserException("error!stats.unknown", arg);
+                throw new I18nUserException("error!stats.unknown", args.next());
             }
         } catch (MissingArgumentException e) {
             throw new AssertionError();
@@ -85,11 +86,11 @@ public class CommandStats {
         }
     }
 
-    private Optional<? extends PlayerData> findTargetFrom(CommandSender sender, String arg) throws MissingArgumentException {
-        if (arg == null) {
+    private Optional<? extends PlayerData> findTargetFrom(CommandSender sender, CommandArgs args) throws MissingArgumentException {
+        if (!args.hasNext()) {
             return players.findData(CommandHelper.getSenderId(sender));
         } else {
-            return Optional.ofNullable(uuidRepository.forName(arg))
+            return Optional.ofNullable(uuidRepository.forName(args.peek()))
                     .flatMap(players::findData);
         }
     }
