@@ -26,13 +26,19 @@ public class TreeStructureRenderer {
     public static final int MAX_HEIGHT = 3;
     public static final int MAX_WIDTH = 5;
     private final SkillTree tree;
-    private final TemplateElementHolder template = new TemplateElementHolder();
+    private TemplateElementHolder template;
     private Function<SimpleSkillTreeNode, MenuElement> elementSupplier;
-    private boolean rendered = false;
+    private boolean rendered;
 
     public TreeStructureRenderer(SkillTree tree, Function<SimpleSkillTreeNode, MenuElement> elementSupplier) {
         this.tree = tree;
         this.elementSupplier = elementSupplier;
+        reset();
+    }
+
+    public void reset() {
+        rendered = false;
+        template = new TemplateElementHolder();
     }
 
     public void render() throws RenderingException {
