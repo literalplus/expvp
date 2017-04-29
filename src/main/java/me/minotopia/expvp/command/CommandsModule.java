@@ -19,6 +19,8 @@ import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.InternationalException;
+import me.minotopia.expvp.logging.LoggingManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -33,6 +35,8 @@ import java.util.List;
  * @since 2017-03-09
  */
 public class CommandsModule extends AbstractModule {
+    private final Logger LOGGER = LoggingManager.getLogger(CommandsModule.class);
+
     @Override
     protected void configure() {
         bind(CommandEPAdmin.class);
@@ -91,19 +95,22 @@ public class CommandsModule extends AbstractModule {
     private CommandExceptionListener i18nCommandExceptionListener() {
         return (argLine, sender, exception) -> {
             if (exception instanceof InternationalException) {
-                sendI18nExceptionText(sender, (InternationalException) exception);
+                sendI18nExceptionText(sender, argLine, (InternationalException) exception);
                 return false;
             } else if (exception.getCause() instanceof InternationalException) {
                 //cannot change message to translated version, so this looks like the only way
                 //we can still benefit from Intake-Spigot's translation
-                sendI18nExceptionText(sender, (InternationalException) exception.getCause());
+                sendI18nExceptionText(sender, argLine, (InternationalException) exception.getCause());
                 return false;
             }
             return true;
         };
     }
 
-    private void sendI18nExceptionText(CommandSender sender, InternationalException exception) {
+    private void sendI18nExceptionText(CommandSender sender, String argLine, InternationalException exception) {
         sender.sendMessage(I18n.loc(sender, exception.toMessage()));
+        if (exception.needsLogging()) {
+            LOGGER.warn("Exception exceuting command /" + argLine + ":", exception);
+        }
     }
 }

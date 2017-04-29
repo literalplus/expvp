@@ -22,4 +22,6 @@ public interface InternationalException {
     String getWrapperMessageKey();
 
     Message toMessage();
+
+    boolean needsLogging();
 }
