@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import li.l1t.common.util.DamageHelper;
 import me.minotopia.expvp.api.respawn.RespawnService;
 import me.minotopia.expvp.api.score.KillDeathService;
+import me.minotopia.expvp.api.score.KillStreakService;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,11 +31,13 @@ import org.bukkit.potion.PotionEffect;
 public class KillDeathForwardingListener implements Listener {
     private final KillDeathService killDeathService;
     private final RespawnService respawnService;
+    private final KillStreakService streakService;
 
     @Inject
-    public KillDeathForwardingListener(KillDeathService killDeathService, RespawnService respawnService) {
+    public KillDeathForwardingListener(KillDeathService killDeathService, RespawnService respawnService, KillStreakService streakService) {
         this.killDeathService = killDeathService;
         this.respawnService = respawnService;
+        this.streakService = streakService;
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -82,5 +85,6 @@ public class KillDeathForwardingListener implements Listener {
         respawnService.startRespawn(event.getEntity());
         event.setDroppedExp(0);
         event.getDrops().clear();
+        streakService.resetStreak(event.getEntity());
     }
 }

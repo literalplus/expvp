@@ -75,7 +75,6 @@ public class PlayerDataKillDeathService implements KillDeathService {
         playerData.addDeath();
         int expPenalty = leagues.getCurrentLeague(victim).getDeathExpPenalty();
         exps.decrementExp(victim, expPenalty);
-        streakService.resetStreak(victim);
         I18n.sendLoc(victim, Format.result(Message.of("score!kill.victim", expPenalty)));
     }
 
