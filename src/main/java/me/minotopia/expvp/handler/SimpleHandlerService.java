@@ -27,6 +27,7 @@ import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.util.SessionProvider;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -104,7 +105,9 @@ public class SimpleHandlerService implements HandlerService {
 
     @Override
     public <T extends SkillHandler> Stream<T> handlersOfTypeStream(Class<? extends T> type, PlayerData playerData) {
-        return handlerMap.getRelevantHandlers(skillService.getSkills(playerData)).stream()
+        Collection<SkillHandler> relevantHandlers = handlerMap.getRelevantHandlers(skillService.getSkills(playerData));
+        LOGGER.debug(playerData.getUniqueId() + " -> " + relevantHandlers);
+        return relevantHandlers.stream()
                 .filter(handler -> type.isAssignableFrom(handler.getClass()))
                 .map(type::cast);
     }

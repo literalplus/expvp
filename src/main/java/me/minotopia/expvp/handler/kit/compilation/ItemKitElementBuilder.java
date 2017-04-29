@@ -65,7 +65,7 @@ public class ItemKitElementBuilder implements KitElementBuilder {
     @Override
     public KitElementBuilder asPotion(PotionType type, int level) {
         Preconditions.checkNotNull(type, "type");
-        Preconditions.checkArgument(level > 0 && level <= potionType.getMaxLevel(),
+        Preconditions.checkArgument(level > 0 && level <= type.getMaxLevel(),
                 "potion level out of bounds: %s %s", type, level);
         include();
         if (this.potionType != type || level > this.potionLevel) {
