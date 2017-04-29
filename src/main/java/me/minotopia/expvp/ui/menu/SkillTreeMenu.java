@@ -14,6 +14,7 @@ import li.l1t.common.inventory.gui.element.Placeholder;
 import li.l1t.common.util.inventory.InventoryHelper;
 import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.ResearchService;
@@ -30,6 +31,7 @@ import me.minotopia.expvp.ui.renderer.exception.RenderingException;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.stream.IntStream;
@@ -43,12 +45,14 @@ import java.util.stream.IntStream;
 public class SkillTreeMenu extends AbstractEPMenu {
     private final SkillTree tree;
     private TreeStructureRenderer renderer;
+    private final KitService kitService;
 
     private SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree, Runnable backButtonHandler,
                           TalentPointService talentPoints, String displayName,
-                          SkillService skills, ResearchService researchService, SkillTreeManager manager) {
+                          SkillService skills, ResearchService researchService, SkillTreeManager manager, KitService kitService) {
         super(plugin, displayName, player);
         this.tree = tree;
+        this.kitService = kitService;
         this.renderer = new TreeStructureRenderer(tree,
                 node -> new ObtainableSkillElement(this, node, skills, researchService)
         );
@@ -106,6 +110,12 @@ public class SkillTreeMenu extends AbstractEPMenu {
         return renderer.getTree();
     }
 
+    @Override
+    public void handleClose(InventoryCloseEvent evt) {
+        super.handleClose(evt);
+        kitService.applyKit((Player) evt.getPlayer());
+    }
+
     public static class Factory {
         private final EPPlugin plugin;
         private final TalentPointService talentPoints;
@@ -113,24 +123,26 @@ public class SkillTreeMenu extends AbstractEPMenu {
         private final SkillService skills;
         private final ResearchService researchService;
         private final SkillTreeManager manager;
+        private final KitService kitService;
 
         @Inject
         public Factory(EPPlugin plugin, TalentPointService talentPoints, DisplayNameService names, SkillService skills,
-                       ResearchService researchService, SkillTreeManager manager) {
+                       ResearchService researchService, SkillTreeManager manager, KitService kitService) {
             this.plugin = plugin;
             this.talentPoints = talentPoints;
             this.names = names;
             this.skills = skills;
             this.researchService = researchService;
             this.manager = manager;
+            this.kitService = kitService;
         }
 
         public SkillTreeMenu createMenuWithBackButton(Player player, SkillTree tree, Runnable backButtonHandler) {
             SkillTreeMenu menu = new SkillTreeMenu(
                     plugin, player, tree, backButtonHandler, talentPoints,
                     I18n.loc(player, names.displayName(tree)),
-                    skills, researchService, manager
-            );
+                    skills, researchService, manager,
+                    kitService);
             menu.applyRenderer();
             return menu;
         }
