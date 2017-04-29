@@ -38,7 +38,7 @@ public class EPPlayerInitService implements PlayerInitService, Listener {
 
     @Inject
     public EPPlayerInitService(Server server, Plugin plugin) {
-        server.getPluginManager().registerEvents(this, plugin);
+
     }
 
     @Override
