@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.exception.UserException;
 import li.l1t.common.i18n.Message;
+import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
@@ -41,11 +42,13 @@ import java.util.stream.Collectors;
 public class SimpleResearchService implements ResearchService {
     private final PlayerDataService playerDataService;
     private final DisplayNameService names;
+    private final HandlerService handlerService;
 
     @Inject
-    public SimpleResearchService(PlayerDataService playerDataService, DisplayNameService names) {
+    public SimpleResearchService(PlayerDataService playerDataService, DisplayNameService names, HandlerService handlerService) {
         this.playerDataService = playerDataService;
         this.names = names;
+        this.handlerService = handlerService;
     }
 
     @Override
@@ -57,6 +60,7 @@ public class SimpleResearchService implements ResearchService {
         checkIsNotObtained(player.getUniqueId(), skill);
         checkIsObtainable(player.getUniqueId(), node);
         playerData.addSkill(skill);
+        handlerService.registerHandlers(playerData);
         playerDataService.saveData(playerData);
         I18n.sendLoc(player, Message.of("core!research.success", names.displayName(skill)));
     }

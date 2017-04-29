@@ -9,6 +9,7 @@
 package me.minotopia.expvp.skill.obtainment;
 
 import com.google.inject.Inject;
+import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.TalentPointService;
@@ -30,8 +31,9 @@ public class TalentPointResearchService extends SimpleResearchService {
 
     @Inject
     public TalentPointResearchService(PlayerDataService playerDataService, SessionProvider sessionProvider,
-                                      DisplayNameService displayNameService, TalentPointService talentPoints) {
-        super(playerDataService, displayNameService);
+                                      DisplayNameService displayNameService, TalentPointService talentPoints,
+                                      HandlerService handlerService) {
+        super(playerDataService, displayNameService, handlerService);
         this.sessionProvider = sessionProvider;
         this.talentPoints = talentPoints;
     }

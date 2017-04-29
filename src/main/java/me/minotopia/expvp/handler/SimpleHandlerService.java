@@ -47,7 +47,7 @@ public class SimpleHandlerService implements HandlerService {
     private final HandlerMap handlerMap;
     private final HandlerFactoryGraph factories;
     private final SkillService skillService;
-    private final Multimap<Skill, UUID> skillRequirementsMap = MultimapBuilder.hashKeys().arrayListValues().build();
+    private final Multimap<Skill, UUID> skillRequirementsMap = MultimapBuilder.hashKeys().hashSetValues().build();
 
     @Inject
     public SimpleHandlerService(HandlerMap handlerMap, HandlerFactoryGraph factories, SkillService skillService,
