@@ -14,8 +14,8 @@ import com.sk89q.intake.argument.MissingArgumentException;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
 import li.l1t.common.i18n.Message;
-import li.l1t.common.intake.provider.annotation.Sender;
 import li.l1t.common.shared.uuid.UUIDRepository;
+import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.PlayerData;
@@ -30,7 +30,6 @@ import me.minotopia.expvp.util.SessionProvider;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
@@ -63,29 +62,35 @@ public class CommandStats {
     }
 
     @Command(aliases = "", usage = "cmd!stats.root.usage", desc = "cmd!stats.root.desc")
-    public void rootNoArg(@Sender Player player) {
+    public void root(CommandSender sender, String arg) throws MissingArgumentException {
         sessionProvider.inSession(ignored -> {
-            PlayerData target = players.findData(player.getUniqueId())
-                    .orElseThrow(() -> new IllegalStateException("online player does not have data: " + player));
-            showStatsOfTo(target, player);
-        });
-    }
-
-    @Command(aliases = "", usage = "cmd!stats.root.usage", desc = "cmd!stats.root.desc")
-    public void rootStringArg(CommandSender sender, String arg) throws MissingArgumentException {
-        sessionProvider.inSession(ignored -> {
-            PlayerData target = tryFindTarget(arg);
+            PlayerData target = tryFindTarget(sender, arg);
             showStatsOfTo(target, sender);
         });
     }
 
-    private PlayerData tryFindTarget(String arg) {
-        Optional<? extends PlayerData> target = Optional.ofNullable(uuidRepository.forName(arg))
-                .flatMap(players::findData);
-        if (target.isPresent()) {
-            return target.get();
+    private PlayerData tryFindTarget(CommandSender sender, String arg) {
+        try {
+            Optional<? extends PlayerData> target = findTargetFrom(sender, arg);
+            if (target.isPresent()) {
+                return target.get();
+            } else {
+                throw new I18nUserException("error!stats.unknown", arg);
+            }
+        } catch (MissingArgumentException e) {
+            throw new AssertionError();
+            // t h i s    c a n    n e v e r    h a p p e n
+            // yet we still have to catch it because fuck checked exceptions
+            // whoever designed this API sure must've hated clean code
+        }
+    }
+
+    private Optional<? extends PlayerData> findTargetFrom(CommandSender sender, String arg) throws MissingArgumentException {
+        if (arg == null) {
+            return players.findData(CommandHelper.getSenderId(sender));
         } else {
-            throw new I18nUserException("error!stats.unknown", arg);
+            return Optional.ofNullable(uuidRepository.forName(arg))
+                    .flatMap(players::findData);
         }
     }
 
