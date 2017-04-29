@@ -28,6 +28,7 @@ import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
+import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.util.SessionProvider;
 import net.md_5.bungee.api.ChatColor;
@@ -70,12 +71,18 @@ public class CommandStats extends BukkitExecutionExecutor {
 
     @Override
     public boolean execute(BukkitExecution exec) throws UserException, InternalException {
-        sessionProvider.inSession(ignored -> {
-            PlayerData target = exec.findArg(0)
-                    .map(this::tryFindTarget)
-                    .orElseGet(provideSelfAsDataOrFail(exec.sender()));
-            showStatsOfTo(target, exec.sender());
-        });
+        try {
+            sessionProvider.inSession(ignored -> {
+                PlayerData target = exec.findArg(0)
+                        .map(this::tryFindTarget)
+                        .orElseGet(provideSelfAsDataOrFail(exec.sender()));
+                showStatsOfTo(target, exec.sender());
+            });
+        } catch (I18nInternalException | I18nUserException e) {
+            I18n.sendLoc(exec.sender(), Message.of(e.getWrapperMessageKey(), e.getMessageKey(), e.getMessageParameters()));
+        } catch (InternalException | UserException e) {
+            exec.sender().sendMessage(e.getColoredMessage());
+        }
         return true;
     }
 
