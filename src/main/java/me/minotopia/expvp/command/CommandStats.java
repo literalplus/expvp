@@ -14,7 +14,6 @@ import com.sk89q.intake.argument.MissingArgumentException;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
 import li.l1t.common.i18n.Message;
-import li.l1t.common.intake.provider.annotation.Sender;
 import li.l1t.common.shared.uuid.UUIDRepository;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
@@ -33,6 +32,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Displays a player's public stats.
@@ -63,18 +63,12 @@ public class CommandStats {
     }
 
     @Command(aliases = "", usage = "cmd!stats.root.usage", desc = "cmd!stats.root.desc")
-    public void rootNoArg(@Sender Player player) {
+    public void rootStringArg(CommandSender sender, @com.sk89q.intake.parametric.annotation.Optional String arg)
+            throws MissingArgumentException {
         sessionProvider.inSession(ignored -> {
-            PlayerData target = players.findData(player.getUniqueId())
-                    .orElseThrow(() -> new IllegalStateException("online player does not have data: " + player));
-            showStatsOfTo(target, player);
-        });
-    }
-
-    @Command(aliases = "", usage = "cmd!stats.root.usage", desc = "cmd!stats.root.desc")
-    public void rootStringArg(CommandSender sender, String arg) throws MissingArgumentException {
-        sessionProvider.inSession(ignored -> {
-            PlayerData target = tryFindTarget(arg);
+            PlayerData target = Optional.ofNullable(arg)
+                    .map(this::tryFindTarget)
+                    .orElseGet(provideSelfAsDataOrFail(sender));
             showStatsOfTo(target, sender);
         });
     }
@@ -87,6 +81,17 @@ public class CommandStats {
         } else {
             throw new I18nUserException("error!stats.unknown", arg);
         }
+    }
+
+    private Supplier<PlayerData> provideSelfAsDataOrFail(CommandSender sender) {
+        return () -> {
+            if (sender instanceof Player) {
+                return players.findData(((Player) sender).getUniqueId())
+                        .orElseThrow(() -> new I18nUserException("error!stats.unknown", sender.getName()));
+            } else {
+                throw new I18nUserException("error!stats.need-player");
+            }
+        };
     }
 
     private void showStatsOfTo(PlayerData target, CommandSender receiver) {
