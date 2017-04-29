@@ -9,6 +9,7 @@
 package me.minotopia.expvp.spawn;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import li.l1t.common.exception.InternalException;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
  * @since 2017-04-12
  */
 @ConstructOnEnable
+@Singleton
 public class YamlSpawnService implements SpawnService {
     private MapSpawn currentSpawn;
     private final SpawnManager spawnManager;
