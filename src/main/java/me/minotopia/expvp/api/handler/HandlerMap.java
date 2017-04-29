@@ -58,5 +58,5 @@ public interface HandlerMap {
      * @param skills the skills to filter by
      * @return the collection of handlers relevant to given skills
      */
-    Collection<SkillHandler> getRelevantHandlers(Collection<? extends Skill> skills);
+    Collection<SkillHandler> getRelevantHandlers(Collection<Skill> skills);
 }

@@ -18,7 +18,6 @@ import me.minotopia.expvp.skill.meta.Skill;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * A simple implementation of a handler map.
@@ -69,14 +68,11 @@ public class SimpleHandlerMap implements HandlerMap {
     }
 
     @Override
-    public Collection<SkillHandler> getRelevantHandlers(Collection<? extends Skill> skills) {
+    public Collection<SkillHandler> getRelevantHandlers(Collection<Skill> skills) {
         Preconditions.checkNotNull(skills, "skills");
-        return handlerStream()
-                .filter(handler -> skills.contains(handler.getSkill()))
+        return handlers.entrySet().stream()
+                .filter(e -> skills.contains(e.getKey()))
+                .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
-    }
-
-    private Stream<SkillHandler> handlerStream() {
-        return handlers.values().stream();
     }
 }

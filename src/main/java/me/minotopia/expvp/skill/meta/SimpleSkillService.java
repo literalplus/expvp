@@ -51,7 +51,7 @@ public class SimpleSkillService implements SkillService {
                 .map(ObtainedSkill::getSkillId)
                 .map(skillManager::get)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override
