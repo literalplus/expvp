@@ -102,7 +102,7 @@ public class SkillTreeMenu extends AbstractEPMenu {
 
     public void refresh() {
         getPlugin().getSessionProvider().inSession(ignored -> {
-            attemptRender(renderer);
+            renderer.reset();
             applyRenderer();
             redraw();
         });
