@@ -100,6 +100,14 @@ public class SkillTreeMenu extends AbstractEPMenu {
         menu.getPlugin().getSessionProvider().inSession(ignored -> menu.open());
     }
 
+    public void refresh() {
+        getPlugin().getSessionProvider().inSession(ignored -> {
+            attemptRender(renderer);
+            applyRenderer();
+            redraw();
+        });
+    }
+
     @Override
     protected ItemStackFactory getPlaceholderFactory() {
         return new ItemStackFactory(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15))

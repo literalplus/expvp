@@ -50,7 +50,7 @@ public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
         }
         Player player = menu.getPlayer();
         researchService.research(player, node);
-        player.closeInventory();
+        getMenu().refresh();
     }
 
 }
