@@ -10,6 +10,7 @@ package me.minotopia.expvp.handler;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.HandlerMap;
 import me.minotopia.expvp.api.handler.SkillHandler;
@@ -25,6 +26,7 @@ import java.util.stream.Stream;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-17
  */
+@Singleton
 public class SimpleHandlerMap implements HandlerMap {
     private final Map<Skill, SkillHandler> handlers = new HashMap<>();
     private final EPPlugin plugin;

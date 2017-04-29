@@ -9,6 +9,7 @@
 package me.minotopia.expvp.handler.kit;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
@@ -31,6 +32,7 @@ import java.util.UUID;
  * @since 2017-03-17
  */
 @ConstructOnEnable
+@Singleton
 public class SkillKitService implements KitService {
     private final KitCompiler compiler;
     private final PlayerDataService players;
