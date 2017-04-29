@@ -21,12 +21,12 @@ public interface RankService {
      * @param data the player to find the exp rank for
      * @return the amount of players that have more Exp than given player, plus one
      */
-    int findExpRank(PlayerData data);
+    long findExpRank(PlayerData data);
 
     /**
      * @param data the player to find the exp rank for
      * @return the {@link #findExpRank(PlayerData) fetched exp rank} for given player, or a short-term cached value, if
      * available
      */
-    int getExpRank(PlayerData data);
+    long getExpRank(PlayerData data);
 }

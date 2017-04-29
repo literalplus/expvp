@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class HibernateRankService implements RankService {
     private final SessionProvider sessionProvider;
-    private final MapCache<UUID, Integer> expRankCache = new GuavaMapCache<>(30, TimeUnit.SECONDS);
+    private final MapCache<UUID, Long> expRankCache = new GuavaMapCache<>(30, TimeUnit.SECONDS);
 
     @Inject
     public HibernateRankService(SessionProvider sessionProvider) {
@@ -35,17 +35,17 @@ public class HibernateRankService implements RankService {
     }
 
     @Override
-    public int findExpRank(PlayerData data) {
+    public long findExpRank(PlayerData data) {
         return sessionProvider.inSessionAnd(scoped -> {
-            TypedQuery<Integer> query = scoped.session().createQuery("SELECT COUNT(*) FROM HibernatePlayerData p " +
-                    "WHERE p.exp > :myexp", Integer.class);
+            TypedQuery<Long> query = scoped.session().createQuery("SELECT COUNT(*) FROM HibernatePlayerData p " +
+                    "WHERE p.exp > :myexp", Long.class);
             query.setParameter("myexp", data.getExp());
             return query.getSingleResult() + 1;
         });
     }
 
     @Override
-    public int getExpRank(PlayerData data) {
+    public long getExpRank(PlayerData data) {
         return expRankCache.getOrCompute(data.getUniqueId(), ignored -> findExpRank(data));
     }
 }
