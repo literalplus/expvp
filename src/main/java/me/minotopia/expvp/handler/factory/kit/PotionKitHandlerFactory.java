@@ -21,8 +21,8 @@ import org.bukkit.potion.PotionType;
  * @since 2017-03-16
  */
 public class PotionKitHandlerFactory extends AbstractKitHandlerFactory {
-    public static final int EFFECT_INDEX = 3;
-    public static final int LEVEL_INDEX = 4;
+    public static final int EFFECT_INDEX = 2;
+    public static final int LEVEL_INDEX = 3;
 
     public PotionKitHandlerFactory(String ownHandlerSpec) {
         super(ownHandlerSpec);
@@ -35,7 +35,7 @@ public class PotionKitHandlerFactory extends AbstractKitHandlerFactory {
 
     @Override
     protected PotionKitHandler createHandler(Skill skill, HandlerArgs args) {
-        return new PotionKitHandler(skill, slotId(args), Material.POTION, amount(args), potionType(args), level(args));
+        return new PotionKitHandler(skill, slotId(args), Material.POTION, args.intArg(1), potionType(args), level(args));
     }
 
     private PotionType potionType(HandlerArgs args) {
