@@ -70,9 +70,10 @@ public class SimpleHandlerMap implements HandlerMap {
     @Override
     public Collection<SkillHandler> getRelevantHandlers(Collection<Skill> skills) {
         Preconditions.checkNotNull(skills, "skills");
-        return handlers.entrySet().stream()
-                .filter(e -> skills.contains(e.getKey()))
-                .map(Map.Entry::getValue)
+        return skills.stream()
+                .map(this::findHandler)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 }
