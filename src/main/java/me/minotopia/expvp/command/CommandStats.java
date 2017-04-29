@@ -9,14 +9,18 @@
 package me.minotopia.expvp.command;
 
 import com.google.inject.Inject;
-import com.sk89q.intake.Command;
-import com.sk89q.intake.argument.MissingArgumentException;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
+import li.l1t.common.command.BukkitExecution;
+import li.l1t.common.command.BukkitExecutionExecutor;
+import li.l1t.common.exception.InternalException;
+import li.l1t.common.exception.UserException;
 import li.l1t.common.i18n.Message;
 import li.l1t.common.shared.uuid.UUIDRepository;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.model.RankService;
 import me.minotopia.expvp.api.score.league.LeagueService;
@@ -40,8 +44,8 @@ import java.util.function.Supplier;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-27
  */
-@AutoRegister("stats")
-public class CommandStats {
+@ConstructOnEnable
+public class CommandStats extends BukkitExecutionExecutor {
     private final PlayerDataService players;
     private final UUIDRepository uuidRepository;
     private final FriendService friendService;
@@ -52,7 +56,8 @@ public class CommandStats {
 
     @Inject
     public CommandStats(PlayerDataService players, UUIDRepository uuidRepository, FriendService friendService,
-                        DisplayNameService names, RankService rankService, LeagueService leagues, SessionProvider sessionProvider) {
+                        DisplayNameService names, RankService rankService, LeagueService leagues, SessionProvider sessionProvider,
+                        EPPlugin plugin) {
         this.players = players;
         this.uuidRepository = uuidRepository;
         this.friendService = friendService;
@@ -60,17 +65,18 @@ public class CommandStats {
         this.rankService = rankService;
         this.leagues = leagues;
         this.sessionProvider = sessionProvider;
+        plugin.getCommand("stats").setExecutor(this);
     }
 
-    @Command(aliases = "", usage = "cmd!stats.root.usage", desc = "cmd!stats.root.desc")
-    public void rootStringArg(CommandSender sender, @com.sk89q.intake.parametric.annotation.Optional String arg)
-            throws MissingArgumentException {
+    @Override
+    public boolean execute(BukkitExecution exec) throws UserException, InternalException {
         sessionProvider.inSession(ignored -> {
-            PlayerData target = Optional.ofNullable(arg)
+            PlayerData target = exec.findArg(0)
                     .map(this::tryFindTarget)
-                    .orElseGet(provideSelfAsDataOrFail(sender));
-            showStatsOfTo(target, sender);
+                    .orElseGet(provideSelfAsDataOrFail(exec.sender()));
+            showStatsOfTo(target, exec.sender());
         });
+        return true;
     }
 
     private PlayerData tryFindTarget(String arg) {

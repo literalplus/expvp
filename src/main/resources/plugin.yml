@@ -9,13 +9,5 @@ website: https://minotopia.me/
 prefix: EXP
 
 commands:
-  kitfabrik:
-    description: "Helps create kits"
-    aliases: [kf]
-  expkit:
-    description: "Shows info about your kit"
-    aliases: [kit]
-  expvp:
-    description: "Shows your current exp, level and skills"
-    aliases: [exp]
-
+  stats:
+    description: Stats
