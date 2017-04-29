@@ -41,7 +41,8 @@ import java.util.stream.StreamSupport;
  */
 public class MessageService {
     private static final Logger LOGGER = LoggingManager.getLogger(MessageService.class);
-    private final BundleCache bundleCache = new BundleCache();
+    private BundleCache bundleCache = new BundleCache();
+    private File dataFolder;
 
     public String getMessage(Locale locale, Message message) {
         Preconditions.checkNotNull(locale, "locale");
@@ -106,6 +107,7 @@ public class MessageService {
      */
     public void setDataFolder(File dataFolder) {
         Preconditions.checkNotNull(dataFolder, "dataFolder");
+        this.dataFolder = dataFolder;
         try {
             bundleCache.setCustomLoader(folderClassLoader(dataFolder));
             File defaultsFolder = new File(dataFolder, "defaults_do_not_edit");
@@ -196,6 +198,9 @@ public class MessageService {
     }
 
     public void clearCache() {
-        bundleCache.clear();
+        bundleCache = new BundleCache();
+        if (dataFolder != null) {
+            setDataFolder(dataFolder);
+        }
     }
 }
