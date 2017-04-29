@@ -106,7 +106,6 @@ public class SimpleHandlerService implements HandlerService {
     @Override
     public <T extends SkillHandler> Stream<T> handlersOfTypeStream(Class<? extends T> type, PlayerData playerData) {
         Collection<SkillHandler> relevantHandlers = handlerMap.getRelevantHandlers(skillService.getSkills(playerData));
-        LOGGER.debug(playerData.getUniqueId() + " -> " + relevantHandlers);
         return relevantHandlers.stream()
                 .filter(handler -> type.isAssignableFrom(handler.getClass()))
                 .map(type::cast);

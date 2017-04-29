@@ -17,13 +17,16 @@ import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.api.skill.SkillService;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
+import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.skilltree.SkillTreeNode;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
  * @since 2017-03-17
  */
 public class SimpleSkillService implements SkillService {
+    private final Logger LOGGER = LoggingManager.getLogger(SimpleSkillService.class);
     private final SkillManager skillManager;
     private final ResearchService researchService;
     private final DisplayNameService names;
@@ -47,11 +51,14 @@ public class SimpleSkillService implements SkillService {
 
     @Override
     public Collection<Skill> getSkills(PlayerData playerData) {
-        return playerData.getSkills().stream()
+        LOGGER.debug(playerData.getUniqueId() + " -> model: " + playerData.getSkills().stream().map(ObtainedSkill::getSkillId).collect(Collectors.joining(", ")));
+        List<Skill> playerSkills = playerData.getSkills().stream()
                 .map(ObtainedSkill::getSkillId)
                 .map(skillManager::get)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+        LOGGER.debug(playerData.getUniqueId() + " -> final: " + playerSkills.stream().map(Skill::getId).collect(Collectors.joining(", ")));
+        return playerSkills;
     }
 
     @Override

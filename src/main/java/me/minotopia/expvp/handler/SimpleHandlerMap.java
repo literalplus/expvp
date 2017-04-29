@@ -75,7 +75,6 @@ public class SimpleHandlerMap implements HandlerMap {
     }
 
     private Stream<SkillHandler> handlerStream() {
-        return handlers.entrySet().stream()
-                .map(Map.Entry::getValue);
+        return handlers.values().stream();
     }
 }
