@@ -81,7 +81,6 @@ public class SpectatorRespawnService implements RespawnService {
 
     @Override
     public void startPostRespawn(Player player) {
-        spawns.teleportToSpawnIfPossible(player);
         kitService.applyKit(player);
         if (leagueChangeDisplayQueue.unqueueLeagueChange(player.getUniqueId())) {
             player.getInventory().setHelmet(new ItemStack(Material.PUMPKIN));
