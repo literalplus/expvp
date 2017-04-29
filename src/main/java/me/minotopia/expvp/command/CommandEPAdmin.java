@@ -137,6 +137,7 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
     @EnumRequires(Permission.ADMIN_BASIC)
     public void clearCache(CommandSender sender) {
         sessionProvider.getSessionFactory().getCache().evictAllRegions();
+        I18n.clearCache();
         I18n.sendLoc(sender, Format.success(Message.ofText(
                 "Ja mehr oder weniger sollten jetzt zumindest die schlimmsten Caches geleert sein."
         )));
