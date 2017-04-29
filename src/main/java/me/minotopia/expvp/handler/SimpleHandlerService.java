@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static li.l1t.common.util.PredicateHelper.not;
@@ -106,6 +107,7 @@ public class SimpleHandlerService implements HandlerService {
     @Override
     public <T extends SkillHandler> Stream<T> handlersOfTypeStream(Class<? extends T> type, PlayerData playerData) {
         Collection<SkillHandler> relevantHandlers = handlerMap.getRelevantHandlers(skillService.getSkills(playerData));
+        LOGGER.debug(playerData.getUniqueId() + " -> relevant: " + relevantHandlers.stream().map(Object::toString).collect(Collectors.joining(", ")));
         return relevantHandlers.stream()
                 .filter(handler -> type.isAssignableFrom(handler.getClass()))
                 .map(type::cast);
