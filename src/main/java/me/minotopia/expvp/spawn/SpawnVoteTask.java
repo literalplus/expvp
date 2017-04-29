@@ -57,7 +57,7 @@ public class SpawnVoteTask implements Runnable {
             voteService.findCurrentlyWinningSpawn().ifPresent(this::forceNextSpawn);
         } else {
             long minutesUntilChange = changeService.findTimeUntilNextChange().toMinutes();
-            if (minutesUntilChange == 5 || (minutesUntilChange % 15) == 0) {
+            if (minutesUntilChange > 0 && (minutesUntilChange == 5 || (minutesUntilChange % 15) == 0)) {
                 remindEligiblePlayersToVote(minutesUntilChange);
             }
         }
