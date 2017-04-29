@@ -60,6 +60,7 @@ public class KillDeathForwardingListener implements Listener {
         teleportToSpawn(victim);
         restoreHealthEtc(victim);
         DamageHelper.findActualDamager(event)
+                .filter(culprit -> culprit.getUniqueId() != victim.getUniqueId())
                 .ifPresent(culprit -> killDeathService.onFatalHit(culprit, victim));
     }
 
