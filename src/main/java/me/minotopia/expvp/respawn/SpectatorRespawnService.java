@@ -70,7 +70,7 @@ public class SpectatorRespawnService implements RespawnService {
 
     @Override
     public void startRespawn(Player player) {
-        player.setGameMode(GameMode.SURVIVAL);
+        //player.setGameMode(GameMode.SURVIVAL); // done in SpawnService below
         player.getInventory().clear();
         spawns.teleportToSpawnIfPossible(player);
         if (talentPoints.getCurrentTalentPointCount(player) > 0) {
