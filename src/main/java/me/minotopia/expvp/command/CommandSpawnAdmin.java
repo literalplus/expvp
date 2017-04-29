@@ -21,6 +21,7 @@ import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.spawn.MapSpawn;
+import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.SpawnCommandService;
 import me.minotopia.expvp.i18n.Format;
@@ -43,16 +44,23 @@ import java.util.Collection;
 @AutoRegister("spa")
 public class CommandSpawnAdmin extends YamlManagerCommandBase<MapSpawn, SpawnCommandService> {
     private final DisplayNameService names;
+    private final SpawnService spawns;
 
     @Inject
-    protected CommandSpawnAdmin(SpawnCommandService commandService, DisplayNameService names) {
+    protected CommandSpawnAdmin(SpawnCommandService commandService, DisplayNameService names, SpawnService spawns) {
         super(commandService);
         this.names = names;
+        this.spawns = spawns;
     }
 
     @Override
     public String getObjectTypeName() {
         return "Skill";
+    }
+
+    @Command(aliases = "show", desc = "", usage = "")
+    public void show(CommandSender sender) {
+        I18n.sendLoc(sender, names.displayName(spawns.getCurrentSpawn().orElse(null)));
     }
 
     @Command(aliases = "new", min = 1,
