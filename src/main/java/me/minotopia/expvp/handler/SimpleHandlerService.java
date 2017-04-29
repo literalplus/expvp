@@ -59,7 +59,10 @@ public class SimpleHandlerService implements HandlerService {
                 sessionProvider.inSession(
                         ignored -> players.findData(player.getUniqueId()).ifPresent(this::registerHandlers)
                 ));
-        initService.registerDeInitHandler(player -> skillRequirementsMap.values().removeIf(player.getUniqueId()::equals));
+        initService.registerDeInitHandler(player -> {
+            skillRequirementsMap.values().removeIf(player.getUniqueId()::equals);
+            purgeStaleHandlers();
+        });
     }
 
     @Override
