@@ -10,6 +10,7 @@ package me.minotopia.expvp.spawn;
 
 import com.google.inject.Inject;
 import li.l1t.common.exception.InternalException;
+import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.SpawnService;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-12
  */
+@ConstructOnEnable
 public class YamlSpawnService implements SpawnService {
     private MapSpawn currentSpawn;
     private final SpawnManager spawnManager;
