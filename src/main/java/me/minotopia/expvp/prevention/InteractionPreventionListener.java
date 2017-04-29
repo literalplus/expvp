@@ -39,7 +39,8 @@ public class InteractionPreventionListener implements Listener {
     public void onInvOpen(InventoryOpenEvent event) {
         Inventory inventory = event.getInventory();
         if (isNotAnInventoryMenu(inventory) && isNotAPlayerInventory(inventory)) {
-            if (Permission.ADMIN_OVERRIDE.has(event.getPlayer())) {
+            if (Permission.ADMIN_OVERRIDE.has(event.getPlayer()) &&
+                    inventory.getType() != InventoryType.MERCHANT) {
                 I18n.sendLoc(event.getPlayer(), Format.success("admin!ignore.inv"));
                 return;
             }
