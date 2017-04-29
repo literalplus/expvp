@@ -64,6 +64,8 @@ public interface KitElementBuilder {
      */
     KitElementBuilder asPotion(PotionType type, int level);
 
+    KitElementBuilder asSplashPotion();
+
     /**
      * Gets the underlying item stack factory for modification of the raw stack that is being built.
      * Note that modifying the raw stack circumvents any conflict detection and changes may be

@@ -19,12 +19,16 @@ import org.bukkit.potion.PotionType;
  * @since 2017-03-10
  */
 public class PotionKitElement extends SimpleKitElement {
-    public PotionKitElement(ItemStack stack, PotionType type, int level) {
-        super(applyPotion(stack, type, level));
+    public PotionKitElement(ItemStack stack, PotionType type, int level, boolean splashPotion) {
+        super(applyPotion(stack, type, level, splashPotion));
     }
 
-    private static ItemStack applyPotion(ItemStack stack, PotionType type, int level) {
-        new Potion(type, level).apply(stack);
+    private static ItemStack applyPotion(ItemStack stack, PotionType type, int level, boolean splashPotion) {
+        Potion potion = new Potion(type, level);
+        if (splashPotion) {
+            potion.splash();
+        }
+        potion.apply(stack);
         return stack;
     }
 }

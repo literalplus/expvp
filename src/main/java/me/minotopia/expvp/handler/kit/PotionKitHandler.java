@@ -32,6 +32,6 @@ public class PotionKitHandler extends SimpleKitHandler {
     @Override
     public void handle(KitCompilation compilation) {
         super.handle(compilation);
-        element(compilation).asPotion(effect, level);
+        element(compilation).asPotion(effect, level).asSplashPotion();
     }
 }

@@ -32,6 +32,7 @@ public class ItemKitElementBuilder implements KitElementBuilder {
     private PotionType potionType;
     private int potionLevel;
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
+    private boolean splashPotion = false;
 
     public ItemKitElementBuilder(Material type, int slotId) {
         this.slotId = slotId;
@@ -76,6 +77,12 @@ public class ItemKitElementBuilder implements KitElementBuilder {
     }
 
     @Override
+    public KitElementBuilder asSplashPotion() {
+        this.splashPotion = true;
+        return this;
+    }
+
+    @Override
     public ItemStackFactory factory() {
         if (factory == null) {
             factory = new ItemStackFactory(type);
@@ -87,7 +94,7 @@ public class ItemKitElementBuilder implements KitElementBuilder {
     public KitElement build() {
         enchantments.forEach((ench, level) -> factory().enchantUnsafe(ench, level));
         if (potionType != null) {
-            return new PotionKitElement(factory().produce(), potionType, potionLevel);
+            return new PotionKitElement(factory().produce(), potionType, potionLevel, splashPotion);
         } else {
             return new SimpleKitElement(factory().produce());
         }
