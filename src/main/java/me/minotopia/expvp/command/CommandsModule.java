@@ -38,6 +38,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandEPAdmin.class);
         bind(CommandSkillAdmin.class);
         //bind(CommandSkills.class); // -> menu
+        bind(CommandSpawn.class);
         bind(CommandSkillTreeAdmin.class);
         bind(CommandSpawnAdmin.class);
         bind(CommandMapVote.class);
