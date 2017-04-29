@@ -51,7 +51,6 @@ public class SimpleSkillService implements SkillService {
 
     @Override
     public Collection<Skill> getSkills(PlayerData playerData) {
-        LOGGER.debug(playerData.getUniqueId() + " -> model: " + playerData.getSkills().stream().map(ObtainedSkill::getSkillId).collect(Collectors.joining(", ")));
         List<Skill> playerSkills = playerData.getSkills().stream()
                 .map(ObtainedSkill::getSkillId)
                 .map(skillManager::get)
