@@ -17,7 +17,6 @@ import li.l1t.common.intake.CommandExceptionListener;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
-import me.minotopia.expvp.command.provider.CommandArgsProvider;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.InternationalException;
 import org.bukkit.command.CommandSender;
@@ -61,7 +60,6 @@ public class CommandsModule extends AbstractModule {
         commandsManager.getHelpProvider().setMetaTranslator(
                 (key, locale) -> key == null || !key.contains("!") ? key : I18n.loc(locale, key)
         );
-        commandsManager.bind(CommandArgs.class).toProvider(new CommandArgsProvider());
         return commandsManager;
     }
 
