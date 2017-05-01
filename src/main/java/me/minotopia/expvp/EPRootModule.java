@@ -60,6 +60,7 @@ public class EPRootModule extends AbstractModule {
         bindPluginProperties();
         bind(DisplayNameService.class).to(EPDisplayNameService.class);
         bind(PlayerInitService.class).to(EPPlayerInitService.class);
+        bind(EPPlayerInitService.PlayerInitListener.class); //Need explicit binding because Listener init checks for key class, not value
         bind(LocaleChangeListener.class);
         bind(PlayerService.class).to(BukkitPlayerService.class);
         bind(ChatListener.class);

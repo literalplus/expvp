@@ -12,8 +12,6 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import me.minotopia.expvp.api.misc.PlayerInitService;
-import me.minotopia.expvp.logging.LoggingManager;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,7 +31,6 @@ import java.util.function.Consumer;
  */
 @Singleton
 public class EPPlayerInitService implements PlayerInitService, Listener {
-    private final Logger LOGGER = LoggingManager.getLogger(EPPlayerInitService.class);
     private final List<Consumer<Player>> initHandlers = new ArrayList<>();
     private final List<Consumer<Player>> deInitHandlers = new ArrayList<>();
 
@@ -63,14 +60,22 @@ public class EPPlayerInitService implements PlayerInitService, Listener {
         deInitHandlers.add(handler);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        LOGGER.debug("init handlers on join ", event.getPlayer().getName());
-        callInitHandlers(event.getPlayer());
-    }
+    public static class PlayerInitListener implements Listener {
+        private final PlayerInitService service;
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        callDeInitHandlers(event.getPlayer());
+        @Inject
+        public PlayerInitListener(PlayerInitService service) {
+            this.service = service;
+        }
+
+        @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+        public void onPlayerJoin(PlayerJoinEvent event) {
+            service.callInitHandlers(event.getPlayer());
+        }
+
+        @EventHandler(ignoreCancelled = true)
+        public void onPlayerQuit(PlayerQuitEvent event) {
+            service.callDeInitHandlers(event.getPlayer());
+        }
     }
 }
