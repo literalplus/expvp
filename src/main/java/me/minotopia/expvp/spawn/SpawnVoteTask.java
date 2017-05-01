@@ -61,7 +61,6 @@ public class SpawnVoteTask implements Runnable {
                 remindEligiblePlayersToVote(minutesUntilChange);
             }
         }
-        displayService.updateForAllPlayers();
     }
 
     private boolean isNotificationMinute(long minutesUntilChange) {

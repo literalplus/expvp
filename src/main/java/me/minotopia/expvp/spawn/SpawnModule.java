@@ -37,5 +37,6 @@ public class SpawnModule extends AbstractModule {
         bind(VoteButtonListener.class);
         bind(SpawnVoteTask.class);
         bind(SpawnDayTimeTask.class);
+        bind(SpawnDisplayTask.class);
     }
 }

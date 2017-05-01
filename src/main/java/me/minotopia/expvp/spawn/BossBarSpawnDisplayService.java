@@ -57,7 +57,6 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     public void updateForAllPlayers() {
         if (spawnService.getCurrentSpawn().isPresent()) {
             updatePlayersBossBars();
-            //tasks.serverThread(this::updatePlayersBossBars); //removing and instantly adding doesn't seem to work well
         } else {
             resetAllBars();
         }
