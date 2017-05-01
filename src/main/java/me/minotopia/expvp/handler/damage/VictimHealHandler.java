@@ -27,8 +27,13 @@ public class VictimHealHandler extends DamageHandlerAdapter {
 
     @Override
     public void handleVictim(Player victim, Player culprit) {
+        double targetHealth = victim.getHealth() + healthPointsHealed;
         if (isChanceMet()) {
-            victim.setHealth(victim.getHealth() + healthPointsHealed);
+            if (targetHealth <= victim.getMaxHealth()) {
+                victim.setHealth(targetHealth);
+            } else {
+                victim.setHealth(victim.getMaxHealth());
+            }
         }
     }
 }
