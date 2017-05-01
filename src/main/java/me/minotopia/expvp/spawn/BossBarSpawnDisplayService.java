@@ -18,7 +18,6 @@ import me.minotopia.expvp.api.spawn.SpawnChangeService;
 import me.minotopia.expvp.api.spawn.SpawnDisplayService;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.i18n.I18n;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.inventivetalent.bossbar.BossBarAPI;
@@ -55,9 +54,11 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
 
     @Override
     public void updateForAllPlayers() {
-        resetAllBars();
         if (spawnService.getCurrentSpawn().isPresent()) {
-            tasks.serverThread(this::updatePlayersBossBars); //removing and instantly adding doesn't seem to work well
+            updatePlayersBossBars();
+            //tasks.serverThread(this::updatePlayersBossBars); //removing and instantly adding doesn't seem to work well
+        } else {
+            resetAllBars();
         }
     }
 
@@ -68,13 +69,10 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
                 .forEach(((locale, players) -> sendToAll(I18n.loc(locale, statusMessage), players)));
     }
 
+    @SuppressWarnings("deprecation")
     private void sendToAll(String message, List<Player> players) {
         float fractionProgress = spawnChangeService.findFractionProgressToNextSpawn();
-        TextComponent wrapperComponent = new TextComponent(TextComponent.fromLegacyText(message));
-        // the method with the collection of players does. not. support. 1.8. should find another lib
-        players.forEach(player -> BossBarAPI.addBar(
-                player, wrapperComponent, BossBarAPI.Color.BLUE, BossBarAPI.Style.PROGRESS, fractionProgress
-        ));
+        players.forEach(player -> BossBarAPI.setMessage(player, message, fractionProgress * 100F));
     }
 
     private void resetAllBars() {
