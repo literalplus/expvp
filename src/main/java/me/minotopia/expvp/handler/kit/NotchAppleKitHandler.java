@@ -11,7 +11,6 @@ package me.minotopia.expvp.handler.kit;
 import me.minotopia.expvp.api.handler.kit.compilation.KitCompilation;
 import me.minotopia.expvp.skill.meta.Skill;
 import org.bukkit.Material;
-import org.bukkit.material.MaterialData;
 
 /**
  * Makes an item a Notch's Golden Apple.
@@ -27,11 +26,6 @@ public class NotchAppleKitHandler extends SimpleKitHandler {
     @Override
     public void handle(KitCompilation compilation) {
         element(compilation).addToAmount(getAmount())
-                .factory().materialData(notchGoldenAppleData());
-    }
-
-    @SuppressWarnings("deprecation")
-    private MaterialData notchGoldenAppleData() {
-        return new MaterialData(Material.GOLDEN_APPLE, (byte) 1);
+                .factory().getBase().setDurability((short) 1);
     }
 }
