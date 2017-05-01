@@ -161,7 +161,7 @@ public class CommandStats extends BukkitExecutionExecutor {
                 )));
         ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stats " + friend.getUniqueId());
         HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                TextComponent.fromLegacyText(I18n.loc(receiver, "score!stats.friend-tooltop"))
+                TextComponent.fromLegacyText(I18n.loc(receiver, "score!stats.friend-tooltip"))
         );
         Arrays.stream(components)
                 .forEach(component -> {
