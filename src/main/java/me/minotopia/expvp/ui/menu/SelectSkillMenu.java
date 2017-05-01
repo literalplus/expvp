@@ -56,7 +56,7 @@ public class SelectSkillMenu extends PaginationListMenu<Skill> {
 
     @Override
     protected String formatTitle(int pageNum, int pageCount) {
-        return I18n.loc(getPlayer(), "admin!ui.skillsel.title", pageCount, pageNum);
+        return I18n.loc(getPlayer(), "admin!ui.skillsel.title", pageNum, pageCount);
     }
 
     public static class Factory {
