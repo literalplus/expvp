@@ -147,7 +147,7 @@ public class CommandStats extends BukkitExecutionExecutor {
                     TextComponent.fromLegacyText(I18n.loc(receiver, Format.result("score!stats.no-friend"))),
                     new XyComponentBuilder(" ")
                             .append(I18n.loc(receiver, "score!stats.friend-add"))
-                            .hintedCommand("/fs add " + target)
+                            .hintedCommand("/fs add " + target.getUniqueId())
                             .color(ChatColor.DARK_GREEN).create()
             );
         }
