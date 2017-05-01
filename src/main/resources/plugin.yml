@@ -10,4 +10,6 @@ prefix: EXP
 
 commands:
   stats:
-    description: Stats
+    description: Expvp Stats
+  spawn:
+    description: Expvp Spawn

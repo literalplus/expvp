@@ -8,3 +8,4 @@
 # Expvp Minecraft Game Mode
 # Copyright (C) 2016 Literallie / Philipp Nowak.
 # Please see the LICENSE.txt file included in the plugin jar.
+override-xlogin-spawn-command-because-bukkits-command-handling-sucks: true
