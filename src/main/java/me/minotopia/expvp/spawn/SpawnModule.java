@@ -36,5 +36,6 @@ public class SpawnModule extends AbstractModule {
         bind(VoteButtonService.class).to(YamlVoteButtonService.class);
         bind(VoteButtonListener.class);
         bind(SpawnVoteTask.class);
+        bind(SpawnDayTimeTask.class);
     }
 }
