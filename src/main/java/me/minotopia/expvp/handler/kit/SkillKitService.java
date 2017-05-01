@@ -19,10 +19,8 @@ import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.service.PlayerDataService;
-import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -36,7 +34,6 @@ import java.util.UUID;
 @ConstructOnEnable
 @Singleton
 public class SkillKitService implements KitService {
-    private static final Logger LOGGER = LoggingManager.getLogger(SkillKitService.class);
     private final KitCompiler compiler;
     private final PlayerDataService players;
     private final HandlerService handlerService;
@@ -54,7 +51,6 @@ public class SkillKitService implements KitService {
 
     @Override
     public void applyKit(Player player) {
-        LOGGER.debug("Applying kit to " + player.getName());
         try (ScopedSession scoped = sessionProvider.scoped().join()) {
             PlayerData data = players.findOrCreateData(player.getUniqueId());
             KitCompilation kit = compiler.compile(player, data);
