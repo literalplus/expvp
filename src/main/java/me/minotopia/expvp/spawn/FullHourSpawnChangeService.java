@@ -60,6 +60,7 @@ public class FullHourSpawnChangeService implements SpawnChangeService {
         Duration fullDuration = Duration.between(lastChange, findNextSpawnChangeTime());
         Duration passedDuration = Duration.between(lastChange, LocalDateTime.now());
         float result = ((float) passedDuration.getSeconds()) / ((float) fullDuration.getSeconds());
+        result += 0.01F;
         return result > 1F ? 1.0F : result;
     }
 

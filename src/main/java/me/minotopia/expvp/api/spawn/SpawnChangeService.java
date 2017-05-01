@@ -28,7 +28,7 @@ public interface SpawnChangeService {
 
     /**
      * @return the fractional progress between the last and next spawn change, meaning a result of 1.0 if the spawn
-     * change would occur now and 0.0 if the spawn was just changed, but never less than zero and never more than 1.0
+     * change would occur now and 0.01 if the spawn was just changed, but never less than zero and never more than 1.0
      */
     float findFractionProgressToNextSpawn();
 
