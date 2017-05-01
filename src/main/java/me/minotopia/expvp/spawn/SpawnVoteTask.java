@@ -57,11 +57,15 @@ public class SpawnVoteTask implements Runnable {
             voteService.findCurrentlyWinningSpawn().ifPresent(this::forceNextSpawn);
         } else {
             long minutesUntilChange = changeService.findTimeUntilNextChange().toMinutes();
-            if (minutesUntilChange > 0 && (minutesUntilChange == 5 || (minutesUntilChange % 15) == 0)) {
+            if (minutesUntilChange > 0 && isNotificationMinute(minutesUntilChange)) {
                 remindEligiblePlayersToVote(minutesUntilChange);
             }
         }
         displayService.updateForAllPlayers();
+    }
+
+    private boolean isNotificationMinute(long minutesUntilChange) {
+        return minutesUntilChange == 1 || minutesUntilChange == 5 || (minutesUntilChange % 15) == 0;
     }
 
     private void remindEligiblePlayersToVote(long minutesUntilChange) {
@@ -90,6 +94,8 @@ public class SpawnVoteTask implements Runnable {
         changeService.registerSpawnChange();
         server.getOnlinePlayers()
                 .forEach(spawns::teleportToSpawnIfPossible);
+        server.getOnlinePlayers()
+                .forEach(player -> I18n.sendLoc(player, "core!spawn.new-spawn"));
         displayService.updateForAllPlayers();
     }
 
