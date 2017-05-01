@@ -11,6 +11,7 @@ package me.minotopia.expvp.spawn;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.util.task.TaskService;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.spawn.*;
 import me.minotopia.expvp.i18n.Format;
@@ -37,17 +38,19 @@ public class SpawnVoteTask implements Runnable {
     private final SpawnChangeService changeService;
     private final SpawnVoteService voteService;
     private final Server server;
+    private final DisplayNameService names;
     private long lastReminderMinute;
 
     @Inject
     public SpawnVoteTask(SpawnDisplayService displayService, SpawnService spawns,
                          SpawnChangeService changeService, SpawnVoteService voteService,
-                         TaskService tasks, Server server) {
+                         TaskService tasks, Server server, DisplayNameService names) {
         this.displayService = displayService;
         this.spawns = spawns;
         this.changeService = changeService;
         this.voteService = voteService;
         this.server = server;
+        this.names = names;
         tasks.repeating(this, Duration.ofSeconds(30));
     }
 
@@ -88,13 +91,13 @@ public class SpawnVoteTask implements Runnable {
     }
 
     private void forceNextSpawn(MapSpawn spawn) {
+        server.getOnlinePlayers()
+                .forEach(player -> I18n.sendLoc(player, "core!spawn.new-spawn", names.displayName(spawn), spawn.getAuthor()));
         spawns.forceNextSpawn(spawn);
         voteService.resetAllVotes();
         changeService.registerSpawnChange();
         server.getOnlinePlayers()
                 .forEach(spawns::teleportToSpawnIfPossible);
-        server.getOnlinePlayers()
-                .forEach(player -> I18n.sendLoc(player, "core!spawn.new-spawn"));
         displayService.updateForAllPlayers();
     }
 
