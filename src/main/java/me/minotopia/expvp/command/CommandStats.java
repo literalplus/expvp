@@ -33,10 +33,14 @@ import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
 import me.minotopia.expvp.util.SessionProvider;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -151,9 +155,20 @@ public class CommandStats extends BukkitExecutionExecutor {
 
     private void showFriendStatsTo(CommandSender receiver, PlayerData friend) {
         double kdRatio = computeKDRatio(friend.getTotalKills(), friend.getTotalDeaths());
-        I18n.sendLoc(receiver, Format.result("score!stats.friend-stats",
-                names.displayName(friend), friend.getExp(), kdRatio
-        ));
+        BaseComponent[] components = TextComponent.fromLegacyText(I18n.loc(
+                receiver, Format.result("score!stats.friend-stats",
+                        names.displayName(friend), friend.getExp(), kdRatio
+                )));
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stats " + friend.getUniqueId());
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                TextComponent.fromLegacyText(I18n.loc(receiver, "score!stats.friend-tooltop"))
+        );
+        Arrays.stream(components)
+                .forEach(component -> {
+                    component.setClickEvent(clickEvent);
+                    component.setHoverEvent(hoverEvent);
+                });
+        ComponentSender.sendTo(components, receiver);
     }
 
     private void showStreakAndSkills(PlayerData target, CommandSender receiver) {
