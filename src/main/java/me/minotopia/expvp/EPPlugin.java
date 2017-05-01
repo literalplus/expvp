@@ -131,8 +131,8 @@ public class EPPlugin extends GenericXyPlugin {
                 .forEach(consumer);
     }
 
-    private <T> Predicate<Map.Entry<Key<?>, ?>> bindingEntryInstanceOf(Class<T> baseType) {
-        return en -> baseType.isAssignableFrom(en.getKey().getTypeLiteral().getRawType());
+    private <T> Predicate<Map.Entry<Key<?>, Binding<?>>> bindingEntryInstanceOf(Class<T> baseType) {
+        return en -> baseType.isAssignableFrom(en.getValue().getKey().getTypeLiteral().getRawType());
     }
 
     private Object bindingEntryToInstance(Map.Entry<?, Binding<?>> entry) {
