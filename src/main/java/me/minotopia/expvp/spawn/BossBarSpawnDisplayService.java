@@ -11,6 +11,7 @@ package me.minotopia.expvp.spawn;
 import com.google.inject.Inject;
 import li.l1t.common.i18n.Message;
 import li.l1t.common.util.task.TaskService;
+import me.confuser.barapi.BarAPI;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerInitService;
@@ -20,7 +21,6 @@ import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.i18n.I18n;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.inventivetalent.bossbar.BossBarAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,7 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     private final TaskService tasks;
 
     @Inject
+    @SuppressWarnings("deprecation")
     public BossBarSpawnDisplayService(SpawnService spawnService, SpawnChangeService spawnChangeService,
                                       Server server, DisplayNameService names, PlayerInitService initService, TaskService tasks) {
         this.spawnService = spawnService;
@@ -49,7 +50,7 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
         this.names = names;
         this.tasks = tasks;
         initService.registerInitHandler(player -> updateForAllPlayers());
-        initService.registerDeInitHandler(BossBarAPI::removeAllBars); //reloads cause stale bars otherwise
+        initService.registerDeInitHandler(BarAPI::removeBar); //reloads cause stale bars otherwise
     }
 
     @Override
@@ -72,11 +73,12 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     @SuppressWarnings("deprecation")
     private void sendToAll(String message, List<Player> players) {
         float fractionProgress = spawnChangeService.findFractionProgressToNextSpawn();
-        players.forEach(player -> BossBarAPI.setMessage(player, message, fractionProgress * 100F));
+        players.forEach(player -> BarAPI.setMessage(player, message, fractionProgress * 100F));
     }
 
+    @SuppressWarnings("deprecation")
     private void resetAllBars() {
-        server.getOnlinePlayers().forEach(BossBarAPI::removeAllBars);
+        server.getOnlinePlayers().forEach(BarAPI::removeBar);
     }
 
     private Message createStatusMessage() {
