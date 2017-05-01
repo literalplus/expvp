@@ -12,14 +12,14 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import me.minotopia.expvp.api.misc.PlayerInitService;
-import org.bukkit.Server;
+import me.minotopia.expvp.logging.LoggingManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +33,12 @@ import java.util.function.Consumer;
  */
 @Singleton
 public class EPPlayerInitService implements PlayerInitService, Listener {
+    private final Logger LOGGER = LoggingManager.getLogger(EPPlayerInitService.class);
     private final List<Consumer<Player>> initHandlers = new ArrayList<>();
     private final List<Consumer<Player>> deInitHandlers = new ArrayList<>();
 
     @Inject
-    public EPPlayerInitService(Server server, Plugin plugin) {
-
+    public EPPlayerInitService() {
     }
 
     @Override
@@ -65,6 +65,7 @@ public class EPPlayerInitService implements PlayerInitService, Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        LOGGER.debug("init handlers on join ", event.getPlayer().getName());
         callInitHandlers(event.getPlayer());
     }
 
