@@ -114,16 +114,30 @@ public class CommandStats extends BukkitExecutionExecutor {
 
     private void showStatsOfTo(PlayerData target, CommandSender receiver) {
         I18n.sendLoc(receiver, Format.header("score!stats.header", names.displayName(target)));
-        showKillsDeathsTo(receiver, target.getCurrentKills(), target.getCurrentDeaths(), "score!stats.current-kds");
-        showKillsDeathsTo(receiver, target.getTotalKills(), target.getTotalDeaths(), "score!stats.overall-kds");
+        showCurrentKillsDeathsTo(target, receiver);
+        showTotalKillsDeathsTo(target, receiver);
         showOwnExpRelated(target, receiver);
         showFriendInfo(target, receiver);
         showStreakAndSkills(target, receiver);
     }
 
-    private void showKillsDeathsTo(CommandSender receiver, int kills, int deaths, String messageKey) {
+    private void showCurrentKillsDeathsTo(PlayerData target, CommandSender receiver) {
+        int kills = target.getCurrentKills();
+        int deaths = target.getCurrentDeaths();
         double kdRatio = computeKDRatio(kills, deaths);
-        I18n.sendLoc(receiver, Format.result(messageKey, Plurals.killPlural(kills), Plurals.deathPlural(deaths), kdRatio));
+        I18n.sendLoc(receiver, Format.result("score!stats.current-kds",
+                Plurals.killPlural(kills), Plurals.deathPlural(deaths), kdRatio)
+        );
+    }
+
+    private void showTotalKillsDeathsTo(PlayerData target, CommandSender receiver) {
+        int kills = target.getTotalKills();
+        int deaths = target.getTotalDeaths();
+        int assists = target.getTotalKillAssists();
+        double kdRatio = computeKDRatio(kills, deaths);
+        I18n.sendLoc(receiver, Format.result("score!stats.overall-kds",
+                Plurals.killPlural(kills), Plurals.deathPlural(deaths), kdRatio, assists
+        ));
     }
 
     private double computeKDRatio(int kills, int deaths) {

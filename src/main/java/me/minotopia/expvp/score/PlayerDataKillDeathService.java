@@ -10,12 +10,15 @@ package me.minotopia.expvp.score;
 
 import com.google.inject.Inject;
 import li.l1t.common.i18n.Message;
+import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
+import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.KillDeathService;
 import me.minotopia.expvp.api.score.KillStreakService;
 import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.score.assist.KillAssistService;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.i18n.Format;
@@ -38,11 +41,14 @@ public class PlayerDataKillDeathService implements KillDeathService {
     private final ExpService exps;
     private final DisplayNameService names;
     private final KillStreakService streakService;
+    private final KillAssistService assistService;
+    private final FriendService friendService;
 
     @Inject
     public PlayerDataKillDeathService(TalentPointService talentPoints, SessionProvider sessionProvider,
                                       PlayerDataService players, LeagueService leagues, ExpService exps,
-                                      DisplayNameService names, KillStreakService streakService) {
+                                      DisplayNameService names, KillStreakService streakService,
+                                      KillAssistService assistService, FriendService friendService) {
         this.talentPoints = talentPoints;
         this.sessionProvider = sessionProvider;
         this.players = players;
@@ -50,6 +56,8 @@ public class PlayerDataKillDeathService implements KillDeathService {
         this.exps = exps;
         this.names = names;
         this.streakService = streakService;
+        this.assistService = assistService;
+        this.friendService = friendService;
     }
 
     @Override
@@ -57,6 +65,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
         sessionProvider.inSession(ignored -> {
             recordKill(culprit);
             recordDeath(victim);
+            friendService.findFriend(culprit).ifPresent(this::recordKillAssist);
             sendKillBroadcast(culprit, victim);
         });
     }
@@ -100,5 +109,9 @@ public class PlayerDataKillDeathService implements KillDeathService {
                     )
             ));
         }
+    }
+
+    private void recordKillAssist(PlayerData friend) {
+
     }
 }
