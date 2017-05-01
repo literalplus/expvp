@@ -30,7 +30,7 @@ public class NotchAppleKitHandlerFactory extends AbstractKitHandlerFactory {
 
     @Override
     protected NotchAppleKitHandler createHandler(Skill skill, HandlerArgs args) {
-        return new NotchAppleKitHandler(skill, slotId(args), amount(args));
+        return new NotchAppleKitHandler(skill, slotId(args), args.intArg(AMOUNT_INDEX - 1));
     }
 
 }
