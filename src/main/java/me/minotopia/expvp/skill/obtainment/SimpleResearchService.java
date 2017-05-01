@@ -60,8 +60,8 @@ public class SimpleResearchService implements ResearchService {
         checkIsNotObtained(player.getUniqueId(), skill);
         checkIsObtainable(player.getUniqueId(), node);
         playerData.addSkill(skill);
-        handlerService.registerHandlers(playerData);
         playerDataService.saveData(playerData);
+        handlerService.registerHandlers(playerData);
         I18n.sendLoc(player, Message.of("core!research.success", names.displayName(skill)));
     }
 
