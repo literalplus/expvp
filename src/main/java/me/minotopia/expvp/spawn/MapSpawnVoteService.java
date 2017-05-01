@@ -11,6 +11,7 @@ package me.minotopia.expvp.spawn;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.api.spawn.SpawnVoteService;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-15
  */
+@Singleton
 public class MapSpawnVoteService implements SpawnVoteService {
     private final Map<UUID, MapSpawn> currentVotes = new HashMap<>();
     private final SpawnService spawns;
