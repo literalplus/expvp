@@ -45,7 +45,7 @@ public class NodeStructureRendererTest {
     }
 
     private NodeStructureRenderer givenANodeRenderer(SkillTree tree) {
-        return new TreeStructureRenderer(tree, node -> new ObtainableSkillElement(null, node, null, null)).createNodeRenderer();
+        return new TreeStructureRenderer(tree, node -> new ObtainableSkillElement(null, node, null, null, null)).createNodeRenderer();
     }
 
     private SkillTree givenASkillTree() {

@@ -48,13 +48,13 @@ public class SkillTreeMenu extends AbstractEPMenu {
     private final KitService kitService;
 
     private SkillTreeMenu(EPPlugin plugin, Player player, SkillTree tree, Runnable backButtonHandler,
-                          TalentPointService talentPoints, String displayName,
+                          TalentPointService talentPoints, DisplayNameService names,
                           SkillService skills, ResearchService researchService, SkillTreeManager manager, KitService kitService) {
-        super(plugin, displayName, player);
+        super(plugin, I18n.loc(player, names.displayName(tree)), player);
         this.tree = tree;
         this.kitService = kitService;
         this.renderer = new TreeStructureRenderer(tree,
-                node -> new ObtainableSkillElement(this, node, skills, researchService)
+                node -> new ObtainableSkillElement(this, node, skills, researchService, names)
         );
         if (backButtonHandler != null) {
             addElement(0, new BackButton(inventoryMenu -> backButtonHandler.run(), getPlayer()));
@@ -148,9 +148,7 @@ public class SkillTreeMenu extends AbstractEPMenu {
         public SkillTreeMenu createMenuWithBackButton(Player player, SkillTree tree, Runnable backButtonHandler) {
             SkillTreeMenu menu = new SkillTreeMenu(
                     plugin, player, tree, backButtonHandler, talentPoints,
-                    I18n.loc(player, names.displayName(tree)),
-                    skills, researchService, manager,
-                    kitService);
+                    names, skills, researchService, manager, kitService);
             menu.applyRenderer();
             return menu;
         }

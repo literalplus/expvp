@@ -8,10 +8,13 @@
 
 package me.minotopia.expvp.ui.element.skill;
 
+import li.l1t.common.i18n.Message;
 import li.l1t.common.inventory.gui.InventoryMenu;
 import li.l1t.common.inventory.gui.holder.ElementHolder;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.api.skill.SkillService;
+import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.skill.meta.Skill;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
@@ -29,12 +32,14 @@ import org.bukkit.inventory.ItemStack;
 public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
     private final ResearchService researchService;
     private final SkillService skills;
+    private final DisplayNameService names;
 
     public ObtainableSkillElement(SkillTreeMenu menu, SimpleSkillTreeNode node, SkillService skills,
-                                  ResearchService researchService) {
+                                  ResearchService researchService, DisplayNameService names) {
         super(menu, node);
         this.researchService = researchService;
         this.skills = skills;
+        this.names = names;
     }
 
     @Override
@@ -50,6 +55,7 @@ public class ObtainableSkillElement extends AbstractNodeElement<SkillTreeMenu> {
         }
         Player player = menu.getPlayer();
         researchService.research(player, node);
+        I18n.sendLoc(player, Message.of("core!research.success", names.displayName(skill)));
         getMenu().refresh();
     }
 
