@@ -13,10 +13,13 @@ import com.google.inject.Inject;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.ExpService;
+import me.minotopia.expvp.api.score.league.League;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 /**
  * An ExpService implementation that uses PlayerDataService as Exp data source.
@@ -53,7 +56,21 @@ public class PlayerDataExpService implements ExpService {
             players.saveData(playerData);
             leagues.updateLeague(player);
             player.setLevel(playerData.getExp()); //The client displays negative numbers as zero
+            displayLeagueProgress(player, newExp, leagues.getPlayerLeague(playerData));
         });
+    }
+
+    private void displayLeagueProgress(Player player, int currentExp, League current) {
+        Optional<League> next = current.next();
+        if (next.isPresent()) {
+            int currentMin = current.getMinExp();
+            int expSinceLeagueChange = currentExp - currentMin;
+            int diffToCurrent = next.get().getMinExp() - currentMin;
+            float progress = ((float) expSinceLeagueChange / (float) diffToCurrent);
+            player.setExp(progress);
+        } else {
+            player.setExp(1F);
+        }
     }
 
     @Override
