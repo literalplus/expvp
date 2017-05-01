@@ -17,6 +17,7 @@ import li.l1t.common.exception.InternalException;
 import li.l1t.common.exception.UserException;
 import li.l1t.common.i18n.Message;
 import li.l1t.common.shared.uuid.UUIDRepository;
+import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
@@ -136,7 +137,7 @@ public class CommandStats extends BukkitExecutionExecutor {
         Optional<PlayerData> friend = friendService.findFriend(target);
         if (friend.isPresent()) {
             showFriendStatsTo(receiver, friend.get());
-        } else {
+        } else if (!target.getUniqueId().equals(CommandHelper.getSenderId(receiver))) {
             ComponentSender.sendTo(
                     receiver,
                     TextComponent.fromLegacyText(I18n.loc(receiver, Format.result("score!stats.no-friend"))),
