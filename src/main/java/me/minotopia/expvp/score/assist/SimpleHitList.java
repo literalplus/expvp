@@ -58,7 +58,7 @@ public class SimpleHitList implements HitList {
     }
 
     @Override
-    public double getDamageSum() {
+    public double getRecentDamageSum() {
         return hits.stream().mapToDouble(Hit::getDamage).sum();
     }
 }

@@ -25,5 +25,5 @@ public interface HitList {
 
     void expireHitsOlderThan(Duration expiryDuration);
 
-    double getDamageSum();
+    double getRecentDamageSum();
 }

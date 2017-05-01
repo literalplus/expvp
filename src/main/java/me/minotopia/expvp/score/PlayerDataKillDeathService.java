@@ -12,12 +12,14 @@ import com.google.inject.Inject;
 import li.l1t.common.i18n.Message;
 import me.minotopia.expvp.api.friend.FriendService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
+import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.KillDeathService;
 import me.minotopia.expvp.api.score.KillStreakService;
 import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.score.assist.HitList;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.service.PlayerDataService;
@@ -43,12 +45,14 @@ public class PlayerDataKillDeathService implements KillDeathService {
     private final KillStreakService streakService;
     private final KillAssistService assistService;
     private final FriendService friendService;
+    private final PlayerService playerService;
 
     @Inject
     public PlayerDataKillDeathService(TalentPointService talentPoints, SessionProvider sessionProvider,
                                       PlayerDataService players, LeagueService leagues, ExpService exps,
                                       DisplayNameService names, KillStreakService streakService,
-                                      KillAssistService assistService, FriendService friendService) {
+                                      KillAssistService assistService, FriendService friendService,
+                                      PlayerService playerService) {
         this.talentPoints = talentPoints;
         this.sessionProvider = sessionProvider;
         this.players = players;
@@ -58,6 +62,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
         this.streakService = streakService;
         this.assistService = assistService;
         this.friendService = friendService;
+        this.playerService = playerService;
     }
 
     @Override
@@ -65,7 +70,8 @@ public class PlayerDataKillDeathService implements KillDeathService {
         sessionProvider.inSession(ignored -> {
             recordKill(culprit);
             recordDeath(victim);
-            friendService.findFriend(culprit).ifPresent(this::recordKillAssist);
+            friendService.findFriend(culprit)
+                    .ifPresent(friendData -> attemptRecordKillAssist(victim, friendData));
             sendKillBroadcast(culprit, victim);
         });
     }
@@ -90,11 +96,16 @@ public class PlayerDataKillDeathService implements KillDeathService {
     private void recordKill(Player culprit) {
         MutablePlayerData playerData = players.findOrCreateDataMutable(culprit.getUniqueId());
         playerData.addKill();
-        int expReward = leagues.getCurrentLeague(culprit).getKillExpReward();
-        exps.incrementExp(culprit, expReward);
+        int expReward = doGrantKillRewards(culprit);
         I18n.sendLoc(culprit, Format.result(Message.of("score!kill.culprit", expReward)));
         grantTalentPointsToKiller(culprit);
         streakService.increaseStreak(culprit);
+    }
+
+    private int doGrantKillRewards(Player culprit) {
+        int expReward = leagues.getCurrentLeague(culprit).getKillExpReward();
+        exps.incrementExp(culprit, expReward);
+        return expReward;
     }
 
     private void grantTalentPointsToKiller(Player culprit) {
@@ -111,7 +122,20 @@ public class PlayerDataKillDeathService implements KillDeathService {
         }
     }
 
-    private void recordKillAssist(PlayerData friend) {
+    private void attemptRecordKillAssist(Player victim, PlayerData friend) {
+        HitList hitList = assistService.getHitsOn(victim.getUniqueId())
+                .getHitList(friend.getUniqueId());
+        double recentDamageSum = hitList.getRecentDamageSum();
+        if (recentDamageSum >= 10) {
+            playerService.findOnlinePlayer(friend.getUniqueId())
+                    .ifPresent(this::recordKillAssist);
+        }
+    }
 
+    private void recordKillAssist(Player assistant) {
+        MutablePlayerData playerData = players.findOrCreateDataMutable(assistant.getUniqueId());
+        playerData.addKillAssist();
+        int expReward = doGrantKillRewards(assistant);
+        I18n.sendLoc(assistant, Format.result(Message.of("score!kill.assist", expReward)));
     }
 }
