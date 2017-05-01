@@ -25,6 +25,8 @@ public interface MutablePlayerData extends PlayerData {
      */
     void addKill();
 
+    void addKillAssist();
+
     /**
      * Registers with the entity that the player has died, causing the death count to be increased.
      */

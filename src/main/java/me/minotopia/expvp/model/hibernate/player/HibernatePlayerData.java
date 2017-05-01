@@ -39,6 +39,8 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     private int totalKills;
     @Column(name = "totaldeaths")
     private int totalDeaths;
+    @Column(name = "totalassists")
+    private int totalKillAssists;
     @Column(name = "currentkills")
     private int currentKills;
     @Column(name = "currentdeaths")
@@ -93,6 +95,16 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     public void addKill() {
         this.totalKills += 1;
         this.currentKills += 1;
+    }
+
+    @Override
+    public int getTotalKillAssists() {
+        return totalKillAssists;
+    }
+
+    @Override
+    public void addKillAssist() {
+        this.totalKillAssists += 1;
     }
 
     @Override

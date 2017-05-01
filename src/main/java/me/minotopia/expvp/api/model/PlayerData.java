@@ -35,6 +35,8 @@ public interface PlayerData extends Serializable {
      */
     int getTotalDeaths();
 
+    int getTotalKillAssists();
+
     /**
      * @return the amount of times this player has killed other players since the last automated reset
      */
