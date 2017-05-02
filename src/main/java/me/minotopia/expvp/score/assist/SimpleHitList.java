@@ -12,7 +12,6 @@ import me.minotopia.expvp.api.score.assist.Hit;
 import me.minotopia.expvp.api.score.assist.HitList;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,7 +53,7 @@ public class SimpleHitList implements HitList {
 
     @Override
     public void expireHitsOlderThan(Duration expiryDuration) {
-        hits.removeIf(hit -> hit.getInstant().plus(expiryDuration).isAfter(Instant.now()));
+        hits.removeIf(hit -> hit.isOlderThan(expiryDuration));
     }
 
     @Override

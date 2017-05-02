@@ -48,7 +48,7 @@ public class SimpleHit implements Hit {
 
     @Override
     public boolean isOlderThan(Duration duration) {
-        return getInstant().plus(duration).isAfter(Instant.now());
+        return getInstant().plus(duration).isBefore(Instant.now());
     }
 
     @Override
