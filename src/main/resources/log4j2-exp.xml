@@ -38,10 +38,19 @@
             <TimeBasedTriggeringPolicy/>
             <DefaultRolloverStrategy max="60"/>
         </RollingFile>
+        <RollingFile name="ChatLogFile" fileName="${sys:exp.logsdir}chat.log"
+                     filePattern="${sys:exp.logsdir}chat/$${date:yyyy-MM}/%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="${pattern}"/>
+            <TimeBasedTriggeringPolicy/>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Logger name="me.minotopia.expvp" level="info" additivity="false">
             <AppenderRef ref="MainLogFile"/>
+        </Logger>
+        <Logger name="me.minotopia.expvp.chat" level="info" additivity="false">
+            <AppenderRef ref="ChatLogFile"/>
         </Logger>
         <Root/>
     </Loggers>

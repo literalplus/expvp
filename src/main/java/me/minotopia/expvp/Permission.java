@@ -35,13 +35,21 @@ public enum Permission {
      */
     ADMIN_OVERRIDE("expvp.admin.override"),
     /**
+     * Allows to ignore all chat filters.
+     */
+    ADMIN_CHAT_IGNORE("expvp.chat.ignore"),
+    /**
      * Allows to administer player data.
      */
     ADMIN_PLAYERS("expvp.admin.players"),
     /**
      * Allows to create and edit map spawns.
      */
-    ADMIN_SPAWN("expvp.admin.spawn");
+    ADMIN_SPAWN("expvp.admin.spawn"),
+    /**
+     * Allows to receive information about advertisements caught by the filter.
+     */
+    CHAT_AD_INFO("expvp.adinfo");
 
     private final String value;
 
