@@ -8,7 +8,10 @@
 
 package me.minotopia.expvp.score.assist;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import li.l1t.common.util.task.TaskService;
+import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.score.assist.Hits;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
 
@@ -28,6 +31,12 @@ public class MapKillAssistService implements KillAssistService {
     private final Map<UUID, MapHits> hitsMap = new HashMap<>();
     private final Duration expiryDuration = Duration.ofMinutes(3);
     private final Duration mostRecentExpiryDuration = Duration.ofSeconds(20);
+
+    @Inject
+    public MapKillAssistService(TaskService tasks, PlayerInitService initService) {
+        tasks.repeating(this::expireOldData, Duration.ofMinutes(5));
+        initService.registerDeInitHandler(player -> clearHitsOn(player.getUniqueId()));
+    }
 
     @Override
     public Hits getHitsOn(UUID playerId) {
