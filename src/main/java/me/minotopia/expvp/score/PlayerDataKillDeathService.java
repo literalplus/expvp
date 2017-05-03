@@ -126,7 +126,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
         HitList hitList = assistService.getHitsOn(victim.getUniqueId())
                 .getHitList(friend.getUniqueId());
         double recentDamageSum = hitList.getRecentDamageSum();
-        if (recentDamageSum >= 10) {
+        if (recentDamageSum >= 6) {
             playerService.findOnlinePlayer(friend.getUniqueId())
                     .ifPresent(this::recordKillAssist);
         }
