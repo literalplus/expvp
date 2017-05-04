@@ -33,5 +33,6 @@ public class ModelModule extends AbstractModule {
         bind(FriendshipRepository.class).to(HibernateFriendshipRepository.class);
         bind(FriendRequestRepository.class).to(HibernateFriendRequestRepository.class);
         bind(RankService.class).to(HibernateRankService.class);
+        bind(HibernateResetService.class);
     }
 }
