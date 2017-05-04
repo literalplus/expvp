@@ -16,6 +16,7 @@ import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.model.friend.HibernateFriendRequestRepository;
 import me.minotopia.expvp.model.friend.HibernateFriendshipRepository;
 import me.minotopia.expvp.model.player.HibernatePlayerDataService;
+import me.minotopia.expvp.model.player.HibernatePlayerTopRepository;
 import me.minotopia.expvp.model.player.HibernateResetService;
 import me.minotopia.expvp.model.score.HibernateRankService;
 
@@ -34,5 +35,6 @@ public class ModelModule extends AbstractModule {
         bind(FriendRequestRepository.class).to(HibernateFriendRequestRepository.class);
         bind(RankService.class).to(HibernateRankService.class);
         bind(HibernateResetService.class);
+        bind(HibernatePlayerTopRepository.class);
     }
 }

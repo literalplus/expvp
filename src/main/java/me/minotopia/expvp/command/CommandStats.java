@@ -78,10 +78,7 @@ public class CommandStats extends BukkitExecutionExecutor {
     public boolean execute(BukkitExecution exec) throws UserException, InternalException {
         try {
             sessionProvider.inSession(ignored -> {
-                PlayerData target = exec.findArg(0)
-                        .map(this::tryFindTarget)
-                        .orElseGet(provideSelfAsDataOrFail(exec.sender()));
-                showStatsOfTo(target, exec.sender());
+                handle(exec);
             });
         } catch (I18nInternalException | I18nUserException e) {
             I18n.sendLoc(exec.sender(), Message.of(e.getWrapperMessageKey(), Message.of(e.getMessageKey(), e.getMessageParameters())));
@@ -89,6 +86,13 @@ public class CommandStats extends BukkitExecutionExecutor {
             exec.sender().sendMessage(e.getColoredMessage());
         }
         return true;
+    }
+
+    private void handle(BukkitExecution exec) {
+        PlayerData target = exec.findArg(0)
+                .map(this::tryFindTarget)
+                .orElseGet(provideSelfAsDataOrFail(exec.sender()));
+        showStatsOfTo(target, exec.sender());
     }
 
     private PlayerData tryFindTarget(String arg) {
