@@ -21,7 +21,6 @@ import me.minotopia.expvp.api.spawn.SpawnVoteService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
-import me.minotopia.expvp.i18n.exception.I18nUserException;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -116,8 +115,15 @@ public class MapSpawnVoteService implements SpawnVoteService {
     public void showCurrentVotesTo(CommandSender sender, boolean showVoteButton) {
         List<MapSpawn> spawns = this.spawns.getSpawns();
         if (spawns.isEmpty()) {
-            throw new I18nUserException("spawn!vote.no-spawns");
+            I18n.sendLoc(sender, Format.internalError("spawn!vote.no-spawns"));
+        } else if (currentVotes.isEmpty() && !showVoteButton) {
+            I18n.sendLoc(sender, Format.userError("spawn!vote.no-votes"));
+        } else {
+            showVotesWithHeader(sender, showVoteButton, spawns);
         }
+    }
+
+    private void showVotesWithHeader(CommandSender sender, boolean showVoteButton, List<MapSpawn> spawns) {
         I18n.sendLoc(sender, Format.listHeader("spawn!vote.header"));
         spawns.forEach(spawn -> sendSpawnItem(sender, spawn, showVoteButton));
         I18n.sendLoc(sender, Format.result("spawn!vote.see-at-spawn"));
@@ -125,6 +131,9 @@ public class MapSpawnVoteService implements SpawnVoteService {
 
     private void sendSpawnItem(CommandSender sender, MapSpawn spawn, boolean showVoteButton) {
         long voteCount = findVoteCount(spawn);
+        if (voteCount == 0 && !showVoteButton) {
+            return;
+        }
         BaseComponent[] nameComponents = TextComponent.fromLegacyText(
                 I18n.loc(sender, Format.listItem("spawn!vote.spawn-item",
                         names.displayName(spawn), Plurals.plural("spawn!vote.vote", voteCount))) + " "

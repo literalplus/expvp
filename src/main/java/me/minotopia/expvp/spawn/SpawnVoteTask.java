@@ -85,20 +85,29 @@ public class SpawnVoteTask implements Runnable {
     }
 
     private Consumer<Player> remindToCastAVote(long minutesUntilChange) {
-        return player -> I18n.sendLoc(
-                player, Format.broadcast("spawn!vote.chat-reminder", Plurals.minutePlural(minutesUntilChange))
-        );
+        return player -> {
+            if (!voteService.getCurrentVotes().isEmpty()) {
+                voteService.showCurrentVotesTo(player, false);
+            }
+            I18n.sendLoc(
+                    player, Format.broadcast("spawn!vote.chat-reminder", Plurals.minutePlural(minutesUntilChange))
+            );
+        };
     }
 
     private void forceNextSpawn(MapSpawn spawn) {
-        server.getOnlinePlayers()
-                .forEach(player -> I18n.sendLoc(player, "core!spawn.new-spawn", names.displayName(spawn), spawn.getAuthor()));
+        server.getOnlinePlayers().forEach(player -> notifyNextSpawn(spawn, player));
         spawns.forceNextSpawn(spawn);
         voteService.resetAllVotes();
         changeService.registerSpawnChange();
         server.getOnlinePlayers()
                 .forEach(spawns::teleportToSpawnIfPossible);
         displayService.updateForAllPlayers();
+    }
+
+    private void notifyNextSpawn(MapSpawn spawn, Player player) {
+        voteService.showCurrentVotesTo(player, false);
+        I18n.sendLoc(player, "core!spawn.new-spawn", names.displayName(spawn), spawn.getAuthor());
     }
 
     private boolean hasNotCastAVote(Player player) {
