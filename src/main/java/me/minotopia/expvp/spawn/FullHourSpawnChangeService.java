@@ -9,6 +9,7 @@
 package me.minotopia.expvp.spawn;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import me.minotopia.expvp.api.spawn.SpawnChangeService;
 
 import java.time.Duration;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-14
  */
+@Singleton
 public class FullHourSpawnChangeService implements SpawnChangeService {
     private LocalDateTime lastChangeTime;
     private LocalDateTime nextChangeTime;
