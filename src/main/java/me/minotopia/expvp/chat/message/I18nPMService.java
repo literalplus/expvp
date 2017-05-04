@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
@@ -60,7 +61,13 @@ public class I18nPMService implements PMService {
         I18n.sendLoc(receiver, "chat!pm.receiver", sender.getName(), message);
         server.getOnlinePlayers().stream()
                 .filter(Permission.CHAT_SPY::has)
+                .filter(isNotPartOfConversation(pm))
                 .forEach(spy -> I18n.sendLoc(spy, "chat!pm.spy", sender.getName(), receiver.getName(), strippedMessage));
+    }
+
+    private Predicate<Player> isNotPartOfConversation(PrivateMessage message) {
+        return player -> !message.getSenderId().equals(player.getUniqueId()) &&
+                !message.getReceiverId().equals(player.getUniqueId());
     }
 
     private SimplePrivateMessage createMessage(UUID senderId, UUID receiverId, String message) {
