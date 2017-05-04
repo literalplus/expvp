@@ -19,6 +19,7 @@ import li.l1t.xlogin.common.api.XLoginProfile;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.spawn.SpawnService;
+import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
@@ -65,7 +66,7 @@ public class CommandSpawn extends BukkitExecutionExecutor {
     @Override
     public boolean execute(BukkitExecution exec) throws UserException, InternalException {
         Player player = exec.player();
-        I18n.sendLoc(player, "core!spawn.stand-still");
+        I18n.sendLoc(player, Format.result("core!spawn.stand-still"));
         Location initialLocation = player.getLocation();
         double initialHealth = player.getHealth();
         int initialRemainingAir = player.getRemainingAir();
@@ -73,7 +74,7 @@ public class CommandSpawn extends BukkitExecutionExecutor {
             if (!LocationHelper.softEqual(initialLocation, player.getLocation()) ||
                     player.getHealth() < initialHealth ||
                     player.getRemainingAir() < initialRemainingAir) {
-                I18n.sendLoc(player, "core!spawn.tp-abort");
+                I18n.sendLoc(player, Format.userError("core!spawn.tp-abort"));
             } else {
                 spawns.teleportToSpawnIfPossible(player);
             }
