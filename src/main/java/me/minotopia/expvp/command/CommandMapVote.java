@@ -13,10 +13,12 @@ import com.sk89q.intake.Command;
 import li.l1t.common.chat.ComponentSender;
 import li.l1t.common.chat.XyComponentBuilder;
 import li.l1t.common.intake.provider.annotation.Sender;
+import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.api.spawn.SpawnVoteService;
+import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
@@ -52,6 +54,7 @@ public class CommandMapVote {
     @Command(aliases = "vote", min = 1,
             desc = "Wählt eine Map",
             usage = "[map]")
+    @EnumRequires(Permission.COMMAND_MAP_VOTE)
     public void vote(@Sender Player player, MapSpawn mapSpawn) throws IOException {
         voteService.castVoteFor(player.getUniqueId(), mapSpawn);
         I18n.sendLoc(player, Format.success("spawn!vote.voted", names.displayName(mapSpawn)));

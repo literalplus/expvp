@@ -49,7 +49,11 @@ public enum Permission {
     /**
      * Allows to receive information about advertisements caught by the filter.
      */
-    CHAT_AD_INFO("expvp.adinfo");
+    CHAT_AD_INFO("expvp.adinfo"),
+    /**
+     * Allows to use the /mv command to vote for spawns.
+     */
+    COMMAND_MAP_VOTE("expvp.spawn.vote");
 
     private final String value;
 
