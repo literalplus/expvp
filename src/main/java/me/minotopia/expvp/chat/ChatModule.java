@@ -15,9 +15,13 @@ import li.l1t.common.chat.AdFilterService;
 import li.l1t.common.chat.CapsFilterService;
 import me.minotopia.expvp.api.chat.ChatDispatcher;
 import me.minotopia.expvp.api.chat.ChatFormatService;
+import me.minotopia.expvp.api.chat.message.PMService;
+import me.minotopia.expvp.api.chat.message.ReplyService;
 import me.minotopia.expvp.chat.dispatch.SimpleChatDispatcher;
 import me.minotopia.expvp.chat.format.I18nChatFormatService;
 import me.minotopia.expvp.chat.handler.*;
+import me.minotopia.expvp.chat.message.I18nPMService;
+import me.minotopia.expvp.chat.message.MapReplyService;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Server;
 
@@ -36,9 +40,12 @@ public class ChatModule extends AbstractModule {
         bind(ChatColorHandler.class);
         bind(LagMessageHandler.class);
         bind(RepeatedMessageHandler.class);
+        bind(ReplyService.class).to(MapReplyService.class);
+        bind(PMService.class).to(I18nPMService.class);
     }
 
     @Provides
+    @Singleton
     public AdFilterService adFilterService(ChatConfig config) {
         AdFilterService adFilterService = new AdFilterService();
         config.configure(adFilterService);
@@ -52,6 +59,7 @@ public class ChatModule extends AbstractModule {
     }
 
     @Provides
+    @Singleton
     public CapsFilterService capsFilterService(ChatConfig config) {
         CapsFilterService capsFilterService = new CapsFilterService();
         config.configure(capsFilterService);

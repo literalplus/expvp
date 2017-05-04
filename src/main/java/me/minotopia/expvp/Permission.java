@@ -51,6 +51,10 @@ public enum Permission {
      */
     CHAT_AD_INFO("expvp.adinfo"),
     /**
+     * Allows to read all private messages from all players on the server.
+     */
+    CHAT_SPY("expvp.chatspy"),
+    /**
      * Allows to use the /mv command to vote for spawns.
      */
     COMMAND_MAP_VOTE("expvp.spawn.vote");
