@@ -31,6 +31,7 @@ import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
 import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
+import me.minotopia.expvp.model.player.HibernatePlayerTopRepository;
 import me.minotopia.expvp.util.SessionProvider;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -40,7 +41,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -59,11 +62,12 @@ public class CommandStats extends BukkitExecutionExecutor {
     private final RankService rankService;
     private final LeagueService leagues;
     private final SessionProvider sessionProvider;
+    private final HibernatePlayerTopRepository topRepository;
 
     @Inject
     public CommandStats(PlayerDataService players, UUIDRepository uuidRepository, FriendService friendService,
                         DisplayNameService names, RankService rankService, LeagueService leagues, SessionProvider sessionProvider,
-                        EPPlugin plugin) {
+                        EPPlugin plugin, HibernatePlayerTopRepository topRepository) {
         this.players = players;
         this.uuidRepository = uuidRepository;
         this.friendService = friendService;
@@ -71,6 +75,7 @@ public class CommandStats extends BukkitExecutionExecutor {
         this.rankService = rankService;
         this.leagues = leagues;
         this.sessionProvider = sessionProvider;
+        this.topRepository = topRepository;
         plugin.getCommand("stats").setExecutor(this);
     }
 
@@ -89,10 +94,24 @@ public class CommandStats extends BukkitExecutionExecutor {
     }
 
     private void handle(BukkitExecution exec) {
+        if (exec.findArg(0).filter("top"::equalsIgnoreCase).isPresent()) {
+            showTopTenKillersTo(exec.sender());
+            return;
+        }
         PlayerData target = exec.findArg(0)
                 .map(this::tryFindTarget)
                 .orElseGet(provideSelfAsDataOrFail(exec.sender()));
         showStatsOfTo(target, exec.sender());
+    }
+
+    private void showTopTenKillersTo(CommandSender sender) {
+        List<PlayerData> topPlayers = new ArrayList<>(topRepository.findTopNByExp(10));
+        I18n.sendLoc(sender, Format.header("score!stats.top-header"));
+        for (int i = 0; i < topPlayers.size(); i++) {
+            PlayerData data = topPlayers.get(i);
+            String name = uuidRepository.getName(data.getUniqueId());
+            I18n.sendLoc(sender, Format.listItem("score!stats.exp-item", i + 1, name, data.getExp()));
+        }
     }
 
     private PlayerData tryFindTarget(String arg) {
