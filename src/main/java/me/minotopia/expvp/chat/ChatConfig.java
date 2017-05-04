@@ -55,6 +55,9 @@ public class ChatConfig extends YamlConfiguration {
 
     public void trySave() {
         try {
+            if (!file.exists()) {
+                Files.touch(file);
+            }
             save(file);
         } catch (IOException e) {
             LOGGER.warn("Failed to save chat configuration to " + file.getAbsolutePath() + ":", e);
