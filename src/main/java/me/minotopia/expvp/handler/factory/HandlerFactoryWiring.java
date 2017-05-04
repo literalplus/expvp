@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.handler.factory;
 
+import com.google.inject.Inject;
+import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.handler.factory.damage.*;
 import me.minotopia.expvp.handler.factory.kit.EnchantKitHandlerFactory;
 import me.minotopia.expvp.handler.factory.kit.NotchAppleKitHandlerFactory;
@@ -21,6 +23,13 @@ import me.minotopia.expvp.handler.factory.kit.SimpleKitHandlerFactory;
  * @since 2017-03-13
  */
 public class HandlerFactoryWiring {
+    private final PlayerInitService initService;
+
+    @Inject
+    public HandlerFactoryWiring(PlayerInitService initService) {
+        this.initService = initService;
+    }
+
     public void wire(EPHandlerFactoryGraph graph) {
         graph.kits().addChild(new SimpleKitHandlerFactory("simple"));
         graph.kits().addChild(new EnchantKitHandlerFactory("ench"));
@@ -31,5 +40,6 @@ public class HandlerFactoryWiring {
         graph.damages().addChild(new VictimEffectHandlerFactory("victim"));
         graph.damages().addChild(new VictimHealHandlerFactory("victim-heal"));
         graph.damages().addChild(new PoisonousArmorHandlerFactory("poison-armor"));
+        graph.damages().addChild(new NotTodayHandlerFactory("nottoday", initService));
     }
 }

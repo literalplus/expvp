@@ -39,6 +39,7 @@ public class HandlerModule extends AbstractModule {
         bind(KitCompiler.class).to(SkillKitCompiler.class);
         bind(KitService.class).to(SkillKitService.class);
         bind(DamageHandlerCaller.class);
+        bind(HandlerFactoryWiring.class);
     }
 
     @Singleton
