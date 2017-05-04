@@ -13,3 +13,7 @@ commands:
     description: Expvp Stats
   spawn:
     description: Expvp Spawn
+  msg:
+    aliases: [tell, m, t, whisper]
+  reply:
+    aliases: [r]
