@@ -56,7 +56,7 @@
         <log4j.version>2.0-beta9</log4j.version>
         <!-- Mojang ship outdated Beta code in Production -->
         <hibernate.version>5.2.3-SNAPSHOT</hibernate.version>
-        <intake-spigot.version>4.2.27</intake-spigot.version>
+        <intake-spigot.version>4.2.29</intake-spigot.version>
         <!-- maven-release-plugin -->
         <ignoreSnapshots>true</ignoreSnapshots>
     </properties>

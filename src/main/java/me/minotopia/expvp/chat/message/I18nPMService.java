@@ -55,10 +55,9 @@ public class I18nPMService implements PMService {
         PrivateMessage pm = createMessage(CommandHelper.getSenderId(sender), CommandHelper.getSenderId(receiver), message);
         checkSpam(pm);
         replyService.registerMessage(pm);
-        String coloredMessage = ChatColor.translateAlternateColorCodes('&', message);
-        String strippedMessage = ChatColor.stripColor(coloredMessage);
-        I18n.sendLoc(sender, "chat!pm.sender", receiver.getName(), coloredMessage);
-        I18n.sendLoc(receiver, "chat!pm.receiver", sender.getName(), coloredMessage);
+        String strippedMessage = ChatColor.stripColor(message);
+        I18n.sendLoc(sender, "chat!pm.sender", receiver.getName(), message);
+        I18n.sendLoc(receiver, "chat!pm.receiver", sender.getName(), message);
         server.getOnlinePlayers().stream()
                 .filter(Permission.CHAT_SPY::has)
                 .forEach(spy -> I18n.sendLoc(spy, "chat!pm.spy", sender.getName(), receiver.getName(), strippedMessage));

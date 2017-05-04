@@ -16,6 +16,7 @@ import com.sk89q.intake.parametric.ProvisionException;
 import li.l1t.common.intake.CommandExceptionListener;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.util.CommandHelper;
+import me.minotopia.expvp.command.chat.CommandMessage;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.InternationalException;
@@ -51,6 +52,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandFriend.class);
         bind(CommandLang.class);
         bind(CommandStats.class);
+        bind(CommandMessage.class);
     }
 
     @Singleton
