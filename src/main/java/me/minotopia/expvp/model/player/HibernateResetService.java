@@ -49,5 +49,6 @@ public class HibernateResetService {
             ).executeUpdate();
             session.commit();
         });
+        sessionProvider.inSession(session -> session.session().getSessionFactory().getCache().evictAllRegions());
     }
 }

@@ -9,7 +9,6 @@
 package me.minotopia.expvp.score;
 
 import com.google.inject.Inject;
-import me.minotopia.expvp.api.reset.ResetService;
 import me.minotopia.expvp.api.score.ExpService;
 import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
@@ -21,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.TemporalAdjusters;
@@ -34,16 +34,14 @@ import java.time.temporal.TemporalAdjusters;
 public class ScoreJoinListener implements Listener {
     private final ExpService exps;
     private final TalentPointService talentPoints;
-    private final ResetService resetService;
     private final PlayerDataService players;
     private final SessionProvider sessionProvider;
 
     @Inject
-    public ScoreJoinListener(ExpService exps, TalentPointService talentPoints, ResetService resetService,
+    public ScoreJoinListener(ExpService exps, TalentPointService talentPoints,
                              PlayerDataService players, SessionProvider sessionProvider) {
         this.exps = exps;
         this.talentPoints = talentPoints;
-        this.resetService = resetService;
         this.players = players;
         this.sessionProvider = sessionProvider;
     }
@@ -71,7 +69,7 @@ public class ScoreJoinListener implements Listener {
 
     private int getFullDaysSinceReset() {
         return Period.between(
-                LocalDate.now().with(TemporalAdjusters.previousOrSame(resetService.getResetDay())),
+                LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY)),
                 LocalDate.now()
         ).getDays();
     }
