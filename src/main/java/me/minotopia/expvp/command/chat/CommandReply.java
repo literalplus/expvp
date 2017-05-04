@@ -9,15 +9,19 @@
 package me.minotopia.expvp.command.chat;
 
 import com.google.inject.Inject;
-import com.sk89q.intake.Command;
-import li.l1t.common.intake.provider.annotation.Colored;
-import li.l1t.common.intake.provider.annotation.Merged;
+import li.l1t.common.command.BukkitExecution;
+import li.l1t.common.command.BukkitExecutionExecutor;
+import li.l1t.common.exception.InternalException;
+import li.l1t.common.exception.UserException;
 import li.l1t.common.util.CommandHelper;
 import li.l1t.common.util.UUIDHelper;
+import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.chat.message.PMService;
 import me.minotopia.expvp.api.chat.message.ReplyService;
+import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.misc.PlayerService;
-import me.minotopia.expvp.command.AutoRegister;
+import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.exception.I18nInternalException;
 import me.minotopia.expvp.i18n.exception.I18nUserException;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -30,23 +34,42 @@ import java.util.UUID;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-05-04
  */
-@AutoRegister(value = "reply", aliases = {"r"})
-public class CommandReply {
+@ConstructOnEnable
+public class CommandReply extends BukkitExecutionExecutor {
     private final PMService pmService;
-    private final ReplyService replyService;
     private final PlayerService playerService;
+    private final ReplyService replyService;
     private final Server server;
 
     @Inject
-    public CommandReply(PMService pmService, ReplyService replyService, PlayerService playerService, Server server) {
+    public CommandReply(PMService pmService, EPPlugin plugin, PlayerService playerService,
+                        ReplyService replyService, Server server) {
         this.pmService = pmService;
-        this.replyService = replyService;
         this.playerService = playerService;
+        this.replyService = replyService;
         this.server = server;
+        plugin.getCommand("reply").setExecutor(this);
     }
 
-    @Command(aliases = "", desc = "cmd!msg.root.desc", min = 2)
-    public void root(CommandSender sender, @Merged @Colored String message) {
+    @Override
+    public boolean execute(BukkitExecution exec) throws UserException, InternalException {
+        try {
+            handle(exec);
+        } catch (I18nUserException | I18nInternalException e) {
+            I18n.sendLoc(exec.sender(), e.toMessage());
+        }
+        return true;
+    }
+
+    private void handle(BukkitExecution exec) {
+        if (exec.args().length < 1) {
+            I18n.sendLoc(exec.sender(), "cmd!reply.usage");
+        } else {
+            pmService.sendMessage(exec.sender(), findReceiver(exec.sender()), exec.joinedArgsColored(1));
+        }
+    }
+
+    private CommandSender findReceiver(CommandSender sender) {
         UUID receiverId = replyService.getMostRecentPartner(CommandHelper.getSenderId(sender))
                 .orElseThrow(() -> new I18nUserException("chat!reply.no-partner"));
         CommandSender receiver;
@@ -56,6 +79,6 @@ public class CommandReply {
             receiver = playerService.findOnlinePlayer(receiverId)
                     .orElseThrow(() -> new I18nUserException("chat!reply.no-partner"));
         }
-        pmService.sendMessage(sender, receiver, message);
+        return receiver;
     }
 }
