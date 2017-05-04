@@ -42,13 +42,20 @@ public class ChatConfig extends YamlConfiguration {
         options().copyDefaults(true);
     }
 
-    public void tryLoad() throws IOException {
+    public void tryLoad() {
+        if (!file.exists()) {
+            return;
+        }
         try {
             load(file);
         } catch (Exception e) {
             LOGGER.warn("Invalid chat configuration at " + file.getAbsolutePath() + ":", e);
             File backupFile = new File(file.getParentFile(), "chat.bkp.yml");
-            Files.copy(file, backupFile);
+            try {
+                Files.copy(file, backupFile);
+            } catch (IOException e1) {
+                LOGGER.warn("Failed to save backup", e1);
+            }
             LOGGER.warn("Saved backup to {}", backupFile.getAbsolutePath());
         }
     }
