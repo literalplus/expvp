@@ -94,7 +94,10 @@ public class I18nPMService implements PMService {
     }
 
     private Predicate<String> checkIsRepeated(PrivateMessage toCheck) {
-        return previous -> previous.equalsIgnoreCase(toCheck.getMessage()) ||
-                StringUtils.getLevenshteinDistance(toCheck.getMessage(), previous) <= 2;
+        return previous -> {
+            String msg = toCheck.getMessage();
+            return previous.equalsIgnoreCase(msg) ||
+                    (msg.length() > 5 && StringUtils.getLevenshteinDistance(msg, previous) <= 2);
+        };
     }
 }
