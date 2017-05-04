@@ -12,10 +12,21 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import li.l1t.common.chat.ComponentSender;
+import li.l1t.common.chat.XyComponentBuilder;
+import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.spawn.MapSpawn;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.api.spawn.SpawnVoteService;
+import me.minotopia.expvp.i18n.Format;
+import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.Plurals;
+import me.minotopia.expvp.i18n.exception.I18nUserException;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.math.RandomUtils;
+import org.bukkit.command.CommandSender;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,10 +41,12 @@ import java.util.stream.Collectors;
 public class MapSpawnVoteService implements SpawnVoteService {
     private final Map<UUID, MapSpawn> currentVotes = new HashMap<>();
     private final SpawnService spawns;
+    private final DisplayNameService names;
 
     @Inject
-    public MapSpawnVoteService(SpawnService spawns) {
+    public MapSpawnVoteService(SpawnService spawns, DisplayNameService names) {
         this.spawns = spawns;
+        this.names = names;
     }
 
     @Override
@@ -97,5 +110,33 @@ public class MapSpawnVoteService implements SpawnVoteService {
     @Override
     public Map<UUID, MapSpawn> getCurrentVotes() {
         return ImmutableMap.copyOf(currentVotes);
+    }
+
+    @Override
+    public void showCurrentVotesTo(CommandSender sender, boolean showVoteButton) {
+        List<MapSpawn> spawns = this.spawns.getSpawns();
+        if (spawns.isEmpty()) {
+            throw new I18nUserException("spawn!vote.no-spawns");
+        }
+        I18n.sendLoc(sender, Format.listHeader("spawn!vote.header"));
+        spawns.forEach(spawn -> sendSpawnItem(sender, spawn, showVoteButton));
+        I18n.sendLoc(sender, Format.result("spawn!vote.see-at-spawn"));
+    }
+
+    private void sendSpawnItem(CommandSender sender, MapSpawn spawn, boolean showVoteButton) {
+        long voteCount = findVoteCount(spawn);
+        BaseComponent[] nameComponents = TextComponent.fromLegacyText(
+                I18n.loc(sender, Format.listItem("spawn!vote.spawn-item",
+                        names.displayName(spawn), Plurals.plural("spawn!vote.vote", voteCount))) + " "
+        );
+        if (showVoteButton) {
+            BaseComponent[] buttonComponents = new XyComponentBuilder(I18n.loc(sender, "spawn!vote.spawn-button"))
+                    .color(ChatColor.GREEN)
+                    .command("/mv vote " + spawn.getId())
+                    .create();
+            ComponentSender.sendTo(sender, nameComponents, buttonComponents);
+        } else {
+            ComponentSender.sendTo(sender, nameComponents);
+        }
     }
 }

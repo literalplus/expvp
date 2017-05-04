@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.api.spawn;
 
+import org.bukkit.command.CommandSender;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,4 +43,6 @@ public interface SpawnVoteService {
     Optional<MapSpawn> findCurrentlyWinningSpawn();
 
     void resetAllVotes();
+
+    void showCurrentVotesTo(CommandSender sender, boolean showVoteButton);
 }
