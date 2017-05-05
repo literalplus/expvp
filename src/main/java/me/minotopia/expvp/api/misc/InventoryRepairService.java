@@ -21,9 +21,11 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public class InventoryRepairService implements RepairService {
     private final Logger LOGGER = LoggingManager.getLogger(InventoryRepairService.class);
+
     @Override
     public void repair(Player player) {
         PlayerInventory inv = player.getInventory();
+        LOGGER.debug("Repairing {}", player.getName());
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
             if (item != null && isRepairable(item.getType())) {
