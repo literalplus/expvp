@@ -14,6 +14,7 @@ import li.l1t.common.i18n.Message;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.handler.kit.KitService;
+import me.minotopia.expvp.api.misc.RepairService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
 import me.minotopia.expvp.api.model.PlayerData;
@@ -146,6 +147,15 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
                 .forEach(kitService::invalidateCache);
         I18n.sendLoc(sender, Format.success(Message.ofText(
                 "Ja mehr oder weniger sollten jetzt zumindest die schlimmsten Caches geleert sein."
+        )));
+    }
+
+    @Command(aliases = "repair", desc = "Repaired dein Kit")
+    @EnumRequires(Permission.ADMIN_BASIC)
+    public void repairKit(RepairService repairService, @Sender Player player) {
+        repairService.repair(player);
+        I18n.sendLoc(player, Format.success(Message.ofText(
+                "oke"
         )));
     }
 }
