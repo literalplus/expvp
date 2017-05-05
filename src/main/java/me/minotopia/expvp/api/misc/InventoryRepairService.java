@@ -8,8 +8,6 @@
 
 package me.minotopia.expvp.api.misc;
 
-import me.minotopia.expvp.logging.LoggingManager;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +18,6 @@ import org.bukkit.inventory.PlayerInventory;
  * @since 2017-05-05
  */
 public class InventoryRepairService implements RepairService {
-    private final Logger LOGGER = LoggingManager.getLogger(InventoryRepairService.class);
 
     @Override
     public void repair(Player player) {
@@ -34,7 +31,6 @@ public class InventoryRepairService implements RepairService {
         for (ItemStack item : contents) {
             if (item != null && isRepairable(item.getType())) {
                 item.setDurability((short) 0);
-                LOGGER.debug("Repairing {} to {}", item.getType(), item.getDurability());
             }
         }
         return contents;
