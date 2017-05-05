@@ -18,6 +18,10 @@ import org.bukkit.entity.Player;
  * @since 2016-08-21
  */
 public interface ChatMessageEvent {
+    boolean isCancelled();
+
+    void setCancelled(boolean cancelled);
+
     /**
      * Attempts to deny this chat message with an error message. This method fails if the player who
      * sent the message has {@link me.minotopia.expvp.Permission#ADMIN_CHAT_IGNORE}

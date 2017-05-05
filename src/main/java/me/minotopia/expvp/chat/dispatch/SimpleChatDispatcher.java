@@ -71,7 +71,7 @@ public class SimpleChatDispatcher implements ChatDispatcher {
         sessionProvider.inSession(ignored -> {
             ChatMessageEvent event = createEvent(bukkitEvent);
             dispatchAllPhases(event);
-            if (bukkitEvent.isCancelled()) {
+            if (event.isCancelled()) {
                 return;
             }
             formatService.sendToAll(event.getPlayer(), event.getMessage());

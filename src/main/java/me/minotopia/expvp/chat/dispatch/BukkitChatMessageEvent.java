@@ -26,10 +26,21 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class BukkitChatMessageEvent implements ChatMessageEvent {
     private final AsyncPlayerChatEvent bukkitEvent;
     private String message;
+    private boolean cancelled;
 
     public BukkitChatMessageEvent(AsyncPlayerChatEvent bukkitEvent) {
         this.bukkitEvent = Preconditions.checkNotNull(bukkitEvent, "bukkitEvent");
         this.message = bukkitEvent.getMessage();
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     @Override
@@ -39,7 +50,7 @@ public class BukkitChatMessageEvent implements ChatMessageEvent {
             return false;
         }
         respond(errorMessage);
-        bukkitEvent.setCancelled(true);
+        setCancelled(true);
         return true;
     }
 
@@ -61,7 +72,7 @@ public class BukkitChatMessageEvent implements ChatMessageEvent {
 
     @Override
     public void dropMessage() {
-        bukkitEvent.setCancelled(true);
+        setCancelled(true);
     }
 
     @Override
