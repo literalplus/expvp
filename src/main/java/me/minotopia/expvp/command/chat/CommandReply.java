@@ -65,7 +65,7 @@ public class CommandReply extends BukkitExecutionExecutor {
         if (exec.args().length < 1) {
             I18n.sendLoc(exec.sender(), "cmd!reply.usage");
         } else {
-            pmService.sendMessage(exec.sender(), findReceiver(exec.sender()), exec.joinedArgsColored(1));
+            pmService.sendMessage(exec.sender(), findReceiver(exec.sender()), exec.joinedArgsColored(0));
         }
     }
 
