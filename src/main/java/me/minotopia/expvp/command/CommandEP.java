@@ -51,9 +51,9 @@ public class CommandEP {
         sender.sendMessage("§6Copyright (C) 2016-" + LocalDateTime.now().getYear() + " Literallie (https://l1t.li/)");
         sender.sendMessage("§e" + plugin.getPluginVersion());
         sender.sendMessage(" ");
-        sender.sendMessage("§9Thanks to everyone who helped test Expvp:");
+        sender.sendMessage("§6Thanks to everyone who helped test Expvp:");
         sender.sendMessage(Arrays.stream(testers)
                 .sorted()
-                .collect(Collectors.joining("§e, §9", "§9 ", "")));
+                .collect(Collectors.joining("§e, §6", "§6 ", "")));
     }
 }
