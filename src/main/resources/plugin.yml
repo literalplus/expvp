@@ -14,6 +14,6 @@ commands:
   spawn:
     description: Expvp Spawn
   msg:
-    aliases: [tell, m, t, whisper]
+    aliases: [tell, m, t, whisper, w]
   reply:
     aliases: [r]
