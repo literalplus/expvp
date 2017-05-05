@@ -49,7 +49,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandSpawnAdmin.class);
         bind(CommandMapVote.class);
         bind(CommandSpawnLink.class);
-        bind(CommandMainMenu.class);
+        bind(CommandEP.class);
         bind(CommandFriend.class);
         bind(CommandLang.class);
         bind(CommandStats.class);
