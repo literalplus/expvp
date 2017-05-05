@@ -72,7 +72,10 @@ public class BossBarSpawnDisplayService implements SpawnDisplayService {
     @SuppressWarnings("deprecation")
     private void sendToAll(String message, List<Player> players) {
         float fractionProgress = spawnChangeService.findFractionProgressToNextSpawn();
-        players.forEach(player -> BossBarAPI.setMessage(player, message, fractionProgress * 100F));
+        players.forEach(player -> {
+            BossBarAPI.removeBar(player);
+            BossBarAPI.setMessage(player, message, fractionProgress * 100F);
+        });
     }
 
     @SuppressWarnings("deprecation")
