@@ -14,7 +14,7 @@
 
     <groupId>me.minotopia.expvp</groupId>
     <artifactId>expvp</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Expvp</name>
