@@ -54,6 +54,6 @@ public class CommandEP {
         sender.sendMessage("§6Thanks to everyone who helped test Expvp:");
         sender.sendMessage(Arrays.stream(testers)
                 .sorted()
-                .collect(Collectors.joining("§e, §6", "§6 ", "")));
+                .collect(Collectors.joining("§e, §6", "§6", "")));
     }
 }
