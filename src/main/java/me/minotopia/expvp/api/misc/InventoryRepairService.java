@@ -31,6 +31,7 @@ public class InventoryRepairService implements RepairService {
             ItemStack item = player.getInventory().getItem(i);
             if (item != null && repairable.contains(item.getType())) {
                 item.setDurability(item.getType().getMaxDurability());
+                player.getInventory().setItem(i, item);
             }
         }
     }
