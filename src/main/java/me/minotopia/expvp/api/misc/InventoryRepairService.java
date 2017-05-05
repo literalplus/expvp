@@ -25,14 +25,19 @@ public class InventoryRepairService implements RepairService {
     @Override
     public void repair(Player player) {
         PlayerInventory inv = player.getInventory();
-        ItemStack[] contents = inv.getContents();
+        inv.setContents(repairAll(inv.getContents()));
+        inv.setArmorContents(repairAll(inv.getArmorContents()));
+        player.updateInventory();
+    }
+
+    private ItemStack[] repairAll(ItemStack[] contents) {
         for (ItemStack item : contents) {
             if (item != null && isRepairable(item.getType())) {
                 item.setDurability((short) 0);
-                LOGGER.debug("Repairing {} - {} to {}", player.getName(), item.getType(), item.getDurability());
+                LOGGER.debug("Repairing {} to {}", item.getType(), item.getDurability());
             }
         }
-        inv.setContents(contents);
+        return contents;
     }
 
     private boolean isRepairable(Material material) {
