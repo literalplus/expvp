@@ -11,8 +11,8 @@ package me.minotopia.expvp.score;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.misc.PlayerInitService;
+import me.minotopia.expvp.api.misc.RepairService;
 import me.minotopia.expvp.api.score.KillStreakService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.i18n.Format;
@@ -40,13 +40,13 @@ public class PlayerKillStreakService implements KillStreakService {
     private final Map<UUID, Integer> playerStreaks = new HashMap<>();
     private final PlayerDataService players;
     private final Server server;
-    private final KitService kitService;
+    private final RepairService repairService;
 
     @Inject
-    public PlayerKillStreakService(PlayerDataService players, Server server, KitService kitService, PlayerInitService initService) {
+    public PlayerKillStreakService(PlayerDataService players, Server server, RepairService repairService, PlayerInitService initService) {
         this.players = players;
         this.server = server;
-        this.kitService = kitService;
+        this.repairService = repairService;
         initService.registerDeInitHandler(this::resetStreak);
     }
 
@@ -78,7 +78,7 @@ public class PlayerKillStreakService implements KillStreakService {
             server.getOnlinePlayers().forEach(onlinePlayer ->
                     I18n.sendLoc(onlinePlayer, Format.broadcast("score!streak.fifth", player.getName(), newStreak))
             );
-            kitService.applyKit(player);
+            repairService.repair(player);
             player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 30 * 20, 0));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30 * 20, 0));
         }

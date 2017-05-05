@@ -18,8 +18,10 @@ import li.l1t.common.util.task.TaskService;
 import li.l1t.xlogin.common.PreferencesHolder;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.inject.DataFolder;
+import me.minotopia.expvp.api.misc.InventoryRepairService;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.misc.PlayerService;
+import me.minotopia.expvp.api.misc.RepairService;
 import me.minotopia.expvp.chat.ChatModule;
 import me.minotopia.expvp.friend.FriendModule;
 import me.minotopia.expvp.handler.HandlerModule;
@@ -64,6 +66,7 @@ public class EPRootModule extends AbstractModule {
         bind(LocaleChangeListener.class);
         bind(PlayerService.class).to(BukkitPlayerService.class);
         bind(VillagerClickHandler.class);
+        bind(RepairService.class).to(InventoryRepairService.class);
         if (PreferencesHolder.getConsumer() != null) { // unit tests
             bind(UUIDRepository.class).toInstance(PreferencesHolder.getConsumer().getRepository());
         } else {
