@@ -32,7 +32,7 @@ public class CommandEP {
     private static final String[] testers = {
             "chris301234", "Krummschi", "BergFelix", "Knuddelhero", "B0mm3l6", "HamsterCrack", "El_Berndo", "_Daimn_",
             "Tw_333", "tobias1198", "Crafter_F12", "CRiiNZ", "Xc3pt1on", "Obi_Maus", "DeathlyPhantom", "ItsTomSanderson",
-            "miggi66 §e(NCP Tester)"
+            "miggi66 §e(NCP Tester)", "skiller4ever"
     };
 
     @Inject
