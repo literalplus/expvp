@@ -77,7 +77,7 @@ public class LocaleService {
 
     private void notifySelectedLocale(Player player, PlayerData playerData) {
         if (playerData.hasCustomLocale()) {
-            I18n.sendLoc(player, "core!lang.manual-selected");
+            I18n.sendLoc(player, Format.result("core!lang.manual-selected"));
         } else {
             I18n.sendLoc(player, Format.result("core!lang.auto-selected"));
         }
