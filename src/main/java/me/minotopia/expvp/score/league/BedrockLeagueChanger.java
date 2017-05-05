@@ -11,22 +11,22 @@ package me.minotopia.expvp.score.league;
 import me.minotopia.expvp.api.model.PlayerData;
 
 /**
- * Handles changing Obsidian players to Bedrock if they're in the top N players, and changing the replaced Bedrock
+ * Handles changing Bedrock players to Obsidian if they're out of the top N players, and changing the replaced Bedrock
  * player back.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-05-05
  */
-class ObsidianLeagueChanger extends ExpLeagueChanger {
+class BedrockLeagueChanger extends ExpLeagueChanger {
     private final Top5Service top5Service;
 
-    public ObsidianLeagueChanger(Top5Service top5Service) {
-        super(StaticLeague.OBSIDIAN);
+    public BedrockLeagueChanger(Top5Service top5Service) {
+        super(StaticLeague.BEDROCK);
         this.top5Service = top5Service;
     }
 
     @Override
-    public boolean needsLeagueChangeUp(PlayerData playerData) {
-        return top5Service.isInTopFive(playerData);
+    public boolean needsLeagueChangeDown(PlayerData playerData) {
+        return !top5Service.isInTopFive(playerData);
     }
 }

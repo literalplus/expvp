@@ -10,6 +10,7 @@ package me.minotopia.expvp.score.league;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import li.l1t.common.i18n.Message;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
@@ -31,6 +32,7 @@ import java.util.Map;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-03-30
  */
+@Singleton
 class StaticLeagueChangeService {
     private final Logger LOGGER = LoggingManager.getLogger(StaticLeagueChangeService.class);
     private final SessionProvider sessionProvider;
@@ -40,7 +42,8 @@ class StaticLeagueChangeService {
     private final LeagueChangeDisplayQueue leagueChangeDisplayQueue;
 
     @Inject
-    public StaticLeagueChangeService(SessionProvider sessionProvider, DisplayNameService names, LeagueChangeDisplayQueue leagueChangeDisplayQueue) {
+    public StaticLeagueChangeService(SessionProvider sessionProvider, DisplayNameService names,
+                                     LeagueChangeDisplayQueue leagueChangeDisplayQueue, Top5Service top5Service) {
         this.sessionProvider = sessionProvider;
         this.names = names;
         this.leagueChangeDisplayQueue = leagueChangeDisplayQueue;
@@ -48,8 +51,8 @@ class StaticLeagueChangeService {
         putDefaultChanger(StaticLeague.STONE);
         putDefaultChanger(StaticLeague.EMERALD);
         putDefaultChanger(StaticLeague.DIAMOND);
-        leagueChangers.put(StaticLeague.OBSIDIAN, new ObsidianLeagueChanger());
-        putDefaultChanger(StaticLeague.BEDROCK);
+        leagueChangers.put(StaticLeague.OBSIDIAN, new ObsidianLeagueChanger(top5Service));
+        leagueChangers.put(StaticLeague.BEDROCK, new BedrockLeagueChanger(top5Service));
     }
 
     private void putDefaultChanger(StaticLeague league) {
