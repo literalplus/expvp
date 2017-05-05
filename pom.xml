@@ -83,9 +83,9 @@
             <url>http://repo.puha.io/nexus/content/repositories/releases/</url>
         </repository>
         <repository>
-            <id>confuser-repo</id>
-            <!-- BarAPI -->
-            <url>https://ci.frostcast.net/plugin/repository/everything/</url>
+            <id>inventive-repo</id>
+            <!-- BossBar-API -->
+            <url>https://repo.inventivetalent.org/content/groups/public/</url>
         </repository>
         <repository>
             <id>oss-sonatype</id>
@@ -141,17 +141,20 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.confuser</groupId>
-            <artifactId>BarAPI</artifactId>
-            <version>3.5</version>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>bossbarapi</artifactId>
+            <version>2.4.1</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>net.gravitydevelopment.updater</groupId>
-                    <artifactId>updater</artifactId>
-                </exclusion>
-                <exclusion>
+                    <!-- wrong version -->
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <!-- remote repo down at time of inclusion, plus not needed by Expvp -->
+                    <groupId>org.mcstats.bukkit</groupId>
+                    <artifactId>metrics-lite</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
