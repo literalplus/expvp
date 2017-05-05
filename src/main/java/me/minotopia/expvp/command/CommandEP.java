@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-21
  */
-@AutoRegister(value = "ep")
+@AutoRegister(value = "ep", aliases = {"expvp", "info", "credits"})
 public class CommandEP {
     private final MainMenu.Factory menuFactory;
     private static final String[] testers = {
