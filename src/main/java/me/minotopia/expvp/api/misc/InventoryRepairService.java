@@ -29,7 +29,7 @@ public class InventoryRepairService implements RepairService {
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
             if (item != null && isRepairable(item.getType())) {
-                item.setDurability(item.getType().getMaxDurability());
+                item.setDurability((short) 0);
                 inv.setItem(i, item);
                 LOGGER.debug("Repairing {} - {} to {}", player.getName(), item.getType(), item.getDurability());
             }
