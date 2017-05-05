@@ -82,7 +82,7 @@ public class I18nPMService implements PMService {
 
     private void checkSpam(PrivateMessage message) {
         List<String> recentMessages = recentSentMessages.get(message.getSenderId());
-        if (recentMessages.stream().anyMatch(checkIsRepeated(message))) {
+        if (recentMessages.stream().filter(checkIsRepeated(message)).count() >= 3) {
             throw new I18nUserException("chat!pm.spam");
         }
         if (recentMessages.size() >= 5) {
