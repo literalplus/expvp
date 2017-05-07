@@ -15,11 +15,18 @@ import li.l1t.common.chat.AdFilterService;
 import li.l1t.common.chat.CapsFilterService;
 import me.minotopia.expvp.api.chat.ChatDispatcher;
 import me.minotopia.expvp.api.chat.ChatFormatService;
+import me.minotopia.expvp.api.chat.GlobalMuteService;
 import me.minotopia.expvp.api.chat.message.PMService;
 import me.minotopia.expvp.api.chat.message.ReplyService;
 import me.minotopia.expvp.chat.dispatch.SimpleChatDispatcher;
 import me.minotopia.expvp.chat.format.I18nChatFormatService;
-import me.minotopia.expvp.chat.handler.*;
+import me.minotopia.expvp.chat.glomu.SimpleGlobalMuteService;
+import me.minotopia.expvp.chat.handler.AdFilterHandler;
+import me.minotopia.expvp.chat.handler.CapsFilterHandler;
+import me.minotopia.expvp.chat.handler.ChatColorHandler;
+import me.minotopia.expvp.chat.handler.GlobalMuteHandler;
+import me.minotopia.expvp.chat.handler.LagMessageHandler;
+import me.minotopia.expvp.chat.handler.RepeatedMessageHandler;
 import me.minotopia.expvp.chat.message.I18nPMService;
 import me.minotopia.expvp.chat.message.MapReplyService;
 import me.minotopia.expvp.util.SessionProvider;
@@ -42,6 +49,7 @@ public class ChatModule extends AbstractModule {
         bind(RepeatedMessageHandler.class);
         bind(ReplyService.class).to(MapReplyService.class);
         bind(PMService.class).to(I18nPMService.class);
+        bind(GlobalMuteService.class).to(SimpleGlobalMuteService.class);
     }
 
     @Provides
@@ -77,11 +85,11 @@ public class ChatModule extends AbstractModule {
     public ChatDispatcher chatDispatcher(
             ChatFormatService formatService, SessionProvider sessionProvider,
             AdFilterHandler ads, CapsFilterHandler caps, ChatColorHandler color, LagMessageHandler lag,
-            RepeatedMessageHandler repeated
+            RepeatedMessageHandler repeated, GlobalMuteHandler glomu
     ) {
         return new SimpleChatDispatcher(formatService, sessionProvider)
                 .registerHandler(ads).registerHandler(caps)
                 .registerHandler(color).registerHandler(lag)
-                .registerHandler(repeated);
+                .registerHandler(repeated).registerHandler(glomu);
     }
 }

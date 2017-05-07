@@ -59,6 +59,10 @@ public enum Permission {
      */
     CHAT_CLEAR("expvp.chat.clear"),
     /**
+     * Allows to mute the global chat.
+     */
+    CHAT_GLOBAL_MUTE("expvp.chat.glomu"),
+    /**
      * Allows to use the /mv command to vote for spawns.
      */
     COMMAND_MAP_VOTE("expvp.spawn.vote");
