@@ -97,6 +97,6 @@ public class BukkitChatMessageEvent implements ChatMessageEvent {
 
     @Override
     public boolean shouldContinueHandling() {
-        return !bukkitEvent.isCancelled();
+        return !cancelled;
     }
 }
