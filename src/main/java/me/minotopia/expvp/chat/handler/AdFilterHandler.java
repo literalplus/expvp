@@ -46,7 +46,9 @@ public class AdFilterHandler extends AbstractChatHandler {
     }
 
     private void handleMatch(ChatMessageEvent evt) {
-        evt.tryDenyMessage(Message.of("chat!ad.sender-response"), this);
+        if (!evt.tryDenyMessage(Message.of("chat!ad.sender-response"), this)) {
+            return;
+        }
         chatFormatService.sendToAll(evt.getPlayer(), getRandomMockMessage());
         broadcastAdInfo(Message.of("chat!ad.admin-info", evt.getPlayer().getName(), evt.getInitialMessage()));
     }
