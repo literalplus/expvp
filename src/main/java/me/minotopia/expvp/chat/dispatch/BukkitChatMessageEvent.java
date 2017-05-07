@@ -49,7 +49,7 @@ public class BukkitChatMessageEvent implements ChatMessageEvent {
             notifyBypassOf(handler);
             return false;
         }
-        respond(errorMessage);
+        respond(Format.userError(errorMessage));
         setCancelled(true);
         return true;
     }
