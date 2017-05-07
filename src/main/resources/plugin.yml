@@ -19,3 +19,5 @@ commands:
     aliases: [r]
   cc:
     description: Clear chat
+  glomu:
+    aliases: [globalmute]

@@ -21,6 +21,7 @@ import li.l1t.common.intake.CommandExceptionListener;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.util.CommandHelper;
 import me.minotopia.expvp.command.chat.CommandChatClear;
+import me.minotopia.expvp.command.chat.CommandGlobalMute;
 import me.minotopia.expvp.command.chat.CommandMessage;
 import me.minotopia.expvp.command.chat.CommandReply;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
@@ -61,6 +62,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandMessage.class);
         bind(CommandReply.class);
         bind(CommandChatClear.class);
+        bind(CommandGlobalMute.class);
     }
 
     @Singleton
