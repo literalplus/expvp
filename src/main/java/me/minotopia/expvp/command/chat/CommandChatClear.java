@@ -52,10 +52,13 @@ public class CommandChatClear extends BukkitExecutionExecutor {
     private void clearPlayerChatIfNotExempt(Player player, CommandSender culprit) {
         if (hasCCPermission(player)) {
             I18n.sendLoc(player, Format.broadcast("chat!cc.admin", culprit.getName()));
-            return;
         } else {
+            clearChatOf(player);
             I18n.sendLoc(player, Format.broadcast("chat!cc.broadcast"));
         }
+    }
+
+    private void clearChatOf(Player player) {
         for (int i = 0; i < 150; i++) {
             player.sendMessage(" §r ");     //Apparently this helps with hack clients' message combining stuffs which are apparently 9001% exploits
             player.sendMessage("    §3  "); //Even though one could just use the logs, but yeah, it looks professional or something. Yell at Janmm14.
