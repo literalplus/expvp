@@ -17,3 +17,5 @@ commands:
     aliases: [tell, m, t, whisper, w]
   reply:
     aliases: [r]
+  cc:
+    description: Clear chat

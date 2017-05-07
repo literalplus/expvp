@@ -49,11 +49,15 @@ public enum Permission {
     /**
      * Allows to receive information about advertisements caught by the filter.
      */
-    CHAT_AD_INFO("expvp.adinfo"),
+    CHAT_AD_INFO("expvp.chat.adinfo"),
     /**
      * Allows to read all private messages from all players on the server.
      */
-    CHAT_SPY("expvp.chatspy"),
+    CHAT_SPY("expvp.chat.spy"),
+    /**
+     * Allows to clear the chat for everybody.
+     */
+    CHAT_CLEAR("expvp.chat.clear"),
     /**
      * Allows to use the /mv command to vote for spawns.
      */

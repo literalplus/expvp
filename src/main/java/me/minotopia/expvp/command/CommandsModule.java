@@ -8,7 +8,11 @@
 
 package me.minotopia.expvp.command;
 
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.Binding;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.sk89q.intake.argument.ArgumentException;
 import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.parametric.Provider;
@@ -16,6 +20,7 @@ import com.sk89q.intake.parametric.ProvisionException;
 import li.l1t.common.intake.CommandExceptionListener;
 import li.l1t.common.intake.CommandsManager;
 import li.l1t.common.util.CommandHelper;
+import me.minotopia.expvp.command.chat.CommandChatClear;
 import me.minotopia.expvp.command.chat.CommandMessage;
 import me.minotopia.expvp.command.chat.CommandReply;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
@@ -55,6 +60,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandStats.class);
         bind(CommandMessage.class);
         bind(CommandReply.class);
+        bind(CommandChatClear.class);
     }
 
     @Singleton
