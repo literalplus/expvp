@@ -23,6 +23,7 @@ import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.misc.RepairService;
 import me.minotopia.expvp.chat.ChatModule;
+import me.minotopia.expvp.extimes.ExTimesModule;
 import me.minotopia.expvp.friend.FriendModule;
 import me.minotopia.expvp.handler.HandlerModule;
 import me.minotopia.expvp.i18n.EPDisplayNameService;
@@ -83,6 +84,7 @@ public class EPRootModule extends AbstractModule {
         install(new PreventionModule());
         install(new FriendModule());
         install(new ChatModule());
+        install(new ExTimesModule());
     }
 
     private void bindPluginProperties() {
