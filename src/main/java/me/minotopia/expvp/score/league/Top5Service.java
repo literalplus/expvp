@@ -12,7 +12,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.model.PlayerData;
+import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.model.player.HibernatePlayerTopRepository;
+import org.apache.logging.log4j.Logger;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -30,10 +32,11 @@ import java.util.stream.Collectors;
  */
 @Singleton
 public class Top5Service {
+    private static final Logger LOGGER = LoggingManager.getLogger(Top5Service.class);
     private static final Duration expiryDuration = Duration.ofSeconds(30);
     private final HibernatePlayerTopRepository topRepository;
     private final TaskService tasks;
-    private final AtomicBoolean updateScheduled = new AtomicBoolean();
+    private final AtomicBoolean updateScheduled = new AtomicBoolean(false);
     private Set<UUID> topFive = null;
     private Instant expiryTime = Instant.MIN;
 
@@ -41,11 +44,12 @@ public class Top5Service {
     public Top5Service(HibernatePlayerTopRepository topRepository, TaskService tasks) {
         this.topRepository = topRepository;
         this.tasks = tasks;
-        scheduleUpdateIfNecessary();
+        tasks.async(this::updateCache);
     }
 
     public boolean isInTopFive(PlayerData target) {
         if (topFive == null) {
+            LOGGER.warn("No top five data yet for " + target.getUniqueId());
             return false;
         }
         scheduleUpdateIfNecessary();
@@ -54,9 +58,8 @@ public class Top5Service {
 
     private void scheduleUpdateIfNecessary() {
         if (!updateScheduled.get() && expiryTime.isBefore(Instant.now())) {
-            if (updateScheduled.compareAndSet(false, true)) {
-                tasks.async(this::updateCache);
-            }
+            updateScheduled.set(true);
+            tasks.async(this::updateCache);
         }
     }
 
@@ -66,5 +69,6 @@ public class Top5Service {
                 .collect(Collectors.toSet());
         topFive = Collections.unmodifiableSet(entries);
         expiryTime = Instant.now().plus(expiryDuration);
+        updateScheduled.set(false);
     }
 }

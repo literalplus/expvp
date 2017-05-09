@@ -29,4 +29,9 @@ class BedrockLeagueChanger extends ExpLeagueChanger {
     public boolean needsLeagueChangeDown(PlayerData playerData) {
         return !top5Service.isInTopFive(playerData);
     }
+
+    @Override
+    public boolean needsLeagueChangeUp(PlayerData playerData) {
+        return false;
+    }
 }
