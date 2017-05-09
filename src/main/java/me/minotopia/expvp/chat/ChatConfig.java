@@ -9,15 +9,14 @@
 package me.minotopia.expvp.chat;
 
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.chat.AdFilterService;
 import li.l1t.common.chat.CapsFilterService;
+import li.l1t.common.yaml.XyConfiguration;
 import me.minotopia.expvp.api.inject.DataFolder;
 import me.minotopia.expvp.logging.LoggingManager;
 import org.apache.logging.log4j.Logger;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,45 +29,14 @@ import java.util.List;
  * @since 2017-05-03
  */
 @Singleton
-public class ChatConfig extends YamlConfiguration {
+public class ChatConfig extends XyConfiguration {
     private final Logger LOGGER = LoggingManager.getLogger(ChatConfig.class);
-    private final File file;
 
     @Inject
     public ChatConfig(@DataFolder File dataFolder) throws IOException {
-        file = new File(dataFolder, "chat.cfg.yml");
-        Files.createParentDirs(file);
+        super(new File(dataFolder, "chat.cfg.yml"));
         tryLoad();
         options().copyDefaults(true);
-    }
-
-    public void tryLoad() {
-        if (!file.exists()) {
-            return;
-        }
-        try {
-            load(file);
-        } catch (Exception e) {
-            LOGGER.warn("Invalid chat configuration at " + file.getAbsolutePath() + ":", e);
-            File backupFile = new File(file.getParentFile(), "chat.bkp.yml");
-            try {
-                Files.copy(file, backupFile);
-            } catch (IOException e1) {
-                LOGGER.warn("Failed to save backup", e1);
-            }
-            LOGGER.warn("Saved backup to {}", backupFile.getAbsolutePath());
-        }
-    }
-
-    public void trySave() {
-        try {
-            if (!file.exists()) {
-                Files.touch(file);
-            }
-            save(file);
-        } catch (IOException e) {
-            LOGGER.warn("Failed to save chat configuration to " + file.getAbsolutePath() + ":", e);
-        }
     }
 
     public void configure(AdFilterService ads) {
@@ -107,5 +75,7 @@ public class ChatConfig extends YamlConfiguration {
     public void configure(CapsFilterService capsFilterService) {
         float capsFactor = ((float) getIntOrSet("caps.max-percent-caps", 50)) / 100F;
         int ignoreUntilLength = getIntOrSet("caps.ignore-messages-shorter-than-characters", 5);
+        capsFilterService.setCapsFactor(capsFactor);
+        capsFilterService.setIgnoreUntilLength(ignoreUntilLength);
     }
 }
