@@ -75,7 +75,9 @@
         <repository>
             <id>dmulloy2-repo</id>
             <!-- ProtocolLib -->
-            <url>http://repo.dmulloy2.net/content/groups/public/</url>
+            <!--<url>http://repo.dmulloy2.net/content/groups/public/</url>-->
+            <!-- remote seems to be quite unstable, down often. remove proxy when resolved -->
+            <url>https://repo.l1t.li/dmulloy2-repo-cache/</url>
         </repository>
         <repository>
             <id>puha-repo</id>
