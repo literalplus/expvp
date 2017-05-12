@@ -49,7 +49,7 @@ public class HibernateResetService {
                             "talentPoints = 0"
             ).executeUpdate();
             session.session().createQuery(
-                    "delete from HibernateObtainableSkill"
+                    "delete from HibernateObtainedSkill"
             ).executeUpdate();
             session.commit();
         });
