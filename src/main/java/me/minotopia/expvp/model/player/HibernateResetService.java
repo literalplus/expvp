@@ -40,18 +40,17 @@ public class HibernateResetService {
     @SuppressWarnings("JpaQlInspection")
     public void resetAllTemporaryStats() {
         LOGGER.info("Now resetting all temporary stats...");
-        sessionProvider.inSession(session -> {
-            session.tx();
-            session.session().createQuery(
+        sessionProvider.inSession(scoped -> {
+            scoped.tx();
+            scoped.session().createQuery(
                     "update HibernatePlayerData set " +
                             "currentKills = 0, " +
                             "currentDeaths = 0, " +
                             "talentPoints = 0"
             ).executeUpdate();
-            session.session().createQuery(
+            scoped.session().createQuery(
                     "delete from HibernateObtainedSkill"
             ).executeUpdate();
-            session.commit();
         });
         sessionProvider.inSession(session -> session.session().getSessionFactory().getCache().evictAllRegions());
         LOGGER.debug("Finished resetting temporary stats.");
