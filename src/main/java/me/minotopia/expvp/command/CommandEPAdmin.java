@@ -10,6 +10,7 @@ package me.minotopia.expvp.command;
 
 import com.google.inject.Inject;
 import com.sk89q.intake.Command;
+import li.l1t.common.exception.UserException;
 import li.l1t.common.i18n.Message;
 import li.l1t.common.intake.provider.annotation.Sender;
 import me.minotopia.expvp.Permission;
@@ -22,9 +23,11 @@ import me.minotopia.expvp.command.permission.EnumRequires;
 import me.minotopia.expvp.command.service.CommandService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.model.player.HibernateResetService;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -157,5 +160,18 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
         I18n.sendLoc(player, Format.success(Message.ofText(
                 "oke"
         )));
+    }
+
+    @Command(aliases = "__forcereset", desc = "Forcefully resets temporary stats")
+    @EnumRequires({Permission.ADMIN_OVERRIDE, Permission.ADMIN_PLAYERS})
+    public void forceReset(CommandSender sender, HibernateResetService resetService, String arg) {
+        if (!(sender instanceof ConsoleCommandSender)) {
+            throw new UserException("Can only be executed by console");
+        }
+        if (!arg.equalsIgnoreCase("fsogffdshajlfskgdfglsdjgsADLFKJAS")) {
+            throw new UserException("This command is only for use by authorised personnel. Provide the secret access code.");
+        }
+        resetService.resetAllTemporaryStats();
+        I18n.sendLoc(sender, Format.success(Message.ofText("lol ok")));
     }
 }
