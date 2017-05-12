@@ -12,7 +12,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
+import me.minotopia.expvp.logging.LoggingManager;
 import me.minotopia.expvp.util.SessionProvider;
+import org.apache.logging.log4j.Logger;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -23,9 +25,10 @@ import java.time.LocalTime;
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-04-18
  */
-@ConstructOnEnable
 @Singleton
+@ConstructOnEnable
 public class HibernateResetService {
+    private static final Logger LOGGER = LoggingManager.getLogger(HibernateResetService.class);
     private final SessionProvider sessionProvider;
 
     @Inject
@@ -36,6 +39,7 @@ public class HibernateResetService {
 
     @SuppressWarnings("JpaQlInspection")
     public void resetAllTemporaryStats() {
+        LOGGER.info("Now resetting all temporary stats...");
         sessionProvider.inSession(session -> {
             session.tx();
             session.session().createQuery(
@@ -50,5 +54,6 @@ public class HibernateResetService {
             session.commit();
         });
         sessionProvider.inSession(session -> session.session().getSessionFactory().getCache().evictAllRegions());
+        LOGGER.debug("Finished resetting temporary stats.");
     }
 }
