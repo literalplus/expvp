@@ -168,7 +168,7 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
         if (!(sender instanceof ConsoleCommandSender)) {
             throw new UserException("Can only be executed by console");
         }
-        if (!arg.equalsIgnoreCase("fsogffdshajlfskgdfglsdjgsADLFKJAS")) {
+        if (!arg.equalsIgnoreCase("ireallyknowwhatimdoing")) {
             throw new UserException("This command is only for use by authorised personnel. Provide the secret access code.");
         }
         resetService.resetAllTemporaryStats();
