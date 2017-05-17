@@ -47,6 +47,10 @@ public enum Permission {
      */
     ADMIN_SPAWN("expvp.admin.spawn"),
     /**
+     * Allows to bypass the ExTimes timed whitelist.
+     */
+    ADMIN_EXTIMES_BYPASS("expvp.admin.etby"),
+    /**
      * Allows to receive information about advertisements caught by the filter.
      */
     CHAT_AD_INFO("expvp.chat.adinfo"),

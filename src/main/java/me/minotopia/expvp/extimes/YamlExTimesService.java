@@ -17,8 +17,10 @@ import me.minotopia.expvp.extimes.cfg.YamlExTimesConfig;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -70,7 +72,7 @@ public class YamlExTimesService implements ExTimesService {
     }
 
     private boolean isWeekend(LocalDate date) {
-        return date.getDayOfWeek().ordinal() >= DayOfWeek.SATURDAY.ordinal();
+        return date.getDayOfWeek().ordinal() >= DayOfWeek.FRIDAY.ordinal();
     }
 
     @Override
@@ -78,5 +80,32 @@ public class YamlExTimesService implements ExTimesService {
         LocalTime now = LocalTime.now();
         return findTodaysTimes().stream()
                 .anyMatch(time -> time.contains(now));
+    }
+
+    @Override
+    public Optional<LocalDateTime> findNextOnlineTime() {
+        return findNextTimeToday()
+                .map(Optional::of)
+                .orElseGet(this::findNextTimeTomorrow);
+    }
+
+    private Optional<LocalDateTime> findNextTimeToday() {
+        return findTodaysTimes().stream()
+                .map(ExTime::getStart)
+                .filter(this::hasNotYetPassed)
+                .findFirst()
+                .map(start -> LocalDateTime.of(LocalDate.now(), start));
+    }
+
+    private boolean hasNotYetPassed(LocalTime time) {
+        return LocalTime.now().isBefore(time);
+    }
+
+    private Optional<LocalDateTime> findNextTimeTomorrow() {
+        return findTomorrowsTimes().stream()
+                .map(ExTime::getStart)
+                .filter(this::hasNotYetPassed)
+                .findFirst()
+                .map(start -> LocalDateTime.of(LocalDate.now().plusDays(1), start));
     }
 }

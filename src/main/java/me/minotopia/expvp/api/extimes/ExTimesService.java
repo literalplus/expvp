@@ -9,7 +9,9 @@
 package me.minotopia.expvp.api.extimes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Handles making Expvp available only at specific times.
@@ -34,4 +36,10 @@ public interface ExTimesService {
     List<? extends ExTime> findTimesFor(LocalDate date);
 
     boolean isCurrentlyOnline();
+
+    /**
+     * @return an optional containing the next time the server will be available, excluding any currently applying
+     * times, or, if the server won't be available today, the next time tomorrow, otherwise, an empty optional
+     */
+    Optional<LocalDateTime> findNextOnlineTime();
 }

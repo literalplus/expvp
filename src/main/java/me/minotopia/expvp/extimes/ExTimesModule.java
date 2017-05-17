@@ -24,5 +24,6 @@ public class ExTimesModule extends AbstractModule {
     protected void configure() {
         bind(ExTimesConfig.class).to(YamlExTimesConfig.class);
         bind(ExTimesService.class).to(YamlExTimesService.class);
+        bind(ExTimesJoinListener.class);
     }
 }

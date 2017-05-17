@@ -11,7 +11,6 @@ package me.minotopia.expvp.extimes.cfg;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.yaml.XyConfiguration;
-import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.extimes.ExTimesConfig;
 import me.minotopia.expvp.api.inject.DataFolder;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -19,6 +18,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -29,15 +29,13 @@ import java.util.List;
  */
 @Singleton
 public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig {
-    private final EPPlugin plugin;
     private List<YamlSpecialExTime> specialTimes;
     private List<YamlDOWExTime> weekendTimes;
     private List<YamlDOWExTime> weekTimes;
 
     @Inject
-    protected YamlExTimesConfig(@DataFolder File dataFolder, EPPlugin plugin) {
+    protected YamlExTimesConfig(@DataFolder File dataFolder) {
         super(new File(dataFolder, "extimes.stor.yml"));
-        this.plugin = plugin;
     }
 
     @Override
@@ -46,6 +44,9 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
         this.specialTimes = getListChecked("special", YamlSpecialExTime.class);
         this.weekendTimes = getListChecked("weekend", YamlDOWExTime.class);
         this.weekTimes = getListChecked("week", YamlDOWExTime.class);
+        specialTimes.sort(Comparator.comparing(AbstractExTime::getStart));
+        weekendTimes.sort(Comparator.comparing(AbstractExTime::getStart));
+        weekTimes.sort(Comparator.comparing(AbstractExTime::getStart));
     }
 
     @Override
