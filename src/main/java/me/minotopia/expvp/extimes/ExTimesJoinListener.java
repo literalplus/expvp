@@ -13,6 +13,7 @@ import li.l1t.common.i18n.Message;
 import me.minotopia.expvp.Permission;
 import me.minotopia.expvp.api.extimes.ExTimesService;
 import me.minotopia.expvp.i18n.I18n;
+import me.minotopia.expvp.i18n.LocaleService;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,10 +32,12 @@ import java.time.format.FormatStyle;
  */
 public class ExTimesJoinListener implements Listener {
     private final ExTimesService times;
+    private final LocaleService localeService;
 
     @Inject
-    public ExTimesJoinListener(ExTimesService times) {
+    public ExTimesJoinListener(ExTimesService times, LocaleService localeService) {
         this.times = times;
+        this.localeService = localeService;
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -43,6 +46,7 @@ public class ExTimesJoinListener implements Listener {
             if (Permission.ADMIN_EXTIMES_BYPASS.has(event.getPlayer())) {
                 I18n.sendLoc(event.getPlayer(), "admin!extimes.bypass");
             } else {
+                localeService.recomputeClientLocale(event.getPlayer());
                 event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
                 event.setKickMessage(I18n.loc(event.getPlayer(), findKickMessageWithNextOnlineTime()));
             }
