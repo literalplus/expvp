@@ -61,7 +61,7 @@ public class CommandExTimes {
                                               Function<T, Message> messageFunction, List<? extends T> times) {
         I18n.sendLoc(sender, Format.listHeader(headerKey));
         if (times.isEmpty()) {
-            I18n.sendLoc(sender, "admin!extimes.none");
+            I18n.sendLoc(sender, Format.result("admin!extimes.none"));
         } else {
             times.forEach(sendAsListItemTo(sender, messageFunction));
         }
