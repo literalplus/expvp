@@ -11,6 +11,7 @@ package me.minotopia.expvp.spawn;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.util.task.TaskService;
+import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.spawn.*;
@@ -39,18 +40,20 @@ public class SpawnVoteTask implements Runnable {
     private final SpawnVoteService voteService;
     private final Server server;
     private final DisplayNameService names;
+    private final KitService kitService;
     private long lastReminderMinute;
 
     @Inject
     public SpawnVoteTask(SpawnDisplayService displayService, SpawnService spawns,
                          SpawnChangeService changeService, SpawnVoteService voteService,
-                         TaskService tasks, Server server, DisplayNameService names) {
+                         TaskService tasks, Server server, DisplayNameService names, KitService kitService) {
         this.displayService = displayService;
         this.spawns = spawns;
         this.changeService = changeService;
         this.voteService = voteService;
         this.server = server;
         this.names = names;
+        this.kitService = kitService;
         tasks.repeating(this, Duration.ofSeconds(30));
     }
 
@@ -100,7 +103,8 @@ public class SpawnVoteTask implements Runnable {
         spawns.forceNextSpawn(spawn);
         voteService.resetAllVotes();
         changeService.registerSpawnChange();
-        server.getOnlinePlayers()
+        server.getOnlinePlayers().stream()
+                .peek(kitService::applyKit)
                 .forEach(spawns::teleportToSpawnIfPossible);
         displayService.updateForAllPlayers();
     }

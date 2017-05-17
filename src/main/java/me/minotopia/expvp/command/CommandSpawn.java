@@ -17,6 +17,7 @@ import li.l1t.common.util.LocationHelper;
 import li.l1t.common.util.task.TaskService;
 import li.l1t.xlogin.common.api.XLoginProfile;
 import me.minotopia.expvp.EPPlugin;
+import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.misc.ConstructOnEnable;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.i18n.Format;
@@ -40,11 +41,13 @@ public class CommandSpawn extends BukkitExecutionExecutor {
     private static final Logger LOGGER = LoggingManager.getLogger(CommandSpawn.class);
     private final SpawnService spawns;
     private final TaskService tasks;
+    private final KitService kitService;
 
     @Inject
-    public CommandSpawn(SpawnService spawns, TaskService tasks, EPPlugin plugin) {
+    public CommandSpawn(SpawnService spawns, TaskService tasks, EPPlugin plugin, KitService kitService) {
         this.spawns = spawns;
         this.tasks = tasks;
+        this.kitService = kitService;
         plugin.getCommand("spawn").setExecutor(this);
         overrideXLoginSpawnCommand(plugin);
     }
@@ -76,6 +79,7 @@ public class CommandSpawn extends BukkitExecutionExecutor {
                     player.getRemainingAir() < initialRemainingAir) {
                 I18n.sendLoc(player, Format.userError("core!spawn.tp-abort"));
             } else {
+                kitService.applyKit(player);
                 spawns.teleportToSpawnIfPossible(player);
             }
         }, Duration.ofSeconds(5));
