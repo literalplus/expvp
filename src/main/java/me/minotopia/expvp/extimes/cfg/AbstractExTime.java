@@ -43,12 +43,14 @@ public class AbstractExTime implements ConfigurationSerializable, ExTime {
         this.uniqueId = config.findString("uuid")
                 .map(UUID::fromString)
                 .orElseThrow(missingArgumentException("uuid"));
+        Preconditions.checkArgument(!start.isAfter(end), "start must be before or equal to end", start, end);
     }
 
     public AbstractExTime(LocalTime start, LocalTime end) {
         this.uniqueId = UUID.randomUUID();
         this.start = Preconditions.checkNotNull(start, "start");
         this.end = Preconditions.checkNotNull(end, "end");
+        Preconditions.checkArgument(!start.isAfter(end), "start must be before or equal to end", start, end);
     }
 
     protected Supplier<IllegalArgumentException> missingArgumentException(final String description) {
