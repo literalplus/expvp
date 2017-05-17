@@ -13,6 +13,8 @@ import com.google.inject.Singleton;
 import li.l1t.common.yaml.XyConfiguration;
 import me.minotopia.expvp.api.extimes.ExTimesConfig;
 import me.minotopia.expvp.api.inject.DataFolder;
+import me.minotopia.expvp.logging.LoggingManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.File;
@@ -29,6 +31,7 @@ import java.util.List;
  */
 @Singleton
 public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig {
+    private static final Logger LOGGER = LoggingManager.getLogger(YamlExTimesConfig.class);
     private List<YamlSpecialExTime> specialTimes;
     private List<YamlDOWExTime> weekendTimes;
     private List<YamlDOWExTime> weekTimes;
@@ -46,6 +49,7 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
         this.weekendTimes = getListChecked("weekend", YamlDOWExTime.class);
         this.weekTimes = getListChecked("week", YamlDOWExTime.class);
         sortAll();
+        LOGGER.debug("Loaded ExTimesConfig", specialTimes, weekendTimes, weekTimes);
     }
 
     private void sortAll() {
