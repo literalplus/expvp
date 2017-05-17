@@ -36,6 +36,7 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
     @Inject
     protected YamlExTimesConfig(@DataFolder File dataFolder) {
         super(new File(dataFolder, "extimes.stor.yml"));
+        tryLoad();
     }
 
     @Override
