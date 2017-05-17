@@ -44,6 +44,10 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
         this.specialTimes = getListChecked("special", YamlSpecialExTime.class);
         this.weekendTimes = getListChecked("weekend", YamlDOWExTime.class);
         this.weekTimes = getListChecked("week", YamlDOWExTime.class);
+        sortAll();
+    }
+
+    private void sortAll() {
         specialTimes.sort(Comparator.comparing(AbstractExTime::getStart));
         weekendTimes.sort(Comparator.comparing(AbstractExTime::getStart));
         weekTimes.sort(Comparator.comparing(AbstractExTime::getStart));
@@ -58,6 +62,7 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
     public YamlSpecialExTime addSpecialTime(LocalDate date, LocalTime start, LocalTime end) {
         YamlSpecialExTime result = new YamlSpecialExTime(date, start, end);
         specialTimes.add(result);
+        sortAll();
         return result;
     }
 
@@ -70,6 +75,7 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
     public YamlDOWExTime addWeekendTime(LocalTime start, LocalTime end) {
         YamlDOWExTime result = new YamlDOWExTime(start, end);
         weekendTimes.add(result);
+        sortAll();
         return result;
     }
 
@@ -82,6 +88,7 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
     public YamlDOWExTime addWeekTime(LocalTime start, LocalTime end) {
         YamlDOWExTime result = new YamlDOWExTime(start, end);
         weekTimes.add(result);
+        sortAll();
         return result;
     }
 }

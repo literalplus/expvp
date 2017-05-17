@@ -58,4 +58,8 @@ public class YamlSpecialExTime extends AbstractExTime implements SpecialExTime {
         return getApplicableDate().isBefore(LocalDate.now());
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + " on " + applicableDate;
+    }
 }

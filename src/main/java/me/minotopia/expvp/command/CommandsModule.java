@@ -8,11 +8,7 @@
 
 package me.minotopia.expvp.command;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Binding;
-import com.google.inject.Injector;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.sk89q.intake.argument.ArgumentException;
 import com.sk89q.intake.argument.CommandArgs;
 import com.sk89q.intake.parametric.Provider;
@@ -25,6 +21,8 @@ import me.minotopia.expvp.command.chat.CommandGlobalMute;
 import me.minotopia.expvp.command.chat.CommandMessage;
 import me.minotopia.expvp.command.chat.CommandReply;
 import me.minotopia.expvp.command.permission.EnumPermissionInvokeListener;
+import me.minotopia.expvp.command.provider.LocalDateProvider;
+import me.minotopia.expvp.command.provider.LocalTimeProvider;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.exception.InternationalException;
 import me.minotopia.expvp.logging.LoggingManager;
@@ -33,6 +31,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.annotation.Annotation;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -63,6 +63,7 @@ public class CommandsModule extends AbstractModule {
         bind(CommandReply.class);
         bind(CommandChatClear.class);
         bind(CommandGlobalMute.class);
+        bind(CommandExTimes.class);
     }
 
     @Singleton
@@ -76,6 +77,8 @@ public class CommandsModule extends AbstractModule {
         commandsManager.getHelpProvider().setMetaTranslator(
                 (key, locale) -> key == null || !key.contains("!") ? key : I18n.loc(locale, key)
         );
+        commandsManager.bind(LocalDate.class).toProvider(new LocalDateProvider());
+        commandsManager.bind(LocalTime.class).toProvider(new LocalTimeProvider());
         return commandsManager;
     }
 

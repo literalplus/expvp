@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
@@ -27,8 +28,9 @@ import java.util.function.Supplier;
  * @since 2017-05-09
  */
 public class AbstractExTime implements ConfigurationSerializable, ExTime {
-    protected final LocalTime start;
-    protected final LocalTime end;
+    private final LocalTime start;
+    private final LocalTime end;
+    private final UUID uniqueId;
 
     public AbstractExTime(Map<String, Object> source) {
         MapConfig config = HashMapConfig.of(source);
@@ -38,9 +40,13 @@ public class AbstractExTime implements ConfigurationSerializable, ExTime {
         this.end = config.findString("end")
                 .map(LocalTime::parse)
                 .orElseThrow(missingArgumentException("end"));
+        this.uniqueId = config.findString("uuid")
+                .map(UUID::fromString)
+                .orElseThrow(missingArgumentException("uuid"));
     }
 
     public AbstractExTime(LocalTime start, LocalTime end) {
+        this.uniqueId = UUID.randomUUID();
         this.start = Preconditions.checkNotNull(start, "start");
         this.end = Preconditions.checkNotNull(end, "end");
     }
@@ -53,6 +59,7 @@ public class AbstractExTime implements ConfigurationSerializable, ExTime {
         Map<String, Object> map = new HashMap<>();
         map.put("start", start.toString());
         map.put("end", end.toString());
+        map.put("uuid", uniqueId.toString());
         return map;
     }
 
@@ -73,7 +80,30 @@ public class AbstractExTime implements ConfigurationSerializable, ExTime {
     }
 
     @Override
+    public UUID getUniqueId() {
+        return uniqueId;
+    }
+
+    @Override
     public boolean contains(LocalTime time) {
         return time.isAfter(start) && time.isBefore(end);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractExTime)) return false;
+        AbstractExTime that = (AbstractExTime) o;
+        return uniqueId.equals(that.uniqueId);
+    }
+
+    @Override
+    public int hashCode() {
+        return uniqueId.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + " from " + getStart() + " to " + getEnd();
     }
 }

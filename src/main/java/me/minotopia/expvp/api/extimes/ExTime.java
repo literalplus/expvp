@@ -10,6 +10,7 @@ package me.minotopia.expvp.api.extimes;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.UUID;
 
 /**
  * Represents a time range during which Expvp is available. The start and end times may be the same to sign that Expvp
@@ -19,6 +20,8 @@ import java.time.LocalTime;
  * @since 2017-05-09
  */
 public interface ExTime {
+    UUID getUniqueId();
+
     LocalTime getStart();
 
     LocalTime getEnd();
