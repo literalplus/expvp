@@ -23,6 +23,7 @@ public class ExTimesModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(ExTimesConfig.class).to(YamlExTimesConfig.class);
+        bind(YamlExTimesConfig.class);
         bind(ExTimesService.class).to(YamlExTimesService.class);
         bind(ExTimesJoinListener.class);
     }
