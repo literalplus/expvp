@@ -100,6 +100,7 @@ public class CommandExTimes {
     public void addWeek(CommandSender sender, LocalTime start, LocalTime end) {
         config.addWeekTime(start, end);
         I18n.sendLoc(sender, Format.success("admin!extimes.added-dow", start, end));
+        times.cleanUp();
     }
 
     @Command(aliases = "addweekend", desc = "Adds a Fri-Sun ExTime", usage = "[start HH:mm] [end HH:mm]")
@@ -107,6 +108,7 @@ public class CommandExTimes {
     public void addWeekend(CommandSender sender, LocalTime start, LocalTime end) {
         config.addWeekendTime(start, end);
         I18n.sendLoc(sender, Format.success("admin!extimes.added-dow", start, end));
+        times.cleanUp();
     }
 
     @Command(aliases = "addspecial", desc = "Adds a special ExTime", usage = "[start HH:mm] [end HH:mm] [date YYYY-MM-dd]")
@@ -114,6 +116,7 @@ public class CommandExTimes {
     public void addSpecial(CommandSender sender, LocalTime start, LocalTime end, LocalDate date) {
         config.addSpecialTime(date, start, end);
         I18n.sendLoc(sender, Format.success("admin!extimes.added-special", date, start, end));
+        times.cleanUp();
     }
 
     @Command(aliases = "remove", desc = "Remove an ExTime", usage = "[uuid]")

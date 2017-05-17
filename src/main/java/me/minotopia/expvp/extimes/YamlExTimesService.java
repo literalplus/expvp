@@ -78,8 +78,9 @@ public class YamlExTimesService implements ExTimesService {
     @Override
     public boolean isCurrentlyOnline() {
         LocalTime now = LocalTime.now();
-        return findTodaysTimes().stream()
-                .anyMatch(time -> time.contains(now));
+        List<? extends ExTime> todaysTimes = findTodaysTimes();
+        return todaysTimes.isEmpty() ||
+                todaysTimes.stream().anyMatch(time -> time.contains(now));
     }
 
     @Override
