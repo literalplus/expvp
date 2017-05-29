@@ -64,6 +64,7 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
         YamlSpecialExTime result = new YamlSpecialExTime(date, start, end);
         specialTimes.add(result);
         sortAll();
+        trySave();
         return result;
     }
 
@@ -77,6 +78,7 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
         YamlDOWExTime result = new YamlDOWExTime(start, end);
         weekendTimes.add(result);
         sortAll();
+        trySave();
         return result;
     }
 
@@ -90,6 +92,7 @@ public class YamlExTimesConfig extends XyConfiguration implements ExTimesConfig 
         YamlDOWExTime result = new YamlDOWExTime(start, end);
         weekTimes.add(result);
         sortAll();
+        trySave();
         return result;
     }
 }

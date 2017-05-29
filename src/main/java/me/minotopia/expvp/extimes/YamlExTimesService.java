@@ -42,9 +42,9 @@ public class YamlExTimesService implements ExTimesService {
 
     @Override
     public void cleanUp() {
-        config.getSpecialTimes()
-                .removeIf(SpecialExTime::hasPassed);
-        config.trySave();
+        if (config.getSpecialTimes().removeIf(SpecialExTime::hasPassed)) {
+            config.trySave();
+        }
     }
 
     @Override

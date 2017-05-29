@@ -127,6 +127,7 @@ public class CommandExTimes {
         if (config.getSpecialTimes().removeIf(idPredicate) ||
                 config.getWeekTimes().removeIf(idPredicate) ||
                 config.getWeekendTimes().removeIf(idPredicate)) {
+            config.trySave();
             I18n.sendLoc(sender, Format.success("admin!extimes.removed"));
         } else {
             I18n.sendLoc(sender, Format.userError("admin!extimes.no-such"));
