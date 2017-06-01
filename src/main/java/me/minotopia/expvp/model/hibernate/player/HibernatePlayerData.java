@@ -8,8 +8,10 @@
 
 package me.minotopia.expvp.model.hibernate.player;
 
+import com.google.common.base.Preconditions;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
+import me.minotopia.expvp.api.score.TalentPointType;
 import me.minotopia.expvp.model.hibernate.BaseEntity;
 import me.minotopia.expvp.model.hibernate.converter.LocaleConverter;
 import me.minotopia.expvp.skill.meta.Skill;
@@ -17,10 +19,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence21.*;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Stores player data related to Expvp.
@@ -60,6 +59,13 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     @OneToMany(cascade = CascadeType.ALL, targetEntity = HibernateObtainedSkill.class, mappedBy = "playerData")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ObtainedSkill> skills = new HashSet<>();
+
+    @ElementCollection
+    @MapKey(name = "type")
+    @MapKeyEnumerated(EnumType.ORDINAL)
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = HibernatePoints.class, mappedBy = "playerData")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Map<TalentPointType, HibernatePoints> points = new HashMap<>();
 
     @SuppressWarnings("unused")
     HibernatePlayerData() {
@@ -144,11 +150,12 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     }
 
     @Override
-    public int getTalentPoints() {
+    public int getAvailableTalentPoints() {
         return talentPoints;
     }
 
     @Override
+    @Deprecated
     public void setTalentPoints(int talentPoints) {
         this.talentPoints = talentPoints;
     }
@@ -200,6 +207,22 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     @Override
     public void clearSkills() {
         skills.clear();
+    }
+
+    @Override
+    public int getTalentPointCount(TalentPointType type) {
+        return Optional.of(points.get(type))
+                .map(HibernatePoints::getCurrentPointCount)
+                .orElse(0);
+    }
+
+    @Override
+    public void grantTalentPoints(TalentPointType type, int pointCount) {
+        Preconditions.checkNotNull(type, "type");
+        Preconditions.checkArgument(pointCount >= 0, "pointCount may not be negative:", pointCount);
+        HibernatePoints pointsObj = points.computeIfAbsent(type, type0 -> new HibernatePoints(this, type0));
+        pointsObj.increasePointCountBy(pointCount);
+        talentPoints += pointCount;
     }
 
     //Implement equals/hashCode if this entity persists across multiple Sessions and has generated ids

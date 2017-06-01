@@ -64,7 +64,7 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
             throws IOException {
         modifyProperty(sender, playerSpec, "Talentpunkte", playerData -> {
             playerData.setTalentPoints(newTalentPoints);
-            return playerData.getTalentPoints();
+            return playerData.getAvailableTalentPoints();
         });
     }
 
@@ -76,8 +76,8 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
     public void addBooks(CommandSender sender, String playerSpec, int addTalentPoints)
             throws IOException {
         modifyProperty(sender, playerSpec, "Talentpunkte", playerData -> {
-            playerData.setTalentPoints(playerData.getTalentPoints() + addTalentPoints);
-            return playerData.getTalentPoints();
+            playerData.setTalentPoints(playerData.getAvailableTalentPoints() + addTalentPoints);
+            return playerData.getAvailableTalentPoints();
         });
     }
 
@@ -103,7 +103,7 @@ public class CommandEPAdmin extends AbstractServiceBackedCommand<CommandService>
             sender.sendMessage("§a»»» §eSpielerinfo §a«««"); //TODO: player name -> xyc profile api
             formatMessage(sender,
                     "§e§l➩ §eLiga: §a%s §eExp: §a%d §eTP: §a%d §eSprache: §a%s",
-                    playerData.getLeagueName(), playerData.getExp(), playerData.getTalentPoints(), playerData.getLocale().getDisplayName()
+                    playerData.getLeagueName(), playerData.getExp(), playerData.getAvailableTalentPoints(), playerData.getLocale().getDisplayName()
             );
             double totalKD = computeKDRatio(playerData.getTotalKills(), playerData.getTotalDeaths());
             formatMessage(sender,

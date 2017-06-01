@@ -35,9 +35,9 @@ public class TreeSelectLinkButton implements MenuElement {
         this.selectTreeMenuFactory = selectTreeMenuFactory;
         ItemStackFactory factory = new ItemStackFactory(Material.BREWING_STAND_ITEM)
                 .displayName(I18n.loc(player, "core!tree-select.title"));
-        if (playerData.getTalentPoints() > 0) {
+        if (playerData.getAvailableTalentPoints() > 0) {
             factory.enchantUnsafe(Enchantment.WATER_WORKER, 1).hideEnchants()
-                    .amount(playerData.getTalentPoints());
+                    .amount(playerData.getAvailableTalentPoints());
         }
         this.stack = factory.produce();
     }

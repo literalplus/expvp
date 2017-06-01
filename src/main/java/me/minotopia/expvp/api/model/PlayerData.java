@@ -8,6 +8,8 @@
 
 package me.minotopia.expvp.api.model;
 
+import me.minotopia.expvp.api.score.TalentPointType;
+
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Set;
@@ -66,7 +68,7 @@ public interface PlayerData extends Serializable {
      *
      * @return the amount of talent points this player currently has
      */
-    int getTalentPoints();
+    int getAvailableTalentPoints();
 
     /**
      * Gets the locale preferred by the player. This can either be automatically computed from the player's client
@@ -90,4 +92,10 @@ public interface PlayerData extends Serializable {
      * @return the set of skills
      */
     Set<ObtainedSkill> getSkills();
+
+    /**
+     * @param type the type to retrieve the amount for
+     * @return the total amount of Talent Points this player has been granted in given type since the last reset
+     */
+    int getTalentPointCount(TalentPointType type);
 }

@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.api.model;
 
+import me.minotopia.expvp.api.score.TalentPointType;
 import me.minotopia.expvp.skill.meta.Skill;
 
 import java.util.Locale;
@@ -47,9 +48,10 @@ public interface MutablePlayerData extends PlayerData {
     void setExp(int exp);
 
     /**
-     * Sets the current amount of {@link #getTalentPoints() talent points} this player has.
+     * Sets the current amount of {@link #getAvailableTalentPoints() talent points} this player has.
      *
      * @param talentPoints the new amount of talent points
+     * @deprecated Prefer {@link #grantTalentPoints(TalentPointType, int)}, which respects limits.
      */
     void setTalentPoints(int talentPoints);
 
@@ -83,4 +85,12 @@ public interface MutablePlayerData extends PlayerData {
      * Clears this player's set of skills.
      */
     void clearSkills();
+
+    /**
+     * Grants this player given amount of Talent Points of given type.
+     *
+     * @param type       the type to grant the Talent Points for
+     * @param pointCount the amount of Talent Points to grant
+     */
+    void grantTalentPoints(TalentPointType type, int pointCount);
 }

@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 
 /**
  * A wrapper for skill obtainment services that adds cost checking and payments using {@link
- * PlayerData#getTalentPoints() books}.
+ * PlayerData#getAvailableTalentPoints() books}.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2016-09-11

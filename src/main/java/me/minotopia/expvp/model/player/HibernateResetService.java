@@ -51,6 +51,9 @@ public class HibernateResetService {
             scoped.session().createQuery(
                     "delete from HibernateObtainedSkill"
             ).executeUpdate();
+            scoped.session().createQuery(
+                    "delete from HibernatePlayerPoints"
+            ).executeUpdate();
         });
         sessionProvider.inSession(session -> session.session().getSessionFactory().getCache().evictAllRegions());
         LOGGER.debug("Finished resetting temporary stats.");

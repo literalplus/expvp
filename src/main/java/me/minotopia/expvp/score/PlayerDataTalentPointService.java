@@ -44,7 +44,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
     public int getCurrentTalentPointCount(Player player) {
         try (ScopedSession ignored = sessionProvider.scoped().join()) {
             return players.findData(player.getUniqueId())
-                    .map(PlayerData::getTalentPoints)
+                    .map(PlayerData::getAvailableTalentPoints)
                     .orElse(0);
         }
     }
@@ -96,7 +96,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
         }
         sessionProvider.inSession(ignored -> {
             MutablePlayerData data = players.findOrCreateDataMutable(player.getUniqueId());
-            data.setTalentPoints(data.getTalentPoints() + talentPoints);
+            data.setTalentPoints(data.getAvailableTalentPoints() + talentPoints);
             players.saveData(data);
         });
     }
@@ -105,7 +105,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
     public void consumeTalentPoints(Player player, int consumePoints) {
         sessionProvider.inSession(ignored -> {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
-            int currentPoints = playerData.getTalentPoints();
+            int currentPoints = playerData.getAvailableTalentPoints();
             if (currentPoints < consumePoints) {
                 throw new InsufficientTalentPointsException(consumePoints, currentPoints);
             } else {

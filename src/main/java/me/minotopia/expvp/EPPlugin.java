@@ -30,6 +30,7 @@ import me.minotopia.expvp.model.hibernate.friend.HibernateFriendRequest;
 import me.minotopia.expvp.model.hibernate.friend.HibernateFriendship;
 import me.minotopia.expvp.model.hibernate.player.HibernateObtainedSkill;
 import me.minotopia.expvp.model.hibernate.player.HibernatePlayerData;
+import me.minotopia.expvp.model.hibernate.player.HibernatePoints;
 import me.minotopia.expvp.util.SessionProvider;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -211,6 +212,7 @@ public class EPPlugin extends GenericXyPlugin {
             sources.addAnnotatedClass(HibernateObtainedSkill.class);
             sources.addAnnotatedClass(HibernateFriendship.class);
             sources.addAnnotatedClass(HibernateFriendRequest.class);
+            sources.addAnnotatedClass(HibernatePoints.class);
             return sources
                     .getMetadataBuilder()
                     //Map UUIDs to CHAR(36) instead of binary; readability > storage
