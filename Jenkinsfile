@@ -17,13 +17,6 @@ static def findHipchatColor(build) {
     }
 }
 
-static def hipchatCommon(build, stage) {
-    hipchatSend color: findHipchatColor(build),
-            message: 'Build <a href="${env.URL}">' + stage +
-                    ' #${env.BUILD_NUMBER}</a> in ${env.DURATION}: ' +
-                    build.result + ' (${env.CHANGES_OR_CAUSE})'
-}
-
 pipeline {
     agent none // Don't block an agent while waiting for approval
 
@@ -63,7 +56,10 @@ pipeline {
 
     post {
         always {
-            hipchatCommon(currentBuild)
+            hipchatSend color: findHipchatColor(currentBuild),
+                    message: 'Build <a href="${env.URL}">Expvp ' +
+                            '#${env.BUILD_NUMBER}</a> in ${env.DURATION}: ' +
+                            currentBuild.result + ' (${env.CHANGES_OR_CAUSE})'
         }
     }
 }
