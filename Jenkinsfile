@@ -41,34 +41,20 @@ pipeline {
         stage('Maven Compile') {
             agent any
             steps {
-                echo ' ~~~~ Starting Maven compilation...'
                 deleteDir()
                 checkout scm
                 sh 'mvn -B -V compile'
             }
         }
 
-        stage('Maven Tests') {
-            agent any
-            steps {
-                echo ' ~~~~ Starting Maven tests...'
-                sh 'mvn -B test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-
         stage('Maven Package') {
             agent any
             steps {
-                echo ' ~~~~ Starting Maven packaging...'
                 sh 'mvn -B package'
             }
             post {
                 always {
+                    junit 'target/surefire-reports/*.xml'
                     archiveArtifacts 'target/expvp-*.jar'
                 }
             }
@@ -77,7 +63,7 @@ pipeline {
 
     post {
         always {
-            hipchatCommon(currentBuild, 'Maven Build')
+            hipchatCommon(currentBuild)
         }
     }
 }
