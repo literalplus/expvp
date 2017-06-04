@@ -1,3 +1,11 @@
+/*
+ * This file is part of Expvp,
+ * Copyright (c) 2016-2017.
+ *
+ * This work is protected by international copyright laws and licensed
+ * under the license terms which can be found at src/main/resources/LICENSE.txt.
+ */
+
 static def findHipchatColor(build) {
     switch (build.result) {
         case "UNSTABLE":
@@ -16,14 +24,6 @@ static def hipchatCommon(build, stage) {
                     build.result + ' (${env.CHANGES_OR_CAUSE})'
 }
 
-/*
- * This file is part of Expvp,
- * Copyright (c) 2016-2017.
- *
- * This work is protected by international copyright laws and licensed
- * under the license terms which can be found at src/main/resources/LICENSE.txt.
- */
-
 pipeline {
     agent none // Don't block an agent while waiting for approval
 
@@ -31,7 +31,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '50'))
         disableConcurrentBuilds()
         skipDefaultCheckout()
-        [$class: 'GithubProjectProperty', projectUrlStr: 'https://bitbucket.org/minotopia/expvp/']
     }
 
     tools {
@@ -56,7 +55,9 @@ pipeline {
                 sh 'mvn -B test'
             }
             post {
-                junit 'target/surefire-reports/*.xml'
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
 
@@ -67,7 +68,9 @@ pipeline {
                 sh 'mvn -B package'
             }
             post {
-                archiveArtifacts 'target/expvp-*.jar'
+                always {
+                    archiveArtifacts 'target/expvp-*.jar'
+                }
             }
         }
     }
