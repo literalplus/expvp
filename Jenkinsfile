@@ -44,7 +44,7 @@ pipeline {
                 echo ' ~~~~ Starting Maven compilation...'
                 deleteDir()
                 checkout scm
-                sh 'mvn -BV compile'
+                sh 'mvn -B -V compile'
             }
         }
 
