@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.api.score;
+package me.minotopia.expvp.api.score.points;
 
 import me.minotopia.expvp.i18n.Plurals;
 import me.minotopia.expvp.i18n.exception.I18nUserException;

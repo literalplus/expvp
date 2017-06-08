@@ -6,11 +6,11 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score;
+package me.minotopia.expvp.score.listener;
 
 import com.google.inject.Inject;
-import me.minotopia.expvp.api.score.ExpService;
-import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointService;
+import me.minotopia.expvp.api.score.service.ExpService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
@@ -48,9 +48,9 @@ public class ScoreJoinListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        sessionProvider.inSession(ignored -> {
-            players.saveData(players.findOrCreateDataMutable(event.getUniqueId()));
-        });
+        sessionProvider.inSession(ignored ->
+                players.saveData(players.findOrCreateDataMutable(event.getUniqueId()))
+        );
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

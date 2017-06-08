@@ -6,14 +6,14 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score;
+package me.minotopia.expvp.score.points;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
-import me.minotopia.expvp.api.score.InsufficientTalentPointsException;
-import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.score.points.InsufficientTalentPointsException;
+import me.minotopia.expvp.api.score.points.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
@@ -125,8 +125,8 @@ public class PlayerDataTalentPointService implements TalentPointService {
 
     @Override
     public void displayCurrentCount(Player player) {
-        sessionProvider.inSession(ignored -> {
-            displayService.displayCurrentTP(player);
-        });
+        sessionProvider.inSession(ignored ->
+                displayService.displayCurrentTP(player)
+        );
     }
 }

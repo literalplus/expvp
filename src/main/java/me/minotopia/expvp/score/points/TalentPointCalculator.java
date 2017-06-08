@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score;
+package me.minotopia.expvp.score.points;
 
 /**
  * Executes computations related to Talent Points, such as calculating the amount of Talent Points for a specific kill

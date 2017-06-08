@@ -6,10 +6,10 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score;
+package me.minotopia.expvp.score.points;
 
 import io.puharesource.mc.titlemanager.api.ActionbarTitleObject;
-import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointService;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
 import org.bukkit.entity.Player;

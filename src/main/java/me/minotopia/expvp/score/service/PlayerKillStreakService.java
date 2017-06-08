@@ -6,14 +6,14 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score;
+package me.minotopia.expvp.score.service;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import me.minotopia.expvp.api.misc.PlayerInitService;
 import me.minotopia.expvp.api.misc.RepairService;
-import me.minotopia.expvp.api.score.KillStreakService;
+import me.minotopia.expvp.api.score.service.KillStreakService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;

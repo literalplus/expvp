@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.api.score;
+package me.minotopia.expvp.api.score.points;
 
 /**
  * Represents a type of Talent Point. Talent Points are categorised by how they are obtained.

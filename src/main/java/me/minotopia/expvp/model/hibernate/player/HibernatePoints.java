@@ -11,7 +11,7 @@ package me.minotopia.expvp.model.hibernate.player;
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.model.PlayerPoints;
-import me.minotopia.expvp.api.score.TalentPointType;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.model.hibernate.converter.TalentPointTypeConverter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;

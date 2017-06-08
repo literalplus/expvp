@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.api.model;
 
-import me.minotopia.expvp.api.score.TalentPointType;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 
 import java.io.Serializable;
 import java.util.Locale;

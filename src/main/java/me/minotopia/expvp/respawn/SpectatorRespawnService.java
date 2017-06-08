@@ -14,7 +14,7 @@ import li.l1t.common.i18n.Message;
 import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.respawn.RespawnService;
-import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointService;
 import me.minotopia.expvp.api.spawn.SpawnService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;

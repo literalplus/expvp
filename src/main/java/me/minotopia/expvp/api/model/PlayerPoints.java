@@ -8,7 +8,7 @@
 
 package me.minotopia.expvp.api.model;
 
-import me.minotopia.expvp.api.score.TalentPointType;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 
 /**
  * Represents a player's current Talent Point count for a specific type. These are used to implement limits per type.

@@ -6,7 +6,7 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score;
+package me.minotopia.expvp.score.service;
 
 import com.google.inject.Inject;
 import li.l1t.common.i18n.Message;
@@ -15,13 +15,13 @@ import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
-import me.minotopia.expvp.api.score.ExpService;
-import me.minotopia.expvp.api.score.KillDeathService;
-import me.minotopia.expvp.api.score.KillStreakService;
-import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.score.assist.HitList;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
 import me.minotopia.expvp.api.score.league.LeagueService;
+import me.minotopia.expvp.api.score.points.TalentPointService;
+import me.minotopia.expvp.api.score.service.ExpService;
+import me.minotopia.expvp.api.score.service.KillDeathService;
+import me.minotopia.expvp.api.score.service.KillStreakService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.i18n.Format;
 import me.minotopia.expvp.i18n.I18n;

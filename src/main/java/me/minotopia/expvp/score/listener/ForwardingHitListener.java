@@ -6,17 +6,17 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score;
+package me.minotopia.expvp.score.listener;
 
 import com.google.inject.Inject;
 import li.l1t.common.util.DamageHelper;
 import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.respawn.RespawnService;
-import me.minotopia.expvp.api.score.KillDeathService;
-import me.minotopia.expvp.api.score.KillStreakService;
 import me.minotopia.expvp.api.score.assist.Hit;
 import me.minotopia.expvp.api.score.assist.Hits;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
+import me.minotopia.expvp.api.score.service.KillDeathService;
+import me.minotopia.expvp.api.score.service.KillStreakService;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

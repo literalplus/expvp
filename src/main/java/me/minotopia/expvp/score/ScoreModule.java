@@ -9,14 +9,20 @@
 package me.minotopia.expvp.score;
 
 import com.google.inject.AbstractModule;
-import me.minotopia.expvp.api.score.ExpService;
-import me.minotopia.expvp.api.score.KillDeathService;
-import me.minotopia.expvp.api.score.KillStreakService;
-import me.minotopia.expvp.api.score.TalentPointService;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
 import me.minotopia.expvp.api.score.league.LeagueService;
+import me.minotopia.expvp.api.score.points.TalentPointService;
+import me.minotopia.expvp.api.score.service.ExpService;
+import me.minotopia.expvp.api.score.service.KillDeathService;
+import me.minotopia.expvp.api.score.service.KillStreakService;
 import me.minotopia.expvp.score.assist.MapKillAssistService;
 import me.minotopia.expvp.score.league.StaticLeagueService;
+import me.minotopia.expvp.score.listener.ForwardingHitListener;
+import me.minotopia.expvp.score.listener.ScoreJoinListener;
+import me.minotopia.expvp.score.points.PlayerDataTalentPointService;
+import me.minotopia.expvp.score.service.PlayerDataExpService;
+import me.minotopia.expvp.score.service.PlayerDataKillDeathService;
+import me.minotopia.expvp.score.service.PlayerKillStreakService;
 
 /**
  * Injector module for everything related to scoring, including Exp, Talent Points, and Leagues.

@@ -11,7 +11,7 @@ package me.minotopia.expvp.model.hibernate.player;
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
-import me.minotopia.expvp.api.score.TalentPointType;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.model.hibernate.BaseEntity;
 import me.minotopia.expvp.model.hibernate.converter.LocaleConverter;
 import me.minotopia.expvp.skill.meta.Skill;

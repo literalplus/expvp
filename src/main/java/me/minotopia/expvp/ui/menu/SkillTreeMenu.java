@@ -16,7 +16,7 @@ import li.l1t.common.util.inventory.ItemStackFactory;
 import me.minotopia.expvp.EPPlugin;
 import me.minotopia.expvp.api.handler.kit.KitService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
-import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointService;
 import me.minotopia.expvp.api.service.ResearchService;
 import me.minotopia.expvp.api.skill.SkillService;
 import me.minotopia.expvp.i18n.I18n;

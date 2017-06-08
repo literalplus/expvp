@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 import me.minotopia.expvp.api.handler.HandlerService;
 import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.model.PlayerData;
-import me.minotopia.expvp.api.score.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.skilltree.SimpleSkillTreeNode;
 import me.minotopia.expvp.util.SessionProvider;

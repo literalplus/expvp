@@ -9,7 +9,7 @@
 package me.minotopia.expvp.model.hibernate.converter;
 
 import com.google.common.base.Preconditions;
-import me.minotopia.expvp.api.score.TalentPointType;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 
 import javax.persistence21.AttributeConverter;
 
