@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.api.score.points;
 
+import me.minotopia.expvp.api.model.MutablePlayerData;
 import org.bukkit.entity.Player;
 
 /**
@@ -20,25 +21,41 @@ import org.bukkit.entity.Player;
 public interface TalentPointService {
     int getCurrentTalentPointCount(Player player);
 
+    /**
+     * @param player the player to inspect
+     * @return given player's overall Talent Point limit for the {@link TalentPointType#COMBAT} type
+     * @deprecated Does not respect other types of Talent Points.
+     */
+    @Deprecated
     int findTalentPointLimit(Player player);
 
     /**
      * @param player the player to check
      * @return whether given player has reached their personal {@link #findTalentPointLimit(Player) Talent Point limit},
      * that means that they will not receive further Talent Points unless their kills get reset
+     * @deprecated Does not respect other types of Talent Points besides {@link TalentPointType#COMBAT}
      */
+    @Deprecated
     boolean hasReachedTalentPointLimit(Player player);
 
     /**
-     * Grants given player the talent points they deserve for their latest kill. This works by figuring out how many
-     * Talent Points the player deserves overall for their current kill count, and then working out the difference
-     * to the deserved Talent Points for the kill count before the kill. The difference in Talent Points is granted.
+     * Grants given player the amount of Talent Points they deserve for given type.
      *
      * @param player the player to operate on
-     * @return the amount of Talent Points granted, zero if none
+     * @param type   the type of Talent Points to compute and grant
+     * @return the positive amount of Talent Points granted, zero if none
+     * @see TalentPointTypeStrategy#findDeservedPoints(MutablePlayerData)
      */
-    int grantTalentPointsForKill(Player player);
+    int grantDeservedTalentPoints(Player player, TalentPointType type);
 
+    /**
+     * Force-grants given player an amount of Talent Points off-the-record. This does not affect Talent Point limits.
+     *
+     * @param player       the player to operate on
+     * @param talentPoints the amount of talent points to grant, may be negative or zero
+     * @deprecated This does not affect Talent Point limits, and should not be used under normal circumstances
+     */
+    @Deprecated
     void grantTalentPoints(Player player, int talentPoints);
 
     /**
@@ -51,19 +68,11 @@ public interface TalentPointService {
     void consumeTalentPoints(Player player, int amount);
 
     /**
-     * Finds the amount of kills given player needs until they are granted the next Talent Point.
-     * <p><b>Note:</b> This method operates theoretically. It does not take into account the Talent Point limit.</p>
-     *
      * @param player the player to operate on
-     * @return the amount of kills left
+     * @param type the type of Talent Point to find the next point objective for
+     * @return the next point objective for given type
+     * @see TalentPointTypeStrategy#calculateObjectiveForNext(MutablePlayerData)
      */
-    int findKillsUntilNextTalentPoint(Player player);
+    TalentPointObjective nextPointObjective(Player player, TalentPointType type);
 
-    /**
-     * Communicates to the player their current amount of Talent Points and how many kills they need until their next
-     * Talent Point, via some means other than the chat.
-     *
-     * @param player the player to operate on
-     */
-    void displayCurrentCount(Player player);
 }

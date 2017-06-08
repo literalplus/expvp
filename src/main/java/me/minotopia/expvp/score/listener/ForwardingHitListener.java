@@ -15,6 +15,8 @@ import me.minotopia.expvp.api.respawn.RespawnService;
 import me.minotopia.expvp.api.score.assist.Hit;
 import me.minotopia.expvp.api.score.assist.Hits;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
+import me.minotopia.expvp.api.score.points.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.api.score.service.KillDeathService;
 import me.minotopia.expvp.api.score.service.KillStreakService;
 import org.bukkit.entity.EntityType;
@@ -40,15 +42,18 @@ public class ForwardingHitListener implements Listener {
     private final KillStreakService streakService;
     private final KillAssistService assistService;
     private final PlayerService playerService;
+    private final TalentPointService talentPoints;
 
     @Inject
     public ForwardingHitListener(KillDeathService killDeathService, RespawnService respawnService,
-                                 KillStreakService streakService, KillAssistService assistService, PlayerService playerService) {
+                                 KillStreakService streakService, KillAssistService assistService,
+                                 PlayerService playerService, TalentPointService talentPoints) {
         this.killDeathService = killDeathService;
         this.respawnService = respawnService;
         this.streakService = streakService;
         this.assistService = assistService;
         this.playerService = playerService;
+        this.talentPoints = talentPoints;
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -95,6 +100,7 @@ public class ForwardingHitListener implements Listener {
     private void handleFatalHitOn(Player victim) {
         assistService.clearHitsOn(victim.getUniqueId());
         streakService.resetStreak(victim);
+        talentPoints.grantDeservedTalentPoints(victim, TalentPointType.DEATHS);
         teleportToSpawn(victim);
         restoreHealthEtc(victim);
     }

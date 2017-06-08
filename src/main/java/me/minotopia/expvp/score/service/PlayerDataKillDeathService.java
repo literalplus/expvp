@@ -18,7 +18,9 @@ import me.minotopia.expvp.api.model.PlayerData;
 import me.minotopia.expvp.api.score.assist.HitList;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
 import me.minotopia.expvp.api.score.league.LeagueService;
+import me.minotopia.expvp.api.score.points.TalentPointObjective;
 import me.minotopia.expvp.api.score.points.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.api.score.service.ExpService;
 import me.minotopia.expvp.api.score.service.KillDeathService;
 import me.minotopia.expvp.api.score.service.KillStreakService;
@@ -109,14 +111,14 @@ public class PlayerDataKillDeathService implements KillDeathService {
     }
 
     private void grantTalentPointsToKiller(Player culprit) {
-        int grantedTalentPoints = talentPoints.grantTalentPointsForKill(culprit);
+        int grantedTalentPoints = talentPoints.grantDeservedTalentPoints(culprit, TalentPointType.COMBAT);
         if (grantedTalentPoints > 0) {
             int currentTP = talentPoints.getCurrentTalentPointCount(culprit);
-            int killsUntilNextTP = talentPoints.findKillsUntilNextTalentPoint(culprit);
+            TalentPointObjective objective = talentPoints.nextPointObjective(culprit, TalentPointType.COMBAT);
             I18n.sendLoc(culprit, Format.success(
                     Message.of("score!tp.status",
                             Plurals.talentPointPlural(currentTP),
-                            Plurals.killPlural(killsUntilNextTP)
+                            objective.getDescription()
                     )
             ));
         }
@@ -124,7 +126,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
 
     private void attemptRecordKillAssist(Player victim, PlayerData friend) {
         HitList hitList = assistService.getHitsOn(victim.getUniqueId())
-                .getHitList(friend.getUniqueId());
+                .getReceivedHitList(friend.getUniqueId());
         double recentDamageSum = hitList.getRecentDamageSum();
         if (recentDamageSum >= 6) {
             playerService.findOnlinePlayer(friend.getUniqueId())

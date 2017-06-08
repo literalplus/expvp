@@ -10,6 +10,7 @@ package me.minotopia.expvp.score.listener;
 
 import com.google.inject.Inject;
 import me.minotopia.expvp.api.score.points.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.api.score.service.ExpService;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.util.SessionProvider;
@@ -19,11 +20,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.temporal.TemporalAdjusters;
 
 /**
  * Listens for join events and does some initialisation work for the score module.
@@ -60,17 +56,10 @@ public class ScoreJoinListener implements Listener {
         sessionProvider.inSession(ignored -> {
             if (!player.hasPlayedBefore()) {
                 exps.incrementExp(player, 100);
-                talentPoints.grantTalentPoints(player, getFullDaysSinceReset() * 10);
             } else {
                 player.setLevel(exps.getExpCount(player));
             }
+            talentPoints.grantDeservedTalentPoints(player, TalentPointType.DAY_ACTIVITY);
         });
-    }
-
-    private int getFullDaysSinceReset() {
-        return Period.between(
-                LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY)),
-                LocalDate.now()
-        ).getDays();
     }
 }

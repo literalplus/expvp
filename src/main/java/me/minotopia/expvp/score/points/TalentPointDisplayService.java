@@ -9,7 +9,9 @@
 package me.minotopia.expvp.score.points;
 
 import io.puharesource.mc.titlemanager.api.ActionbarTitleObject;
+import me.minotopia.expvp.api.score.points.TalentPointObjective;
 import me.minotopia.expvp.api.score.points.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.i18n.I18n;
 import me.minotopia.expvp.i18n.Plurals;
 import org.bukkit.entity.Player;
@@ -28,14 +30,31 @@ class TalentPointDisplayService {
     }
 
     public void displayCurrentTP(Player player) {
-        sendActionbarMessage("score!tp.actionbar", player);
+        sendCombatTPStatusMessage(player);
     }
 
-    public void displayTPGained(Player player, int count) {
+    private void sendCombatTPStatusMessage(Player player) {
+        int availablePoints = talentPoints.getCurrentTalentPointCount(player);
+        TalentPointObjective objective = this.talentPoints.nextPointObjective(player, TalentPointType.COMBAT);
+        sendActionbar(
+                player, "score!tp.actionbar",
+                Plurals.talentPointPlural(availablePoints),
+                objective.getDescription()
+        );
+    }
+
+    private void sendActionbar(Player receiver, String messageKey, Object... args) {
+        new ActionbarTitleObject(I18n.loc(receiver, messageKey, args)).send(receiver);
+    }
+
+    public void displayTPGained(Player player, int count, TalentPointType type) {
         if (count <= 0) {
             displayCurrentTP(player);
         } else {
-            sendActionbarMessage("score!tp.actionbar.gain", player, count);
+            sendActionbar(
+                    player, "score!tp.actionbar.gain",
+                    Plurals.talentPointPlural(count), type.getDescription()
+            );
         }
     }
 
@@ -43,20 +62,10 @@ class TalentPointDisplayService {
         if (count <= 0) {
             displayCurrentTP(player);
         } else {
-            sendActionbarMessage("score!tp.actionbar.lose", player, count);
+            sendActionbar(
+                    player, "score!tp.actionbar.lose",
+                    Plurals.talentPointPlural(count)
+            );
         }
-    }
-
-    private void sendActionbarMessage(String messageKey, Player player) {
-        sendActionbarMessage(messageKey, player, talentPoints.getCurrentTalentPointCount(player));
-    }
-
-    private void sendActionbarMessage(String messageKey, Player player, int talentPoints) {
-        int killsUntilNextTalentPoint = this.talentPoints.findKillsUntilNextTalentPoint(player);
-        new ActionbarTitleObject(I18n.loc(
-                player, messageKey,
-                Plurals.talentPointPlural(talentPoints),
-                Plurals.killPlural(killsUntilNextTalentPoint)
-        )).send(player);
     }
 }

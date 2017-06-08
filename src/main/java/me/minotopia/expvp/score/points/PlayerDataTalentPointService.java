@@ -12,12 +12,18 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
-import me.minotopia.expvp.api.score.points.InsufficientTalentPointsException;
+import me.minotopia.expvp.api.score.points.TalentPointObjective;
 import me.minotopia.expvp.api.score.points.TalentPointService;
+import me.minotopia.expvp.api.score.points.TalentPointType;
+import me.minotopia.expvp.api.score.points.TalentPointTypeStrategy;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.score.points.strategy.DeathsTalentPointStrategy;
+import me.minotopia.expvp.score.points.strategy.KillsTalentPointStrategy;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
+
+import java.util.EnumMap;
 
 /**
  * Works out Talent Points using the PlayerData API.
@@ -30,6 +36,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
     private final SessionProvider sessionProvider;
     private final TalentPointCalculator calculator;
     private final TalentPointDisplayService displayService;
+    private final EnumMap<TalentPointType, TalentPointTypeStrategy> strategies = new EnumMap<>(TalentPointType.class);
 
     @Inject
     public PlayerDataTalentPointService(PlayerDataService players, SessionProvider sessionProvider,
@@ -38,6 +45,15 @@ public class PlayerDataTalentPointService implements TalentPointService {
         this.sessionProvider = sessionProvider;
         this.calculator = calculator;
         displayService = new TalentPointDisplayService(this);
+        strategies.put(TalentPointType.COMBAT, new KillsTalentPointStrategy());
+        strategies.put(TalentPointType.DEATHS, new DeathsTalentPointStrategy());
+    }
+
+    private TalentPointTypeStrategy strategy(TalentPointType type) {
+        Preconditions.checkNotNull(type, "type");
+        TalentPointTypeStrategy strategy = strategies.get(type);
+        Preconditions.checkArgument(strategy != null, "Unsupported talent point type %s", type);
+        return strategy;
     }
 
     @Override
@@ -50,11 +66,13 @@ public class PlayerDataTalentPointService implements TalentPointService {
     }
 
     @Override
+    @Deprecated
     public int findTalentPointLimit(Player player) {
-        return 75; //TODO: Lanatus product for this maybe
+        return TalentPointType.COMBAT.getLimit();
     }
 
     @Override
+    @Deprecated
     public boolean hasReachedTalentPointLimit(Player player) {
         Integer kills = players.findData(player.getUniqueId())
                 .map(PlayerData::getCurrentKills)
@@ -63,32 +81,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
     }
 
     @Override
-    public int grantTalentPointsForKill(Player player) {
-        return sessionProvider.inSessionAnd(ignored -> {
-            PlayerData playerData = players.findOrCreateData(player.getUniqueId());
-            int talentPointLimit = findTalentPointLimit(player);
-            int grantedTalentPoints = findDeservedTalentPointDifference(talentPointLimit, playerData.getCurrentKills());
-            grantTalentPoints(player, grantedTalentPoints);
-            displayService.displayTPGained(player, grantedTalentPoints);
-            return grantedTalentPoints;
-        });
-    }
-
-    private int findDeservedTalentPointDifference(int talentPointLimit, int currentKills) {
-        if (currentKills <= 0) {
-            return 0;
-        } else {
-            int newPoints = calculator.totalDeservedPoints(currentKills);
-            if (newPoints > talentPointLimit) {
-                return 0;
-            } else {
-                int previousPoints = calculator.totalDeservedPoints(currentKills - 1);
-                return newPoints - previousPoints;
-            }
-        }
-    }
-
-    @Override
+    @Deprecated
     public void grantTalentPoints(Player player, int talentPoints) {
         Preconditions.checkArgument(talentPoints >= 0, "talentPoints must be positive", talentPoints);
         if (talentPoints == 0) {
@@ -102,31 +95,38 @@ public class PlayerDataTalentPointService implements TalentPointService {
     }
 
     @Override
-    public void consumeTalentPoints(Player player, int consumePoints) {
-        sessionProvider.inSession(ignored -> {
+    public int grantDeservedTalentPoints(Player player, TalentPointType type) {
+        Preconditions.checkNotNull(type, "type");
+        Preconditions.checkNotNull(player, "player");
+        return sessionProvider.inSessionAnd(ignored -> {
             MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
-            int currentPoints = playerData.getAvailableTalentPoints();
-            if (currentPoints < consumePoints) {
-                throw new InsufficientTalentPointsException(consumePoints, currentPoints);
-            } else {
-                playerData.setTalentPoints(currentPoints - consumePoints);
+            int deservedPoints = strategy(type).findDeservedPoints(playerData);
+            if (deservedPoints > 0) {
+                playerData.grantTalentPoints(type, deservedPoints);
+                displayService.displayTPGained(player, deservedPoints, type);
+                players.saveData(playerData);
             }
-            displayService.displayTPSpent(player, consumePoints);
+            return deservedPoints;
         });
     }
 
     @Override
-    public int findKillsUntilNextTalentPoint(Player player) {
-        int currentKills = players.findData(player.getUniqueId())
-                .map(PlayerData::getCurrentKills)
-                .orElse(0);
-        return calculator.killsLeftUntilNextPoint(currentKills);
+    public void consumeTalentPoints(Player player, int consumePoints) {
+        sessionProvider.inSession(ignored -> {
+            MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
+            playerData.consumeTalentPoints(consumePoints);
+            displayService.displayTPSpent(player, consumePoints);
+            players.saveData(playerData);
+        });
     }
 
     @Override
-    public void displayCurrentCount(Player player) {
-        sessionProvider.inSession(ignored ->
-                displayService.displayCurrentTP(player)
-        );
+    public TalentPointObjective nextPointObjective(Player player, TalentPointType type) {
+        Preconditions.checkNotNull(type, "type");
+        Preconditions.checkNotNull(player, "player");
+        return sessionProvider.inSessionAnd(ignored -> {
+            MutablePlayerData playerData = players.findOrCreateDataMutable(player.getUniqueId());
+            return strategy(type).calculateObjectiveForNext(playerData);
+        });
     }
 }

@@ -8,6 +8,7 @@
 
 package me.minotopia.expvp.api.model;
 
+import me.minotopia.expvp.api.score.points.InsufficientTalentPointsException;
 import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.skill.meta.Skill;
 
@@ -89,8 +90,17 @@ public interface MutablePlayerData extends PlayerData {
     /**
      * Grants this player given amount of Talent Points of given type.
      *
-     * @param type       the type to grant the Talent Points for
-     * @param pointCount the amount of Talent Points to grant
+     * @param type   the type to grant the Talent Points for
+     * @param amount the amount of Talent Points to grant
      */
-    void grantTalentPoints(TalentPointType type, int pointCount);
+    void grantTalentPoints(TalentPointType type, int amount);
+
+    /**
+     * Consumes given amount of Talent Points from this player's available Talent Points.
+     *
+     * @param amount the amount to consume
+     * @throws InsufficientTalentPointsException if this player would have a negative amount of Talent Points after this
+     *                                           operation
+     */
+    void consumeTalentPoints(int amount) throws InsufficientTalentPointsException;
 }

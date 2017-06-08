@@ -11,6 +11,7 @@ package me.minotopia.expvp.model.hibernate.player;
 import com.google.common.base.Preconditions;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.ObtainedSkill;
+import me.minotopia.expvp.api.score.points.InsufficientTalentPointsException;
 import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.model.hibernate.BaseEntity;
 import me.minotopia.expvp.model.hibernate.converter.LocaleConverter;
@@ -217,12 +218,21 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
     }
 
     @Override
-    public void grantTalentPoints(TalentPointType type, int pointCount) {
+    public void grantTalentPoints(TalentPointType type, int amount) {
         Preconditions.checkNotNull(type, "type");
-        Preconditions.checkArgument(pointCount >= 0, "pointCount may not be negative:", pointCount);
+        Preconditions.checkArgument(amount >= 0, "amount may not be negative:", amount);
         HibernatePoints pointsObj = points.computeIfAbsent(type, type0 -> new HibernatePoints(this, type0));
-        pointsObj.increasePointCountBy(pointCount);
-        talentPoints += pointCount;
+        pointsObj.increasePointCountBy(amount);
+        talentPoints += amount;
+    }
+
+    @Override
+    public void consumeTalentPoints(int amount) throws InsufficientTalentPointsException {
+        Preconditions.checkArgument(amount >= 0, "amount may not be negative:", amount);
+        if (talentPoints < amount) {
+            throw new InsufficientTalentPointsException(amount, talentPoints);
+        }
+        talentPoints -= amount;
     }
 
     //Implement equals/hashCode if this entity persists across multiple Sessions and has generated ids
