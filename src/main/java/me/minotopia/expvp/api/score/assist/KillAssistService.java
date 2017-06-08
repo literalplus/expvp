@@ -21,5 +21,7 @@ public interface KillAssistService {
 
     void clearHitsOn(UUID playerId);
 
+    void recordHitOnBy(UUID victimId, UUID culpritId, double damage);
+
     void expireOldData();
 }

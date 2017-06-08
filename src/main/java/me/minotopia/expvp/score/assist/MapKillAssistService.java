@@ -48,6 +48,11 @@ public class MapKillAssistService implements KillAssistService {
     }
 
     @Override
+    public void recordHitOnBy(UUID victimId, UUID culpritId, double damage) {
+        getHitsOn(victimId).recordHitInvolving(culpritId, damage);
+    }
+
+    @Override
     public void clearHitsOn(UUID playerId) {
         hitsMap.remove(playerId);
     }

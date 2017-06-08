@@ -13,13 +13,13 @@ import java.util.Collection;
 import java.util.UUID;
 
 /**
- * Stores and provides convenient access to the list of recent hits a culprit dealt on a known victim.
+ * Stores and provides convenient access to the list of recent hits a peer dealt to a known specific player.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-05-01
  */
 public interface HitList {
-    UUID getCulpritId();
+    UUID getPeerId();
 
     Collection<? extends Hit> getRawHits();
 

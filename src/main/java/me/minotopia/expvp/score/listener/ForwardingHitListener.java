@@ -71,8 +71,8 @@ public class ForwardingHitListener implements Listener {
                 event.setCancelled(true);
                 handleFatalHitOn(victim);
             } else {
-                culprit.map(Player::getUniqueId)
-                        .ifPresent(damagerId -> hits.recordHitBy(damagerId, event.getFinalDamage()));
+                culprit.map(Player::getUniqueId).ifPresent(culpritId ->
+                        assistService.recordHitOnBy(victim.getUniqueId(), culpritId, event.getFinalDamage()));
             }
         }
     }

@@ -12,10 +12,8 @@ import me.minotopia.expvp.api.score.assist.Hit;
 import me.minotopia.expvp.api.score.assist.Hits;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Keeps hits on a single victim in a map.
@@ -43,28 +41,36 @@ public class MapHits implements Hits {
 
     @Override
     public Optional<Hit> getMostRecentHitIfNotExpired() {
-        if (mostRecentHit.isOlderThan(mostRecentExpiryDuration)) {
+        if (mostRecentHit != null && mostRecentHit.isOlderThan(mostRecentExpiryDuration)) {
             mostRecentHit = null;
         }
         return Optional.ofNullable(mostRecentHit);
     }
 
     @Override
-    public SimpleHitList getHitList(UUID culpritId) {
-        SimpleHitList hitList = hitLists.computeIfAbsent(culpritId, SimpleHitList::new);
+    public SimpleHitList getHitList(UUID peerId) {
+        SimpleHitList hitList = hitLists.computeIfAbsent(peerId, SimpleHitList::new);
         hitList.expireHitsOlderThan(getExpiryDuration());
         return hitList;
     }
 
     @Override
-    public void recordHitBy(UUID culpritId, double damage) {
-        mostRecentHit = getHitList(culpritId).recordHit(damage);
+    public void recordHitInvolving(UUID peerId, double damage) {
+        mostRecentHit = getHitList(peerId).recordHit(damage);
     }
 
     @Override
     public void expireOldHits() {
         hitLists.values().forEach(hitList -> hitList.expireHitsOlderThan(getExpiryDuration()));
         hitLists.values().removeIf(SimpleHitList::isEmpty);
+    }
+
+    @Override
+    public Stream<SimpleHit> allHits() {
+        expireOldHits();
+        return hitLists.values().stream()
+                .map(SimpleHitList::getRawHits)
+                .flatMap(Collection::stream);
     }
 
     @Override

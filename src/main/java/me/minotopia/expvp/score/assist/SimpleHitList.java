@@ -24,16 +24,16 @@ import java.util.UUID;
  * @since 2017-05-01
  */
 public class SimpleHitList implements HitList {
-    private final UUID culpritId;
+    private final UUID peerId;
     private final List<SimpleHit> hits = new ArrayList<>(32);
 
-    public SimpleHitList(UUID culpritId) {
-        this.culpritId = culpritId;
+    public SimpleHitList(UUID peerId) {
+        this.peerId = peerId;
     }
 
     @Override
-    public UUID getCulpritId() {
-        return culpritId;
+    public UUID getPeerId() {
+        return peerId;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SimpleHitList implements HitList {
     }
 
     public Hit recordHit(double damage) {
-        SimpleHit hit = new SimpleHit(culpritId, damage);
+        SimpleHit hit = new SimpleHit(peerId, damage);
         hits.add(hit);
         return hit;
     }
