@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
+import me.minotopia.expvp.api.score.hit.OutgoingHitService;
 import me.minotopia.expvp.api.score.points.TalentPointObjective;
 import me.minotopia.expvp.api.score.points.TalentPointService;
 import me.minotopia.expvp.api.score.points.TalentPointType;
@@ -19,6 +20,7 @@ import me.minotopia.expvp.api.score.points.TalentPointTypeStrategy;
 import me.minotopia.expvp.api.service.PlayerDataService;
 import me.minotopia.expvp.score.points.strategy.DeathsTalentPointStrategy;
 import me.minotopia.expvp.score.points.strategy.KillsTalentPointStrategy;
+import me.minotopia.expvp.score.points.strategy.RecentDamageTalentPointStrategy;
 import me.minotopia.expvp.util.ScopedSession;
 import me.minotopia.expvp.util.SessionProvider;
 import org.bukkit.entity.Player;
@@ -40,13 +42,14 @@ public class PlayerDataTalentPointService implements TalentPointService {
 
     @Inject
     public PlayerDataTalentPointService(PlayerDataService players, SessionProvider sessionProvider,
-                                        TalentPointCalculator calculator) {
+                                        TalentPointCalculator calculator, OutgoingHitService hitService) {
         this.players = players;
         this.sessionProvider = sessionProvider;
         this.calculator = calculator;
         displayService = new TalentPointDisplayService(this);
         strategies.put(TalentPointType.COMBAT, new KillsTalentPointStrategy());
         strategies.put(TalentPointType.DEATHS, new DeathsTalentPointStrategy());
+        strategies.put(TalentPointType.RECENT_DAMAGE, new RecentDamageTalentPointStrategy(hitService));
     }
 
     private TalentPointTypeStrategy strategy(TalentPointType type) {
