@@ -6,22 +6,20 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.api.score.assist;
-
-import me.minotopia.expvp.api.score.hit.Hits;
+package me.minotopia.expvp.api.score.hit;
 
 import java.util.UUID;
 
 /**
- * Keeps track of short-term hits on a player for detection of kill assistance.
+ * Keeps track of short-term hits by a player for score bonuses.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
- * @since 2017-05-01
+ * @since 2017-06-08
  */
-public interface KillAssistService {
-    Hits getHitsOn(UUID playerId);
+public interface OutgoingHitService {
+    Hits getHitsBy(UUID playerId);
 
-    void clearHitsOn(UUID playerId);
+    void clearHitsBy(UUID playerId);
 
     void recordHitOnBy(UUID victimId, UUID culpritId, double damage);
 

@@ -6,10 +6,10 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score.assist;
+package me.minotopia.expvp.score.hit;
 
-import me.minotopia.expvp.api.score.assist.Hit;
-import me.minotopia.expvp.api.score.assist.Hits;
+import me.minotopia.expvp.api.score.hit.Hit;
+import me.minotopia.expvp.api.score.hit.Hits;
 
 import java.time.Duration;
 import java.util.*;

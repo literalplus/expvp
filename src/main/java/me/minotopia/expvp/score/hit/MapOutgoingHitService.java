@@ -6,15 +6,14 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.score.assist;
+package me.minotopia.expvp.score.hit;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import li.l1t.common.util.task.TaskService;
 import me.minotopia.expvp.api.misc.PlayerInitService;
-import me.minotopia.expvp.api.score.assist.KillAssistService;
 import me.minotopia.expvp.api.score.hit.Hits;
-import me.minotopia.expvp.score.hit.MapHits;
+import me.minotopia.expvp.api.score.hit.OutgoingHitService;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -22,39 +21,38 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * A simple map-based implementation of a kill assist service.
+ * Keeps track of outgoing hits using a map.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
- * @since 2017-05-01
+ * @since 2017-06-08
  */
 @Singleton
-public class MapKillAssistService implements KillAssistService {
+public class MapOutgoingHitService implements OutgoingHitService {
     private final Map<UUID, MapHits> hitsMap = new HashMap<>();
-    private final Duration expiryDuration = Duration.ofMinutes(3);
-    private final Duration mostRecentExpiryDuration = Duration.ofSeconds(20);
+    private final Duration expiryDuration = Duration.ofMinutes(5);
 
     @Inject
-    public MapKillAssistService(TaskService tasks, PlayerInitService initService) {
-        tasks.repeating(this::expireOldData, Duration.ofMinutes(5));
-        initService.registerDeInitHandler(player -> clearHitsOn(player.getUniqueId()));
+    public MapOutgoingHitService(TaskService tasks, PlayerInitService initService) {
+        tasks.repeating(this::expireOldData, Duration.ofMinutes(10));
+        initService.registerDeInitHandler(player -> clearHitsBy(player.getUniqueId()));
     }
 
     @Override
-    public Hits getHitsOn(UUID playerId) {
+    public Hits getHitsBy(UUID playerId) {
         return hitsMap.computeIfAbsent(playerId, this::createHitsFor);
     }
 
     private MapHits createHitsFor(UUID uuid) {
-        return new MapHits(expiryDuration, mostRecentExpiryDuration, uuid);
+        return new MapHits(expiryDuration, expiryDuration, uuid);
     }
 
     @Override
     public void recordHitOnBy(UUID victimId, UUID culpritId, double damage) {
-        getHitsOn(victimId).recordHitInvolving(culpritId, damage);
+        getHitsBy(victimId).recordHitInvolving(culpritId, damage);
     }
 
     @Override
-    public void clearHitsOn(UUID playerId) {
+    public void clearHitsBy(UUID playerId) {
         hitsMap.remove(playerId);
     }
 

@@ -15,8 +15,8 @@ import me.minotopia.expvp.api.i18n.DisplayNameService;
 import me.minotopia.expvp.api.misc.PlayerService;
 import me.minotopia.expvp.api.model.MutablePlayerData;
 import me.minotopia.expvp.api.model.PlayerData;
-import me.minotopia.expvp.api.score.assist.HitList;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
+import me.minotopia.expvp.api.score.hit.HitList;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.score.points.TalentPointObjective;
 import me.minotopia.expvp.api.score.points.TalentPointService;
@@ -126,7 +126,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
 
     private void attemptRecordKillAssist(Player victim, PlayerData friend) {
         HitList hitList = assistService.getHitsOn(victim.getUniqueId())
-                .getReceivedHitList(friend.getUniqueId());
+                .getHitList(friend.getUniqueId());
         double recentDamageSum = hitList.getRecentDamageSum();
         if (recentDamageSum >= 6) {
             playerService.findOnlinePlayer(friend.getUniqueId())

@@ -10,12 +10,15 @@ package me.minotopia.expvp.score;
 
 import com.google.inject.AbstractModule;
 import me.minotopia.expvp.api.score.assist.KillAssistService;
+import me.minotopia.expvp.api.score.hit.OutgoingHitService;
 import me.minotopia.expvp.api.score.league.LeagueService;
 import me.minotopia.expvp.api.score.points.TalentPointService;
 import me.minotopia.expvp.api.score.service.ExpService;
 import me.minotopia.expvp.api.score.service.KillDeathService;
 import me.minotopia.expvp.api.score.service.KillStreakService;
 import me.minotopia.expvp.score.assist.MapKillAssistService;
+import me.minotopia.expvp.score.hit.MapOutgoingHitService;
+import me.minotopia.expvp.score.hit.OutgoingHitListener;
 import me.minotopia.expvp.score.league.StaticLeagueService;
 import me.minotopia.expvp.score.listener.ForwardingHitListener;
 import me.minotopia.expvp.score.listener.ScoreJoinListener;
@@ -41,5 +44,7 @@ public class ScoreModule extends AbstractModule {
         bind(ForwardingHitListener.class);
         bind(ScoreJoinListener.class);
         bind(KillAssistService.class).to(MapKillAssistService.class);
+        bind(OutgoingHitListener.class);
+        bind(OutgoingHitService.class).to(MapOutgoingHitService.class);
     }
 }

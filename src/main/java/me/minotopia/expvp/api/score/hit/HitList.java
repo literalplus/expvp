@@ -6,24 +6,24 @@
  * under the license terms which can be found at src/main/resources/LICENSE.txt.
  */
 
-package me.minotopia.expvp.api.score.assist;
+package me.minotopia.expvp.api.score.hit;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
- * Represents a single hit that a known culprit executed on a known victim.
+ * Stores and provides convenient access to the list of recent hits a peer dealt to a known specific player.
  *
  * @author <a href="https://l1t.li/">Literallie</a>
  * @since 2017-05-01
  */
-public interface Hit {
-    UUID getCulpritId();
+public interface HitList {
+    UUID getPeerId();
 
-    Instant getInstant();
+    Collection<? extends Hit> getRawHits();
 
-    double getDamage();
+    void expireHitsOlderThan(Duration expiryDuration);
 
-    boolean isOlderThan(Duration duration);
+    double getRecentDamageSum();
 }
