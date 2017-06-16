@@ -62,12 +62,14 @@ pipeline {
 
     post {
         always {
-            script {
-                agent any
-                gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-            }
             echo currentBuild
-            echo currentBuild.result
+            echo currentBuild?.result
+            echo currentBuild?.durationString
+            script {
+                node {
+                    gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                }
+            }
             echo gitCommit
             hipchatSend color: findHipchatColor(leBuild),
                     message: "Built <a href='${env.BUILD_URL}'>Expvp " +
