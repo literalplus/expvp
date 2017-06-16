@@ -62,9 +62,6 @@ pipeline {
 
     post {
         always {
-            echo currentBuild
-            echo currentBuild?.result
-            echo currentBuild?.durationString
             script {
                 node {
                     gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
@@ -72,9 +69,9 @@ pipeline {
             }
             echo gitCommit
             hipchatSend color: findHipchatColor(leBuild),
-                    message: "Built <a href='${env.BUILD_URL}'>Expvp " +
-                            "#${env.BUILD_NUMBER}</a> in ${leBuild.durationString}: " +
-                            "${leBuild.result} [${gitCommit.take(6)}]"
+                    message: "Built <a href='${currentBuild.absoluteUrl}'>Expvp " +
+                            "#${currentBuild.number}</a> in ${currentBuild.durationString}: " +
+                            "${currentBuild.result} [${gitCommit.take(6)}]"
         }
     }
 }
