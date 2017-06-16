@@ -17,6 +17,8 @@ static def findHipchatColor(build) {
     }
 }
 
+def leBuild
+
 pipeline {
     agent none // Don't block an agent while waiting for approval
 
@@ -34,6 +36,7 @@ pipeline {
         stage('Maven Compile') {
             agent any
             steps {
+                leBuild = currentBuild
                 deleteDir()
                 checkout scm
                 sh 'mvn -B -V compile'
@@ -56,10 +59,11 @@ pipeline {
 
     post {
         always {
-            hipchatSend color: findHipchatColor(currentBuild),
+            def gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+            hipchatSend color: findHipchatColor(leBuild),
                     message: "Built <a href='${env.BUILD_URL}'>Expvp " +
-                            "#${env.BUILD_NUMBER}</a> in ${env.DURATION}: " +
-                            "${currentBuild.result} (${env.CHANGES_OR_CAUSE}) [${env.GIT_BRANCH} ${env.GIT_COMMIT?.take(6)}]"
+                            "#${env.BUILD_NUMBER}</a> in ${leBuild.durationString}: " +
+                            "${leBuild.result} [${gitCommit.take(6)}]"
         }
     }
 }
