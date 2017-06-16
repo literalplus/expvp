@@ -23,6 +23,7 @@ import me.minotopia.expvp.score.league.StaticLeagueService;
 import me.minotopia.expvp.score.listener.ForwardingHitListener;
 import me.minotopia.expvp.score.listener.ScoreJoinListener;
 import me.minotopia.expvp.score.points.PlayerDataTalentPointService;
+import me.minotopia.expvp.score.points.RecentDamageTalentPointChecker;
 import me.minotopia.expvp.score.service.PlayerDataExpService;
 import me.minotopia.expvp.score.service.PlayerDataKillDeathService;
 import me.minotopia.expvp.score.service.PlayerKillStreakService;
@@ -46,5 +47,6 @@ public class ScoreModule extends AbstractModule {
         bind(KillAssistService.class).to(MapKillAssistService.class);
         bind(OutgoingHitListener.class);
         bind(OutgoingHitService.class).to(MapOutgoingHitService.class);
+        bind(RecentDamageTalentPointChecker.class);
     }
 }

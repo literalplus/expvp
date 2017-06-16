@@ -93,6 +93,29 @@ public class PlayerDataKillDeathService implements KillDeathService {
         int expPenalty = leagues.getCurrentLeague(victim).getDeathExpPenalty();
         exps.decrementExp(victim, expPenalty);
         I18n.sendLoc(victim, Format.result(Message.of("score!kill.victim", expPenalty)));
+        grantTalentPointsToVictim(victim);
+    }
+
+    private void grantTalentPointsToVictim(Player victim) {
+        grantDeservedTalentPoints(victim, TalentPointType.DEATHS);
+    }
+
+    private void grantDeservedTalentPoints(Player target, TalentPointType type) {
+        int grantedTalentPoints = talentPoints.grantDeservedTalentPoints(target, type);
+        if (grantedTalentPoints > 0) {
+            showNextTalentPointObjective(target, type);
+        }
+    }
+
+    private void showNextTalentPointObjective(Player culprit, TalentPointType type) {
+        int currentTP = talentPoints.getCurrentTalentPointCount(culprit);
+        TalentPointObjective objective = talentPoints.nextPointObjective(culprit, type);
+        I18n.sendLoc(culprit, Format.success(
+                Message.of("score!tp.status",
+                        Plurals.talentPointPlural(currentTP),
+                        objective.getDescription()
+                )
+        ));
     }
 
     private void recordKill(Player culprit) {
@@ -111,17 +134,7 @@ public class PlayerDataKillDeathService implements KillDeathService {
     }
 
     private void grantTalentPointsToKiller(Player culprit) {
-        int grantedTalentPoints = talentPoints.grantDeservedTalentPoints(culprit, TalentPointType.COMBAT);
-        if (grantedTalentPoints > 0) {
-            int currentTP = talentPoints.getCurrentTalentPointCount(culprit);
-            TalentPointObjective objective = talentPoints.nextPointObjective(culprit, TalentPointType.COMBAT);
-            I18n.sendLoc(culprit, Format.success(
-                    Message.of("score!tp.status",
-                            Plurals.talentPointPlural(currentTP),
-                            objective.getDescription()
-                    )
-            ));
-        }
+        grantDeservedTalentPoints(culprit, TalentPointType.COMBAT);
     }
 
     private void attemptRecordKillAssist(Player victim, PlayerData friend) {
