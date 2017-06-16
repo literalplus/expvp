@@ -18,6 +18,7 @@ import me.minotopia.expvp.api.score.points.TalentPointService;
 import me.minotopia.expvp.api.score.points.TalentPointType;
 import me.minotopia.expvp.api.score.points.TalentPointTypeStrategy;
 import me.minotopia.expvp.api.service.PlayerDataService;
+import me.minotopia.expvp.score.points.strategy.DayActivityTalentPointStrategy;
 import me.minotopia.expvp.score.points.strategy.DeathsTalentPointStrategy;
 import me.minotopia.expvp.score.points.strategy.KillsTalentPointStrategy;
 import me.minotopia.expvp.score.points.strategy.RecentDamageTalentPointStrategy;
@@ -50,6 +51,7 @@ public class PlayerDataTalentPointService implements TalentPointService {
         strategies.put(TalentPointType.COMBAT, new KillsTalentPointStrategy());
         strategies.put(TalentPointType.DEATHS, new DeathsTalentPointStrategy());
         strategies.put(TalentPointType.RECENT_DAMAGE, new RecentDamageTalentPointStrategy(hitService));
+        strategies.put(TalentPointType.DAY_ACTIVITY, new DayActivityTalentPointStrategy());
     }
 
     private TalentPointTypeStrategy strategy(TalentPointType type) {
