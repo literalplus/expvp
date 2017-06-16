@@ -56,9 +56,9 @@ pipeline {
             }
         }
 
-        stage('Await QA Approval') {
-
-        }
+//        stage('Await QA Approval') {
+//            input message: 'Deploy to Expvp QA?', submitter: 'xxyy'
+//        }
     }
     post {
         always {
