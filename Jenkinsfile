@@ -57,9 +57,9 @@ pipeline {
     post {
         always {
             hipchatSend color: findHipchatColor(currentBuild),
-                    message: "Built <a href='${env.URL}'>Expvp " +
+                    message: "Built <a href='${env.BUILD_URL}'>Expvp " +
                             "#${env.BUILD_NUMBER}</a> in ${env.DURATION}: " +
-                            "${currentBuild.result} (${env.CHANGES_OR_CAUSE})"
+                            "${currentBuild.result} (${env.CHANGES_OR_CAUSE}) [${env.GIT_BRANCH} ${env.GIT_COMMIT?.take(6)}]"
         }
     }
 }
