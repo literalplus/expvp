@@ -61,8 +61,8 @@ pipeline {
 
 
     post {
-        agent any
         always {
+            agent any
             script {
                 gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
             }
