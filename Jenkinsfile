@@ -35,8 +35,10 @@ pipeline {
     stages {
         stage('Maven Compile') {
             agent any
-            leBuild = currentBuild
             steps {
+                script {
+                    leBuild = currentBuild
+                }
                 deleteDir()
                 checkout scm
                 sh 'mvn -B -V compile'
@@ -57,10 +59,15 @@ pipeline {
         }
     }
 
-    def gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
 
     post {
         always {
+            script {
+                gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+            }
+            echo currentBuild
+            echo currentBuild.result
+            echo gitCommit
             hipchatSend color: findHipchatColor(leBuild),
                     message: "Built <a href='${env.BUILD_URL}'>Expvp " +
                             "#${env.BUILD_NUMBER}</a> in ${leBuild.durationString}: " +
