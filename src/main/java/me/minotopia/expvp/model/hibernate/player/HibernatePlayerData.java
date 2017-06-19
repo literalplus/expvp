@@ -212,7 +212,7 @@ public class HibernatePlayerData extends BaseEntity implements MutablePlayerData
 
     @Override
     public int getTalentPointCount(TalentPointType type) {
-        return Optional.of(points.get(type))
+        return Optional.ofNullable(points.get(type))
                 .map(HibernatePoints::getCurrentPointCount)
                 .orElse(0);
     }
