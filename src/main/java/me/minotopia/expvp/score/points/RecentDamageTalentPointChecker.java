@@ -36,8 +36,8 @@ public class RecentDamageTalentPointChecker {
     }
 
     private void checkAllOnlinePlayers() {
-        server.getOnlinePlayers().forEach(player -> {
-            talentPoints.grantDeservedTalentPoints(player, TalentPointType.RECENT_DAMAGE);
-        });
+        server.getOnlinePlayers().forEach(player ->
+                talentPoints.grantDeservedTalentPoints(player, TalentPointType.RECENT_DAMAGE)
+        );
     }
 }

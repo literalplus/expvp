@@ -42,9 +42,10 @@ public class RecentDamageTalentPointStrategy implements TalentPointTypeStrategy 
 
     @Override
     public int findDeservedPoints(MutablePlayerData playerData) {
-        if (hitService.getHitsBy(playerData.getUniqueId()).allHits()
+        double damageSum = hitService.getHitsBy(playerData.getUniqueId()).allHits()
                 .mapToDouble(Hit::getDamage)
-                .sum() >= POINT_DAMAGE_THRESHOLD) {
+                .sum();
+        if (damageSum >= POINT_DAMAGE_THRESHOLD) {
             return 1;
         } else {
             return 0;
