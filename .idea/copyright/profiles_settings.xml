@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="ExPvP">
+  <settings default="Expvp">
     <module2copyright>
-      <element module="Project Files" copyright="ExPvP" />
+      <element module="Project Files" copyright="Expvp" />
     </module2copyright>
   </settings>
 </component>
