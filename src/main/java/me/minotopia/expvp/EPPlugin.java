@@ -271,7 +271,8 @@ public class EPPlugin extends GenericXyPlugin {
                 "§6Expvp Minecraft Game Mode for MinoTopia.me",
                 getPluginVersion().toString(),
                 "§6Copyright (C) 2016-2017 Philipp Nowak (Literallie)",
-                "§6See the LICENSE.txt file in the plugin jar for more info."
+                "§6Licensed under GNU AGPLv3.",
+                "§6Source code: https://github.com/xxyy/expvp"
         }); // it says "Expvp"
     }
 
