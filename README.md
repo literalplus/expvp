@@ -27,7 +27,7 @@ from MinoTopia's community, it is compatible with Minecraft
 Contributing
 ------------
 
-See [CONTRIBUTING.md](https://bitbucket.org/minotopia/expvp/src/master/CONTRIBUTING.md?at=master) for details on contribution guidelines.
+See [CONTRIBUTING.md](https://github.com/xxyy/expvp/blob/master/CONTRIBUTING.md) for details on contribution guidelines.
 
 Trademark Note
 --------------
