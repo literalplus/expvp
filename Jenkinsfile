@@ -54,9 +54,5 @@ pipeline {
                 }
             }
         }
-
-//        stage('Await QA Approval') {
-//            input message: 'Deploy to Expvp QA?', submitter: 'xxyy'
-//        }
     }
 }
