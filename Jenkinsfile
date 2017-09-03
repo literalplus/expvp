@@ -16,17 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-static def findHipchatColor(build) {
-    switch (build.result) {
-        case "UNSTABLE":
-            return "YELLOW"
-        case "FAILED":
-            return "RED"
-        default:
-            return "GREEN"
-    }
-}
-
 pipeline {
     agent none // Don't block an agent while waiting for approval
 
@@ -37,7 +26,7 @@ pipeline {
     }
 
     tools {
-        maven 'def-maven'
+        maven 'Default Maven'
     }
 
     stages {
@@ -69,20 +58,5 @@ pipeline {
 //        stage('Await QA Approval') {
 //            input message: 'Deploy to Expvp QA?', submitter: 'xxyy'
 //        }
-    }
-    post {
-        always {
-            script {
-                node {
-                    gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-                }
-            }
-            hipchatSend color: findHipchatColor(leBuild),
-                    message: "Built <a href='${currentBuild.absoluteUrl}'>Expvp " +
-                            "#${currentBuild.number}</a> in " +
-                            "${currentBuild.durationString.replaceAll(' and counting', '')}: " +
-                            "${currentBuild.currentResult} [${gitCommit.take(6)}]"
-
-        }
     }
 }
