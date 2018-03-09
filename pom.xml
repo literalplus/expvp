@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Expvp Minecraft game mode
-  ~ Copyright (C) 2016-2017 Philipp Nowak (https://github.com/xxyy)
+  ~ Copyright (C) 2016-2018 Philipp Nowak (https://github.com/xxyy)
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU Affero General Public License as published
@@ -329,6 +329,18 @@
                         </relocation>
                     </relocations>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.3.0.603</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.9</version>
             </plugin>
         </plugins>
 

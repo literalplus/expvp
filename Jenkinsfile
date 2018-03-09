@@ -1,6 +1,6 @@
 /*
  * Expvp Minecraft game mode
- * Copyright (C) 2016-2017 Philipp Nowak (https://github.com/xxyy)
+ * Copyright (C) 2016-2018 Philipp Nowak (https://github.com/xxyy)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -45,7 +45,7 @@ pipeline {
         stage('Maven Package') {
             agent any
             steps {
-                sh 'mvn -B package'
+                sh 'mvn -B jacoco:prepare-agent package sonar:sonar'
             }
             post {
                 always {
