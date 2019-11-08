@@ -10,7 +10,7 @@ Expvp
 ~~~~╚══════╝╚═╝~~╚═╝╚═╝~~~~~~~╚═══╝~~╚═╝~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Expvp Minecraft Game Mode
-Copyright (C) 2016-2017 Philipp Nowak (https://github.com/xxyy)
+Copyright (C) 2016-2017 Philipp Nowak (git@lit.plus)
 ````
 
 Expvp is an advanced Minecraft player-vs-player game mode.
@@ -27,7 +27,7 @@ from MinoTopia's community, it is compatible with Minecraft
 Contributing
 ------------
 
-See [CONTRIBUTING.md](https://github.com/xxyy/expvp/blob/master/CONTRIBUTING.md) for details on contribution guidelines.
+See [CONTRIBUTING.md](https://github.com/literalplus/expvp/blob/master/CONTRIBUTING.md) for details on contribution guidelines.
 
 Trademark Note
 --------------
